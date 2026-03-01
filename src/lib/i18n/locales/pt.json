@@ -1,0 +1,1337 @@
+{
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "add": "Adicionar",
+    "remove": "Remover",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "insert": "Inserir",
+    "replace": "Substituir",
+    "copy": "Copiar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "browse": "Alterar",
+    "clear": "Redefinir",
+    "play": "Reproduzir",
+    "stop": "Parar",
+    "untitled": "Sem título"
+  },
+  "settings": {
+    "title": "Configurações",
+    "tabs": {
+      "general": "Geral",
+      "editor": "Editor",
+      "appearance": "Aparência",
+      "ai": "IA",
+      "mcp": "MCP",
+      "image": "Imagem",
+      "publish": "Publicar",
+      "permissions": "Permissões",
+      "voice": "Voz",
+      "plugins": "Plugins"
+    },
+    "language": {
+      "label": "Idioma",
+      "system": "Seguir sistema"
+    },
+    "theme": {
+      "label": "Tema",
+      "system": "Seguir sistema",
+      "light": "Claro",
+      "dark": "Escuro"
+    },
+    "appearance": {
+      "themeSection": "Tema",
+      "darkModeSection": "Modo escuro",
+      "fontSection": "Fonte",
+      "separateDarkTheme": "Usar tema separado para modo escuro",
+      "darkTheme": "Tema do modo escuro",
+      "darkModeLabel": "Aparência"
+    },
+    "fontSize": {
+      "label": "Tamanho da fonte"
+    },
+    "autoSave": {
+      "label": "Salvamento automático",
+      "interval": "Intervalo de salvamento automático"
+    },
+    "rememberLastFolder": "Lembrar última pasta aberta",
+    "editor": {
+      "lineWidth": "Largura da linha do editor",
+      "tabSize": "Tamanho da tabulação",
+      "showLineNumbers": "Mostrar números de linha no modo código-fonte"
+    },
+    "version": "Moraya v{version}",
+    "permissions": {
+      "mcpTitle": "Permissões MCP",
+      "aiTitle": "Configurações de IA",
+      "aiMaxTokens": "Máximo de tokens de saída",
+      "aiMaxTokensHint": "Número máximo de tokens que a IA pode gerar por resposta. Valores maiores permitem respostas mais longas e chamadas de ferramentas, mas custam mais.",
+      "aiRulesMaxChars": "Máximo de caracteres do arquivo de regras",
+      "aiRulesMaxCharsHint": "Máximo de caracteres lidos do arquivo de regras MORAYA.md. Aumente para arquivos de regras grandes. Mais caracteres = mais tokens por requisição.",
+      "aiToolResultMaxChars": "Máximo de caracteres do resultado da ferramenta",
+      "aiToolResultMaxCharsHint": "Máximo de caracteres mantidos de cada resultado de ferramenta MCP. Valores maiores preservam mais detalhes, mas consomem mais contexto.",
+      "aiMaxToolRounds": "Máximo de rodadas de chamada de ferramentas",
+      "aiMaxToolRoundsHint": "Número máximo de rodadas de chamada de ferramentas que a IA pode realizar em um único turno de conversa. Aumente para tarefas complexas com múltiplas etapas."
+    },
+    "voice": {
+      "providers": "Provedores de fala",
+      "addProvider": "Adicionar provedor",
+      "editProvider": "Editar provedor",
+      "noProviders": "Nenhum provedor de fala configurado.",
+      "provider": "Provedor",
+      "apiKey": "Chave de API",
+      "apiKeyOptional": "Opcional para AWS (use a chave de acesso)",
+      "awsAccessKey": "ID da chave de acesso AWS",
+      "awsSecretKey": "Chave secreta AWS",
+      "region": "Região",
+      "model": "Modelo",
+      "modelPlaceholder": "Digite o nome do modelo",
+      "endpointIdPlaceholder": "Digite o ID do endpoint de inferência",
+      "language": "Idioma",
+      "langAuto": "Detecção automática",
+      "langMulti": "Multi-idioma",
+      "baseUrl": "URL personalizada do WebSocket",
+      "testConnection": "Testar conexão",
+      "testing": "Testando...",
+      "testOk": "Conectado",
+      "testFailed": "Falha na conexão",
+      "setActive": "Definir como padrão",
+      "active": "Padrão",
+      "custom": "Personalizado",
+      "storage": "Armazenamento",
+      "recordingBackupDir": "Backup de gravação",
+      "recordingBackupHint": "Salvar gravações completas como arquivos WAV após cada sessão.",
+      "voiceSyncDir": "Diretório de sincronização de perfis de voz",
+      "voiceSyncHint": "Sincronize perfis de voz via armazenamento em nuvem (ex.: iCloud, Dropbox). Use o botão Alterar para escolher uma pasta — perfis existentes serão migrados automaticamente.",
+      "syncDefault": "Dados do app (padrão)",
+      "disabled": "Desativado",
+      "migratingProfiles": "Migrando...",
+      "migrationFailed": "Falha na migração",
+      "profiles": "Perfis de voz",
+      "noProfiles": "Nenhum perfil de voz ainda. Eles são criados automaticamente após sessões de transcrição.",
+      "naming": {
+        "male": "Homem {n}",
+        "female": "Mulher {n}",
+        "bystander": "Espectador {n}",
+        "speaker": "Falante {n}"
+      }
+    }
+  },
+  "titlebar": {
+    "unsaved": "Não salvo",
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "close": "Fechar"
+  },
+  "sidebar": {
+    "title": "Explorador",
+    "openFolder": "Abrir pasta",
+    "noFolder": "Nenhuma pasta aberta",
+    "createKB": "Criar base de conhecimento",
+    "emptyDir": "Nenhum arquivo neste diretório",
+    "kbSettings": "Configurações da base de conhecimento",
+    "treeView": "Visualização em árvore",
+    "listView": "Visualização em lista",
+    "search": "Buscar arquivos...",
+    "contextMenu": {
+      "newFile": "Novo arquivo",
+      "searchFiles": "Buscar",
+      "refresh": "Atualizar",
+      "rename": "Renomear",
+      "duplicate": "Criar cópia",
+      "delete": "Excluir",
+      "copyPath": "Copiar caminho",
+      "revealInFinder": "Revelar no Finder"
+    },
+    "newFilePrompt": "Digite o nome do arquivo",
+    "renamePrompt": "Digite o novo nome",
+    "deleteConfirm": "Tem certeza de que deseja excluir \"{name}\"? Esta ação não pode ser desfeita."
+  },
+  "statusbar": {
+    "words": "Palavras",
+    "characters": "Caracteres",
+    "format": "Markdown",
+    "sourceMode": "Código-fonte",
+    "visualMode": "Visual",
+    "splitMode": "Dividido",
+    "publishWorkflow": "Fluxo de trabalho IA",
+    "aiTooltip": "IA"
+  },
+  "editor": {
+    "sourceMode": "Modo código-fonte",
+    "visualMode": "Modo visual",
+    "splitMode": "Modo dividido",
+    "unsavedTitle": "Alterações não salvas",
+    "unsavedNewDocMsg": "Você tem conteúdo não salvo que será perdido. Deseja salvar primeiro?",
+    "saveFirst": "Salvar",
+    "discardChanges": "Não salvar"
+  },
+  "table": {
+    "insertRowAbove": "Inserir linha acima",
+    "insertRowBelow": "Inserir linha abaixo",
+    "deleteRow": "Excluir linha",
+    "insertColLeft": "Inserir coluna à esquerda",
+    "insertColRight": "Inserir coluna à direita",
+    "deleteCol": "Excluir coluna",
+    "alignLeft": "Alinhar à esquerda",
+    "alignCenter": "Centralizar",
+    "alignRight": "Alinhar à direita"
+  },
+  "knowledgeBase": {
+    "title": "Base de conhecimento",
+    "add": "Adicionar base de conhecimento",
+    "remove": "Remover",
+    "rename": "Renomear",
+    "manage": "Gerenciar bases de conhecimento...",
+    "empty": "Nenhuma base de conhecimento configurada",
+    "emptyHint": "Adicione uma pasta como base de conhecimento para alternância rápida.",
+    "deleteConfirm": "Remover \"{name}\" das bases de conhecimento? A pasta em si não será excluída.",
+    "switchTo": "Alternar base de conhecimento",
+    "saveHint": "Esta pasta não está nas suas bases de conhecimento.",
+    "saveAsKB": "Salvar como base de conhecimento"
+  },
+  "ai": {
+    "title": "Assistente de IA",
+    "morayaMdActive": "Regras MORAYA.md ativas para esta base de conhecimento",
+    "clearChat": "Limpar conversa",
+    "unconfigured": "A IA não está configurada.",
+    "unconfiguredHint": "Abra as Configurações ({shortcut}) e configure sua chave de API para habilitar os recursos de IA.",
+    "openSettings": "Abrir configurações de IA",
+    "openImageSettings": "Abrir configurações de geração de imagens",
+    "textAiLabel": "IA de texto (geração de prompts)",
+    "imageAiLabel": "IA de imagem (geração de imagens)",
+    "welcomeTitle": "Como posso ajudar?",
+    "welcomeHint": "Digite uma mensagem ou use {kbd} para comandos",
+    "you": "Você",
+    "assistant": "IA",
+    "typing": "digitando...",
+    "placeholder": "Pergunte qualquer coisa à IA... (/ para comandos)",
+    "placeholderSelection": "Pergunte sobre a seleção... (/ para comandos)",
+    "send": "Enviar (⌘↵)",
+    "stop": "Parar (Esc)",
+    "interrupted": "Interrompido",
+    "insertToEditor": "Inserir no editor",
+    "replaceSelection": "Substituir seleção",
+    "attachImage": "Anexar imagem",
+    "attachImageMax": "Máximo de {max} imagens",
+    "removeImage": "Remover imagem",
+    "closePreview": "Fechar pré-visualização",
+    "moreActions": "Mais ações",
+    "voiceTranscription": "Transcrição de voz por IA",
+    "config": {
+      "title": "Configuração de IA",
+      "provider": "Provedor",
+      "apiKey": "Chave de API",
+      "apiKeyPlaceholder": "Digite a chave de API do {provider}",
+      "apiKeyNotRequired": "Não necessário para Ollama",
+      "baseUrl": "URL base",
+      "model": "Modelo",
+      "modelPlaceholder": "Digite o nome do modelo",
+      "maxTokens": "Máximo de tokens",
+      "temperature": "Temperatura",
+      "testConnection": "Testar conexão",
+      "testing": "Testando...",
+      "connected": "Conectado!",
+      "failed": "Falhou"
+    },
+    "providers": {
+      "claude": "Anthropic Claude",
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "deepseek": "DeepSeek",
+      "ollama": "Ollama (Local)",
+      "custom": "API personalizada",
+      "grok": "xAI Grok",
+      "mistral": "Mistral AI",
+      "glm": "Zhipu GLM",
+      "minimax": "MiniMax",
+      "doubao": "Doubao (ByteDance)"
+    },
+    "multiModel": {
+      "addModel": "+ Adicionar modelo",
+      "default": "Padrão",
+      "setDefault": "Definir como padrão",
+      "noModels": "Nenhum modelo de IA configurado",
+      "noModelsHint": "Adicione um modelo de IA para começar a usar os recursos de IA.",
+      "noImageModels": "Nenhum modelo de imagem configurado",
+      "noImageModelsHint": "Adicione um modelo de geração de imagens para usar os recursos de imagem por IA."
+    },
+    "imageConfig": {
+      "title": "IA de geração de imagens",
+      "provider": "Provedor",
+      "providerOpenai": "OpenAI DALL-E",
+      "providerGrok": "Grok (xAI)",
+      "providerCustom": "Personalizado (compatível com OpenAI)",
+      "apiKey": "Chave de API",
+      "apiKeyPlaceholder": "Digite a chave de API de imagem",
+      "baseUrl": "URL base",
+      "model": "Modelo",
+      "modelPlaceholder": "Digite o nome do modelo",
+      "defaultSize": "Tamanho padrão",
+      "ratio": "Proporção",
+      "sizeLevel": "Tamanho",
+      "size_large": "Grande",
+      "size_medium": "Médio",
+      "size_small": "Pequeno",
+      "providerGemini": "Google Gemini Imagen",
+      "providerQwen": "Qwen (Alibaba)",
+      "providerDoubao": "Doubao (ByteDance)"
+    },
+    "commands": {
+      "write": "Escrever",
+      "writeDesc": "Escrever conteúdo com base no seu prompt",
+      "continue": "Continuar escrevendo",
+      "continueDesc": "Continuar de onde o texto parou",
+      "summarize": "Resumir",
+      "summarizeDesc": "Resumir o texto selecionado",
+      "translate": "Traduzir",
+      "translateDesc": "Traduzir texto para outro idioma",
+      "improve": "Melhorar",
+      "improveDesc": "Melhorar a qualidade da escrita",
+      "fixGrammar": "Corrigir gramática",
+      "fixGrammarDesc": "Corrigir erros gramaticais e ortográficos",
+      "simplify": "Simplificar",
+      "simplifyDesc": "Simplificar texto complexo",
+      "expand": "Expandir",
+      "expandDesc": "Expandir sobre o tema",
+      "outline": "Gerar esboço",
+      "outlineDesc": "Gerar um esboço de artigo",
+      "explain": "Explicar",
+      "explainDesc": "Explicar o texto selecionado"
+    },
+    "prompts": {
+      "emptyResponse": "Você retornou uma resposta vazia. Por favor, continue a tarefa: faça as chamadas de ferramenta necessárias ou resuma o que foi concluído e liste os itens restantes. Não retorne uma mensagem vazia.",
+      "emptyResponseContinue": "\n\nSua última mensagem foi: \"{lastMessage}\"\nPor favor, continue a partir daí.",
+      "truncationContinue": "Sua resposta anterior foi cortada devido ao limite de tamanho de saída. O texto acima foi salvo. Agora, por favor, complete a tarefa fazendo as chamadas de ferramenta necessárias. Não repita o conteúdo — use-o diretamente nos argumentos da ferramenta.",
+      "continuationPrompt": "Por favor, continue e faça as chamadas de ferramenta necessárias para concluir a tarefa. Não repita o que já foi dito — prossiga diretamente com as chamadas de ferramenta.",
+      "mcpToolPrompt": "Use a ferramenta {toolName} (de {serverName})"
+    },
+    "detection": {
+      "intentPrefixes": "Eu vou|Preciso|Devo|Deixe-me|Primeiro|Agora|Em seguida",
+      "actionVerbs": "criar|escrever|ler|atualizar|enviar|gerar|buscar|verificar|testar|usar|executar|enviar|procurar|encontrar|salvar|excluir|editar|configurar|exportar|exibir",
+      "continuationPhrases": "Primeiro|Em seguida|Depois|Agora",
+      "remainingPhrases": "restante|próximo|passo \\d+",
+      "unfinishedPhrases": "a fazer|TODO|próximo passo|ainda não|pendente"
+    }
+  },
+  "mcp": {
+    "title": "Servidores MCP",
+    "tabs": {
+      "servers": "Servidores",
+      "publish": "Publicar",
+      "sync": "Sincronizar",
+      "marketplace": "Mercado"
+    },
+    "aiServices": {
+      "empty": "Nenhum serviço criado pela IA",
+      "hint": "A IA pode criar serviços MCP durante a conversa. Peça para ela interagir com uma API!",
+      "nodeRequired": "Node.js 18+ necessário",
+      "checkingNode": "Verificando Node.js...",
+      "temp": "Temporário",
+      "saved": "Salvo",
+      "viewCode": "Código",
+      "tools": "{count} ferramentas",
+      "serviceCreated": "A IA criou o serviço \"{name}\" com {count} ferramentas",
+      "serviceSaved": "Serviço \"{name}\" salvo",
+      "serviceRemoved": "Serviço \"{name}\" removido",
+      "launchConfirmTitle": "Aviso de segurança do serviço de IA",
+      "launchConfirmMsg": "A IA gerou um serviço MCP que precisa executar código gerado automaticamente:\n  Serviço: {name}\n  Ferramentas: {tools}\n\nEste código será executado em um processo Node.js local.\nPor favor, confirme que você confia neste código gerado pela IA.",
+      "launchConfirmOk": "Executar",
+      "launchConfirmCancel": "Cancelar"
+    },
+    "servers": {
+      "empty": "Nenhum servidor MCP configurado",
+      "localMcp": "MCP local",
+      "addServer": "Adicionar servidor",
+      "addServerPlus": "+ Adicionar servidor",
+      "connected": "Conectado",
+      "disconnected": "Desconectado",
+      "serverName": "Nome do servidor",
+      "serverUrl": "URL do servidor (ex.: http://localhost:3000/mcp)",
+      "http": "HTTP",
+      "sse": "SSE (Server-Sent Events)",
+      "stdio": "stdio (Processo local)",
+      "command": "Comando",
+      "commandPlaceholder": "Comando (ex.: npx, node, python)",
+      "argsPlaceholder": "Argumentos (ex.: -y @modelcontextprotocol/server-filesystem /caminho)",
+      "envPlaceholder": "ENV_KEY=valor (um por linha)",
+      "presets": "MCP remoto",
+      "presetsHint": "Adicione servidores MCP populares com um clique",
+      "presetDesc": {
+        "filesystem": "Ler, buscar e gerenciar arquivos locais",
+        "fetch": "Buscar páginas web e converter para Markdown",
+        "git": "Ler e pesquisar repositórios Git",
+        "memory": "Grafo de conhecimento persistente para memória da IA"
+      },
+      "formMode": "Formulário",
+      "jsonMode": "JSON",
+      "jsonPlaceholder": "Cole a configuração JSON, ex.:\n{\n  \"mcpServers\": {\n    \"nome\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@.../server-xxx\"]\n    }\n  }\n}",
+      "jsonNoConfig": "Nenhuma configuração de servidor MCP válida encontrada",
+      "jsonParseError": "erro de análise",
+      "launchConfirmTitle": "Aviso de segurança",
+      "launchConfirmMsg": "Prestes a iniciar programa externo:\n  Comando: {command}\n  Argumentos: {args}\n\nEste servidor MCP será executado com suas permissões de usuário e pode acessar arquivos locais e rede.\nPor favor, confirme que este servidor MCP é de uma fonte confiável.",
+      "launchConfirmOk": "Iniciar",
+      "launchConfirmCancel": "Cancelar",
+      "autoApprove": "Aprovar automaticamente o lançamento de MCP",
+      "autoApproveHint": "Pular a confirmação de segurança ao conectar servidores MCP e iniciar serviços gerados pela IA. Não recomendado para fontes não confiáveis."
+    },
+    "publish": {
+      "empty": "Nenhum alvo de publicação configurado",
+      "hint": "Conecte um servidor MCP com capacidades de publicação primeiro.",
+      "button": "Publicar",
+      "publishing": "Publicando...",
+      "published": "Publicado! {info}",
+      "failed": "Falhou: {message}",
+      "error": "Erro: {message}"
+    },
+    "sync": {
+      "empty": "Nenhuma configuração de sincronização",
+      "hint": "Conecte um servidor MCP primeiro e depois adicione uma configuração de sincronização.",
+      "syncNow": "Sincronizar agora",
+      "addSync": "+ Adicionar sincronização",
+      "name": "Nome da configuração",
+      "server": "Servidor MCP",
+      "remotePath": "Caminho remoto",
+      "localPath": "Caminho local",
+      "direction": "Direção",
+      "push": "Enviar (local → remoto)",
+      "pull": "Receber (remoto → local)",
+      "bidirectional": "Bidirecional",
+      "lastSync": "Última sincronização: {time}",
+      "syncing": "Sincronizando...",
+      "success": "Sincronização concluída",
+      "error": "Erro de sincronização: {message}"
+    },
+    "marketplace": {
+      "title": "Mercado",
+      "search": "Buscar servidores MCP...",
+      "source": "Fonte",
+      "sourceOfficial": "Oficial",
+      "sourceLobehub": "LobeHub",
+      "sourceSmithery": "Smithery",
+      "install": "Instalar",
+      "installAndConnect": "Instalar e conectar",
+      "installing": "Instalando...",
+      "installed": "Instalado",
+      "viewDetails": "Detalhes",
+      "loadMore": "Carregar mais",
+      "noResults": "Nenhum servidor MCP encontrado",
+      "networkError": "Falha ao carregar, verifique a rede",
+      "retry": "Tentar novamente",
+      "envVars": "Variáveis de ambiente",
+      "envRequired": "(obrigatório)",
+      "popularity": "usos",
+      "installs": "Instalações / Usos",
+      "verified": "Verificado",
+      "cancel": "Cancelar"
+    }
+  },
+  "imageDialog": {
+    "title": "Inserir imagem",
+    "urlTab": "URL",
+    "fileTab": "Arquivo local",
+    "urlPlaceholder": "https://exemplo.com/imagem.png",
+    "altPlaceholder": "Descrição da imagem (opcional)",
+    "selectFile": "Selecionar imagem...",
+    "noFileSelected": "Nenhum arquivo selecionado",
+    "insert": "Inserir",
+    "cancel": "Cancelar"
+  },
+  "imageHost": {
+    "title": "Hospedagem de imagens",
+    "provider": "Provedor",
+    "smms": "SM.MS",
+    "imgur": "Imgur",
+    "github": "Repositório GitHub",
+    "custom": "API personalizada",
+    "apiToken": "Token de API",
+    "apiTokenPlaceholder": "Digite o token de API",
+    "customEndpoint": "Endpoint de upload",
+    "customEndpointPlaceholder": "https://sua-api.com/upload",
+    "customHeaders": "Cabeçalhos personalizados (JSON)",
+    "githubRepoUrl": "URL do repositório",
+    "githubRepoUrlPlaceholder": "https://github.com/usuario/imagens",
+    "githubBranch": "Branch",
+    "githubDir": "Diretório de imagens",
+    "githubToken": "Token de acesso pessoal",
+    "githubTokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "githubCdn": "Formato da URL",
+    "githubCdnRaw": "raw.githubusercontent.com",
+    "githubCdnJsdelivr": "CDN jsDelivr",
+    "importFromPublish": "Importar do alvo de publicação",
+    "autoUpload": "Upload automático de imagens ao colar/soltar",
+    "testUpload": "Testar upload",
+    "testing": "Testando...",
+    "success": "Upload realizado com sucesso!",
+    "failed": "Falha no upload",
+    "addTarget": "Adicionar hospedagem de imagem",
+    "targetName": "Nome",
+    "targetNamePlaceholder": "ex.: CDN do meu blog",
+    "settingsEmpty": "Nenhuma hospedagem de imagem configurada",
+    "settingsHint": "Adicione um serviço de hospedagem de imagens para habilitar o upload automático.",
+    "default": "Padrão",
+    "setDefault": "Definir como padrão",
+    "gitlab": "Repositório GitLab",
+    "git_custom": "Git personalizado (Gitea/Forgejo)",
+    "qiniu": "Qiniu Kodo",
+    "aliyun_oss": "Aliyun OSS",
+    "tencent_cos": "Tencent COS",
+    "aws_s3": "AWS S3",
+    "google_gcs": "Google Cloud Storage",
+    "groupApi": "Hospedagem via API",
+    "groupGit": "Repositório Git",
+    "groupOss": "Armazenamento de objetos",
+    "gitlabRepoUrl": "URL do repositório",
+    "gitlabBranch": "Branch",
+    "gitlabDir": "Diretório de imagens",
+    "gitlabToken": "Token de acesso pessoal",
+    "gitlabTokenPlaceholder": "glpat-xxxxxxxxxxxx",
+    "gitCustomRepoUrl": "URL do repositório",
+    "gitCustomBranch": "Branch",
+    "gitCustomDir": "Diretório de imagens",
+    "gitCustomToken": "Token de acesso",
+    "gitCustomTokenPlaceholder": "Digite o token",
+    "ossAccessKey": "Chave de acesso",
+    "ossAccessKeyPlaceholder": "Digite o ID da chave de acesso",
+    "ossSecretKey": "Chave secreta",
+    "ossSecretKeyPlaceholder": "Digite a chave secreta",
+    "ossBucket": "Bucket",
+    "ossBucketPlaceholder": "ex.: meu-bucket-de-imagens",
+    "ossRegion": "Região",
+    "ossRegionPlaceholder": "ex.: cn-east-1, us-east-1",
+    "selectRegion": "Selecionar região",
+    "ossEndpoint": "Endpoint personalizado (opcional)",
+    "ossEndpointPlaceholder": "ex.: https://s3.custom.com",
+    "ossCdnDomain": "Domínio CDN (opcional)",
+    "ossCdnDomainPlaceholder": "ex.: https://cdn.exemplo.com",
+    "ossPathPrefix": "Prefixo de caminho (opcional)",
+    "ossPathPrefixPlaceholder": "ex.: images/blog/"
+  },
+  "imageMenu": {
+    "resize": "Redimensionar",
+    "upload": "Enviar para hospedagem de imagens",
+    "editAlt": "Editar descrição",
+    "copyUrl": "Copiar URL da imagem",
+    "copyImage": "Copiar imagem",
+    "openInBrowser": "Abrir imagem no navegador",
+    "saveAs": "Salvar imagem como...",
+    "delete": "Excluir imagem",
+    "originalSize": "Tamanho original"
+  },
+  "menu": {
+    "file": "Arquivo",
+    "edit": "Editar",
+    "paragraph": "Parágrafo",
+    "format": "Formatar",
+    "view": "Visualizar",
+    "window": "Janela",
+    "help": "Ajuda",
+    "new": "Novo",
+    "newWindow": "Nova janela",
+    "open": "Abrir...",
+    "save": "Salvar",
+    "saveAs": "Salvar como...",
+    "export": "Exportar",
+    "exportHtml": "HTML",
+    "exportPdf": "PDF",
+    "exportImage": "Imagem (PNG)",
+    "exportDoc": "Word (.doc)",
+    "heading1": "Título 1",
+    "heading2": "Título 2",
+    "heading3": "Título 3",
+    "heading4": "Título 4",
+    "heading5": "Título 5",
+    "heading6": "Título 6",
+    "table": "Tabela",
+    "codeBlock": "Bloco de código",
+    "mathBlock": "Bloco de fórmula",
+    "quote": "Citação",
+    "bulletList": "Lista com marcadores",
+    "orderedList": "Lista numerada",
+    "horizontalRule": "Linha horizontal",
+    "bold": "Negrito",
+    "italic": "Itálico",
+    "strikethrough": "Tachado",
+    "code": "Código",
+    "link": "Link",
+    "image": "Imagem",
+    "visualMode": "Modo visual",
+    "sourceMode": "Modo código-fonte",
+    "splitMode": "Modo dividido",
+    "toggleSidebar": "Alternar barra lateral",
+    "toggleAIPanel": "Alternar painel de IA",
+    "toggleOutline": "Alternar estrutura de tópicos",
+    "zoomIn": "Ampliar",
+    "zoomOut": "Reduzir",
+    "actualSize": "Tamanho real",
+    "find": "Localizar",
+    "replace": "Substituir",
+    "changelog": "Registro de alterações",
+    "privacyPolicy": "Política de privacidade",
+    "officialWebsite": "Site oficial",
+    "aboutMoraya": "Sobre o Moraya",
+    "feedback": "Feedback",
+    "settings": "Configurações...",
+    "versionInfo": "Informações da versão"
+  },
+  "search": {
+    "findPlaceholder": "Localizar...",
+    "replacePlaceholder": "Substituir...",
+    "noResults": "Sem resultados",
+    "caseSensitive": "Diferenciar maiúsculas",
+    "replace": "Substituir",
+    "replaceAll": "Substituir tudo"
+  },
+  "mermaid": {
+    "loading": "Carregando diagrama...",
+    "error": "Falha ao renderizar o diagrama",
+    "edit": "Editar",
+    "preview": "Pré-visualizar",
+    "empty": "Diagrama vazio"
+  },
+  "export": {
+    "exportAs": "Exportar como {format}",
+    "pdf": "PDF",
+    "html": "HTML (com estilos)",
+    "htmlPlain": "HTML (sem estilos)",
+    "image": "Imagem (PNG)",
+    "doc": "Word (.doc)",
+    "rtf": "RTF",
+    "epub": "Epub",
+    "latex": "LaTeX",
+    "mediawiki": "MediaWiki",
+    "rst": "reStructuredText",
+    "textile": "Textile",
+    "opml": "OPML"
+  },
+  "workflow": {
+    "title": "Fluxo de trabalho IA",
+    "seoStep": "Otimização SEO",
+    "imageGenStep": "Imagens por IA",
+    "publishStep": "Publicar",
+    "publishDesc": "Enviar para plataformas de destino",
+    "optionalAbove": "As etapas acima são opcionais",
+    "selectTargets": "Selecionar alvos de publicação",
+    "confirmPublish": "Publicar",
+    "publishing": "Publicando...",
+    "publishSuccess": "Publicado com sucesso!",
+    "publishFailed": "Falha na publicação",
+    "mcpEntry": "MCP IA",
+    "mcpServerCount": "serviços conectados",
+    "mcpToolCount": "ferramentas"
+  },
+  "imageGen": {
+    "title": "Geração de imagens por IA",
+    "step1Title": "Modo de imagem",
+    "step2Title": "Gerar imagens",
+    "step3Title": "Inserir no artigo",
+    "generatingPrompts": "Gerando prompts...",
+    "contentTooShort": "O conteúdo do artigo é muito curto para geração de imagens.",
+    "styleLabel": "Estilo",
+    "countLabel": "Quantidade",
+    "style_auto": "Automático",
+    "style_photo": "Foto",
+    "style_illustration": "Ilustração",
+    "style_flat": "Flat",
+    "style_ink": "Tinta nanquim",
+    "style_watercolor": "Aquarela",
+    "style_isometric": "Isométrico",
+    "style_infographic": "Infográfico",
+    "style_editorial": "Editorial",
+    "style_cartoon": "Desenho animado",
+    "style_render": "Renderização 3D",
+    "style_sketch": "Esboço",
+    "style_blueprint": "Planta técnica",
+    "style_clay": "Modelo de argila",
+    "style_wireframe": "Wireframe",
+    "style_exploded": "Vista explodida",
+    "style_section": "Corte transversal",
+    "style_cad": "Desenho CAD",
+    "style_prototype": "Protótipo",
+    "style_anime": "Anime",
+    "style_comic": "Quadrinhos",
+    "style_cinematic": "Cinematográfico",
+    "style_pixel": "Pixel Art",
+    "style_noir": "Film Noir",
+    "style_manga": "Mangá",
+    "style_realistic": "Realista",
+    "style_studio": "Estúdio",
+    "style_lifestyle": "Lifestyle",
+    "style_flatlay": "Flat Lay",
+    "style_macro": "Macro",
+    "style_minimalist": "Minimalista",
+    "style_packaging": "Embalagem",
+    "style_outdoor": "Ao ar livre",
+    "style_mood": "Mood",
+    "style_abstract": "Abstrato",
+    "style_texture": "Textura",
+    "style_gradient": "Gradiente",
+    "style_collage": "Colagem",
+    "style_vintage": "Vintage",
+    "style_botanical": "Botânico",
+    "style_geometric": "Geométrico",
+    "style_ethereal": "Etéreo",
+    "style_brutalist": "Brutalista",
+    "generate": "Gerar",
+    "next": "Próximo",
+    "back": "Voltar",
+    "insertConfirm": "Inserir",
+    "insertParagraph": "Inserir após o parágrafo correspondente (Recomendado)",
+    "insertEnd": "Inserir no final do artigo",
+    "insertReplace": "Substituir imagens no artigo",
+    "insertClipboard": "Copiar Markdown para a área de transferência",
+    "selected": "{count} selecionado(s)",
+    "completed": "Imagens geradas",
+    "stepDescription": "Gerar ilustrações para o artigo",
+    "mode_article": "Artigo",
+    "mode_design": "Design",
+    "mode_storyboard": "Storyboard",
+    "mode_product": "Produto",
+    "mode_moodboard": "Moodboard",
+    "mode_portrait": "Retrato",
+    "style_portrait": "Retrato",
+    "style_headshot": "Foto de rosto",
+    "style_fullbody": "Corpo inteiro",
+    "style_fashion": "Moda",
+    "style_street": "Street",
+    "style_glamour": "Glamour",
+    "style_environmental": "Ambiental",
+    "style_candid": "Espontâneo",
+    "style_group": "Grupo",
+    "preDefinedDetected": "Detectado(s) {count} prompt(s) pré-definido(s) no documento",
+    "usePredefined": "Usar prompts pré-definidos"
+  },
+  "seo": {
+    "title": "Otimização SEO",
+    "generating": "Analisando artigo...",
+    "titles": "Candidatos a título",
+    "customTitle": "Título personalizado...",
+    "excerpt": "Resumo",
+    "tags": "Tags",
+    "addTag": "Adicionar tag...",
+    "slug": "Slug da URL",
+    "metaDescription": "Meta descrição",
+    "regenerate": "Regenerar",
+    "apply": "Aplicar",
+    "retry": "Tentar novamente",
+    "contentTooShort": "O conteúdo do artigo é muito curto para análise SEO.",
+    "completed": "SEO otimizado",
+    "stepDescription": "Gerar título, resumo e tags"
+  },
+  "publish": {
+    "settingsEmpty": "Nenhum alvo de publicação configurado",
+    "settingsHint": "Adicione um repositório GitHub ou endpoint de API personalizado para publicar seus artigos.",
+    "addTarget": "Adicionar alvo",
+    "editTarget": "Editar",
+    "deleteTarget": "Excluir",
+    "testConnection": "Testar conexão",
+    "github": "Repositório GitHub",
+    "customApi": "API personalizada",
+    "targetName": "Nome",
+    "targetNamePlaceholder": "ex.: Meu blog",
+    "repoUrl": "URL do repositório",
+    "repoUrlPlaceholder": "https://github.com/usuario/blog",
+    "branch": "Branch",
+    "articlesDir": "Diretório de artigos",
+    "articlesDirPlaceholder": "content/posts/",
+    "imagesDir": "Diretório de imagens",
+    "imagesDirPlaceholder": "static/images/",
+    "token": "Token de acesso pessoal",
+    "tokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "frontMatterTemplate": "Template de front matter",
+    "endpoint": "Endpoint da API",
+    "endpointPlaceholder": "https://api.exemplo.com/artigos",
+    "method": "Método HTTP",
+    "headers": "Cabeçalhos (JSON)",
+    "bodyTemplate": "Template do corpo",
+    "templatePresets": "Templates predefinidos",
+    "presetHugo": "Hugo",
+    "presetHexo": "Hexo",
+    "presetAstro": "Astro",
+    "presetCustom": "Personalizado",
+    "fileNamePattern": "Padrão de nome de arquivo",
+    "fileNamePreset": "Predefinição de nome",
+    "fileNamePreview": "Pré-visualização",
+    "presetSimple": "Simples (nome do arquivo)",
+    "presetDateSlug": "Data + Slug",
+    "presetDateFilename": "Data + Nome do arquivo",
+    "presetYearMonth": "Ano/Mês/Slug",
+    "fileNameVariables": "Variáveis: {{date}}, {{year}}, {{month}}, {{day}}, {{slug}}, {{filename}}, {{title}}",
+    "rssSection": "Feed RSS",
+    "rssEnable": "Gerar feed RSS",
+    "rssEnableHint": "Atualizar automaticamente o feed.xml ao publicar",
+    "rssFeedPath": "Caminho do arquivo de feed",
+    "rssFeedPathPlaceholder": "feed.xml",
+    "rssSiteUrl": "URL do site",
+    "rssSiteUrlPlaceholder": "https://meublog.com",
+    "rssFeedTitle": "Título do feed",
+    "rssFeedTitlePlaceholder": "Meu blog",
+    "rssFeedDescription": "Descrição do feed",
+    "rssFeedDescriptionPlaceholder": "Artigos sobre...",
+    "rssLanguage": "Idioma",
+    "rssAuthorName": "Autor",
+    "rssAuthorNamePlaceholder": "João Silva",
+    "rssMaxItems": "Máximo de itens no feed",
+    "rssIncludeFullContent": "Incluir conteúdo completo do artigo no feed",
+    "rssFeedEndpoint": "Endpoint do feed RSS",
+    "rssFeedEndpointPlaceholder": "https://api.exemplo.com/rss",
+    "rssUpdateFailed": "Falha ao atualizar o feed RSS",
+    "progressTitle": "Publicando...",
+    "progressPublishing": "Enviando...",
+    "progressRss": "Atualizando RSS...",
+    "progressDone": "Concluído",
+    "progressFailed": "Falhou"
+  },
+  "update": {
+    "title": "Informações da versão",
+    "currentVersion": "Versão atual",
+    "latestVersion": "Versão mais recente",
+    "checking": "Verificando atualizações...",
+    "upToDate": "Você está usando a versão mais recente!",
+    "checkFailed": "Falha ao verificar atualizações",
+    "releaseNotes": "Novidades",
+    "noAsset": "Nenhum instalador disponível para sua plataforma. Por favor, baixe manualmente.",
+    "upgrade": "Atualizar",
+    "retry": "Tentar novamente",
+    "viewRelease": "Ver lançamento",
+    "downloading": "Baixando...",
+    "downloadFailed": "Falha no download",
+    "installLaunched": "Instalador iniciado. O Moraya será fechado em breve.",
+    "newVersionAvailable": "Nova versão disponível! Clique para atualizar."
+  },
+  "errors": {
+    "aiNotConfigured": "A IA não está configurada.",
+    "aiRequestFailed": "Falha na requisição de IA",
+    "chatRequestFailed": "Falha na requisição de chat",
+    "unknownCommand": "Comando de IA desconhecido: {command}"
+  },
+  "welcome": {
+    "title": "Bem-vindo ao Moraya",
+    "subtitle": "Um editor Markdown minimalista, pronto para IA.",
+    "featuresTitle": "Recursos",
+    "featureWysiwyg": "Edição Markdown **WYSIWYG**",
+    "featureMath": "Suporte a fórmulas matemáticas: $E = mc^2$",
+    "featureThemes": "Temas escuro e claro",
+    "featureAI": "Assistente de escrita com IA",
+    "featureMCP": "Protocolo MCP para publicação e sincronização",
+    "featureLightweight": "Leve (~5MB instalador)",
+    "mathTitle": "Exemplo de fórmula",
+    "codeTitle": "Exemplo de código",
+    "tableTitle": "Exemplo de tabela",
+    "tableFeature": "Recurso",
+    "tableStatus": "Status",
+    "tableDone": "Concluído",
+    "startWriting": "Comece a escrever suas ideias aqui...",
+    "tip": "**Dica:** Pressione `Cmd+I` para abrir o painel do assistente de IA.",
+    "shortcutsTitle": "Atalhos de teclado",
+    "shortcutSave": "`Cmd+S` — Salvar documento",
+    "shortcutOpen": "`Cmd+O` — Abrir arquivo",
+    "shortcutNew": "`Cmd+N` — Novo documento",
+    "shortcutToggleMode": "`Cmd+/` — Alternar modo Visual/Código-fonte",
+    "shortcutSplitMode": "`Cmd+Shift+/` — Alternar modo dividido",
+    "shortcutSidebar": "`Cmd+\\` — Alternar barra lateral",
+    "shortcutSettings": "`Cmd+,` — Abrir configurações",
+    "shortcutAI": "`Cmd+Shift+I` — Alternar painel de IA",
+    "shortcutExport": "`Cmd+Shift+E` — Exportar como HTML",
+    "blockquoteTitle": "Exemplo de citação",
+    "blockquoteContent": "A arte de escrever é a arte de descobrir aquilo em que você acredita. — Gustave Flaubert",
+    "advancedMathTitle": "Matemática avançada",
+    "listTitle": "Exemplo de lista aninhada",
+    "listItem1": "Primeiros passos",
+    "listItem1a": "Instalar o aplicativo",
+    "listItem1b": "Configurar suas preferências",
+    "listItem1c": "Começar a escrever",
+    "listItem2": "Recursos avançados",
+    "listItem2a": "Assistência de escrita com IA",
+    "listItem2b": "Integração com protocolo MCP",
+    "listItem2c": "Múltiplos formatos de exportação",
+    "listItem3": "Personalização",
+    "listItem3a": "Temas e aparência",
+    "listItem3b": "Configurações do editor",
+    "listItem3c": "Atalhos de teclado",
+    "paragraphTitle": "Sobre o Moraya",
+    "paragraph1": "Moraya é um editor Markdown moderno e leve, construído com Rust e Tauri. Ele combina a simplicidade de um editor de texto com o poder de uma interface WYSIWYG, oferecendo o melhor dos dois mundos.",
+    "paragraph2": "O nome \"Moraya\" vem da combinação de \"mora\" (latim para \"um momento\") com \"ya\" (chinês para \"elegância\"), simbolizando momentos elegantes de escrita.",
+    "paragraph3": "Seja para escrever documentação técnica, posts de blog, artigos acadêmicos ou notas pessoais, o Moraya oferece um ambiente livre de distrações que permite que você se concentre no que mais importa — seu conteúdo.",
+    "hrTitle": "Linhas horizontais",
+    "hrDescription": "Você pode usar linhas horizontais para separar diferentes seções do seu documento:"
+  },
+  "templates": {
+    "gallery": {
+      "title": "Assistente de IA",
+      "search": "Buscar templates...",
+      "back": "Voltar",
+      "start": "Iniciar"
+    },
+    "error": {
+      "noDocument": "Por favor, escreva algum conteúdo primeiro",
+      "noSelection": "Por favor, selecione algum texto primeiro",
+      "noContent": "Por favor, escreva algum conteúdo ou selecione texto primeiro"
+    },
+    "writing": {
+      "name": "Escrita",
+      "desc": "Escrita, edição e resumo com IA",
+      "free": {
+        "name": "Escrita livre",
+        "desc": "Digite um tema e a IA gera o conteúdo",
+        "hint": "Digite um tema ou instruções de escrita..."
+      },
+      "continue": {
+        "name": "Continuar escrevendo",
+        "desc": "Continuar do final do documento"
+      },
+      "outline": {
+        "name": "Gerar esboço",
+        "desc": "Criar um esboço de artigo",
+        "hint": "Digite o tema do artigo..."
+      },
+      "summarize": {
+        "name": "Resumir",
+        "desc": "Resumir texto selecionado ou documento completo"
+      },
+      "improve": {
+        "name": "Melhorar",
+        "desc": "Melhorar a qualidade da escrita"
+      },
+      "simplify": {
+        "name": "Simplificar",
+        "desc": "Simplificar texto complexo"
+      },
+      "expand": {
+        "name": "Expandir",
+        "desc": "Adicionar mais detalhes e explicações"
+      },
+      "fixGrammar": {
+        "name": "Corrigir gramática",
+        "desc": "Corrigir erros gramaticais e ortográficos"
+      }
+    },
+    "translation": {
+      "name": "Tradução",
+      "desc": "Tradução e localização multi-idioma",
+      "auto": {
+        "name": "Tradução inteligente",
+        "desc": "Detectar idioma automaticamente e traduzir"
+      },
+      "toTarget": {
+        "name": "Traduzir para...",
+        "desc": "Escolher idioma de destino e traduzir"
+      },
+      "explain": {
+        "name": "Traduzir e explicar",
+        "desc": "Traduzir com explicação palavra por palavra"
+      },
+      "polish": {
+        "name": "Localizar",
+        "desc": "Tornar traduções mais naturais"
+      },
+      "compare": {
+        "name": "Múltiplas versões",
+        "desc": "Fornecer múltiplos estilos de tradução"
+      },
+      "targetLang": "Idioma de destino",
+      "lang": {
+        "en": "Inglês",
+        "zhCN": "Chinês simplificado",
+        "zhHant": "Chinês tradicional",
+        "ja": "Japonês",
+        "ko": "Coreano",
+        "ar": "Árabe",
+        "fr": "Francês",
+        "de": "Alemão",
+        "es": "Espanhol",
+        "hi": "Hindi",
+        "pt": "Português",
+        "ru": "Russo"
+      }
+    },
+    "student": {
+      "name": "Ajudante de estudos",
+      "desc": "Aprendizado, anotações, compreensão de conceitos",
+      "explain": {
+        "name": "Explicar conceito",
+        "desc": "Explicar um conceito em termos simples",
+        "hint": "Digite um conceito para explicar..."
+      },
+      "notes": {
+        "name": "Notas de estudo",
+        "desc": "Organizar conteúdo em notas estruturadas"
+      },
+      "flashcard": {
+        "name": "Flashcards",
+        "desc": "Extrair flashcards de perguntas e respostas do conteúdo"
+      },
+      "mindmap": {
+        "name": "Mapa mental",
+        "desc": "Gerar um mapa mental em Markdown"
+      },
+      "essayOutline": {
+        "name": "Esboço de redação",
+        "desc": "Gerar um esboço de redação",
+        "hint": "Digite o tema da redação..."
+      },
+      "reading": {
+        "name": "Análise de leitura",
+        "desc": "Análise aprofundada do conteúdo de texto"
+      },
+      "formula": {
+        "name": "Derivação de fórmulas",
+        "desc": "Mostrar etapas de derivação de fórmulas matemáticas",
+        "hint": "Digite o nome ou conteúdo da fórmula..."
+      },
+      "compare": {
+        "name": "Comparar conceitos",
+        "desc": "Comparar dois conceitos lado a lado",
+        "hint": "Digite dois conceitos (ex.: TCP vs UDP)..."
+      }
+    },
+    "kids": {
+      "name": "Aprendizado infantil",
+      "desc": "Histórias, aprendizado divertido, jogos interativos",
+      "story": {
+        "name": "História infantil",
+        "desc": "Gerar uma história a partir de palavras-chave",
+        "hint": "Digite palavras-chave da história (ex.: coelho floresta aventura)..."
+      },
+      "poem": {
+        "name": "Rima infantil",
+        "desc": "Criar uma rima sobre um tema",
+        "hint": "Digite um tema..."
+      },
+      "why": {
+        "name": "Por quê? Por quê? Por quê?",
+        "desc": "A IA responde perguntas intermináveis de 'por quê'"
+      },
+      "alphabet": {
+        "name": "Diversão com o alfabeto",
+        "desc": "Aprendizado interativo de letras"
+      },
+      "mathGame": {
+        "name": "Jogo de matemática",
+        "desc": "Aritmética interativa e divertida"
+      },
+      "riddle": {
+        "name": "Adivinhas",
+        "desc": "A IA propõe adivinhas para as crianças resolverem"
+      },
+      "drawText": {
+        "name": "Falando sobre imagens",
+        "desc": "Descreva uma cena e a IA escreve uma história",
+        "hint": "Descreva uma cena..."
+      },
+      "knowledge": {
+        "name": "Curiosidades",
+        "desc": "Enciclopédia de natureza, ciência e animais"
+      }
+    },
+    "marketing": {
+      "name": "Marketing",
+      "desc": "Redes sociais, anúncios e copywriting SEO",
+      "xiaohongshu": {
+        "name": "Post Xiaohongshu",
+        "desc": "Gerar post no estilo avaliação de lifestyle",
+        "hint": "Digite o produto ou tema..."
+      },
+      "twitter": {
+        "name": "Post Twitter/X",
+        "desc": "Gerar conteúdo no estilo tweet",
+        "hint": "Digite o tema..."
+      },
+      "slogan": {
+        "name": "Slogan publicitário",
+        "desc": "Gerar slogans marcantes para marcas",
+        "hint": "Digite a marca ou produto..."
+      },
+      "email": {
+        "name": "E-mail marketing",
+        "desc": "Configurar público e tom para o e-mail",
+        "hint": "Descreva o conteúdo do e-mail..."
+      },
+      "seoArticle": {
+        "name": "Artigo SEO",
+        "desc": "Gerar conteúdo otimizado para SEO",
+        "hint": "Digite as palavras-chave alvo..."
+      },
+      "productDesc": {
+        "name": "Descrição de produto",
+        "desc": "Gerar texto de produto atraente",
+        "hint": "Digite informações do produto..."
+      },
+      "tone": "Tom",
+      "tone.formal": "Formal",
+      "tone.friendly": "Amigável",
+      "tone.urgent": "Urgente",
+      "tone.humorous": "Humorístico"
+    },
+    "professional": {
+      "name": "Profissional",
+      "desc": "E-mails, relatórios, atas de reunião",
+      "email": {
+        "name": "E-mail comercial",
+        "desc": "Configurar cenário e tom para o e-mail",
+        "hint": "Descreva o conteúdo do e-mail..."
+      },
+      "meeting": {
+        "name": "Ata de reunião",
+        "desc": "Organizar anotações em ata formal"
+      },
+      "report": {
+        "name": "Relatório de trabalho",
+        "desc": "Gerar relatório semanal/mensal/trimestral",
+        "hint": "Digite os pontos-chave do relatório..."
+      },
+      "review": {
+        "name": "Revisão de código",
+        "desc": "Revisar código e sugerir melhorias"
+      },
+      "resume": {
+        "name": "Polir currículo",
+        "desc": "Otimizar currículo com método STAR"
+      },
+      "prd": {
+        "name": "Documento PRD",
+        "desc": "Gerar documento de requisitos de produto",
+        "hint": "Digite a descrição do recurso..."
+      },
+      "tone": "Tom",
+      "tone.concise": "Conciso",
+      "reportType": "Tipo de relatório",
+      "reportType.weekly": "Semanal",
+      "reportType.monthly": "Mensal",
+      "reportType.quarterly": "Trimestral"
+    },
+    "personal": {
+      "name": "Crescimento pessoal",
+      "desc": "Diário, metas, tomada de decisão",
+      "journal": {
+        "name": "Assistente de diário",
+        "desc": "Diário guiado e reflexão",
+        "hint": "O que aconteceu hoje?..."
+      },
+      "goal": {
+        "name": "Desmembramento de metas",
+        "desc": "Dividir metas em etapas acionáveis",
+        "hint": "Digite sua meta..."
+      },
+      "habit": {
+        "name": "Construtor de hábitos",
+        "desc": "Criar um plano de construção de hábitos",
+        "hint": "Digite o hábito que deseja construir..."
+      },
+      "decision": {
+        "name": "Análise de decisão",
+        "desc": "Análise de prós e contras para decisões",
+        "hint": "Descreva suas opções..."
+      },
+      "bookNotes": {
+        "name": "Notas de leitura",
+        "desc": "Organizar conteúdo em notas de leitura"
+      }
+    },
+    "games_cn": {
+      "name": "Jogos chineses",
+      "desc": "Jogos de poesia, cadeia de provérbios, adivinhas",
+      "feihualing": {
+        "name": "飞花令",
+        "desc": "Revezar recitando poemas com um caractere dado"
+      },
+      "chengyuChain": {
+        "name": "成语接龙",
+        "desc": "Encadear provérbios pelo último/primeiro caractere"
+      },
+      "riddle": {
+        "name": "猜谜语",
+        "desc": "A IA dá pistas, você adivinha a resposta"
+      },
+      "lanternRiddle": {
+        "name": "猜灯谜",
+        "desc": "Charadas baseadas em caracteres chineses"
+      },
+      "poetryFill": {
+        "name": "诗词填空",
+        "desc": "Preencher palavras faltantes de poemas"
+      },
+      "storyChain": {
+        "name": "故事接龙",
+        "desc": "Revezar continuando uma história"
+      },
+      "characterGame": {
+        "name": "猜字游戏",
+        "desc": "Adivinhar o caractere chinês a partir de pistas"
+      },
+      "brainTeaser": {
+        "name": "脑筋急转弯",
+        "desc": "Charadas divertidas e pegadinhas"
+      },
+      "couplet": {
+        "name": "对联",
+        "desc": "A IA dá o primeiro verso, você completa"
+      },
+      "wordExplain": {
+        "name": "你说我猜",
+        "desc": "A IA descreve, você adivinha a palavra"
+      },
+      "ancientText": {
+        "name": "文言文翻译",
+        "desc": "Traduzir chinês clássico para chinês moderno"
+      },
+      "homophone": {
+        "name": "谐音梗",
+        "desc": "Desafio de trocadilhos homófonos"
+      }
+    },
+    "games_en": {
+      "name": "Jogos em inglês",
+      "desc": "Word Chain, Hangman, Trivia e mais",
+      "wordChain": {
+        "name": "Word Chain",
+        "desc": "A última letra inicia a próxima palavra"
+      },
+      "twentyQuestions": {
+        "name": "20 Questions",
+        "desc": "Adivinhe o objeto em 20 perguntas de sim/não"
+      },
+      "hangman": {
+        "name": "Hangman",
+        "desc": "Adivinhe a palavra letra por letra"
+      },
+      "storyBuilder": {
+        "name": "Story Builder",
+        "desc": "Reveze construindo uma história"
+      },
+      "wordAssociation": {
+        "name": "Word Association",
+        "desc": "Cadeia de associação livre de palavras"
+      },
+      "riddles": {
+        "name": "Riddles",
+        "desc": "Resolva adivinhas em inglês"
+      },
+      "trivia": {
+        "name": "Trivia Quiz",
+        "desc": "Perguntas de conhecimento geral"
+      },
+      "rhymeTime": {
+        "name": "Rhyme Time",
+        "desc": "Crie histórias com palavras que rimam"
+      },
+      "acronym": {
+        "name": "Acronym Game",
+        "desc": "Invente significados para acrônimos aleatórios"
+      },
+      "taboo": {
+        "name": "Taboo",
+        "desc": "Descreva sem usar palavras proibidas"
+      },
+      "sentenceBuilder": {
+        "name": "Sentence Builder",
+        "desc": "Construa a frase mais longa com palavras dadas"
+      },
+      "emojiStory": {
+        "name": "Emoji Story",
+        "desc": "Conte histórias usando emojis"
+      }
+    },
+    "quiz": {
+      "name": "Quiz e prática",
+      "desc": "Perguntas geradas por IA com pontuação",
+      "practice": {
+        "name": "Quiz universal",
+        "desc": "Escolha disciplina e dificuldade, a IA faz o quiz"
+      },
+      "direction": "Disciplina",
+      "dir": {
+        "programming": "Programação",
+        "math": "Matemática",
+        "english": "Inglês",
+        "science": "Ciências",
+        "history": "História",
+        "interview": "Preparação para entrevista",
+        "custom": "Disciplina personalizada"
+      },
+      "difficulty": "Dificuldade",
+      "diff": {
+        "easy": "Fácil",
+        "medium": "Médio",
+        "hard": "Difícil"
+      }
+    }
+  },
+  "plugins": {
+    "tabs": {
+      "installed": "Instalados",
+      "market": "Marketplace"
+    },
+    "installed": {
+      "empty": "Nenhum plugin instalado ainda."
+    },
+    "sandbox": {
+      "label": "Nível de sandbox",
+      "sandbox": "Sandbox (JS)",
+      "local": "Local (sem rede)",
+      "system": "Sistema (acesso à rede)"
+    },
+    "permissions": {
+      "label": "Permissões"
+    },
+    "market": {
+      "search": "Buscar plugins...",
+      "refresh": "Atualizar",
+      "catAll": "Todos",
+      "cached": "Mostrando resultados em cache",
+      "loading": "Carregando marketplace...",
+      "empty": "Nenhum plugin encontrado",
+      "install": "Instalar",
+      "installed": "Instalado",
+      "installing": "Instalando..."
+    },
+    "install": {
+      "fromFile": "Instalar a partir de .zip",
+      "urlPlaceholder": "URL do repositório GitHub (https://github.com/...)",
+      "validate": "Importar",
+      "confirmUrl": "Instalar plugin a partir da URL?",
+      "author": "Autor",
+      "permissions": "Permissões",
+      "noPermissions": "Sem permissões"
+    },
+    "verified": "Verificado",
+    "enable": "Ativar",
+    "disable": "Desativar",
+    "uninstall": "Desinstalar",
+    "changelog": "Registro de alterações",
+    "viewSource": "Código-fonte",
+    "blacklisted": "Na lista negra",
+    "blacklistWarning": "Este plugin foi colocado na lista negra devido a um problema de segurança. Por favor, desinstale-o.",
+    "processError": "O processo do plugin travou. Alterne para reiniciar.",
+    "error": {
+      "platformNotSupported": "Nenhum download disponível para sua plataforma."
+    }
+  },
+  "transcription": {
+    "title": "Transcrição",
+    "recording": "Gravando",
+    "connecting": "Conectando...",
+    "paused": "Pausado",
+    "stopping": "Parando...",
+    "idle": "Pronto",
+    "start": "Iniciar",
+    "stop": "Parar",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "back": "Voltar ao chat",
+    "emptyIdle": "Clique em Iniciar para começar a gravar e transcrever.",
+    "emptyWaiting": "Aguardando fala...",
+    "summarizeWithAI": "Resumir com IA",
+    "saveAsDoc": "Salvar como documento",
+    "summarizePrompt": "Por favor, gere um resumo de reunião a partir da transcrição a seguir. Identifique os principais pontos de discussão, decisões tomadas e itens de ação. Formate como Markdown.",
+    "noSpeechConfig": "Nenhum provedor de fala configurado. Adicione um em Configurações → Voz.",
+    "noSpeechConfigHint": "Vá para Configurações → Voz para adicionar um provedor de fala (ex.: Deepgram).",
+    "goToVoiceSettings": "Abrir configurações de voz"
+  },
+  "outline": {
+    "empty": "Sem títulos"
+  }
+}

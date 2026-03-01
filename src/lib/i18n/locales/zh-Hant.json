@@ -1,0 +1,1337 @@
+{
+  "common": {
+    "save": "儲存",
+    "cancel": "取消",
+    "close": "關閉",
+    "add": "新增",
+    "remove": "移除",
+    "connect": "連線",
+    "disconnect": "斷開",
+    "insert": "插入",
+    "replace": "取代",
+    "copy": "複製",
+    "edit": "編輯",
+    "delete": "刪除",
+    "browse": "更換",
+    "clear": "恢復預設",
+    "play": "試聽",
+    "stop": "停止",
+    "untitled": "未命名"
+  },
+  "settings": {
+    "title": "設定",
+    "tabs": {
+      "general": "一般",
+      "editor": "編輯器",
+      "appearance": "外觀",
+      "ai": "AI",
+      "mcp": "MCP",
+      "image": "圖片",
+      "publish": "發佈",
+      "permissions": "權限",
+      "voice": "語音",
+      "plugins": "外掛"
+    },
+    "language": {
+      "label": "語言",
+      "system": "跟隨系統"
+    },
+    "theme": {
+      "label": "主題",
+      "system": "跟隨系統",
+      "light": "淺色",
+      "dark": "深色"
+    },
+    "appearance": {
+      "themeSection": "主題",
+      "darkModeSection": "深色模式",
+      "fontSection": "字型",
+      "separateDarkTheme": "在深色模式下使用獨立的主題",
+      "darkTheme": "深色模式主題",
+      "darkModeLabel": "外觀模式"
+    },
+    "fontSize": {
+      "label": "字型大小"
+    },
+    "autoSave": {
+      "label": "自動儲存",
+      "interval": "自動儲存間隔"
+    },
+    "rememberLastFolder": "記住上次開啟的資料夾",
+    "editor": {
+      "lineWidth": "編輯器行寬",
+      "tabSize": "定位字元大小",
+      "showLineNumbers": "原始碼模式顯示行號"
+    },
+    "version": "Moraya v{version}",
+    "permissions": {
+      "mcpTitle": "MCP 權限",
+      "aiTitle": "AI 設定",
+      "aiMaxTokens": "最大輸出 Token 數",
+      "aiMaxTokensHint": "AI 單次回應可產生的最大 Token 數量。較大的值允許更長的回覆和工具呼叫，但會消耗更多額度。",
+      "aiRulesMaxChars": "規則檔案最大字元數",
+      "aiRulesMaxCharsHint": "從 MORAYA.md 規則檔案讀取的最大字元數。規則檔案較大時請調高此值。字元越多，每次請求消耗的 Token 越多。",
+      "aiToolResultMaxChars": "工具結果最大字元數",
+      "aiToolResultMaxCharsHint": "MCP 工具回傳結果保留的最大字元數。較大的值保留更多細節，但會佔用更多上下文。",
+      "aiMaxToolRounds": "最大工具呼叫輪次",
+      "aiMaxToolRoundsHint": "AI 單次對話中可執行工具呼叫的最大輪次。複雜的多步驟任務（如批次上傳）需要調大此值。"
+    },
+    "voice": {
+      "providers": "語音辨識服務",
+      "addProvider": "新增服務",
+      "editProvider": "編輯服務",
+      "noProviders": "尚未設定語音辨識服務。",
+      "provider": "服務商",
+      "apiKey": "API Key",
+      "apiKeyOptional": "AWS 可選（使用存取金鑰代替）",
+      "awsAccessKey": "AWS Access Key ID",
+      "awsSecretKey": "AWS Secret Access Key",
+      "region": "區域",
+      "model": "模型",
+      "modelPlaceholder": "輸入模型名稱",
+      "endpointIdPlaceholder": "輸入推論接入點 ID",
+      "language": "語言",
+      "langAuto": "自動辨識",
+      "langMulti": "多語言",
+      "baseUrl": "自訂 WebSocket 位址",
+      "testConnection": "測試連線",
+      "testing": "測試中...",
+      "testOk": "連線成功",
+      "testFailed": "連線失敗",
+      "setActive": "設為預設",
+      "active": "預設",
+      "custom": "自訂",
+      "storage": "儲存",
+      "recordingBackupDir": "錄音備份",
+      "recordingBackupHint": "工作階段結束後自動儲存完整錄音 WAV 檔案。",
+      "voiceSyncDir": "聲紋同步目錄",
+      "voiceSyncHint": "透過雲端硬碟同步聲紋檔案（如 iCloud、Dropbox）。點選「更換」選擇資料夾，已有聲紋檔案將自動遷移至新目錄。",
+      "syncDefault": "AppData（預設）",
+      "disabled": "已停用",
+      "migratingProfiles": "遷移中...",
+      "migrationFailed": "遷移失敗",
+      "profiles": "聲紋檔案",
+      "noProfiles": "暫無聲紋檔案，轉錄工作階段結束後會自動擷取。",
+      "naming": {
+        "male": "男{n}號",
+        "female": "女{n}號",
+        "bystander": "路人{n}",
+        "speaker": "說話人{n}"
+      }
+    }
+  },
+  "titlebar": {
+    "unsaved": "未儲存",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "close": "關閉"
+  },
+  "sidebar": {
+    "title": "資源管理器",
+    "openFolder": "開啟資料夾",
+    "noFolder": "未開啟資料夾",
+    "createKB": "建立本機知識庫",
+    "emptyDir": "目前目錄中還沒有任何檔案",
+    "kbSettings": "知識庫管理",
+    "treeView": "樹狀檢視",
+    "listView": "列表檢視",
+    "search": "搜尋檔案...",
+    "contextMenu": {
+      "newFile": "新建檔案",
+      "searchFiles": "搜尋",
+      "refresh": "重新整理",
+      "rename": "重新命名",
+      "duplicate": "建立副本",
+      "delete": "刪除",
+      "copyPath": "複製路徑",
+      "revealInFinder": "在 Finder 中顯示"
+    },
+    "newFilePrompt": "輸入檔案名稱",
+    "renamePrompt": "輸入新名稱",
+    "deleteConfirm": "確定要刪除「{name}」嗎？此操作不可復原。"
+  },
+  "statusbar": {
+    "words": "字數",
+    "characters": "字元數",
+    "format": "Markdown",
+    "sourceMode": "原始碼",
+    "visualMode": "視覺化",
+    "splitMode": "對比",
+    "publishWorkflow": "AI工作流",
+    "aiTooltip": "AI"
+  },
+  "editor": {
+    "sourceMode": "原始碼模式",
+    "visualMode": "視覺化模式",
+    "splitMode": "對比模式",
+    "unsavedTitle": "未儲存的變更",
+    "unsavedNewDocMsg": "目前文件有未儲存的內容，切換後將遺失。是否先儲存？",
+    "saveFirst": "儲存",
+    "discardChanges": "不儲存"
+  },
+  "table": {
+    "insertRowAbove": "在上方插入列",
+    "insertRowBelow": "在下方插入列",
+    "deleteRow": "刪除列",
+    "insertColLeft": "在左側插入欄",
+    "insertColRight": "在右側插入欄",
+    "deleteCol": "刪除欄",
+    "alignLeft": "靠左對齊",
+    "alignCenter": "置中對齊",
+    "alignRight": "靠右對齊"
+  },
+  "knowledgeBase": {
+    "title": "知識庫",
+    "add": "新增知識庫",
+    "remove": "移除",
+    "rename": "重新命名",
+    "manage": "管理知識庫...",
+    "empty": "暫無知識庫",
+    "emptyHint": "新增資料夾作為知識庫，方便快速切換。",
+    "deleteConfirm": "從知識庫中移除「{name}」？資料夾本身不會被刪除。",
+    "switchTo": "切換知識庫",
+    "saveHint": "此資料夾尚未加入知識庫。",
+    "saveAsKB": "儲存為知識庫"
+  },
+  "ai": {
+    "title": "AI 助手",
+    "morayaMdActive": "MORAYA.md 規則已對此知識庫生效",
+    "clearChat": "清空對話",
+    "unconfigured": "AI 未設定。",
+    "unconfiguredHint": "開啟設定（{shortcut}）並設定 API 金鑰以啟用 AI 功能。",
+    "openSettings": "開啟 AI 設定",
+    "openImageSettings": "開啟 AIGC 設定",
+    "textAiLabel": "AI 對話設定（產生提示詞）",
+    "imageAiLabel": "AI 圖像設定（產生圖片）",
+    "welcomeTitle": "有什麼可以幫您？",
+    "welcomeHint": "輸入訊息或使用 {kbd} 檢視指令",
+    "you": "你",
+    "assistant": "AI",
+    "typing": "輸入中...",
+    "placeholder": "向 AI 提問...（/ 檢視指令）",
+    "placeholderSelection": "詢問選取內容...（/ 檢視指令）",
+    "send": "傳送（⌘↵）",
+    "stop": "停止（Esc）",
+    "interrupted": "已中斷",
+    "insertToEditor": "插入到編輯器",
+    "replaceSelection": "取代選取內容",
+    "attachImage": "附加圖片",
+    "attachImageMax": "最多 {max} 張圖片",
+    "removeImage": "移除圖片",
+    "closePreview": "關閉預覽",
+    "moreActions": "更多功能",
+    "voiceTranscription": "AI 錄音即時轉錄",
+    "config": {
+      "title": "AI 設定",
+      "provider": "服務商",
+      "apiKey": "API 金鑰",
+      "apiKeyPlaceholder": "輸入 {provider} API 金鑰",
+      "apiKeyNotRequired": "Ollama 無需金鑰",
+      "baseUrl": "基礎 URL",
+      "model": "模型",
+      "modelPlaceholder": "輸入模型名稱",
+      "maxTokens": "最大 Token 數",
+      "temperature": "溫度",
+      "testConnection": "測試連線",
+      "testing": "測試中...",
+      "connected": "已連線！",
+      "failed": "失敗"
+    },
+    "providers": {
+      "claude": "Anthropic Claude",
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "deepseek": "DeepSeek",
+      "ollama": "Ollama（本機）",
+      "custom": "自訂 API",
+      "grok": "xAI Grok",
+      "mistral": "Mistral AI",
+      "glm": "智譜 GLM",
+      "minimax": "MiniMax",
+      "doubao": "豆包（字節跳動）"
+    },
+    "multiModel": {
+      "addModel": "+ 新增模型",
+      "default": "預設",
+      "setDefault": "設為預設",
+      "noModels": "未設定 AI 模型",
+      "noModelsHint": "新增 AI 模型以啟用 AI 功能。",
+      "noImageModels": "未設定圖像模型",
+      "noImageModelsHint": "新增圖像產生模型以使用 AI 配圖功能。"
+    },
+    "imageConfig": {
+      "title": "圖片產生 AI",
+      "provider": "服務商",
+      "providerOpenai": "OpenAI DALL-E",
+      "providerGrok": "Grok (xAI)",
+      "providerCustom": "自訂（OpenAI 相容）",
+      "apiKey": "API 金鑰",
+      "apiKeyPlaceholder": "輸入圖片 API 金鑰",
+      "baseUrl": "基礎 URL",
+      "model": "模型",
+      "modelPlaceholder": "輸入模型名稱",
+      "defaultSize": "預設尺寸",
+      "ratio": "圖片比例",
+      "sizeLevel": "解析度",
+      "size_large": "大",
+      "size_medium": "中",
+      "size_small": "小",
+      "providerGemini": "Google Gemini Imagen",
+      "providerQwen": "通義千問（阿里雲）",
+      "providerDoubao": "豆包（字節跳動）"
+    },
+    "commands": {
+      "write": "撰寫",
+      "writeDesc": "根據提示撰寫內容",
+      "continue": "續寫",
+      "continueDesc": "從目前位置繼續寫作",
+      "summarize": "摘要",
+      "summarizeDesc": "摘要選取的文字",
+      "translate": "翻譯",
+      "translateDesc": "將文字翻譯為其他語言",
+      "improve": "優化",
+      "improveDesc": "提升寫作品質",
+      "fixGrammar": "修正文法",
+      "fixGrammarDesc": "修正文法和拼寫錯誤",
+      "simplify": "簡化",
+      "simplifyDesc": "簡化複雜文字",
+      "expand": "擴展",
+      "expandDesc": "擴展相關主題",
+      "outline": "產生大綱",
+      "outlineDesc": "產生文章大綱",
+      "explain": "解釋",
+      "explainDesc": "解釋選取的文字"
+    },
+    "prompts": {
+      "emptyResponse": "你回傳了空回應。請繼續完成任務：直接呼叫所需的工具，或者摘要已完成的工作並列出剩餘步驟。不要回傳空訊息。",
+      "emptyResponseContinue": "\n\n你上次說的是：「{lastMessage}」\n請從這裡繼續。",
+      "truncationContinue": "你的回覆因輸出長度限制被截斷了。上面的文字已儲存。請繼續完成任務，直接進行工具呼叫。不要重複已輸出的內容。",
+      "continuationPrompt": "請繼續執行，直接呼叫所需的工具完成任務。不要重複已說過的內容，不要再次描述計畫，直接進行工具呼叫。",
+      "mcpToolPrompt": "請使用 {toolName} 工具（來自 {serverName}）"
+    },
+    "detection": {
+      "intentPrefixes": "讓我|我來|我先|我需要|我將|我要|我會",
+      "actionVerbs": "查看|取得|檢查|讀取|擷取|分析|上傳|下載|呼叫|執行|處理|開啟|搜尋|建立|產生|寫入|修改|編輯|刪除|取代|儲存|發佈|命名|使用|轉換",
+      "continuationPhrases": "接下來|下面|現在|然後|讓我|繼續|處理|開始|上傳|傳送|呼叫|查看|取得|擷取",
+      "remainingPhrases": "還有|剩餘|接下來|下一|第\\d+[張個步]",
+      "unfinishedPhrases": "還需要|還沒有|尚未|待處理"
+    }
+  },
+  "mcp": {
+    "title": "MCP 伺服器",
+    "tabs": {
+      "servers": "伺服器",
+      "publish": "發佈",
+      "sync": "同步",
+      "marketplace": "市集"
+    },
+    "aiServices": {
+      "empty": "暫無 AI 建立的服務",
+      "hint": "AI 可以在對話中自動建立 MCP 服務，試試讓它呼叫 API！",
+      "nodeRequired": "需要 Node.js 18+",
+      "checkingNode": "正在偵測 Node.js...",
+      "temp": "暫時",
+      "saved": "已儲存",
+      "viewCode": "程式碼",
+      "tools": "{count} 個工具",
+      "serviceCreated": "AI 建立了服務「{name}」，包含 {count} 個工具",
+      "serviceSaved": "服務「{name}」已儲存",
+      "serviceRemoved": "服務「{name}」已移除",
+      "launchConfirmTitle": "AI 服務安全提示",
+      "launchConfirmMsg": "AI 已產生一個 MCP 服務，需要執行自動產生的程式碼：\n  服務名：{name}\n  工具：{tools}\n\n此程式碼將在本機 Node.js 處理程序中執行。\n請確認是否信任此 AI 產生的服務程式碼。",
+      "launchConfirmOk": "確認執行",
+      "launchConfirmCancel": "取消"
+    },
+    "servers": {
+      "empty": "未設定 MCP 伺服器",
+      "localMcp": "Local MCP",
+      "addServer": "新增伺服器",
+      "addServerPlus": "+ 新增伺服器",
+      "connected": "已連線",
+      "disconnected": "已斷開",
+      "serverName": "伺服器名稱",
+      "serverUrl": "伺服器 URL（例如：http://localhost:3000/mcp）",
+      "http": "HTTP",
+      "sse": "SSE（伺服器傳送事件）",
+      "stdio": "stdio（本機處理程序）",
+      "command": "指令",
+      "commandPlaceholder": "指令（如：npx、node、python）",
+      "argsPlaceholder": "參數（如：-y @modelcontextprotocol/server-filesystem /path）",
+      "envPlaceholder": "環境變數 KEY=VALUE（每行一個）",
+      "presets": "Remote MCP",
+      "presetsHint": "一鍵新增常用 MCP 伺服器",
+      "presetDesc": {
+        "filesystem": "讀取、搜尋和管理本機檔案",
+        "fetch": "抓取網頁並轉換為 Markdown",
+        "git": "讀取和搜尋 Git 儲存庫",
+        "memory": "AI 持久化知識圖譜記憶"
+      },
+      "formMode": "表單",
+      "jsonMode": "JSON 匯入",
+      "jsonPlaceholder": "貼上 JSON 設定，例如：\n{\n  \"mcpServers\": {\n    \"名稱\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@.../server-xxx\"]\n    }\n  }\n}",
+      "jsonNoConfig": "未找到有效的 MCP 伺服器設定",
+      "jsonParseError": "解析錯誤",
+      "launchConfirmTitle": "安全提示",
+      "launchConfirmMsg": "即將啟動外部程式：\n  指令：{command}\n  參數：{args}\n\nMCP 伺服器將以目前使用者權限執行，可以存取本機檔案和網路。\n請確認此 MCP 伺服器來自可信來源。",
+      "launchConfirmOk": "確認啟動",
+      "launchConfirmCancel": "取消",
+      "autoApprove": "自動核准 MCP 啟動",
+      "autoApproveHint": "連線 MCP 伺服器和啟動 AI 產生的服務時跳過安全確認。不建議用於不可信來源。"
+    },
+    "publish": {
+      "empty": "未設定發佈目標",
+      "hint": "請先連線具有發佈功能的 MCP 伺服器。",
+      "button": "發佈",
+      "publishing": "發佈中...",
+      "published": "已發佈！{info}",
+      "failed": "失敗：{message}",
+      "error": "錯誤：{message}"
+    },
+    "sync": {
+      "empty": "未設定同步",
+      "hint": "請先連線 MCP 伺服器，然後新增同步設定。",
+      "syncNow": "立即同步",
+      "addSync": "+ 新增同步",
+      "name": "設定名稱",
+      "server": "MCP 伺服器",
+      "remotePath": "遠端路徑",
+      "localPath": "本機路徑",
+      "direction": "方向",
+      "push": "推送（本機 → 遠端）",
+      "pull": "拉取（遠端 → 本機）",
+      "bidirectional": "雙向同步",
+      "lastSync": "上次同步：{time}",
+      "syncing": "同步中...",
+      "success": "同步完成",
+      "error": "同步錯誤：{message}"
+    },
+    "marketplace": {
+      "title": "市集",
+      "search": "搜尋 MCP 服務...",
+      "source": "資料來源",
+      "sourceOfficial": "Official",
+      "sourceLobehub": "LobeHub",
+      "sourceSmithery": "Smithery",
+      "install": "安裝",
+      "installAndConnect": "安裝並連線",
+      "installing": "安裝中...",
+      "installed": "已安裝",
+      "viewDetails": "詳情",
+      "loadMore": "載入更多",
+      "noResults": "未找到 MCP 服務",
+      "networkError": "載入失敗，請檢查網路",
+      "retry": "重試",
+      "envVars": "環境變數",
+      "envRequired": "（必填）",
+      "popularity": "次使用",
+      "installs": "安裝 / 使用次數",
+      "verified": "已驗證",
+      "cancel": "取消"
+    }
+  },
+  "imageDialog": {
+    "title": "插入圖片",
+    "urlTab": "URL 位址",
+    "fileTab": "本機檔案",
+    "urlPlaceholder": "https://example.com/image.png",
+    "altPlaceholder": "圖片描述（可選）",
+    "selectFile": "選擇圖片...",
+    "noFileSelected": "未選擇檔案",
+    "insert": "插入",
+    "cancel": "取消"
+  },
+  "imageHost": {
+    "title": "圖床服務",
+    "provider": "服務商",
+    "smms": "SM.MS",
+    "imgur": "Imgur",
+    "github": "GitHub 儲存庫",
+    "custom": "自訂 API",
+    "apiToken": "API 金鑰",
+    "apiTokenPlaceholder": "輸入 API 金鑰",
+    "customEndpoint": "上傳介面",
+    "customEndpointPlaceholder": "https://your-api.com/upload",
+    "customHeaders": "自訂請求標頭（JSON）",
+    "githubRepoUrl": "儲存庫位址",
+    "githubRepoUrlPlaceholder": "https://github.com/user/images",
+    "githubBranch": "分支",
+    "githubDir": "圖片目錄",
+    "githubToken": "個人存取權杖",
+    "githubTokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "githubCdn": "URL 格式",
+    "githubCdnRaw": "raw.githubusercontent.com",
+    "githubCdnJsdelivr": "jsDelivr CDN",
+    "importFromPublish": "從發佈目標匯入",
+    "autoUpload": "貼上/拖入圖片時自動上傳",
+    "testUpload": "測試上傳",
+    "testing": "測試中...",
+    "success": "上傳成功！",
+    "failed": "上傳失敗",
+    "addTarget": "新增圖床",
+    "targetName": "名稱",
+    "targetNamePlaceholder": "例如：我的部落格圖床",
+    "settingsEmpty": "未設定圖床",
+    "settingsHint": "新增圖床服務以啟用圖片自動上傳。",
+    "default": "預設",
+    "setDefault": "設為預設",
+    "gitlab": "GitLab 儲存庫",
+    "git_custom": "自訂 Git（Gitea/Forgejo）",
+    "qiniu": "七牛雲 Kodo",
+    "aliyun_oss": "阿里雲 OSS",
+    "tencent_cos": "騰訊雲 COS",
+    "aws_s3": "AWS S3",
+    "google_gcs": "Google Cloud Storage",
+    "groupApi": "API 圖床",
+    "groupGit": "程式碼託管",
+    "groupOss": "物件儲存",
+    "gitlabRepoUrl": "儲存庫 URL",
+    "gitlabBranch": "分支",
+    "gitlabDir": "圖片目錄",
+    "gitlabToken": "個人存取權杖",
+    "gitlabTokenPlaceholder": "glpat-xxxxxxxxxxxx",
+    "gitCustomRepoUrl": "儲存庫 URL",
+    "gitCustomBranch": "分支",
+    "gitCustomDir": "圖片目錄",
+    "gitCustomToken": "存取權杖",
+    "gitCustomTokenPlaceholder": "輸入 Token",
+    "ossAccessKey": "Access Key",
+    "ossAccessKeyPlaceholder": "輸入 AccessKey ID",
+    "ossSecretKey": "Secret Key",
+    "ossSecretKeyPlaceholder": "輸入 SecretKey",
+    "ossBucket": "Bucket 名稱",
+    "ossBucketPlaceholder": "例如 my-images-bucket",
+    "ossRegion": "地域 Region",
+    "ossRegionPlaceholder": "例如 cn-east-1、us-east-1",
+    "selectRegion": "選擇地域",
+    "ossEndpoint": "自訂 Endpoint（可選）",
+    "ossEndpointPlaceholder": "例如 https://s3.custom.com",
+    "ossCdnDomain": "CDN 加速網域（可選）",
+    "ossCdnDomainPlaceholder": "例如 https://cdn.example.com",
+    "ossPathPrefix": "路徑前綴（可選）",
+    "ossPathPrefixPlaceholder": "例如 images/blog/"
+  },
+  "imageMenu": {
+    "resize": "調整大小",
+    "upload": "上傳到圖床",
+    "editAlt": "編輯描述",
+    "copyUrl": "複製圖片位址",
+    "copyImage": "複製圖片",
+    "openInBrowser": "在瀏覽器中開啟圖片",
+    "saveAs": "圖片另存為...",
+    "delete": "刪除圖片",
+    "originalSize": "原始大小"
+  },
+  "menu": {
+    "file": "檔案",
+    "edit": "編輯",
+    "paragraph": "段落",
+    "format": "格式",
+    "view": "檢視",
+    "window": "視窗",
+    "help": "說明",
+    "new": "新建",
+    "newWindow": "新建視窗",
+    "open": "開啟...",
+    "save": "儲存",
+    "saveAs": "另存為...",
+    "export": "匯出",
+    "exportHtml": "HTML",
+    "exportPdf": "PDF",
+    "exportImage": "圖片 (PNG)",
+    "exportDoc": "Word (.doc)",
+    "heading1": "標題 1",
+    "heading2": "標題 2",
+    "heading3": "標題 3",
+    "heading4": "標題 4",
+    "heading5": "標題 5",
+    "heading6": "標題 6",
+    "table": "表格",
+    "codeBlock": "程式碼區塊",
+    "mathBlock": "公式區塊",
+    "quote": "引用",
+    "bulletList": "無序列表",
+    "orderedList": "有序列表",
+    "horizontalRule": "分隔線",
+    "bold": "粗體",
+    "italic": "斜體",
+    "strikethrough": "刪除線",
+    "code": "程式碼",
+    "link": "連結",
+    "image": "圖片",
+    "visualMode": "視覺化模式",
+    "sourceMode": "原始碼模式",
+    "splitMode": "對比模式",
+    "toggleSidebar": "切換知識庫面板",
+    "toggleAIPanel": "切換AI面板",
+    "toggleOutline": "切換大綱",
+    "zoomIn": "放大",
+    "zoomOut": "縮小",
+    "actualSize": "實際大小",
+    "find": "尋找",
+    "replace": "取代",
+    "changelog": "更新日誌",
+    "privacyPolicy": "隱私條款",
+    "officialWebsite": "官方網站",
+    "aboutMoraya": "關於 Moraya",
+    "feedback": "意見回饋",
+    "settings": "設定...",
+    "versionInfo": "版本資訊"
+  },
+  "search": {
+    "findPlaceholder": "尋找...",
+    "replacePlaceholder": "取代...",
+    "noResults": "無結果",
+    "caseSensitive": "區分大小寫",
+    "replace": "取代",
+    "replaceAll": "全部取代"
+  },
+  "mermaid": {
+    "loading": "圖表載入中...",
+    "error": "圖表算繪失敗",
+    "edit": "編輯",
+    "preview": "預覽",
+    "empty": "空圖表"
+  },
+  "export": {
+    "exportAs": "匯出為 {format}",
+    "pdf": "PDF",
+    "html": "HTML（含樣式）",
+    "htmlPlain": "HTML（無樣式）",
+    "image": "圖片 (PNG)",
+    "doc": "Word (.doc)",
+    "rtf": "RTF",
+    "epub": "Epub",
+    "latex": "LaTeX",
+    "mediawiki": "MediaWiki",
+    "rst": "reStructuredText",
+    "textile": "Textile",
+    "opml": "OPML"
+  },
+  "workflow": {
+    "title": "AI工作流",
+    "seoStep": "SEO 優化",
+    "imageGenStep": "AI 配圖",
+    "publishStep": "發佈",
+    "publishDesc": "推送到目標平台",
+    "optionalAbove": "以上步驟可選",
+    "selectTargets": "選擇發佈目標",
+    "confirmPublish": "確認發佈",
+    "publishing": "發佈中...",
+    "publishSuccess": "發佈成功！",
+    "publishFailed": "發佈失敗",
+    "mcpEntry": "AI MCP",
+    "mcpServerCount": "個服務已連線",
+    "mcpToolCount": "個工具"
+  },
+  "imageGen": {
+    "title": "AI 配圖",
+    "step1Title": "生圖模式",
+    "step2Title": "產生圖片",
+    "step3Title": "插入文章",
+    "generatingPrompts": "正在產生提示詞...",
+    "contentTooShort": "文章內容太短，無法產生配圖。",
+    "styleLabel": "圖片風格",
+    "countLabel": "圖片張數",
+    "style_auto": "自動",
+    "style_photo": "攝影",
+    "style_illustration": "插畫",
+    "style_flat": "扁平",
+    "style_ink": "水墨",
+    "style_watercolor": "水彩",
+    "style_isometric": "等距檢視",
+    "style_infographic": "資訊圖",
+    "style_editorial": "雜誌風",
+    "style_cartoon": "卡通",
+    "style_render": "3D算繪",
+    "style_sketch": "手繪草圖",
+    "style_blueprint": "藍圖",
+    "style_clay": "黏土模型",
+    "style_wireframe": "線框圖",
+    "style_exploded": "爆炸圖",
+    "style_section": "剖面圖",
+    "style_cad": "CAD工程圖",
+    "style_prototype": "原型",
+    "style_anime": "動漫",
+    "style_comic": "漫畫",
+    "style_cinematic": "電影",
+    "style_pixel": "像素風",
+    "style_noir": "黑白電影",
+    "style_manga": "日漫",
+    "style_realistic": "寫實",
+    "style_studio": "棚拍",
+    "style_lifestyle": "場景",
+    "style_flatlay": "平鋪",
+    "style_macro": "微距",
+    "style_minimalist": "極簡",
+    "style_packaging": "包裝",
+    "style_outdoor": "戶外",
+    "style_mood": "氛圍",
+    "style_abstract": "抽象",
+    "style_texture": "紋理",
+    "style_gradient": "漸層",
+    "style_collage": "拼貼",
+    "style_vintage": "復古",
+    "style_botanical": "植物",
+    "style_geometric": "幾何",
+    "style_ethereal": "空靈",
+    "style_brutalist": "粗野主義",
+    "generate": "產生提示詞",
+    "next": "下一步",
+    "back": "上一步",
+    "insertConfirm": "插入",
+    "insertParagraph": "插入對應段落後（推薦）",
+    "insertEnd": "插入文章末尾",
+    "insertReplace": "取代文章中的圖片",
+    "insertClipboard": "複製 Markdown 到剪貼簿",
+    "selected": "已選 {count} 張",
+    "completed": "配圖已產生",
+    "stepDescription": "產生文章配圖",
+    "mode_article": "文章模式",
+    "mode_design": "設計模式",
+    "mode_storyboard": "分鏡模式",
+    "mode_product": "產品模式",
+    "mode_moodboard": "情緒板",
+    "mode_portrait": "人像模式",
+    "style_portrait": "肖像",
+    "style_headshot": "特寫",
+    "style_fullbody": "全身",
+    "style_fashion": "時尚",
+    "style_street": "街拍",
+    "style_glamour": "美妝",
+    "style_environmental": "環境人像",
+    "style_candid": "抓拍",
+    "style_group": "群像",
+    "preDefinedDetected": "偵測到文件中的預定義提示詞 ({count}條)",
+    "usePredefined": "使用預定義提示詞"
+  },
+  "seo": {
+    "title": "SEO 優化",
+    "generating": "正在分析文章...",
+    "titles": "標題候選",
+    "customTitle": "自訂標題...",
+    "excerpt": "摘要",
+    "tags": "標籤",
+    "addTag": "新增標籤...",
+    "slug": "URL 路徑",
+    "metaDescription": "Meta 描述",
+    "regenerate": "重新產生",
+    "apply": "套用",
+    "retry": "重試",
+    "contentTooShort": "文章內容太短，無法進行 SEO 分析。",
+    "completed": "SEO 已優化",
+    "stepDescription": "產生標題/摘要/標籤"
+  },
+  "publish": {
+    "settingsEmpty": "未設定發佈目標",
+    "settingsHint": "新增 GitHub 儲存庫或自訂 API 端點來發佈你的文章。",
+    "addTarget": "新增目標",
+    "editTarget": "編輯",
+    "deleteTarget": "刪除",
+    "testConnection": "測試連線",
+    "github": "GitHub 儲存庫",
+    "customApi": "自訂 API",
+    "targetName": "名稱",
+    "targetNamePlaceholder": "例如：我的部落格",
+    "repoUrl": "儲存庫位址",
+    "repoUrlPlaceholder": "https://github.com/user/blog",
+    "branch": "分支",
+    "articlesDir": "文章目錄",
+    "articlesDirPlaceholder": "content/posts/",
+    "imagesDir": "圖片目錄",
+    "imagesDirPlaceholder": "static/images/",
+    "token": "個人存取權杖",
+    "tokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "frontMatterTemplate": "Front Matter 範本",
+    "endpoint": "API 端點",
+    "endpointPlaceholder": "https://api.example.com/articles",
+    "method": "HTTP 方法",
+    "headers": "請求標頭（JSON）",
+    "bodyTemplate": "請求主體範本",
+    "templatePresets": "範本預設",
+    "presetHugo": "Hugo",
+    "presetHexo": "Hexo",
+    "presetAstro": "Astro",
+    "presetCustom": "自訂",
+    "fileNamePattern": "檔案命名規則",
+    "fileNamePreset": "命名預設",
+    "fileNamePreview": "預覽",
+    "presetSimple": "簡單（原始檔案名稱）",
+    "presetDateSlug": "日期 + Slug",
+    "presetDateFilename": "日期 + 檔案名稱",
+    "presetYearMonth": "年/月/Slug 目錄",
+    "fileNameVariables": "可用變數：{{date}}, {{year}}, {{month}}, {{day}}, {{slug}}, {{filename}}, {{title}}",
+    "rssSection": "RSS 訂閱",
+    "rssEnable": "產生 RSS 訂閱來源",
+    "rssEnableHint": "發佈時自動更新 feed.xml",
+    "rssFeedPath": "Feed 檔案路徑",
+    "rssFeedPathPlaceholder": "feed.xml",
+    "rssSiteUrl": "網站 URL",
+    "rssSiteUrlPlaceholder": "https://myblog.com",
+    "rssFeedTitle": "Feed 標題",
+    "rssFeedTitlePlaceholder": "我的部落格",
+    "rssFeedDescription": "Feed 描述",
+    "rssFeedDescriptionPlaceholder": "關於...",
+    "rssLanguage": "語言",
+    "rssAuthorName": "作者",
+    "rssAuthorNamePlaceholder": "張三",
+    "rssMaxItems": "Feed 最大條目數",
+    "rssIncludeFullContent": "在 Feed 中包含完整文章內容",
+    "rssFeedEndpoint": "RSS Feed 介面",
+    "rssFeedEndpointPlaceholder": "https://api.example.com/rss",
+    "rssUpdateFailed": "RSS 訂閱來源更新失敗",
+    "progressTitle": "發佈中...",
+    "progressPublishing": "正在上傳...",
+    "progressRss": "正在更新 RSS...",
+    "progressDone": "發佈成功",
+    "progressFailed": "發佈失敗"
+  },
+  "update": {
+    "title": "版本資訊",
+    "currentVersion": "目前版本",
+    "latestVersion": "最新版本",
+    "checking": "正在檢查更新...",
+    "upToDate": "已經是最新版本！",
+    "checkFailed": "檢查更新失敗",
+    "releaseNotes": "更新內容",
+    "noAsset": "未找到適用於您平台的安裝套件，請手動下載。",
+    "upgrade": "升級",
+    "retry": "重試",
+    "viewRelease": "檢視發佈頁",
+    "downloading": "正在下載...",
+    "downloadFailed": "下載失敗",
+    "installLaunched": "安裝程式已啟動，Moraya 即將關閉。",
+    "newVersionAvailable": "有新版本可用！點選升級。"
+  },
+  "errors": {
+    "aiNotConfigured": "AI 未設定。",
+    "aiRequestFailed": "AI 請求失敗",
+    "chatRequestFailed": "對話請求失敗",
+    "unknownCommand": "未知 AI 指令：{command}"
+  },
+  "welcome": {
+    "title": "歡迎使用 Moraya",
+    "subtitle": "極簡的、支援 AI 的 Markdown 編輯器。",
+    "featuresTitle": "功能特性",
+    "featureWysiwyg": "**所見即所得** Markdown 編輯",
+    "featureMath": "數學公式支援：$E = mc^2$",
+    "featureThemes": "深色和淺色主題",
+    "featureAI": "AI 驅動的寫作助手",
+    "featureMCP": "MCP 協定發佈與同步",
+    "featureLightweight": "輕量級（約 5MB 安裝套件）",
+    "mathTitle": "數學範例",
+    "codeTitle": "程式碼範例",
+    "tableTitle": "表格範例",
+    "tableFeature": "功能",
+    "tableStatus": "狀態",
+    "tableDone": "完成",
+    "startWriting": "在這裡開始寫下你的想法...",
+    "tip": "**提示：** 按 `Cmd+I` 切換 AI 助手面板。",
+    "shortcutsTitle": "鍵盤快速鍵",
+    "shortcutSave": "`Cmd+S` — 儲存文件",
+    "shortcutOpen": "`Cmd+O` — 開啟檔案",
+    "shortcutNew": "`Cmd+N` — 新建文件",
+    "shortcutToggleMode": "`Cmd+/` — 切換視覺化/原始碼模式",
+    "shortcutSplitMode": "`Cmd+Shift+/` — 切換對比模式",
+    "shortcutSidebar": "`Cmd+\\` — 切換知識庫面板",
+    "shortcutSettings": "`Cmd+,` — 開啟設定",
+    "shortcutAI": "`Cmd+Shift+I` — 切換AI面板",
+    "shortcutExport": "`Cmd+Shift+E` — 匯出為 HTML",
+    "blockquoteTitle": "引用範例",
+    "blockquoteContent": "寫作的藝術就是發現你所相信的東西的藝術。—— 居斯塔夫·福樓拜",
+    "advancedMathTitle": "進階數學公式",
+    "listTitle": "巢狀列表範例",
+    "listItem1": "快速上手",
+    "listItem1a": "安裝應用程式",
+    "listItem1b": "設定偏好設定",
+    "listItem1c": "開始寫作",
+    "listItem2": "進階功能",
+    "listItem2a": "AI 驅動的寫作輔助",
+    "listItem2b": "MCP 協定整合",
+    "listItem2c": "多種匯出格式",
+    "listItem3": "個人化自訂",
+    "listItem3a": "主題與外觀",
+    "listItem3b": "編輯器設定",
+    "listItem3c": "鍵盤快速鍵",
+    "paragraphTitle": "關於 Moraya",
+    "paragraph1": "Moraya 是一款使用 Rust 和 Tauri 建構的現代輕量級 Markdown 編輯器。它將文字編輯器的簡潔與所見即所得介面的強大功能相結合，為你提供兩全其美的體驗。",
+    "paragraph2": "\"Moraya\" 這個名字來源於拉丁語 \"mora\"（片刻）與中文 \"雅\"（優雅）的組合，寓意\"墨雅\"——優雅的書寫片刻。",
+    "paragraph3": "無論你是在編寫技術文件、部落格文章、學術論文還是個人筆記，Moraya 都能提供一個無干擾的環境，讓你專注於最重要的事情——你的內容。",
+    "hrTitle": "分隔線",
+    "hrDescription": "你可以使用分隔線來分隔文件的不同部分："
+  },
+  "templates": {
+    "gallery": {
+      "title": "AI 助手",
+      "search": "搜尋範本...",
+      "back": "返回",
+      "start": "開始"
+    },
+    "error": {
+      "noDocument": "請先輸入一些內容",
+      "noSelection": "請先選取一些文字",
+      "noContent": "請先輸入內容或選取文字"
+    },
+    "writing": {
+      "name": "寫作輔助",
+      "desc": "AI 輔助寫作、潤飾、摘要",
+      "free": {
+        "name": "自由寫作",
+        "desc": "輸入主題或要求，AI 為你產生文章",
+        "hint": "請輸入寫作主題或要求..."
+      },
+      "continue": {
+        "name": "繼續寫作",
+        "desc": "從目前文件末尾續寫"
+      },
+      "outline": {
+        "name": "產生大綱",
+        "desc": "輸入主題，產生文章大綱",
+        "hint": "請輸入文章主題..."
+      },
+      "summarize": {
+        "name": "摘要概括",
+        "desc": "摘要選取文字或全文要點"
+      },
+      "improve": {
+        "name": "潤飾優化",
+        "desc": "提升選取文字的表達品質"
+      },
+      "simplify": {
+        "name": "簡化表達",
+        "desc": "將複雜文字簡化為易懂的語言"
+      },
+      "expand": {
+        "name": "擴展內容",
+        "desc": "對選取內容進行補充擴展"
+      },
+      "fixGrammar": {
+        "name": "文法修正",
+        "desc": "修復文法和拼寫錯誤"
+      }
+    },
+    "translation": {
+      "name": "翻譯",
+      "desc": "多語言互譯與在地化",
+      "auto": {
+        "name": "智慧翻譯",
+        "desc": "自動偵測語言並翻譯"
+      },
+      "toTarget": {
+        "name": "指定語言翻譯",
+        "desc": "選擇目標語言後翻譯"
+      },
+      "explain": {
+        "name": "翻譯並解釋",
+        "desc": "翻譯並逐句解釋用詞"
+      },
+      "polish": {
+        "name": "在地化潤飾",
+        "desc": "使翻譯更道地自然"
+      },
+      "compare": {
+        "name": "多版本翻譯",
+        "desc": "提供多個不同風格譯本"
+      },
+      "targetLang": "目標語言",
+      "lang": {
+        "en": "英語",
+        "zhCN": "簡體中文",
+        "zhHant": "繁體中文",
+        "ja": "日語",
+        "ko": "韓語",
+        "fr": "法語",
+        "de": "德語",
+        "es": "西班牙語",
+        "ar": "阿拉伯語",
+        "hi": "印地語",
+        "pt": "葡萄牙語",
+        "ru": "俄語"
+      }
+    },
+    "student": {
+      "name": "學習助手",
+      "desc": "知識學習、筆記整理、概念理解",
+      "explain": {
+        "name": "概念解釋",
+        "desc": "用通俗語言解釋概念",
+        "hint": "請輸入要解釋的概念..."
+      },
+      "notes": {
+        "name": "學習筆記",
+        "desc": "將內容整理成結構化筆記"
+      },
+      "flashcard": {
+        "name": "知識卡片",
+        "desc": "從內容中擷取 Q&A 閃卡"
+      },
+      "mindmap": {
+        "name": "心智圖",
+        "desc": "產生 Markdown 格式心智圖"
+      },
+      "essayOutline": {
+        "name": "作文提綱",
+        "desc": "產生作文提綱",
+        "hint": "請輸入作文題目..."
+      },
+      "reading": {
+        "name": "閱讀理解",
+        "desc": "對文字進行深度分析"
+      },
+      "formula": {
+        "name": "公式推導",
+        "desc": "給出數學公式推導過程",
+        "hint": "請輸入公式名稱或內容..."
+      },
+      "compare": {
+        "name": "知識對比",
+        "desc": "表格對比兩個概念異同",
+        "hint": "請輸入要對比的兩個概念（如：TCP vs UDP）..."
+      }
+    },
+    "kids": {
+      "name": "少兒啟蒙",
+      "desc": "兒童故事、趣味學習、互動遊戲",
+      "story": {
+        "name": "兒童故事",
+        "desc": "根據關鍵字產生兒童故事",
+        "hint": "請輸入故事關鍵字（如：小兔子 森林 冒險）..."
+      },
+      "poem": {
+        "name": "兒歌童謠",
+        "desc": "根據主題編寫兒歌",
+        "hint": "請輸入主題..."
+      },
+      "why": {
+        "name": "十萬個為什麼",
+        "desc": "AI 回答小朋友的為什麼"
+      },
+      "alphabet": {
+        "name": "字母學習",
+        "desc": "互動式字母和拼音教學"
+      },
+      "mathGame": {
+        "name": "趣味算術",
+        "desc": "互動出題算術遊戲"
+      },
+      "riddle": {
+        "name": "猜謎語",
+        "desc": "AI 出謎語讓小朋友猜"
+      },
+      "drawText": {
+        "name": "看圖說話",
+        "desc": "描述場景讓 AI 編故事",
+        "hint": "請描述一個場景..."
+      },
+      "knowledge": {
+        "name": "百科問答",
+        "desc": "自然科學動物百科互動"
+      }
+    },
+    "marketing": {
+      "name": "行銷文案",
+      "desc": "社群媒體、廣告、SEO 文案產生",
+      "xiaohongshu": {
+        "name": "小紅書文案",
+        "desc": "產生種草風格文案",
+        "hint": "請輸入產品或主題..."
+      },
+      "twitter": {
+        "name": "Twitter/X 貼文",
+        "desc": "產生推特風格短文案",
+        "hint": "請輸入主題..."
+      },
+      "slogan": {
+        "name": "廣告標語",
+        "desc": "為品牌/產品產生廣告標語",
+        "hint": "請輸入品牌或產品..."
+      },
+      "email": {
+        "name": "行銷郵件",
+        "desc": "設定目標人群和語氣產生郵件",
+        "hint": "請描述郵件內容..."
+      },
+      "seoArticle": {
+        "name": "SEO 文章",
+        "desc": "根據關鍵字產生 SEO 優化文章",
+        "hint": "請輸入目標關鍵字..."
+      },
+      "productDesc": {
+        "name": "產品描述",
+        "desc": "產生有吸引力的產品描述",
+        "hint": "請輸入產品資訊..."
+      },
+      "tone": "語氣風格",
+      "tone.formal": "正式",
+      "tone.friendly": "友好",
+      "tone.urgent": "緊迫",
+      "tone.humorous": "幽默"
+    },
+    "professional": {
+      "name": "職場辦公",
+      "desc": "郵件、報告、會議紀要",
+      "email": {
+        "name": "商務郵件",
+        "desc": "設定場景和語氣產生郵件",
+        "hint": "請描述郵件內容..."
+      },
+      "meeting": {
+        "name": "會議紀要",
+        "desc": "將筆記整理成正式會議紀要"
+      },
+      "report": {
+        "name": "工作報告",
+        "desc": "產生週報/月報/季報",
+        "hint": "請輸入報告要點..."
+      },
+      "review": {
+        "name": "程式碼審查",
+        "desc": "審查程式碼並提出改進建議"
+      },
+      "resume": {
+        "name": "履歷優化",
+        "desc": "用 STAR 法則優化履歷描述"
+      },
+      "prd": {
+        "name": "PRD 文件",
+        "desc": "產生產品需求文件",
+        "hint": "請輸入功能描述..."
+      },
+      "tone": "語氣風格",
+      "tone.concise": "簡潔",
+      "reportType": "報告類型",
+      "reportType.weekly": "週報",
+      "reportType.monthly": "月報",
+      "reportType.quarterly": "季報"
+    },
+    "personal": {
+      "name": "個人成長",
+      "desc": "日記、目標管理、決策分析",
+      "journal": {
+        "name": "日記助手",
+        "desc": "引導式日記寫作",
+        "hint": "請輸入今天想記錄的事情..."
+      },
+      "goal": {
+        "name": "目標分解",
+        "desc": "將大目標分解為可執行步驟",
+        "hint": "請輸入你的目標..."
+      },
+      "habit": {
+        "name": "習慣養成",
+        "desc": "制定習慣養成計畫",
+        "hint": "請輸入想養成的習慣..."
+      },
+      "decision": {
+        "name": "決策分析",
+        "desc": "利弊分析幫助做決定",
+        "hint": "請描述你面臨的選擇..."
+      },
+      "bookNotes": {
+        "name": "讀書筆記",
+        "desc": "整理選取內容為讀書筆記"
+      }
+    },
+    "games_cn": {
+      "name": "中文遊戲",
+      "desc": "飛花令、成語接龍、猜謎語等文字遊戲",
+      "feihualing": {
+        "name": "飛花令",
+        "desc": "輪流說含指定字的詩句"
+      },
+      "chengyuChain": {
+        "name": "成語接龍",
+        "desc": "末字接首字的成語接龍"
+      },
+      "riddle": {
+        "name": "猜謎語",
+        "desc": "AI 出謎面，你猜謎底"
+      },
+      "lanternRiddle": {
+        "name": "猜燈謎",
+        "desc": "字謎、拆字等燈謎挑戰"
+      },
+      "poetryFill": {
+        "name": "詩詞填空",
+        "desc": "古詩詞記憶力考驗"
+      },
+      "storyChain": {
+        "name": "故事接龍",
+        "desc": "雙方交替續寫故事"
+      },
+      "characterGame": {
+        "name": "猜字遊戲",
+        "desc": "根據描述猜漢字"
+      },
+      "brainTeaser": {
+        "name": "腦筋急轉彎",
+        "desc": "趣味腦筋急轉彎"
+      },
+      "couplet": {
+        "name": "對聯",
+        "desc": "AI 出上聯，你對下聯"
+      },
+      "wordExplain": {
+        "name": "你說我猜",
+        "desc": "AI 描述詞語你來猜"
+      },
+      "ancientText": {
+        "name": "文言文翻譯",
+        "desc": "文言文翻譯白話文挑戰"
+      },
+      "homophone": {
+        "name": "諧音梗",
+        "desc": "諧音雙關創意挑戰"
+      }
+    },
+    "games_en": {
+      "name": "英文遊戲",
+      "desc": "Word Chain、Hangman、Trivia 等英文語言遊戲",
+      "wordChain": {
+        "name": "Word Chain",
+        "desc": "末字母接首字母單字接龍"
+      },
+      "twentyQuestions": {
+        "name": "20 Questions",
+        "desc": "20 個是/否問題猜物品"
+      },
+      "hangman": {
+        "name": "Hangman",
+        "desc": "猜字母拼單字"
+      },
+      "storyBuilder": {
+        "name": "Story Builder",
+        "desc": "輪流共創故事"
+      },
+      "wordAssociation": {
+        "name": "Word Association",
+        "desc": "自由詞彙聯想接龍"
+      },
+      "riddles": {
+        "name": "Riddles",
+        "desc": "英文謎語"
+      },
+      "trivia": {
+        "name": "Trivia Quiz",
+        "desc": "常識問答挑戰"
+      },
+      "rhymeTime": {
+        "name": "Rhyme Time",
+        "desc": "用押韻詞編故事"
+      },
+      "acronym": {
+        "name": "Acronym Game",
+        "desc": "為隨機縮寫編含義"
+      },
+      "taboo": {
+        "name": "Taboo",
+        "desc": "不用禁詞描述目標詞"
+      },
+      "sentenceBuilder": {
+        "name": "Sentence Builder",
+        "desc": "用指定詞造最長句"
+      },
+      "emojiStory": {
+        "name": "Emoji Story",
+        "desc": "用 emoji 表達讓對方猜"
+      }
+    },
+    "quiz": {
+      "name": "刷題練習",
+      "desc": "AI 出題評分，涵蓋各領域",
+      "practice": {
+        "name": "萬能刷題",
+        "desc": "選擇方向和難度，AI 出題 → 答題 → 評分 → 下一題"
+      },
+      "direction": "刷題方向",
+      "dir": {
+        "programming": "程式設計",
+        "math": "數學",
+        "english": "英語",
+        "science": "科學",
+        "history": "歷史",
+        "interview": "面試題",
+        "custom": "自訂方向"
+      },
+      "difficulty": "難度",
+      "diff": {
+        "easy": "簡單",
+        "medium": "中等",
+        "hard": "困難"
+      }
+    }
+  },
+  "plugins": {
+    "tabs": {
+      "installed": "已安裝",
+      "market": "外掛市集"
+    },
+    "installed": {
+      "empty": "尚未安裝任何外掛。"
+    },
+    "sandbox": {
+      "label": "沙箱等級",
+      "sandbox": "沙箱（JS）",
+      "local": "本機（無網路）",
+      "system": "系統（可存取網路）"
+    },
+    "permissions": {
+      "label": "權限"
+    },
+    "market": {
+      "search": "搜尋外掛...",
+      "refresh": "重新整理",
+      "catAll": "全部",
+      "cached": "顯示快取結果",
+      "loading": "正在載入外掛市集...",
+      "empty": "未找到外掛",
+      "install": "安裝",
+      "installed": "已安裝",
+      "installing": "安裝中..."
+    },
+    "install": {
+      "fromFile": "從 .zip 安裝",
+      "urlPlaceholder": "GitHub 儲存庫 URL（https://github.com/…）",
+      "validate": "匯入",
+      "confirmUrl": "從 URL 安裝外掛？",
+      "author": "作者",
+      "permissions": "權限",
+      "noPermissions": "無權限"
+    },
+    "verified": "已認證",
+    "enable": "啟用",
+    "disable": "停用",
+    "uninstall": "解除安裝",
+    "changelog": "更新日誌",
+    "viewSource": "原始碼",
+    "blacklisted": "已列入黑名單",
+    "blacklistWarning": "此外掛因安全問題已被列入黑名單，請立即解除安裝。",
+    "processError": "外掛處理程序已當機，請切換開關重新啟動。",
+    "error": {
+      "platformNotSupported": "目前平台暫無可用安裝套件。"
+    }
+  },
+  "transcription": {
+    "title": "轉錄記錄",
+    "recording": "錄音中",
+    "connecting": "連線中...",
+    "paused": "已暫停",
+    "stopping": "停止中...",
+    "idle": "準備就緒",
+    "start": "開始錄音",
+    "stop": "停止",
+    "pause": "暫停",
+    "resume": "繼續",
+    "back": "返回對話",
+    "emptyIdle": "點選「開始錄音」，開始即時轉錄。",
+    "emptyWaiting": "等待語音輸入...",
+    "summarizeWithAI": "產生會議摘要",
+    "saveAsDoc": "儲存為文件",
+    "summarizePrompt": "請根據以下轉錄內容產生會議摘要，標註關鍵討論點、決策和行動項，以 Markdown 格式輸出。",
+    "noSpeechConfig": "未設定語音辨識服務，請前往 設定 → 語音 新增。",
+    "noSpeechConfigHint": "請前往 設定 → 語音 Tab 新增語音辨識服務（如 Deepgram）。",
+    "goToVoiceSettings": "開啟語音設定"
+  },
+  "outline": {
+    "empty": "暫無標題"
+  }
+}

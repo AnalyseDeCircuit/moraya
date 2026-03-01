@@ -1939,4 +1939,19 @@ ${tr('welcome.tip')}
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .split-visual {
+    border-left: none;
+    border-right: 1px solid var(--border-color);
+  }
+
+  :global([dir="rtl"]) .publish-progress {
+    right: auto;
+    left: 1rem;
+  }
+
+  :global([dir="rtl"]) .progress-status {
+    text-align: left;
+  }
 </style>

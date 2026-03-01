@@ -48,9 +48,26 @@ function buildDetectionPatterns() {
 }
 const DETECTION = buildDetectionPatterns();
 
-/** Detect conversation language and return the matching locale code. */
+/** Detect conversation language by script analysis and return the matching locale code. */
 function detectResponseLocale(text: string): SupportedLocale {
-  return /[\u4e00-\u9fff]/.test(text) ? 'zh-CN' : 'en';
+  const sample = text.slice(0, 500);
+
+  // Japanese: kana presence is a strong signal (even if CJK ideographs are mixed in)
+  if (/[\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff]/.test(sample)) return 'ja';
+  // Korean: hangul syllables or jamo
+  if (/[\uac00-\ud7af\u1100-\u11ff\u3130-\u318f]/.test(sample)) return 'ko';
+  // Arabic script
+  if (/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/.test(sample)) return 'ar';
+  // Devanagari (Hindi)
+  if (/[\u0900-\u097f]/.test(sample)) return 'hi';
+  // Cyrillic (Russian)
+  if (/[\u0400-\u04ff]/.test(sample)) return 'ru';
+  // CJK Ideographs without kana/hangul → Chinese
+  if (/[\u4e00-\u9fff\u3400-\u4dbf]/.test(sample)) return 'zh-CN';
+
+  // Latin-script languages (de/es/fr/pt) fall back to English —
+  // English recovery prompts work well for all Latin-script locales.
+  return 'en';
 }
 
 async function saveKeyToKeychain(configId: string, apiKey: string): Promise<boolean> {

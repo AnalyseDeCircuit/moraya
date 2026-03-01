@@ -26,7 +26,7 @@
       <button
         class="outline-item"
         class:active={h.id === activeId}
-        style="padding-left: {(h.level - 1) * 12}px"
+        style="padding-inline-start: {(h.level - 1) * 12}px"
         onclick={() => onSelect?.(h)}
         title={h.text}
       >
@@ -84,5 +84,22 @@
   .outline-item.active {
     color: var(--text-primary);
     border-left-color: var(--accent-color);
+  }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .outline-panel {
+    padding-right: 0;
+    padding-left: 8px;
+  }
+
+  :global([dir="rtl"]) .outline-item {
+    text-align: right;
+    border-left: none;
+    border-right: 2px solid transparent;
+  }
+
+  :global([dir="rtl"]) .outline-item.active {
+    border-left-color: transparent;
+    border-right-color: var(--accent-color);
   }
 </style>

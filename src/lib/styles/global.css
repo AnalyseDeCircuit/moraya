@@ -48,6 +48,12 @@ html, body {
   user-select: none;
 }
 
+/* ── RTL (right-to-left) base rules ── */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
 /* iPadOS / touch devices: disable hover effects, use active state */
 @media (hover: none) and (pointer: coarse) {
   /* Prevent sticky hover on touch: disable hover backgrounds on common UI */

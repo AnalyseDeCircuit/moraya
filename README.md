@@ -359,6 +359,7 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 | v0.16.0-v0.17.0 | Search & Replace, ProseMirror Performance | Complete |
 | v0.18.0 | Document Outline, Table Keys, Freeze Fix | Complete |
 | v0.19.0 | Rendering Pipeline v2 (Doc Cache, hljs Cache, Async Parse) | Complete |
+| v0.20.0 | Multi-Language Support (12 locales, RTL) | Complete |
 
 ## License
 

@@ -1,0 +1,1337 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "add": "追加",
+    "remove": "削除",
+    "connect": "接続",
+    "disconnect": "切断",
+    "insert": "挿入",
+    "replace": "置換",
+    "copy": "コピー",
+    "edit": "編集",
+    "delete": "削除",
+    "browse": "変更",
+    "clear": "リセット",
+    "play": "再生",
+    "stop": "停止",
+    "untitled": "無題"
+  },
+  "settings": {
+    "title": "設定",
+    "tabs": {
+      "general": "一般",
+      "editor": "エディター",
+      "appearance": "外観",
+      "ai": "AI",
+      "mcp": "MCP",
+      "image": "画像",
+      "publish": "公開",
+      "permissions": "権限",
+      "voice": "音声",
+      "plugins": "プラグイン"
+    },
+    "language": {
+      "label": "言語",
+      "system": "システムに従う"
+    },
+    "theme": {
+      "label": "テーマ",
+      "system": "システムに従う",
+      "light": "ライト",
+      "dark": "ダーク"
+    },
+    "appearance": {
+      "themeSection": "テーマ",
+      "darkModeSection": "ダークモード",
+      "fontSection": "フォント",
+      "separateDarkTheme": "ダークモード用の別テーマを使用する",
+      "darkTheme": "ダークモードテーマ",
+      "darkModeLabel": "外観"
+    },
+    "fontSize": {
+      "label": "フォントサイズ"
+    },
+    "autoSave": {
+      "label": "自動保存",
+      "interval": "自動保存の間隔"
+    },
+    "rememberLastFolder": "最後に開いたフォルダーを記憶する",
+    "editor": {
+      "lineWidth": "エディターの行幅",
+      "tabSize": "タブサイズ",
+      "showLineNumbers": "ソースモードで行番号を表示する"
+    },
+    "version": "Moraya v{version}",
+    "permissions": {
+      "mcpTitle": "MCP 権限",
+      "aiTitle": "AI 設定",
+      "aiMaxTokens": "最大出力トークン数",
+      "aiMaxTokensHint": "AIが1回の応答で生成できるトークンの最大数です。値を大きくすると長い応答やツール呼び出しが可能になりますが、コストが増加します。",
+      "aiRulesMaxChars": "ルールファイルの最大文字数",
+      "aiRulesMaxCharsHint": "MORAYA.md ルールファイルから読み取る最大文字数です。大きなルールファイルの場合は増やしてください。文字数が多いほど、リクエストあたりのトークン数が増えます。",
+      "aiToolResultMaxChars": "ツール結果の最大文字数",
+      "aiToolResultMaxCharsHint": "各MCPツール結果から保持する最大文字数です。値を大きくすると詳細が保持されますが、コンテキストの消費が増えます。",
+      "aiMaxToolRounds": "ツール呼び出しの最大ラウンド数",
+      "aiMaxToolRoundsHint": "AIが1回の会話ターンで実行できるツール呼び出しラウンドの最大数です。複雑なマルチステップタスクの場合は増やしてください。"
+    },
+    "voice": {
+      "providers": "音声認識プロバイダー",
+      "addProvider": "プロバイダーを追加",
+      "editProvider": "プロバイダーを編集",
+      "noProviders": "音声認識プロバイダーが設定されていません。",
+      "provider": "プロバイダー",
+      "apiKey": "API キー",
+      "apiKeyOptional": "AWS の場合はオプション（代わりにアクセスキーを使用）",
+      "awsAccessKey": "AWS アクセスキー ID",
+      "awsSecretKey": "AWS シークレットアクセスキー",
+      "region": "リージョン",
+      "model": "モデル",
+      "modelPlaceholder": "モデル名を入力",
+      "endpointIdPlaceholder": "推論エンドポイント ID を入力",
+      "language": "言語",
+      "langAuto": "自動検出",
+      "langMulti": "多言語",
+      "baseUrl": "カスタム WebSocket URL",
+      "testConnection": "接続テスト",
+      "testing": "テスト中...",
+      "testOk": "接続済み",
+      "testFailed": "接続に失敗しました",
+      "setActive": "デフォルトに設定",
+      "active": "デフォルト",
+      "custom": "カスタム",
+      "storage": "ストレージ",
+      "recordingBackupDir": "録音バックアップ",
+      "recordingBackupHint": "各セッション後に録音を WAV ファイルとして保存します。",
+      "voiceSyncDir": "ボイスプロファイル同期ディレクトリ",
+      "voiceSyncHint": "クラウドストレージ（iCloud、Dropbox など）でボイスプロファイルを同期します。変更ボタンでフォルダーを選択すると、既存のプロファイルが自動的に移行されます。",
+      "syncDefault": "アプリデータ（デフォルト）",
+      "disabled": "無効",
+      "migratingProfiles": "移行中...",
+      "migrationFailed": "移行に失敗しました",
+      "profiles": "ボイスプロファイル",
+      "noProfiles": "ボイスプロファイルはまだありません。文字起こしセッション後に自動的に作成されます。",
+      "naming": {
+        "male": "男性{n}",
+        "female": "女性{n}",
+        "bystander": "傍観者{n}",
+        "speaker": "話者{n}"
+      }
+    }
+  },
+  "titlebar": {
+    "unsaved": "未保存",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "close": "閉じる"
+  },
+  "sidebar": {
+    "title": "エクスプローラー",
+    "openFolder": "フォルダーを開く",
+    "noFolder": "フォルダーが開かれていません",
+    "createKB": "ナレッジベースを作成",
+    "emptyDir": "このディレクトリにファイルはありません",
+    "kbSettings": "ナレッジベース設定",
+    "treeView": "ツリー表示",
+    "listView": "リスト表示",
+    "search": "ファイルを検索...",
+    "contextMenu": {
+      "newFile": "新規ファイル",
+      "searchFiles": "検索",
+      "refresh": "更新",
+      "rename": "名前を変更",
+      "duplicate": "コピーを作成",
+      "delete": "削除",
+      "copyPath": "パスをコピー",
+      "revealInFinder": "Finder で表示"
+    },
+    "newFilePrompt": "ファイル名を入力",
+    "renamePrompt": "新しい名前を入力",
+    "deleteConfirm": "「{name}」を削除してもよろしいですか？この操作は取り消せません。"
+  },
+  "statusbar": {
+    "words": "単語数",
+    "characters": "文字数",
+    "format": "Markdown",
+    "sourceMode": "ソース",
+    "visualMode": "ビジュアル",
+    "splitMode": "分割",
+    "publishWorkflow": "AI ワークフロー",
+    "aiTooltip": "AI"
+  },
+  "editor": {
+    "sourceMode": "ソースモード",
+    "visualMode": "ビジュアルモード",
+    "splitMode": "分割モード",
+    "unsavedTitle": "未保存の変更",
+    "unsavedNewDocMsg": "未保存の内容があります。先に保存しますか？",
+    "saveFirst": "保存",
+    "discardChanges": "保存しない"
+  },
+  "table": {
+    "insertRowAbove": "上に行を挿入",
+    "insertRowBelow": "下に行を挿入",
+    "deleteRow": "行を削除",
+    "insertColLeft": "左に列を挿入",
+    "insertColRight": "右に列を挿入",
+    "deleteCol": "列を削除",
+    "alignLeft": "左揃え",
+    "alignCenter": "中央揃え",
+    "alignRight": "右揃え"
+  },
+  "knowledgeBase": {
+    "title": "ナレッジベース",
+    "add": "ナレッジベースを追加",
+    "remove": "削除",
+    "rename": "名前を変更",
+    "manage": "ナレッジベースを管理...",
+    "empty": "ナレッジベースが設定されていません",
+    "emptyHint": "フォルダーをナレッジベースとして追加すると、素早く切り替えられます。",
+    "deleteConfirm": "「{name}」をナレッジベースから削除しますか？フォルダー自体は削除されません。",
+    "switchTo": "ナレッジベースを切り替え",
+    "saveHint": "このフォルダーはナレッジベースに含まれていません。",
+    "saveAsKB": "ナレッジベースとして保存"
+  },
+  "ai": {
+    "title": "AI アシスタント",
+    "morayaMdActive": "このナレッジベースで MORAYA.md ルールが有効です",
+    "clearChat": "チャットをクリア",
+    "unconfigured": "AI が設定されていません。",
+    "unconfiguredHint": "設定（{shortcut}）を開いて API キーを構成し、AI 機能を有効にしてください。",
+    "openSettings": "AI 設定を開く",
+    "openImageSettings": "AIGC 設定を開く",
+    "textAiLabel": "テキスト AI（プロンプト生成）",
+    "imageAiLabel": "画像 AI（画像生成）",
+    "welcomeTitle": "何かお手伝いできますか？",
+    "welcomeHint": "メッセージを入力するか、{kbd} でコマンドを使用",
+    "you": "あなた",
+    "assistant": "AI",
+    "typing": "入力中...",
+    "placeholder": "AI に何でも聞いてください...（/ でコマンド）",
+    "placeholderSelection": "選択範囲について質問...（/ でコマンド）",
+    "send": "送信（⌘↵）",
+    "stop": "停止（Esc）",
+    "interrupted": "中断されました",
+    "insertToEditor": "エディターに挿入",
+    "replaceSelection": "選択範囲を置換",
+    "attachImage": "画像を添付",
+    "attachImageMax": "最大 {max} 枚の画像",
+    "removeImage": "画像を削除",
+    "closePreview": "プレビューを閉じる",
+    "moreActions": "その他の操作",
+    "voiceTranscription": "AI 音声文字起こし",
+    "config": {
+      "title": "AI 設定",
+      "provider": "プロバイダー",
+      "apiKey": "API キー",
+      "apiKeyPlaceholder": "{provider} の API キーを入力",
+      "apiKeyNotRequired": "Ollama では不要です",
+      "baseUrl": "ベース URL",
+      "model": "モデル",
+      "modelPlaceholder": "モデル名を入力",
+      "maxTokens": "最大トークン数",
+      "temperature": "Temperature",
+      "testConnection": "接続テスト",
+      "testing": "テスト中...",
+      "connected": "接続済み！",
+      "failed": "失敗"
+    },
+    "providers": {
+      "claude": "Anthropic Claude",
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "deepseek": "DeepSeek",
+      "ollama": "Ollama（ローカル）",
+      "custom": "カスタム API",
+      "grok": "xAI Grok",
+      "mistral": "Mistral AI",
+      "glm": "智譜 GLM",
+      "minimax": "MiniMax",
+      "doubao": "豆包（ByteDance）"
+    },
+    "multiModel": {
+      "addModel": "+ モデルを追加",
+      "default": "デフォルト",
+      "setDefault": "デフォルトに設定",
+      "noModels": "AI モデルが設定されていません",
+      "noModelsHint": "AI 機能を使用するには、AI モデルを追加してください。",
+      "noImageModels": "画像モデルが設定されていません",
+      "noImageModelsHint": "AI 画像機能を使用するには、画像生成モデルを追加してください。"
+    },
+    "imageConfig": {
+      "title": "画像生成 AI",
+      "provider": "プロバイダー",
+      "providerOpenai": "OpenAI DALL-E",
+      "providerGrok": "Grok（xAI）",
+      "providerCustom": "カスタム（OpenAI 互換）",
+      "apiKey": "API キー",
+      "apiKeyPlaceholder": "画像 API キーを入力",
+      "baseUrl": "ベース URL",
+      "model": "モデル",
+      "modelPlaceholder": "モデル名を入力",
+      "defaultSize": "デフォルトサイズ",
+      "ratio": "アスペクト比",
+      "sizeLevel": "サイズ",
+      "size_large": "大",
+      "size_medium": "中",
+      "size_small": "小",
+      "providerGemini": "Google Gemini Imagen",
+      "providerQwen": "Qwen（Alibaba）",
+      "providerDoubao": "豆包（ByteDance）"
+    },
+    "commands": {
+      "write": "執筆",
+      "writeDesc": "プロンプトに基づいてコンテンツを作成します",
+      "continue": "続きを書く",
+      "continueDesc": "テキストの続きから書きます",
+      "summarize": "要約",
+      "summarizeDesc": "選択したテキストを要約します",
+      "translate": "翻訳",
+      "translateDesc": "テキストを別の言語に翻訳します",
+      "improve": "改善",
+      "improveDesc": "文章の品質を向上させます",
+      "fixGrammar": "文法修正",
+      "fixGrammarDesc": "文法とスペルのエラーを修正します",
+      "simplify": "簡素化",
+      "simplifyDesc": "複雑なテキストを簡潔にします",
+      "expand": "拡張",
+      "expandDesc": "トピックをさらに詳しく展開します",
+      "outline": "アウトライン生成",
+      "outlineDesc": "記事のアウトラインを生成します",
+      "explain": "説明",
+      "explainDesc": "選択したテキストを説明します"
+    },
+    "prompts": {
+      "emptyResponse": "空の応答が返されました。タスクを続行してください：必要なツール呼び出しを行うか、完了した内容と残りの項目をまとめてください。空のメッセージを返さないでください。",
+      "emptyResponseContinue": "\n\nあなたの最後のメッセージは：「{lastMessage}」\nそこから続けてください。",
+      "truncationContinue": "前の応答は出力長の制限により途中で切れました。上記のテキストは保存されています。必要なツール呼び出しを行ってタスクを完了してください。内容を繰り返さず、ツール引数で直接使用してください。",
+      "continuationPrompt": "続行して、タスクを完了するために必要なツール呼び出しを行ってください。すでに述べた内容は繰り返さず、直接ツール呼び出しに進んでください。",
+      "mcpToolPrompt": "{toolName} ツール（{serverName} から）を使用してください"
+    },
+    "detection": {
+      "intentPrefixes": "私は|私が|まず|次に|これから|それでは|今から|最初に",
+      "actionVerbs": "作成|書き込み|読み取り|更新|アップロード|生成|取得|呼び出し|確認|検証|テスト|調査|使用|適用|実行|公開|送信|投稿|提出|検索|参照|発見|探索|ダウンロード|開く|アクセス|接続|設定|構成|変更|編集|削除|除去|保存|格納|エクスポート|分析|処理|変換|一覧|表示|ヘルプ",
+      "continuationPhrases": "まず|次に|続いて|それから",
+      "remainingPhrases": "残り|次の|ステップ\\d+",
+      "unfinishedPhrases": "まだ|未完了|保留中|次のステップ|TODO"
+    }
+  },
+  "mcp": {
+    "title": "MCP サーバー",
+    "tabs": {
+      "servers": "サーバー",
+      "publish": "公開",
+      "sync": "同期",
+      "marketplace": "マーケット"
+    },
+    "aiServices": {
+      "empty": "AI 作成のサービスはありません",
+      "hint": "AI はチャット中に MCP サービスを作成できます。API との連携を依頼してみてください！",
+      "nodeRequired": "Node.js 18+ が必要です",
+      "checkingNode": "Node.js を確認中...",
+      "temp": "一時",
+      "saved": "保存済み",
+      "viewCode": "コード",
+      "tools": "{count} ツール",
+      "serviceCreated": "AI がサービス「{name}」を作成しました（{count} ツール）",
+      "serviceSaved": "サービス「{name}」を保存しました",
+      "serviceRemoved": "サービス「{name}」を削除しました",
+      "launchConfirmTitle": "AI サービスセキュリティ警告",
+      "launchConfirmMsg": "AI が自動生成コードを実行する MCP サービスを生成しました：\n  サービス: {name}\n  ツール: {tools}\n\nこのコードはローカルの Node.js プロセスで実行されます。\nこの AI 生成サービスコードを信頼できることを確認してください。",
+      "launchConfirmOk": "実行",
+      "launchConfirmCancel": "キャンセル"
+    },
+    "servers": {
+      "empty": "MCP サーバーが設定されていません",
+      "localMcp": "ローカル MCP",
+      "addServer": "サーバーを追加",
+      "addServerPlus": "+ サーバーを追加",
+      "connected": "接続済み",
+      "disconnected": "切断済み",
+      "serverName": "サーバー名",
+      "serverUrl": "サーバー URL（例：http://localhost:3000/mcp）",
+      "http": "HTTP",
+      "sse": "SSE（Server-Sent Events）",
+      "stdio": "stdio（ローカルプロセス）",
+      "command": "コマンド",
+      "commandPlaceholder": "コマンド（例：npx, node, python）",
+      "argsPlaceholder": "引数（例：-y @modelcontextprotocol/server-filesystem /path）",
+      "envPlaceholder": "ENV_KEY=value（1行に1つ）",
+      "presets": "リモート MCP",
+      "presetsHint": "人気の MCP サーバーをワンクリックで追加",
+      "presetDesc": {
+        "filesystem": "ローカルファイルの読み取り、検索、管理",
+        "fetch": "Web ページを取得して Markdown に変換",
+        "git": "Git リポジトリの読み取りと検索",
+        "memory": "AI メモリ用の永続ナレッジグラフ"
+      },
+      "formMode": "フォーム",
+      "jsonMode": "JSON",
+      "jsonPlaceholder": "JSON 設定を貼り付けてください。例：\n{\n  \"mcpServers\": {\n    \"name\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@.../server-xxx\"]\n    }\n  }\n}",
+      "jsonNoConfig": "有効な MCP サーバー設定が見つかりません",
+      "jsonParseError": "パースエラー",
+      "launchConfirmTitle": "セキュリティ警告",
+      "launchConfirmMsg": "外部プログラムを起動しようとしています：\n  コマンド: {command}\n  引数: {args}\n\nこの MCP サーバーはユーザー権限で実行され、ローカルファイルとネットワークにアクセスできます。\nこの MCP サーバーが信頼できるソースからのものであることを確認してください。",
+      "launchConfirmOk": "起動",
+      "launchConfirmCancel": "キャンセル",
+      "autoApprove": "MCP 起動の自動承認",
+      "autoApproveHint": "MCP サーバーの接続や AI 生成サービスの起動時にセキュリティ確認をスキップします。信頼できないソースには推奨しません。"
+    },
+    "publish": {
+      "empty": "公開ターゲットが設定されていません",
+      "hint": "まず公開機能を持つ MCP サーバーを接続してください。",
+      "button": "公開",
+      "publishing": "公開中...",
+      "published": "公開しました！ {info}",
+      "failed": "失敗: {message}",
+      "error": "エラー: {message}"
+    },
+    "sync": {
+      "empty": "同期設定がありません",
+      "hint": "まず MCP サーバーを接続してから、同期設定を追加してください。",
+      "syncNow": "今すぐ同期",
+      "addSync": "+ 同期を追加",
+      "name": "設定名",
+      "server": "MCP サーバー",
+      "remotePath": "リモートパス",
+      "localPath": "ローカルパス",
+      "direction": "方向",
+      "push": "プッシュ（ローカル → リモート）",
+      "pull": "プル（リモート → ローカル）",
+      "bidirectional": "双方向",
+      "lastSync": "最終同期: {time}",
+      "syncing": "同期中...",
+      "success": "同期完了",
+      "error": "同期エラー: {message}"
+    },
+    "marketplace": {
+      "title": "マーケット",
+      "search": "MCP サーバーを検索...",
+      "source": "ソース",
+      "sourceOfficial": "公式",
+      "sourceLobehub": "LobeHub",
+      "sourceSmithery": "Smithery",
+      "install": "インストール",
+      "installAndConnect": "インストールして接続",
+      "installing": "インストール中...",
+      "installed": "インストール済み",
+      "viewDetails": "詳細",
+      "loadMore": "もっと読み込む",
+      "noResults": "MCP サーバーが見つかりません",
+      "networkError": "読み込みに失敗しました。ネットワークを確認してください",
+      "retry": "再試行",
+      "envVars": "環境変数",
+      "envRequired": "（必須）",
+      "popularity": "利用数",
+      "installs": "インストール / 利用数",
+      "verified": "認証済み",
+      "cancel": "キャンセル"
+    }
+  },
+  "imageDialog": {
+    "title": "画像を挿入",
+    "urlTab": "URL",
+    "fileTab": "ローカルファイル",
+    "urlPlaceholder": "https://example.com/image.png",
+    "altPlaceholder": "画像の説明（任意）",
+    "selectFile": "画像を選択...",
+    "noFileSelected": "ファイルが選択されていません",
+    "insert": "挿入",
+    "cancel": "キャンセル"
+  },
+  "imageHost": {
+    "title": "画像ホスティング",
+    "provider": "プロバイダー",
+    "smms": "SM.MS",
+    "imgur": "Imgur",
+    "github": "GitHub リポジトリ",
+    "custom": "カスタム API",
+    "apiToken": "API トークン",
+    "apiTokenPlaceholder": "API トークンを入力",
+    "customEndpoint": "アップロードエンドポイント",
+    "customEndpointPlaceholder": "https://your-api.com/upload",
+    "customHeaders": "カスタムヘッダー（JSON）",
+    "githubRepoUrl": "リポジトリ URL",
+    "githubRepoUrlPlaceholder": "https://github.com/user/images",
+    "githubBranch": "ブランチ",
+    "githubDir": "画像ディレクトリ",
+    "githubToken": "パーソナルアクセストークン",
+    "githubTokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "githubCdn": "URL 形式",
+    "githubCdnRaw": "raw.githubusercontent.com",
+    "githubCdnJsdelivr": "jsDelivr CDN",
+    "importFromPublish": "公開ターゲットからインポート",
+    "autoUpload": "ペースト/ドロップ時に画像を自動アップロード",
+    "testUpload": "テストアップロード",
+    "testing": "テスト中...",
+    "success": "アップロード成功！",
+    "failed": "アップロード失敗",
+    "addTarget": "画像ホストを追加",
+    "targetName": "名前",
+    "targetNamePlaceholder": "例：マイブログ CDN",
+    "settingsEmpty": "画像ホスティングターゲットが設定されていません",
+    "settingsHint": "自動アップロードを有効にするには、画像ホスティングサービスを追加してください。",
+    "default": "デフォルト",
+    "setDefault": "デフォルトに設定",
+    "gitlab": "GitLab リポジトリ",
+    "git_custom": "カスタム Git（Gitea/Forgejo）",
+    "qiniu": "七牛 Kodo",
+    "aliyun_oss": "Aliyun OSS",
+    "tencent_cos": "Tencent COS",
+    "aws_s3": "AWS S3",
+    "google_gcs": "Google Cloud Storage",
+    "groupApi": "API ホスティング",
+    "groupGit": "Git リポジトリ",
+    "groupOss": "オブジェクトストレージ",
+    "gitlabRepoUrl": "リポジトリ URL",
+    "gitlabBranch": "ブランチ",
+    "gitlabDir": "画像ディレクトリ",
+    "gitlabToken": "パーソナルアクセストークン",
+    "gitlabTokenPlaceholder": "glpat-xxxxxxxxxxxx",
+    "gitCustomRepoUrl": "リポジトリ URL",
+    "gitCustomBranch": "ブランチ",
+    "gitCustomDir": "画像ディレクトリ",
+    "gitCustomToken": "アクセストークン",
+    "gitCustomTokenPlaceholder": "トークンを入力",
+    "ossAccessKey": "アクセスキー",
+    "ossAccessKeyPlaceholder": "アクセスキー ID を入力",
+    "ossSecretKey": "シークレットキー",
+    "ossSecretKeyPlaceholder": "シークレットキーを入力",
+    "ossBucket": "バケット",
+    "ossBucketPlaceholder": "例：my-images-bucket",
+    "ossRegion": "リージョン",
+    "ossRegionPlaceholder": "例：cn-east-1, us-east-1",
+    "selectRegion": "リージョンを選択",
+    "ossEndpoint": "カスタムエンドポイント（任意）",
+    "ossEndpointPlaceholder": "例：https://s3.custom.com",
+    "ossCdnDomain": "CDN ドメイン（任意）",
+    "ossCdnDomainPlaceholder": "例：https://cdn.example.com",
+    "ossPathPrefix": "パスプレフィックス（任意）",
+    "ossPathPrefixPlaceholder": "例：images/blog/"
+  },
+  "imageMenu": {
+    "resize": "リサイズ",
+    "upload": "画像ホストにアップロード",
+    "editAlt": "説明を編集",
+    "copyUrl": "画像 URL をコピー",
+    "copyImage": "画像をコピー",
+    "openInBrowser": "ブラウザーで画像を開く",
+    "saveAs": "画像を名前を付けて保存...",
+    "delete": "画像を削除",
+    "originalSize": "元のサイズ"
+  },
+  "menu": {
+    "file": "ファイル",
+    "edit": "編集",
+    "paragraph": "段落",
+    "format": "書式",
+    "view": "表示",
+    "window": "ウィンドウ",
+    "help": "ヘルプ",
+    "new": "新規",
+    "newWindow": "新規ウィンドウ",
+    "open": "開く...",
+    "save": "保存",
+    "saveAs": "名前を付けて保存...",
+    "export": "エクスポート",
+    "exportHtml": "HTML",
+    "exportPdf": "PDF",
+    "exportImage": "画像（PNG）",
+    "exportDoc": "Word（.doc）",
+    "heading1": "見出し 1",
+    "heading2": "見出し 2",
+    "heading3": "見出し 3",
+    "heading4": "見出し 4",
+    "heading5": "見出し 5",
+    "heading6": "見出し 6",
+    "table": "表",
+    "codeBlock": "コードブロック",
+    "mathBlock": "数式ブロック",
+    "quote": "引用",
+    "bulletList": "箇条書きリスト",
+    "orderedList": "番号付きリスト",
+    "horizontalRule": "水平線",
+    "bold": "太字",
+    "italic": "斜体",
+    "strikethrough": "取り消し線",
+    "code": "コード",
+    "link": "リンク",
+    "image": "画像",
+    "visualMode": "ビジュアルモード",
+    "sourceMode": "ソースモード",
+    "splitMode": "分割モード",
+    "toggleSidebar": "サイドバーの切り替え",
+    "toggleAIPanel": "AI パネルの切り替え",
+    "toggleOutline": "アウトラインの切り替え",
+    "zoomIn": "拡大",
+    "zoomOut": "縮小",
+    "actualSize": "実際のサイズ",
+    "find": "検索",
+    "replace": "置換",
+    "changelog": "変更履歴",
+    "privacyPolicy": "プライバシーポリシー",
+    "officialWebsite": "公式サイト",
+    "aboutMoraya": "Moraya について",
+    "feedback": "フィードバック",
+    "settings": "設定...",
+    "versionInfo": "バージョン情報"
+  },
+  "search": {
+    "findPlaceholder": "検索...",
+    "replacePlaceholder": "置換...",
+    "noResults": "結果なし",
+    "caseSensitive": "大文字/小文字を区別",
+    "replace": "置換",
+    "replaceAll": "すべて置換"
+  },
+  "mermaid": {
+    "loading": "ダイアグラムを読み込み中...",
+    "error": "ダイアグラムの描画に失敗しました",
+    "edit": "編集",
+    "preview": "プレビュー",
+    "empty": "空のダイアグラム"
+  },
+  "export": {
+    "exportAs": "{format} としてエクスポート",
+    "pdf": "PDF",
+    "html": "HTML（スタイル付き）",
+    "htmlPlain": "HTML（スタイルなし）",
+    "image": "画像（PNG）",
+    "doc": "Word（.doc）",
+    "rtf": "RTF",
+    "epub": "Epub",
+    "latex": "LaTeX",
+    "mediawiki": "MediaWiki",
+    "rst": "reStructuredText",
+    "textile": "Textile",
+    "opml": "OPML"
+  },
+  "workflow": {
+    "title": "AI ワークフロー",
+    "seoStep": "SEO 最適化",
+    "imageGenStep": "AI 画像",
+    "publishStep": "公開",
+    "publishDesc": "ターゲットプラットフォームに公開",
+    "optionalAbove": "上記のステップは任意です",
+    "selectTargets": "公開ターゲットを選択",
+    "confirmPublish": "公開",
+    "publishing": "公開中...",
+    "publishSuccess": "公開に成功しました！",
+    "publishFailed": "公開に失敗しました",
+    "mcpEntry": "AI MCP",
+    "mcpServerCount": "サービス接続中",
+    "mcpToolCount": "ツール"
+  },
+  "imageGen": {
+    "title": "AI 画像生成",
+    "step1Title": "画像モード",
+    "step2Title": "画像を生成",
+    "step3Title": "記事に挿入",
+    "generatingPrompts": "プロンプトを生成中...",
+    "contentTooShort": "記事の内容が画像生成には短すぎます。",
+    "styleLabel": "スタイル",
+    "countLabel": "枚数",
+    "style_auto": "自動",
+    "style_photo": "写真",
+    "style_illustration": "イラスト",
+    "style_flat": "フラット",
+    "style_ink": "水墨画",
+    "style_watercolor": "水彩画",
+    "style_isometric": "アイソメトリック",
+    "style_infographic": "インフォグラフィック",
+    "style_editorial": "エディトリアル",
+    "style_cartoon": "カートゥーン",
+    "style_render": "3D レンダー",
+    "style_sketch": "スケッチ",
+    "style_blueprint": "設計図",
+    "style_clay": "クレイモデル",
+    "style_wireframe": "ワイヤーフレーム",
+    "style_exploded": "分解図",
+    "style_section": "断面図",
+    "style_cad": "CAD 図面",
+    "style_prototype": "プロトタイプ",
+    "style_anime": "アニメ",
+    "style_comic": "コミック",
+    "style_cinematic": "シネマティック",
+    "style_pixel": "ピクセルアート",
+    "style_noir": "フィルムノワール",
+    "style_manga": "マンガ",
+    "style_realistic": "リアリスティック",
+    "style_studio": "スタジオ",
+    "style_lifestyle": "ライフスタイル",
+    "style_flatlay": "フラットレイ",
+    "style_macro": "マクロ",
+    "style_minimalist": "ミニマリスト",
+    "style_packaging": "パッケージング",
+    "style_outdoor": "アウトドア",
+    "style_mood": "ムード",
+    "style_abstract": "アブストラクト",
+    "style_texture": "テクスチャ",
+    "style_gradient": "グラデーション",
+    "style_collage": "コラージュ",
+    "style_vintage": "ヴィンテージ",
+    "style_botanical": "ボタニカル",
+    "style_geometric": "ジオメトリック",
+    "style_ethereal": "エシリアル",
+    "style_brutalist": "ブルータリスト",
+    "generate": "生成",
+    "next": "次へ",
+    "back": "戻る",
+    "insertConfirm": "挿入",
+    "insertParagraph": "対応する段落の後に挿入（推奨）",
+    "insertEnd": "記事の末尾に挿入",
+    "insertReplace": "記事内の画像を置換",
+    "insertClipboard": "Markdown をクリップボードにコピー",
+    "selected": "{count} 件選択中",
+    "completed": "画像生成完了",
+    "stepDescription": "記事のイラストを生成",
+    "mode_article": "記事",
+    "mode_design": "デザイン",
+    "mode_storyboard": "ストーリーボード",
+    "mode_product": "プロダクト",
+    "mode_moodboard": "ムードボード",
+    "mode_portrait": "ポートレート",
+    "style_portrait": "ポートレート",
+    "style_headshot": "ヘッドショット",
+    "style_fullbody": "全身",
+    "style_fashion": "ファッション",
+    "style_street": "ストリート",
+    "style_glamour": "グラマー",
+    "style_environmental": "環境ポートレート",
+    "style_candid": "キャンディッド",
+    "style_group": "グループ",
+    "preDefinedDetected": "ドキュメント内に {count} 件の定義済みプロンプトを検出しました",
+    "usePredefined": "定義済みプロンプトを使用"
+  },
+  "seo": {
+    "title": "SEO 最適化",
+    "generating": "記事を分析中...",
+    "titles": "タイトル候補",
+    "customTitle": "カスタムタイトル...",
+    "excerpt": "抜粋",
+    "tags": "タグ",
+    "addTag": "タグを追加...",
+    "slug": "URL スラッグ",
+    "metaDescription": "メタディスクリプション",
+    "regenerate": "再生成",
+    "apply": "適用",
+    "retry": "再試行",
+    "contentTooShort": "記事の内容が SEO 分析には短すぎます。",
+    "completed": "SEO 最適化済み",
+    "stepDescription": "タイトル、抜粋、タグを生成"
+  },
+  "publish": {
+    "settingsEmpty": "公開ターゲットが設定されていません",
+    "settingsHint": "GitHub リポジトリまたはカスタム API エンドポイントを追加して、記事を公開してください。",
+    "addTarget": "ターゲットを追加",
+    "editTarget": "編集",
+    "deleteTarget": "削除",
+    "testConnection": "接続テスト",
+    "github": "GitHub リポジトリ",
+    "customApi": "カスタム API",
+    "targetName": "名前",
+    "targetNamePlaceholder": "例：マイブログ",
+    "repoUrl": "リポジトリ URL",
+    "repoUrlPlaceholder": "https://github.com/user/blog",
+    "branch": "ブランチ",
+    "articlesDir": "記事ディレクトリ",
+    "articlesDirPlaceholder": "content/posts/",
+    "imagesDir": "画像ディレクトリ",
+    "imagesDirPlaceholder": "static/images/",
+    "token": "パーソナルアクセストークン",
+    "tokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "frontMatterTemplate": "フロントマターテンプレート",
+    "endpoint": "API エンドポイント",
+    "endpointPlaceholder": "https://api.example.com/articles",
+    "method": "HTTP メソッド",
+    "headers": "ヘッダー（JSON）",
+    "bodyTemplate": "ボディテンプレート",
+    "templatePresets": "テンプレートプリセット",
+    "presetHugo": "Hugo",
+    "presetHexo": "Hexo",
+    "presetAstro": "Astro",
+    "presetCustom": "カスタム",
+    "fileNamePattern": "ファイル名パターン",
+    "fileNamePreset": "名前プリセット",
+    "fileNamePreview": "プレビュー",
+    "presetSimple": "シンプル（ファイル名）",
+    "presetDateSlug": "日付 + スラッグ",
+    "presetDateFilename": "日付 + ファイル名",
+    "presetYearMonth": "年/月/スラッグ",
+    "fileNameVariables": "変数: {{date}}, {{year}}, {{month}}, {{day}}, {{slug}}, {{filename}}, {{title}}",
+    "rssSection": "RSS フィード",
+    "rssEnable": "RSS フィードを生成",
+    "rssEnableHint": "公開時に feed.xml を自動更新します",
+    "rssFeedPath": "フィードファイルパス",
+    "rssFeedPathPlaceholder": "feed.xml",
+    "rssSiteUrl": "サイト URL",
+    "rssSiteUrlPlaceholder": "https://myblog.com",
+    "rssFeedTitle": "フィードタイトル",
+    "rssFeedTitlePlaceholder": "マイブログ",
+    "rssFeedDescription": "フィードの説明",
+    "rssFeedDescriptionPlaceholder": "〜についての記事...",
+    "rssLanguage": "言語",
+    "rssAuthorName": "著者",
+    "rssAuthorNamePlaceholder": "山田太郎",
+    "rssMaxItems": "フィードの最大項目数",
+    "rssIncludeFullContent": "フィードに記事の全文を含める",
+    "rssFeedEndpoint": "RSS フィードエンドポイント",
+    "rssFeedEndpointPlaceholder": "https://api.example.com/rss",
+    "rssUpdateFailed": "RSS フィードの更新に失敗しました",
+    "progressTitle": "公開中...",
+    "progressPublishing": "アップロード中...",
+    "progressRss": "RSS 更新中...",
+    "progressDone": "完了",
+    "progressFailed": "失敗"
+  },
+  "update": {
+    "title": "バージョン情報",
+    "currentVersion": "現在のバージョン",
+    "latestVersion": "最新バージョン",
+    "checking": "アップデートを確認中...",
+    "upToDate": "最新バージョンを使用しています！",
+    "checkFailed": "アップデートの確認に失敗しました",
+    "releaseNotes": "更新内容",
+    "noAsset": "お使いのプラットフォーム用のインストーラーがありません。手動でダウンロードしてください。",
+    "upgrade": "アップグレード",
+    "retry": "再試行",
+    "viewRelease": "リリースを表示",
+    "downloading": "ダウンロード中...",
+    "downloadFailed": "ダウンロードに失敗しました",
+    "installLaunched": "インストーラーを起動しました。まもなく Moraya が終了します。",
+    "newVersionAvailable": "新しいバージョンが利用可能です！クリックしてアップグレードしてください。"
+  },
+  "errors": {
+    "aiNotConfigured": "AI が設定されていません。",
+    "aiRequestFailed": "AI リクエストに失敗しました",
+    "chatRequestFailed": "チャットリクエストに失敗しました",
+    "unknownCommand": "不明な AI コマンド: {command}"
+  },
+  "welcome": {
+    "title": "Moraya へようこそ",
+    "subtitle": "ミニマルで AI 対応の Markdown エディターです。",
+    "featuresTitle": "機能",
+    "featureWysiwyg": "**WYSIWYG** Markdown 編集",
+    "featureMath": "数式サポート: $E = mc^2$",
+    "featureThemes": "ダーク & ライトテーマ",
+    "featureAI": "AI パワード ライティングアシスタント",
+    "featureMCP": "MCP プロトコルによる公開と同期",
+    "featureLightweight": "軽量（インストーラー約 5MB）",
+    "mathTitle": "数式の例",
+    "codeTitle": "コードの例",
+    "tableTitle": "表の例",
+    "tableFeature": "機能",
+    "tableStatus": "ステータス",
+    "tableDone": "完了",
+    "startWriting": "ここにアイデアを書き始めましょう...",
+    "tip": "**ヒント:** `Cmd+I` を押して AI アシスタントパネルを切り替えられます。",
+    "shortcutsTitle": "キーボードショートカット",
+    "shortcutSave": "`Cmd+S` — ドキュメントを保存",
+    "shortcutOpen": "`Cmd+O` — ファイルを開く",
+    "shortcutNew": "`Cmd+N` — 新規ドキュメント",
+    "shortcutToggleMode": "`Cmd+/` — ビジュアル/ソースモード切り替え",
+    "shortcutSplitMode": "`Cmd+Shift+/` — 分割モード切り替え",
+    "shortcutSidebar": "`Cmd+\\` — サイドバー切り替え",
+    "shortcutSettings": "`Cmd+,` — 設定を開く",
+    "shortcutAI": "`Cmd+Shift+I` — AI パネル切り替え",
+    "shortcutExport": "`Cmd+Shift+E` — HTML としてエクスポート",
+    "blockquoteTitle": "引用の例",
+    "blockquoteContent": "書く技術とは、自分が何を信じているかを発見する技術である。 — ギュスターヴ・フローベール",
+    "advancedMathTitle": "高度な数式",
+    "listTitle": "ネストされたリストの例",
+    "listItem1": "はじめに",
+    "listItem1a": "アプリケーションをインストール",
+    "listItem1b": "お好みの設定を構成",
+    "listItem1c": "執筆を開始",
+    "listItem2": "高度な機能",
+    "listItem2a": "AI パワード ライティングアシスタント",
+    "listItem2b": "MCP プロトコル統合",
+    "listItem2c": "複数のエクスポート形式",
+    "listItem3": "カスタマイズ",
+    "listItem3a": "テーマと外観",
+    "listItem3b": "エディター設定",
+    "listItem3c": "キーボードショートカット",
+    "paragraphTitle": "Moraya について",
+    "paragraph1": "Moraya は Rust と Tauri で構築された、モダンで軽量な Markdown エディターです。テキストエディターのシンプルさと WYSIWYG インターフェースのパワーを兼ね備え、両方の良さを提供します。",
+    "paragraph2": "「Moraya」という名前は、ラテン語の「mora」（一瞬）と中国語の「雅」（優雅さ）を組み合わせたもので、優雅な執筆の瞬間を象徴しています。",
+    "paragraph3": "技術文書、ブログ記事、学術論文、個人的なメモなど、何を書いていても、Moraya は最も大切なもの、つまりあなたのコンテンツに集中できる、気が散らない環境を提供します。",
+    "hrTitle": "水平線",
+    "hrDescription": "水平線を使って文書の異なるセクションを区切ることができます："
+  },
+  "templates": {
+    "gallery": {
+      "title": "AI アシスタント",
+      "search": "テンプレートを検索...",
+      "back": "戻る",
+      "start": "開始"
+    },
+    "error": {
+      "noDocument": "まずコンテンツを書いてください",
+      "noSelection": "まずテキストを選択してください",
+      "noContent": "コンテンツを書くか、テキストを選択してください"
+    },
+    "writing": {
+      "name": "ライティング",
+      "desc": "AI による執筆、編集、要約",
+      "free": {
+        "name": "フリーライティング",
+        "desc": "トピックを入力すると AI がコンテンツを生成します",
+        "hint": "執筆のトピックまたは指示を入力..."
+      },
+      "continue": {
+        "name": "続きを書く",
+        "desc": "ドキュメントの末尾から続きを書きます"
+      },
+      "outline": {
+        "name": "アウトライン生成",
+        "desc": "記事のアウトラインを作成します",
+        "hint": "記事のトピックを入力..."
+      },
+      "summarize": {
+        "name": "要約",
+        "desc": "選択したテキストまたはドキュメント全体を要約します"
+      },
+      "improve": {
+        "name": "改善",
+        "desc": "文章の品質を向上させます"
+      },
+      "simplify": {
+        "name": "簡素化",
+        "desc": "複雑なテキストを簡潔にします"
+      },
+      "expand": {
+        "name": "拡張",
+        "desc": "詳細と説明を追加します"
+      },
+      "fixGrammar": {
+        "name": "文法修正",
+        "desc": "文法とスペルのエラーを修正します"
+      }
+    },
+    "translation": {
+      "name": "翻訳",
+      "desc": "多言語翻訳とローカライゼーション",
+      "auto": {
+        "name": "スマート翻訳",
+        "desc": "言語を自動検出して翻訳します"
+      },
+      "toTarget": {
+        "name": "指定言語に翻訳",
+        "desc": "翻訳先の言語を選択して翻訳します"
+      },
+      "explain": {
+        "name": "翻訳と解説",
+        "desc": "単語ごとの解説付きで翻訳します"
+      },
+      "polish": {
+        "name": "ローカライズ",
+        "desc": "翻訳をより自然な表現にします"
+      },
+      "compare": {
+        "name": "マルチバージョン",
+        "desc": "複数の翻訳スタイルを提供します"
+      },
+      "targetLang": "翻訳先の言語",
+      "lang": {
+        "en": "英語",
+        "zhCN": "簡体字中国語",
+        "zhHant": "繁体字中国語",
+        "ar": "アラビア語",
+        "de": "ドイツ語",
+        "es": "スペイン語",
+        "fr": "フランス語",
+        "hi": "ヒンディー語",
+        "ja": "日本語",
+        "ko": "韓国語",
+        "pt": "ポルトガル語",
+        "ru": "ロシア語"
+      }
+    },
+    "student": {
+      "name": "学習ヘルパー",
+      "desc": "学習、ノート作成、概念理解",
+      "explain": {
+        "name": "概念の説明",
+        "desc": "概念をわかりやすく説明します",
+        "hint": "説明してほしい概念を入力..."
+      },
+      "notes": {
+        "name": "学習ノート",
+        "desc": "内容を構造化されたノートに整理します"
+      },
+      "flashcard": {
+        "name": "フラッシュカード",
+        "desc": "内容から Q&A フラッシュカードを抽出します"
+      },
+      "mindmap": {
+        "name": "マインドマップ",
+        "desc": "Markdown マインドマップを生成します"
+      },
+      "essayOutline": {
+        "name": "エッセイアウトライン",
+        "desc": "エッセイのアウトラインを生成します",
+        "hint": "エッセイのトピックを入力..."
+      },
+      "reading": {
+        "name": "読解分析",
+        "desc": "テキスト内容の深い分析"
+      },
+      "formula": {
+        "name": "数式の導出",
+        "desc": "数式の導出手順を表示します",
+        "hint": "数式の名前または内容を入力..."
+      },
+      "compare": {
+        "name": "概念の比較",
+        "desc": "2つの概念を並べて比較します",
+        "hint": "2つの概念を入力（例：TCP vs UDP）..."
+      }
+    },
+    "kids": {
+      "name": "子供の学習",
+      "desc": "物語、楽しい学習、インタラクティブゲーム",
+      "story": {
+        "name": "子供向けストーリー",
+        "desc": "キーワードからストーリーを生成します",
+        "hint": "ストーリーのキーワードを入力（例：うさぎ 森 冒険）..."
+      },
+      "poem": {
+        "name": "童謡",
+        "desc": "トピックについて童謡を作ります",
+        "hint": "トピックを入力..."
+      },
+      "why": {
+        "name": "なぜ？なぜ？なぜ？",
+        "desc": "AI が終わりなき「なぜ」の質問に答えます"
+      },
+      "alphabet": {
+        "name": "アルファベット遊び",
+        "desc": "インタラクティブな文字学習"
+      },
+      "mathGame": {
+        "name": "算数ゲーム",
+        "desc": "楽しいインタラクティブ計算"
+      },
+      "riddle": {
+        "name": "なぞなぞ",
+        "desc": "AI が子供向けのなぞなぞを出します"
+      },
+      "drawText": {
+        "name": "ピクチャートーク",
+        "desc": "場面を描写すると、AI がストーリーを書きます",
+        "hint": "場面を描写してください..."
+      },
+      "knowledge": {
+        "name": "おもしろ豆知識",
+        "desc": "自然、科学、動物百科事典"
+      }
+    },
+    "marketing": {
+      "name": "マーケティング",
+      "desc": "SNS、広告、SEO コピーライティング",
+      "xiaohongshu": {
+        "name": "小紅書投稿",
+        "desc": "ライフスタイルレビュー風の投稿を生成します",
+        "hint": "商品またはトピックを入力..."
+      },
+      "twitter": {
+        "name": "Twitter/X 投稿",
+        "desc": "ツイート形式のコンテンツを生成します",
+        "hint": "トピックを入力..."
+      },
+      "slogan": {
+        "name": "広告スローガン",
+        "desc": "キャッチーなブランドスローガンを生成します",
+        "hint": "ブランドまたは商品を入力..."
+      },
+      "email": {
+        "name": "マーケティングメール",
+        "desc": "対象とトーンを設定してメールを作成します",
+        "hint": "メールの内容を説明..."
+      },
+      "seoArticle": {
+        "name": "SEO 記事",
+        "desc": "SEO に最適化されたコンテンツを生成します",
+        "hint": "ターゲットキーワードを入力..."
+      },
+      "productDesc": {
+        "name": "商品説明",
+        "desc": "魅力的な商品コピーを生成します",
+        "hint": "商品情報を入力..."
+      },
+      "tone": "トーン",
+      "tone.formal": "フォーマル",
+      "tone.friendly": "フレンドリー",
+      "tone.urgent": "緊急",
+      "tone.humorous": "ユーモラス"
+    },
+    "professional": {
+      "name": "ビジネス",
+      "desc": "メール、レポート、議事録",
+      "email": {
+        "name": "ビジネスメール",
+        "desc": "シーンとトーンを設定してメールを作成します",
+        "hint": "メールの内容を説明..."
+      },
+      "meeting": {
+        "name": "議事録",
+        "desc": "メモを正式な議事録に整理します"
+      },
+      "report": {
+        "name": "業務報告",
+        "desc": "週次/月次/四半期レポートを生成します",
+        "hint": "レポートの要点を入力..."
+      },
+      "review": {
+        "name": "コードレビュー",
+        "desc": "コードをレビューして改善を提案します"
+      },
+      "resume": {
+        "name": "履歴書ブラッシュアップ",
+        "desc": "STAR メソッドで履歴書を最適化します"
+      },
+      "prd": {
+        "name": "PRD ドキュメント",
+        "desc": "プロダクト要件書を生成します",
+        "hint": "機能の説明を入力..."
+      },
+      "tone": "トーン",
+      "tone.concise": "簡潔",
+      "reportType": "レポートの種類",
+      "reportType.weekly": "週次",
+      "reportType.monthly": "月次",
+      "reportType.quarterly": "四半期"
+    },
+    "personal": {
+      "name": "自己成長",
+      "desc": "日記、目標設定、意思決定",
+      "journal": {
+        "name": "日記ヘルパー",
+        "desc": "ガイド付きの日記と振り返り",
+        "hint": "今日何がありましたか？..."
+      },
+      "goal": {
+        "name": "目標の細分化",
+        "desc": "目標を実行可能なステップに分解します",
+        "hint": "目標を入力..."
+      },
+      "habit": {
+        "name": "習慣づくり",
+        "desc": "習慣形成プランを作成します",
+        "hint": "身につけたい習慣を入力..."
+      },
+      "decision": {
+        "name": "意思決定分析",
+        "desc": "メリット/デメリット分析で意思決定を支援します",
+        "hint": "選択肢を説明..."
+      },
+      "bookNotes": {
+        "name": "読書ノート",
+        "desc": "内容を読書ノートに整理します"
+      }
+    },
+    "games_cn": {
+      "name": "中文游戏",
+      "desc": "飞花令、成语接龙、猜谜语等文字游戏",
+      "feihualing": {
+        "name": "飞花令",
+        "desc": "轮流说含指定字的诗句"
+      },
+      "chengyuChain": {
+        "name": "成语接龙",
+        "desc": "末字接首字的成语接龙"
+      },
+      "riddle": {
+        "name": "猜谜语",
+        "desc": "AI 出谜面，你猜谜底"
+      },
+      "lanternRiddle": {
+        "name": "猜灯谜",
+        "desc": "字谜、拆字等灯谜挑战"
+      },
+      "poetryFill": {
+        "name": "诗词填空",
+        "desc": "古诗词记忆力考验"
+      },
+      "storyChain": {
+        "name": "故事接龙",
+        "desc": "双方交替续写故事"
+      },
+      "characterGame": {
+        "name": "猜字游戏",
+        "desc": "根据描述猜汉字"
+      },
+      "brainTeaser": {
+        "name": "脑筋急转弯",
+        "desc": "趣味脑筋急转弯"
+      },
+      "couplet": {
+        "name": "对联",
+        "desc": "AI 出上联，你对下联"
+      },
+      "wordExplain": {
+        "name": "你说我猜",
+        "desc": "AI 描述词语你来猜"
+      },
+      "ancientText": {
+        "name": "文言文翻译",
+        "desc": "文言文翻译白话文挑战"
+      },
+      "homophone": {
+        "name": "谐音梗",
+        "desc": "谐音双关创意挑战"
+      }
+    },
+    "games_en": {
+      "name": "英語ゲーム",
+      "desc": "Word Chain、Hangman、Trivia など英語の言葉遊び",
+      "wordChain": {
+        "name": "Word Chain",
+        "desc": "最後の文字で始まる単語をつなげます"
+      },
+      "twentyQuestions": {
+        "name": "20 Questions",
+        "desc": "20回のはい/いいえの質問で物を当てます"
+      },
+      "hangman": {
+        "name": "Hangman",
+        "desc": "1文字ずつ推測して単語を当てます"
+      },
+      "storyBuilder": {
+        "name": "Story Builder",
+        "desc": "交互にストーリーを作り上げます"
+      },
+      "wordAssociation": {
+        "name": "Word Association",
+        "desc": "自由連想の単語チェーン"
+      },
+      "riddles": {
+        "name": "Riddles",
+        "desc": "英語のなぞなぞを解きます"
+      },
+      "trivia": {
+        "name": "Trivia Quiz",
+        "desc": "一般知識のクイズ"
+      },
+      "rhymeTime": {
+        "name": "Rhyme Time",
+        "desc": "韻を踏む言葉でストーリーを作ります"
+      },
+      "acronym": {
+        "name": "Acronym Game",
+        "desc": "ランダムな頭字語の意味を考えます"
+      },
+      "taboo": {
+        "name": "Taboo",
+        "desc": "禁止ワードを使わずに説明します"
+      },
+      "sentenceBuilder": {
+        "name": "Sentence Builder",
+        "desc": "与えられた単語で最長の文を作ります"
+      },
+      "emojiStory": {
+        "name": "Emoji Story",
+        "desc": "絵文字を使ってストーリーを伝えます"
+      }
+    },
+    "quiz": {
+      "name": "クイズ & 練習",
+      "desc": "AI 生成の問題とスコアリング",
+      "practice": {
+        "name": "ユニバーサルクイズ",
+        "desc": "科目と難易度を選び、AI がクイズを出題します"
+      },
+      "direction": "科目",
+      "dir": {
+        "programming": "プログラミング",
+        "math": "数学",
+        "english": "英語",
+        "science": "科学",
+        "history": "歴史",
+        "interview": "面接対策",
+        "custom": "カスタム科目"
+      },
+      "difficulty": "難易度",
+      "diff": {
+        "easy": "易しい",
+        "medium": "普通",
+        "hard": "難しい"
+      }
+    }
+  },
+  "plugins": {
+    "tabs": {
+      "installed": "インストール済み",
+      "market": "マーケットプレイス"
+    },
+    "installed": {
+      "empty": "プラグインはまだインストールされていません。"
+    },
+    "sandbox": {
+      "label": "サンドボックスレベル",
+      "sandbox": "サンドボックス（JS）",
+      "local": "ローカル（ネットワークなし）",
+      "system": "システム（ネットワークアクセス）"
+    },
+    "permissions": {
+      "label": "権限"
+    },
+    "market": {
+      "search": "プラグインを検索...",
+      "refresh": "更新",
+      "catAll": "すべて",
+      "cached": "キャッシュされた結果を表示しています",
+      "loading": "マーケットプレイスを読み込み中...",
+      "empty": "プラグインが見つかりません",
+      "install": "インストール",
+      "installed": "インストール済み",
+      "installing": "インストール中..."
+    },
+    "install": {
+      "fromFile": ".zip からインストール",
+      "urlPlaceholder": "GitHub リポジトリ URL（https://github.com/...）",
+      "validate": "インポート",
+      "confirmUrl": "URL からプラグインをインストールしますか？",
+      "author": "作者",
+      "permissions": "権限",
+      "noPermissions": "権限なし"
+    },
+    "verified": "認証済み",
+    "enable": "有効化",
+    "disable": "無効化",
+    "uninstall": "アンインストール",
+    "changelog": "変更履歴",
+    "viewSource": "ソース",
+    "blacklisted": "ブラックリスト",
+    "blacklistWarning": "このプラグインはセキュリティ上の問題によりブラックリストに登録されています。アンインストールしてください。",
+    "processError": "プラグインプロセスがクラッシュしました。切り替えて再起動してください。",
+    "error": {
+      "platformNotSupported": "お使いのプラットフォーム用のダウンロードがありません。"
+    }
+  },
+  "transcription": {
+    "title": "文字起こし",
+    "recording": "録音中",
+    "connecting": "接続中...",
+    "paused": "一時停止中",
+    "stopping": "停止中...",
+    "idle": "準備完了",
+    "start": "開始",
+    "stop": "停止",
+    "pause": "一時停止",
+    "resume": "再開",
+    "back": "チャットに戻る",
+    "emptyIdle": "「開始」をクリックして録音と文字起こしを始めましょう。",
+    "emptyWaiting": "音声を待っています...",
+    "summarizeWithAI": "AI で要約",
+    "saveAsDoc": "ドキュメントとして保存",
+    "summarizePrompt": "以下の文字起こしから会議の要約を生成してください。主な議論ポイント、決定事項、アクションアイテムを特定してください。Markdown 形式でフォーマットしてください。",
+    "noSpeechConfig": "音声認識プロバイダーが設定されていません。設定 → 音声 で追加してください。",
+    "noSpeechConfigHint": "設定 → 音声 で音声認識プロバイダー（例：Deepgram）を追加してください。",
+    "goToVoiceSettings": "音声設定を開く"
+  },
+  "outline": {
+    "empty": "見出しがありません"
+  }
+}

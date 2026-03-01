@@ -1,0 +1,1337 @@
+{
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "add": "Добавить",
+    "remove": "Удалить",
+    "connect": "Подключить",
+    "disconnect": "Отключить",
+    "insert": "Вставить",
+    "replace": "Заменить",
+    "copy": "Копировать",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "browse": "Изменить",
+    "clear": "Сбросить",
+    "play": "Воспроизвести",
+    "stop": "Остановить",
+    "untitled": "Без названия"
+  },
+  "settings": {
+    "title": "Настройки",
+    "tabs": {
+      "general": "Основные",
+      "editor": "Редактор",
+      "appearance": "Внешний вид",
+      "ai": "AI",
+      "mcp": "MCP",
+      "image": "Изображения",
+      "publish": "Публикация",
+      "permissions": "Разрешения",
+      "voice": "Голос",
+      "plugins": "Плагины"
+    },
+    "language": {
+      "label": "Язык",
+      "system": "Системный"
+    },
+    "theme": {
+      "label": "Тема",
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "appearance": {
+      "themeSection": "Тема",
+      "darkModeSection": "Тёмный режим",
+      "fontSection": "Шрифт",
+      "separateDarkTheme": "Использовать отдельную тему для тёмного режима",
+      "darkTheme": "Тема тёмного режима",
+      "darkModeLabel": "Режим оформления"
+    },
+    "fontSize": {
+      "label": "Размер шрифта"
+    },
+    "autoSave": {
+      "label": "Автосохранение",
+      "interval": "Интервал автосохранения"
+    },
+    "rememberLastFolder": "Запоминать последнюю открытую папку",
+    "editor": {
+      "lineWidth": "Ширина строки редактора",
+      "tabSize": "Размер табуляции",
+      "showLineNumbers": "Показывать номера строк в режиме исходного кода"
+    },
+    "version": "Moraya v{version}",
+    "permissions": {
+      "mcpTitle": "Разрешения MCP",
+      "aiTitle": "Настройки AI",
+      "aiMaxTokens": "Максимум выходных токенов",
+      "aiMaxTokensHint": "Максимальное количество токенов, которое AI может сгенерировать за один ответ. Большие значения позволяют более длинные ответы и вызовы инструментов, но расходуют больше средств.",
+      "aiRulesMaxChars": "Макс. символов в файле правил",
+      "aiRulesMaxCharsHint": "Максимальное количество символов, считываемых из файла правил MORAYA.md. Увеличьте для больших файлов правил. Больше символов = больше токенов на запрос.",
+      "aiToolResultMaxChars": "Макс. символов в результате инструмента",
+      "aiToolResultMaxCharsHint": "Максимальное количество символов, сохраняемых из результата каждого MCP-инструмента. Большие значения сохраняют больше деталей, но потребляют больше контекста.",
+      "aiMaxToolRounds": "Макс. раундов вызова инструментов",
+      "aiMaxToolRoundsHint": "Максимальное количество раундов вызова инструментов, которое AI может выполнить за один ход диалога. Увеличьте для сложных многошаговых задач."
+    },
+    "voice": {
+      "providers": "Провайдеры распознавания речи",
+      "addProvider": "Добавить провайдера",
+      "editProvider": "Редактировать провайдера",
+      "noProviders": "Провайдеры распознавания речи не настроены.",
+      "provider": "Провайдер",
+      "apiKey": "API Key",
+      "apiKeyOptional": "Необязательно для AWS (используйте Access Key)",
+      "awsAccessKey": "AWS Access Key ID",
+      "awsSecretKey": "AWS Secret Access Key",
+      "region": "Регион",
+      "model": "Модель",
+      "modelPlaceholder": "Введите название модели",
+      "endpointIdPlaceholder": "Введите ID конечной точки вывода",
+      "language": "Язык",
+      "langAuto": "Автоопределение",
+      "langMulti": "Мультиязычный",
+      "baseUrl": "Пользовательский URL WebSocket",
+      "testConnection": "Проверить соединение",
+      "testing": "Проверка...",
+      "testOk": "Подключено",
+      "testFailed": "Ошибка подключения",
+      "setActive": "Установить по умолчанию",
+      "active": "По умолчанию",
+      "custom": "Пользовательский",
+      "storage": "Хранилище",
+      "recordingBackupDir": "Резервное копирование записей",
+      "recordingBackupHint": "Сохранять полные записи в формате WAV после каждой сессии.",
+      "voiceSyncDir": "Каталог синхронизации голосовых профилей",
+      "voiceSyncHint": "Синхронизация голосовых профилей через облачное хранилище (например, iCloud, Dropbox). Нажмите «Изменить», чтобы выбрать папку — существующие профили будут перенесены автоматически.",
+      "syncDefault": "Данные приложения (по умолчанию)",
+      "disabled": "Отключено",
+      "migratingProfiles": "Перенос...",
+      "migrationFailed": "Ошибка переноса",
+      "profiles": "Голосовые профили",
+      "noProfiles": "Голосовых профилей пока нет. Они создаются автоматически после сеансов транскрипции.",
+      "naming": {
+        "male": "Мужчина {n}",
+        "female": "Женщина {n}",
+        "bystander": "Наблюдатель {n}",
+        "speaker": "Говорящий {n}"
+      }
+    }
+  },
+  "titlebar": {
+    "unsaved": "Не сохранено",
+    "minimize": "Свернуть",
+    "maximize": "Развернуть",
+    "close": "Закрыть"
+  },
+  "sidebar": {
+    "title": "Проводник",
+    "openFolder": "Открыть папку",
+    "noFolder": "Папка не открыта",
+    "createKB": "Создать базу знаний",
+    "emptyDir": "В этом каталоге нет файлов",
+    "kbSettings": "Настройки базы знаний",
+    "treeView": "Древовидный вид",
+    "listView": "Список",
+    "search": "Поиск файлов...",
+    "contextMenu": {
+      "newFile": "Новый файл",
+      "searchFiles": "Поиск",
+      "refresh": "Обновить",
+      "rename": "Переименовать",
+      "duplicate": "Создать копию",
+      "delete": "Удалить",
+      "copyPath": "Копировать путь",
+      "revealInFinder": "Показать в Finder"
+    },
+    "newFilePrompt": "Введите имя файла",
+    "renamePrompt": "Введите новое имя",
+    "deleteConfirm": "Вы уверены, что хотите удалить «{name}»? Это действие нельзя отменить."
+  },
+  "statusbar": {
+    "words": "Слова",
+    "characters": "Символы",
+    "format": "Markdown",
+    "sourceMode": "Исходный код",
+    "visualMode": "Визуальный",
+    "splitMode": "Разделённый",
+    "publishWorkflow": "AI Рабочий процесс",
+    "aiTooltip": "AI"
+  },
+  "editor": {
+    "sourceMode": "Режим исходного кода",
+    "visualMode": "Визуальный режим",
+    "splitMode": "Разделённый режим",
+    "unsavedTitle": "Несохранённые изменения",
+    "unsavedNewDocMsg": "У вас есть несохранённое содержимое, которое будет потеряно. Сохранить?",
+    "saveFirst": "Сохранить",
+    "discardChanges": "Не сохранять"
+  },
+  "table": {
+    "insertRowAbove": "Вставить строку выше",
+    "insertRowBelow": "Вставить строку ниже",
+    "deleteRow": "Удалить строку",
+    "insertColLeft": "Вставить столбец слева",
+    "insertColRight": "Вставить столбец справа",
+    "deleteCol": "Удалить столбец",
+    "alignLeft": "Выровнять по левому краю",
+    "alignCenter": "Выровнять по центру",
+    "alignRight": "Выровнять по правому краю"
+  },
+  "knowledgeBase": {
+    "title": "База знаний",
+    "add": "Добавить базу знаний",
+    "remove": "Удалить",
+    "rename": "Переименовать",
+    "manage": "Управление базами знаний...",
+    "empty": "Базы знаний не настроены",
+    "emptyHint": "Добавьте папку как базу знаний для быстрого переключения.",
+    "deleteConfirm": "Удалить «{name}» из баз знаний? Сама папка не будет удалена.",
+    "switchTo": "Переключить базу знаний",
+    "saveHint": "Эта папка не в ваших базах знаний.",
+    "saveAsKB": "Сохранить как базу знаний"
+  },
+  "ai": {
+    "title": "AI Ассистент",
+    "morayaMdActive": "Правила MORAYA.md активны для этой базы знаний",
+    "clearChat": "Очистить чат",
+    "unconfigured": "AI не настроен.",
+    "unconfiguredHint": "Откройте Настройки ({shortcut}) и укажите ваш API-ключ, чтобы включить функции AI.",
+    "openSettings": "Открыть настройки AI",
+    "openImageSettings": "Открыть настройки AIGC",
+    "textAiLabel": "Текстовый AI (генерация промптов)",
+    "imageAiLabel": "Графический AI (генерация изображений)",
+    "welcomeTitle": "Чем могу помочь?",
+    "welcomeHint": "Введите сообщение или используйте {kbd} для команд",
+    "you": "Вы",
+    "assistant": "AI",
+    "typing": "печатает...",
+    "placeholder": "Спросите AI что угодно... (/ для команд)",
+    "placeholderSelection": "Спросите о выделенном... (/ для команд)",
+    "send": "Отправить (⌘↵)",
+    "stop": "Остановить (Esc)",
+    "interrupted": "Прервано",
+    "insertToEditor": "Вставить в редактор",
+    "replaceSelection": "Заменить выделение",
+    "attachImage": "Прикрепить изображение",
+    "attachImageMax": "Максимум {max} изображений",
+    "removeImage": "Удалить изображение",
+    "closePreview": "Закрыть предпросмотр",
+    "moreActions": "Ещё действия",
+    "voiceTranscription": "Голосовая транскрипция AI",
+    "config": {
+      "title": "Настройка AI",
+      "provider": "Провайдер",
+      "apiKey": "API Key",
+      "apiKeyPlaceholder": "Введите API-ключ {provider}",
+      "apiKeyNotRequired": "Не требуется для Ollama",
+      "baseUrl": "Базовый URL",
+      "model": "Модель",
+      "modelPlaceholder": "Введите название модели",
+      "maxTokens": "Макс. токенов",
+      "temperature": "Температура",
+      "testConnection": "Проверить соединение",
+      "testing": "Проверка...",
+      "connected": "Подключено!",
+      "failed": "Ошибка"
+    },
+    "providers": {
+      "claude": "Anthropic Claude",
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "deepseek": "DeepSeek",
+      "ollama": "Ollama (Локальный)",
+      "custom": "Пользовательский API",
+      "grok": "xAI Grok",
+      "mistral": "Mistral AI",
+      "glm": "Zhipu GLM",
+      "minimax": "MiniMax",
+      "doubao": "Doubao (ByteDance)"
+    },
+    "multiModel": {
+      "addModel": "+ Добавить модель",
+      "default": "По умолчанию",
+      "setDefault": "Установить по умолчанию",
+      "noModels": "Модели AI не настроены",
+      "noModelsHint": "Добавьте модель AI, чтобы начать использовать функции AI.",
+      "noImageModels": "Модели для генерации изображений не настроены",
+      "noImageModelsHint": "Добавьте модель генерации изображений, чтобы использовать функции AI-изображений."
+    },
+    "imageConfig": {
+      "title": "AI генерация изображений",
+      "provider": "Провайдер",
+      "providerOpenai": "OpenAI DALL-E",
+      "providerGrok": "Grok (xAI)",
+      "providerCustom": "Пользовательский (OpenAI-совместимый)",
+      "apiKey": "API Key",
+      "apiKeyPlaceholder": "Введите API-ключ для изображений",
+      "baseUrl": "Базовый URL",
+      "model": "Модель",
+      "modelPlaceholder": "Введите название модели",
+      "defaultSize": "Размер по умолчанию",
+      "ratio": "Соотношение сторон",
+      "sizeLevel": "Размер",
+      "size_large": "Большой",
+      "size_medium": "Средний",
+      "size_small": "Маленький",
+      "providerGemini": "Google Gemini Imagen",
+      "providerQwen": "Qwen (Alibaba)",
+      "providerDoubao": "Doubao (ByteDance)"
+    },
+    "commands": {
+      "write": "Написать",
+      "writeDesc": "Написать содержимое по вашему запросу",
+      "continue": "Продолжить",
+      "continueDesc": "Продолжить с того места, где остановился текст",
+      "summarize": "Резюмировать",
+      "summarizeDesc": "Резюмировать выделенный текст",
+      "translate": "Перевести",
+      "translateDesc": "Перевести текст на другой язык",
+      "improve": "Улучшить",
+      "improveDesc": "Улучшить качество текста",
+      "fixGrammar": "Исправить грамматику",
+      "fixGrammarDesc": "Исправить грамматические и орфографические ошибки",
+      "simplify": "Упростить",
+      "simplifyDesc": "Упростить сложный текст",
+      "expand": "Расширить",
+      "expandDesc": "Расширить тему",
+      "outline": "Создать план",
+      "outlineDesc": "Создать план статьи",
+      "explain": "Объяснить",
+      "explainDesc": "Объяснить выделенный текст"
+    },
+    "prompts": {
+      "emptyResponse": "Вы вернули пустой ответ. Пожалуйста, продолжите задачу: либо выполните необходимые вызовы инструментов, либо подведите итог выполненного и перечислите оставшиеся пункты. Не возвращайте пустое сообщение.",
+      "emptyResponseContinue": "\n\nВаше последнее сообщение было: «{lastMessage}»\nПожалуйста, продолжите с этого места.",
+      "truncationContinue": "Ваш предыдущий ответ был обрезан из-за ограничения длины вывода. Текст выше был сохранён. Теперь, пожалуйста, завершите задачу, выполнив необходимые вызовы инструментов. Не повторяйте содержимое — используйте его напрямую в аргументах инструмента.",
+      "continuationPrompt": "Пожалуйста, продолжите и выполните необходимые вызовы инструментов для завершения задачи. Не повторяйте то, что уже было сказано — переходите непосредственно к вызовам инструментов.",
+      "mcpToolPrompt": "Используйте инструмент {toolName} (от {serverName})"
+    },
+    "detection": {
+      "intentPrefixes": "Я буду|Мне нужно|Я должен|Позвольте мне|Сначала|Теперь|Далее",
+      "actionVerbs": "создать|написать|прочитать|обновить|загрузить|сгенерировать|получить|проверить|протестировать|использовать|выполнить|отправить|искать|найти|сохранить|удалить|редактировать|настроить|экспортировать|показать",
+      "continuationPhrases": "Сначала|Далее|Затем|Теперь",
+      "remainingPhrases": "оставшийся|следующий|шаг \\d+",
+      "unfinishedPhrases": "нужно сделать|TODO|следующий шаг|ещё не|в ожидании"
+    }
+  },
+  "mcp": {
+    "title": "MCP Серверы",
+    "tabs": {
+      "servers": "Серверы",
+      "publish": "Публикация",
+      "sync": "Синхронизация",
+      "marketplace": "Маркет"
+    },
+    "aiServices": {
+      "empty": "Нет AI-сервисов",
+      "hint": "AI может создавать MCP-сервисы во время чата. Попросите его взаимодействовать с API!",
+      "nodeRequired": "Требуется Node.js 18+",
+      "checkingNode": "Проверка Node.js...",
+      "temp": "Временный",
+      "saved": "Сохранённый",
+      "viewCode": "Код",
+      "tools": "{count} инструментов",
+      "serviceCreated": "AI создал сервис «{name}» с {count} инструментами",
+      "serviceSaved": "Сервис «{name}» сохранён",
+      "serviceRemoved": "Сервис «{name}» удалён",
+      "launchConfirmTitle": "Предупреждение безопасности AI-сервиса",
+      "launchConfirmMsg": "AI сгенерировал MCP-сервис, который должен выполнить автоматически сгенерированный код:\n  Сервис: {name}\n  Инструменты: {tools}\n\nЭтот код будет выполняться в локальном процессе Node.js.\nПожалуйста, подтвердите, что вы доверяете этому AI-сгенерированному коду.",
+      "launchConfirmOk": "Запустить",
+      "launchConfirmCancel": "Отмена"
+    },
+    "servers": {
+      "empty": "MCP-серверы не настроены",
+      "localMcp": "Локальный MCP",
+      "addServer": "Добавить сервер",
+      "addServerPlus": "+ Добавить сервер",
+      "connected": "Подключён",
+      "disconnected": "Отключён",
+      "serverName": "Имя сервера",
+      "serverUrl": "URL сервера (напр., http://localhost:3000/mcp)",
+      "http": "HTTP",
+      "sse": "SSE (Server-Sent Events)",
+      "stdio": "stdio (Локальный процесс)",
+      "command": "Команда",
+      "commandPlaceholder": "Команда (напр., npx, node, python)",
+      "argsPlaceholder": "Аргументы (напр., -y @modelcontextprotocol/server-filesystem /path)",
+      "envPlaceholder": "ENV_KEY=значение (по одному на строку)",
+      "presets": "Удалённые MCP",
+      "presetsHint": "Добавление популярных MCP-серверов в один клик",
+      "presetDesc": {
+        "filesystem": "Чтение, поиск и управление локальными файлами",
+        "fetch": "Загрузка веб-страниц и конвертация в Markdown",
+        "git": "Чтение и поиск по Git-репозиториям",
+        "memory": "Постоянный граф знаний для памяти AI"
+      },
+      "formMode": "Форма",
+      "jsonMode": "JSON",
+      "jsonPlaceholder": "Вставьте JSON-конфигурацию, напр.:\n{\n  \"mcpServers\": {\n    \"name\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@.../server-xxx\"]\n    }\n  }\n}",
+      "jsonNoConfig": "Допустимая конфигурация MCP-сервера не найдена",
+      "jsonParseError": "ошибка разбора",
+      "launchConfirmTitle": "Предупреждение безопасности",
+      "launchConfirmMsg": "Запуск внешней программы:\n  Команда: {command}\n  Аргументы: {args}\n\nЭтот MCP-сервер будет работать с правами вашего пользователя и может получить доступ к локальным файлам и сети.\nПожалуйста, подтвердите, что этот MCP-сервер из надёжного источника.",
+      "launchConfirmOk": "Запустить",
+      "launchConfirmCancel": "Отмена",
+      "autoApprove": "Автоодобрение запуска MCP",
+      "autoApproveHint": "Пропускать подтверждение безопасности при подключении MCP-серверов и запуске AI-сервисов. Не рекомендуется для ненадёжных источников."
+    },
+    "publish": {
+      "empty": "Целевые платформы для публикации не настроены",
+      "hint": "Сначала подключите MCP-сервер с возможностью публикации.",
+      "button": "Опубликовать",
+      "publishing": "Публикация...",
+      "published": "Опубликовано! {info}",
+      "failed": "Ошибка: {message}",
+      "error": "Ошибка: {message}"
+    },
+    "sync": {
+      "empty": "Конфигурации синхронизации отсутствуют",
+      "hint": "Сначала подключите MCP-сервер, затем добавьте конфигурацию синхронизации.",
+      "syncNow": "Синхронизировать",
+      "addSync": "+ Добавить синхронизацию",
+      "name": "Имя конфигурации",
+      "server": "MCP Сервер",
+      "remotePath": "Удалённый путь",
+      "localPath": "Локальный путь",
+      "direction": "Направление",
+      "push": "Отправка (локальный → удалённый)",
+      "pull": "Загрузка (удалённый → локальный)",
+      "bidirectional": "Двунаправленная",
+      "lastSync": "Последняя синхронизация: {time}",
+      "syncing": "Синхронизация...",
+      "success": "Синхронизация завершена",
+      "error": "Ошибка синхронизации: {message}"
+    },
+    "marketplace": {
+      "title": "Маркет",
+      "search": "Поиск MCP-серверов...",
+      "source": "Источник",
+      "sourceOfficial": "Официальный",
+      "sourceLobehub": "LobeHub",
+      "sourceSmithery": "Smithery",
+      "install": "Установить",
+      "installAndConnect": "Установить и подключить",
+      "installing": "Установка...",
+      "installed": "Установлено",
+      "viewDetails": "Подробнее",
+      "loadMore": "Загрузить ещё",
+      "noResults": "MCP-серверы не найдены",
+      "networkError": "Не удалось загрузить, проверьте сеть",
+      "retry": "Повторить",
+      "envVars": "Переменные окружения",
+      "envRequired": "(обязательно)",
+      "popularity": "использований",
+      "installs": "Установки / Использования",
+      "verified": "Проверено",
+      "cancel": "Отмена"
+    }
+  },
+  "imageDialog": {
+    "title": "Вставить изображение",
+    "urlTab": "URL",
+    "fileTab": "Локальный файл",
+    "urlPlaceholder": "https://example.com/image.png",
+    "altPlaceholder": "Описание изображения (необязательно)",
+    "selectFile": "Выбрать изображение...",
+    "noFileSelected": "Файл не выбран",
+    "insert": "Вставить",
+    "cancel": "Отмена"
+  },
+  "imageHost": {
+    "title": "Хостинг изображений",
+    "provider": "Провайдер",
+    "smms": "SM.MS",
+    "imgur": "Imgur",
+    "github": "Репозиторий GitHub",
+    "custom": "Пользовательский API",
+    "apiToken": "API Token",
+    "apiTokenPlaceholder": "Введите API-токен",
+    "customEndpoint": "Конечная точка загрузки",
+    "customEndpointPlaceholder": "https://your-api.com/upload",
+    "customHeaders": "Пользовательские заголовки (JSON)",
+    "githubRepoUrl": "URL репозитория",
+    "githubRepoUrlPlaceholder": "https://github.com/user/images",
+    "githubBranch": "Ветка",
+    "githubDir": "Каталог изображений",
+    "githubToken": "Personal Access Token",
+    "githubTokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "githubCdn": "Формат URL",
+    "githubCdnRaw": "raw.githubusercontent.com",
+    "githubCdnJsdelivr": "jsDelivr CDN",
+    "importFromPublish": "Импортировать из цели публикации",
+    "autoUpload": "Автозагрузка изображений при вставке/перетаскивании",
+    "testUpload": "Тестовая загрузка",
+    "testing": "Тестирование...",
+    "success": "Загрузка успешна!",
+    "failed": "Ошибка загрузки",
+    "addTarget": "Добавить хостинг изображений",
+    "targetName": "Название",
+    "targetNamePlaceholder": "напр., CDN моего блога",
+    "settingsEmpty": "Хостинги изображений не настроены",
+    "settingsHint": "Добавьте сервис хостинга изображений для включения автозагрузки.",
+    "default": "По умолчанию",
+    "setDefault": "Установить по умолчанию",
+    "gitlab": "Репозиторий GitLab",
+    "git_custom": "Пользовательский Git (Gitea/Forgejo)",
+    "qiniu": "Qiniu Kodo",
+    "aliyun_oss": "Aliyun OSS",
+    "tencent_cos": "Tencent COS",
+    "aws_s3": "AWS S3",
+    "google_gcs": "Google Cloud Storage",
+    "groupApi": "API Хостинг",
+    "groupGit": "Git-репозиторий",
+    "groupOss": "Объектное хранилище",
+    "gitlabRepoUrl": "URL репозитория",
+    "gitlabBranch": "Ветка",
+    "gitlabDir": "Каталог изображений",
+    "gitlabToken": "Personal Access Token",
+    "gitlabTokenPlaceholder": "glpat-xxxxxxxxxxxx",
+    "gitCustomRepoUrl": "URL репозитория",
+    "gitCustomBranch": "Ветка",
+    "gitCustomDir": "Каталог изображений",
+    "gitCustomToken": "Токен доступа",
+    "gitCustomTokenPlaceholder": "Введите токен",
+    "ossAccessKey": "Access Key",
+    "ossAccessKeyPlaceholder": "Введите Access Key ID",
+    "ossSecretKey": "Secret Key",
+    "ossSecretKeyPlaceholder": "Введите Secret Key",
+    "ossBucket": "Bucket",
+    "ossBucketPlaceholder": "напр., my-images-bucket",
+    "ossRegion": "Регион",
+    "ossRegionPlaceholder": "напр., cn-east-1, us-east-1",
+    "selectRegion": "Выберите регион",
+    "ossEndpoint": "Пользовательская конечная точка (необязательно)",
+    "ossEndpointPlaceholder": "напр., https://s3.custom.com",
+    "ossCdnDomain": "CDN домен (необязательно)",
+    "ossCdnDomainPlaceholder": "напр., https://cdn.example.com",
+    "ossPathPrefix": "Префикс пути (необязательно)",
+    "ossPathPrefixPlaceholder": "напр., images/blog/"
+  },
+  "imageMenu": {
+    "resize": "Изменить размер",
+    "upload": "Загрузить на хостинг",
+    "editAlt": "Редактировать описание",
+    "copyUrl": "Копировать URL изображения",
+    "copyImage": "Копировать изображение",
+    "openInBrowser": "Открыть изображение в браузере",
+    "saveAs": "Сохранить изображение как...",
+    "delete": "Удалить изображение",
+    "originalSize": "Исходный размер"
+  },
+  "menu": {
+    "file": "Файл",
+    "edit": "Правка",
+    "paragraph": "Абзац",
+    "format": "Формат",
+    "view": "Вид",
+    "window": "Окно",
+    "help": "Справка",
+    "new": "Создать",
+    "newWindow": "Новое окно",
+    "open": "Открыть...",
+    "save": "Сохранить",
+    "saveAs": "Сохранить как...",
+    "export": "Экспорт",
+    "exportHtml": "HTML",
+    "exportPdf": "PDF",
+    "exportImage": "Изображение (PNG)",
+    "exportDoc": "Word (.doc)",
+    "heading1": "Заголовок 1",
+    "heading2": "Заголовок 2",
+    "heading3": "Заголовок 3",
+    "heading4": "Заголовок 4",
+    "heading5": "Заголовок 5",
+    "heading6": "Заголовок 6",
+    "table": "Таблица",
+    "codeBlock": "Блок кода",
+    "mathBlock": "Математический блок",
+    "quote": "Цитата",
+    "bulletList": "Маркированный список",
+    "orderedList": "Нумерованный список",
+    "horizontalRule": "Горизонтальная линия",
+    "bold": "Полужирный",
+    "italic": "Курсив",
+    "strikethrough": "Зачёркнутый",
+    "code": "Код",
+    "link": "Ссылка",
+    "image": "Изображение",
+    "visualMode": "Визуальный режим",
+    "sourceMode": "Режим исходного кода",
+    "splitMode": "Разделённый режим",
+    "toggleSidebar": "Показать/скрыть боковую панель",
+    "toggleAIPanel": "Показать/скрыть панель AI",
+    "toggleOutline": "Показать/скрыть план документа",
+    "zoomIn": "Увеличить",
+    "zoomOut": "Уменьшить",
+    "actualSize": "Фактический размер",
+    "find": "Найти",
+    "replace": "Заменить",
+    "changelog": "Журнал изменений",
+    "privacyPolicy": "Политика конфиденциальности",
+    "officialWebsite": "Официальный сайт",
+    "aboutMoraya": "О Moraya",
+    "feedback": "Обратная связь",
+    "settings": "Настройки...",
+    "versionInfo": "Информация о версии"
+  },
+  "search": {
+    "findPlaceholder": "Найти...",
+    "replacePlaceholder": "Заменить...",
+    "noResults": "Нет результатов",
+    "caseSensitive": "Учитывать регистр",
+    "replace": "Заменить",
+    "replaceAll": "Заменить все"
+  },
+  "mermaid": {
+    "loading": "Загрузка диаграммы...",
+    "error": "Ошибка отрисовки диаграммы",
+    "edit": "Редактировать",
+    "preview": "Предпросмотр",
+    "empty": "Пустая диаграмма"
+  },
+  "export": {
+    "exportAs": "Экспорт в {format}",
+    "pdf": "PDF",
+    "html": "HTML (со стилями)",
+    "htmlPlain": "HTML (без стилей)",
+    "image": "Изображение (PNG)",
+    "doc": "Word (.doc)",
+    "rtf": "RTF",
+    "epub": "Epub",
+    "latex": "LaTeX",
+    "mediawiki": "MediaWiki",
+    "rst": "reStructuredText",
+    "textile": "Textile",
+    "opml": "OPML"
+  },
+  "workflow": {
+    "title": "AI Рабочий процесс",
+    "seoStep": "SEO Оптимизация",
+    "imageGenStep": "AI Изображения",
+    "publishStep": "Публикация",
+    "publishDesc": "Отправить на целевые платформы",
+    "optionalAbove": "Шаги выше необязательны",
+    "selectTargets": "Выбрать цели публикации",
+    "confirmPublish": "Опубликовать",
+    "publishing": "Публикация...",
+    "publishSuccess": "Успешно опубликовано!",
+    "publishFailed": "Ошибка публикации",
+    "mcpEntry": "AI MCP",
+    "mcpServerCount": "сервисов подключено",
+    "mcpToolCount": "инструментов"
+  },
+  "imageGen": {
+    "title": "AI Генерация изображений",
+    "step1Title": "Режим изображений",
+    "step2Title": "Генерация изображений",
+    "step3Title": "Вставка в статью",
+    "generatingPrompts": "Генерация промптов...",
+    "contentTooShort": "Содержимое статьи слишком короткое для генерации изображений.",
+    "styleLabel": "Стиль",
+    "countLabel": "Количество",
+    "style_auto": "Авто",
+    "style_photo": "Фото",
+    "style_illustration": "Иллюстрация",
+    "style_flat": "Плоский",
+    "style_ink": "Тушь",
+    "style_watercolor": "Акварель",
+    "style_isometric": "Изометрия",
+    "style_infographic": "Инфографика",
+    "style_editorial": "Редакционный",
+    "style_cartoon": "Мультфильм",
+    "style_render": "3D Рендер",
+    "style_sketch": "Набросок",
+    "style_blueprint": "Чертёж",
+    "style_clay": "Пластилиновая модель",
+    "style_wireframe": "Каркас",
+    "style_exploded": "Покомпонентный вид",
+    "style_section": "Сечение",
+    "style_cad": "CAD Чертёж",
+    "style_prototype": "Прототип",
+    "style_anime": "Аниме",
+    "style_comic": "Комикс",
+    "style_cinematic": "Кинематографичный",
+    "style_pixel": "Пиксель-арт",
+    "style_noir": "Нуар",
+    "style_manga": "Манга",
+    "style_realistic": "Реалистичный",
+    "style_studio": "Студийный",
+    "style_lifestyle": "Лайфстайл",
+    "style_flatlay": "Раскладка",
+    "style_macro": "Макро",
+    "style_minimalist": "Минимализм",
+    "style_packaging": "Упаковка",
+    "style_outdoor": "На открытом воздухе",
+    "style_mood": "Настроение",
+    "style_abstract": "Абстракция",
+    "style_texture": "Текстура",
+    "style_gradient": "Градиент",
+    "style_collage": "Коллаж",
+    "style_vintage": "Винтаж",
+    "style_botanical": "Ботанический",
+    "style_geometric": "Геометрический",
+    "style_ethereal": "Воздушный",
+    "style_brutalist": "Брутализм",
+    "generate": "Сгенерировать",
+    "next": "Далее",
+    "back": "Назад",
+    "insertConfirm": "Вставить",
+    "insertParagraph": "Вставить после соответствующего абзаца (рекомендуется)",
+    "insertEnd": "Вставить в конец статьи",
+    "insertReplace": "Заменить изображения в статье",
+    "insertClipboard": "Копировать Markdown в буфер обмена",
+    "selected": "{count} выбрано",
+    "completed": "Изображения сгенерированы",
+    "stepDescription": "Генерация иллюстраций к статье",
+    "mode_article": "Статья",
+    "mode_design": "Дизайн",
+    "mode_storyboard": "Раскадровка",
+    "mode_product": "Продукт",
+    "mode_moodboard": "Мудборд",
+    "mode_portrait": "Портрет",
+    "style_portrait": "Портрет",
+    "style_headshot": "Крупный план",
+    "style_fullbody": "В полный рост",
+    "style_fashion": "Мода",
+    "style_street": "Уличный",
+    "style_glamour": "Гламур",
+    "style_environmental": "Средовой",
+    "style_candid": "Репортажный",
+    "style_group": "Групповой",
+    "preDefinedDetected": "Обнаружено {count} предустановленных промптов в документе",
+    "usePredefined": "Использовать предустановленные промпты"
+  },
+  "seo": {
+    "title": "SEO Оптимизация",
+    "generating": "Анализ статьи...",
+    "titles": "Варианты заголовков",
+    "customTitle": "Свой заголовок...",
+    "excerpt": "Аннотация",
+    "tags": "Теги",
+    "addTag": "Добавить тег...",
+    "slug": "URL Slug",
+    "metaDescription": "Мета-описание",
+    "regenerate": "Сгенерировать заново",
+    "apply": "Применить",
+    "retry": "Повторить",
+    "contentTooShort": "Содержимое статьи слишком короткое для SEO-анализа.",
+    "completed": "SEO оптимизировано",
+    "stepDescription": "Генерация заголовка, аннотации и тегов"
+  },
+  "publish": {
+    "settingsEmpty": "Цели публикации не настроены",
+    "settingsHint": "Добавьте репозиторий GitHub или пользовательскую API-конечную точку для публикации статей.",
+    "addTarget": "Добавить цель",
+    "editTarget": "Редактировать",
+    "deleteTarget": "Удалить",
+    "testConnection": "Проверить соединение",
+    "github": "Репозиторий GitHub",
+    "customApi": "Пользовательский API",
+    "targetName": "Название",
+    "targetNamePlaceholder": "напр., Мой блог",
+    "repoUrl": "URL репозитория",
+    "repoUrlPlaceholder": "https://github.com/user/blog",
+    "branch": "Ветка",
+    "articlesDir": "Каталог статей",
+    "articlesDirPlaceholder": "content/posts/",
+    "imagesDir": "Каталог изображений",
+    "imagesDirPlaceholder": "static/images/",
+    "token": "Personal Access Token",
+    "tokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "frontMatterTemplate": "Шаблон Front Matter",
+    "endpoint": "API-конечная точка",
+    "endpointPlaceholder": "https://api.example.com/articles",
+    "method": "HTTP-метод",
+    "headers": "Заголовки (JSON)",
+    "bodyTemplate": "Шаблон тела запроса",
+    "templatePresets": "Шаблоны",
+    "presetHugo": "Hugo",
+    "presetHexo": "Hexo",
+    "presetAstro": "Astro",
+    "presetCustom": "Пользовательский",
+    "fileNamePattern": "Шаблон имени файла",
+    "fileNamePreset": "Пресет имени",
+    "fileNamePreview": "Предпросмотр",
+    "presetSimple": "Простой (имя файла)",
+    "presetDateSlug": "Дата + Slug",
+    "presetDateFilename": "Дата + Имя файла",
+    "presetYearMonth": "Год/Месяц/Slug",
+    "fileNameVariables": "Переменные: {{date}}, {{year}}, {{month}}, {{day}}, {{slug}}, {{filename}}, {{title}}",
+    "rssSection": "RSS Лента",
+    "rssEnable": "Генерировать RSS-ленту",
+    "rssEnableHint": "Автоматически обновлять feed.xml при публикации",
+    "rssFeedPath": "Путь к файлу ленты",
+    "rssFeedPathPlaceholder": "feed.xml",
+    "rssSiteUrl": "URL сайта",
+    "rssSiteUrlPlaceholder": "https://myblog.com",
+    "rssFeedTitle": "Заголовок ленты",
+    "rssFeedTitlePlaceholder": "Мой блог",
+    "rssFeedDescription": "Описание ленты",
+    "rssFeedDescriptionPlaceholder": "Статьи о...",
+    "rssLanguage": "Язык",
+    "rssAuthorName": "Автор",
+    "rssAuthorNamePlaceholder": "Иван Иванов",
+    "rssMaxItems": "Макс. элементов в ленте",
+    "rssIncludeFullContent": "Включать полный текст статьи в ленту",
+    "rssFeedEndpoint": "Конечная точка RSS-ленты",
+    "rssFeedEndpointPlaceholder": "https://api.example.com/rss",
+    "rssUpdateFailed": "Ошибка обновления RSS-ленты",
+    "progressTitle": "Публикация...",
+    "progressPublishing": "Загрузка...",
+    "progressRss": "Обновление RSS...",
+    "progressDone": "Готово",
+    "progressFailed": "Ошибка"
+  },
+  "update": {
+    "title": "Информация о версии",
+    "currentVersion": "Текущая версия",
+    "latestVersion": "Последняя версия",
+    "checking": "Проверка обновлений...",
+    "upToDate": "У вас установлена последняя версия!",
+    "checkFailed": "Ошибка проверки обновлений",
+    "releaseNotes": "Что нового",
+    "noAsset": "Нет установщика для вашей платформы. Пожалуйста, скачайте вручную.",
+    "upgrade": "Обновить",
+    "retry": "Повторить",
+    "viewRelease": "Посмотреть релиз",
+    "downloading": "Загрузка...",
+    "downloadFailed": "Ошибка загрузки",
+    "installLaunched": "Установщик запущен. Moraya скоро закроется.",
+    "newVersionAvailable": "Доступна новая версия! Нажмите для обновления."
+  },
+  "errors": {
+    "aiNotConfigured": "AI не настроен.",
+    "aiRequestFailed": "Ошибка запроса к AI",
+    "chatRequestFailed": "Ошибка запроса чата",
+    "unknownCommand": "Неизвестная команда AI: {command}"
+  },
+  "welcome": {
+    "title": "Добро пожаловать в Moraya",
+    "subtitle": "Минималистичный Markdown-редактор с поддержкой AI.",
+    "featuresTitle": "Возможности",
+    "featureWysiwyg": "**WYSIWYG** редактирование Markdown",
+    "featureMath": "Поддержка математических формул: $E = mc^2$",
+    "featureThemes": "Тёмная и светлая темы",
+    "featureAI": "AI-ассистент для написания текстов",
+    "featureMCP": "Протокол MCP для публикации и синхронизации",
+    "featureLightweight": "Легковесный (~5 МБ установщик)",
+    "mathTitle": "Пример формулы",
+    "codeTitle": "Пример кода",
+    "tableTitle": "Пример таблицы",
+    "tableFeature": "Функция",
+    "tableStatus": "Статус",
+    "tableDone": "Готово",
+    "startWriting": "Начните писать свои идеи здесь...",
+    "tip": "**Совет:** Нажмите `Cmd+I`, чтобы открыть панель AI-ассистента.",
+    "shortcutsTitle": "Горячие клавиши",
+    "shortcutSave": "`Cmd+S` — Сохранить документ",
+    "shortcutOpen": "`Cmd+O` — Открыть файл",
+    "shortcutNew": "`Cmd+N` — Новый документ",
+    "shortcutToggleMode": "`Cmd+/` — Переключить Визуальный/Исходный режим",
+    "shortcutSplitMode": "`Cmd+Shift+/` — Переключить разделённый режим",
+    "shortcutSidebar": "`Cmd+\\` — Показать/скрыть боковую панель",
+    "shortcutSettings": "`Cmd+,` — Открыть настройки",
+    "shortcutAI": "`Cmd+Shift+I` — Показать/скрыть панель AI",
+    "shortcutExport": "`Cmd+Shift+E` — Экспорт в HTML",
+    "blockquoteTitle": "Пример цитаты",
+    "blockquoteContent": "Искусство писать — это искусство открывать то, во что вы верите. — Гюстав Флобер",
+    "advancedMathTitle": "Продвинутая математика",
+    "listTitle": "Пример вложенного списка",
+    "listItem1": "Начало работы",
+    "listItem1a": "Установите приложение",
+    "listItem1b": "Настройте параметры",
+    "listItem1c": "Начните писать",
+    "listItem2": "Расширенные возможности",
+    "listItem2a": "AI-ассистент для написания текстов",
+    "listItem2b": "Интеграция протокола MCP",
+    "listItem2c": "Множество форматов экспорта",
+    "listItem3": "Персонализация",
+    "listItem3a": "Темы и внешний вид",
+    "listItem3b": "Настройки редактора",
+    "listItem3c": "Горячие клавиши",
+    "paragraphTitle": "О Moraya",
+    "paragraph1": "Moraya — это современный легковесный Markdown-редактор, созданный на Rust и Tauri. Он сочетает простоту текстового редактора с мощью WYSIWYG-интерфейса, давая вам лучшее от обоих подходов.",
+    "paragraph2": "Название «Moraya» образовано от «mora» (лат. «мгновение») и «ya» (кит. «изящество»), символизируя изящные мгновения творчества.",
+    "paragraph3": "Будь то техническая документация, записи в блог, научные статьи или личные заметки — Moraya создаёт свободную от отвлечений среду, позволяющую сосредоточиться на главном — вашем тексте.",
+    "hrTitle": "Горизонтальные линии",
+    "hrDescription": "Вы можете использовать горизонтальные линии для разделения различных разделов документа:"
+  },
+  "templates": {
+    "gallery": {
+      "title": "AI Ассистент",
+      "search": "Поиск шаблонов...",
+      "back": "Назад",
+      "start": "Начать"
+    },
+    "error": {
+      "noDocument": "Сначала напишите какой-нибудь текст",
+      "noSelection": "Сначала выделите текст",
+      "noContent": "Сначала напишите текст или выделите фрагмент"
+    },
+    "writing": {
+      "name": "Написание",
+      "desc": "AI-написание, редактирование и резюмирование",
+      "free": {
+        "name": "Свободное письмо",
+        "desc": "Введите тему, и AI сгенерирует текст",
+        "hint": "Введите тему или инструкции..."
+      },
+      "continue": {
+        "name": "Продолжить",
+        "desc": "Продолжить с конца документа"
+      },
+      "outline": {
+        "name": "Создать план",
+        "desc": "Создать план статьи",
+        "hint": "Введите тему статьи..."
+      },
+      "summarize": {
+        "name": "Резюмировать",
+        "desc": "Резюмировать выделенный текст или весь документ"
+      },
+      "improve": {
+        "name": "Улучшить",
+        "desc": "Повысить качество текста"
+      },
+      "simplify": {
+        "name": "Упростить",
+        "desc": "Упростить сложный текст"
+      },
+      "expand": {
+        "name": "Расширить",
+        "desc": "Добавить больше деталей и пояснений"
+      },
+      "fixGrammar": {
+        "name": "Исправить грамматику",
+        "desc": "Исправить грамматические и орфографические ошибки"
+      }
+    },
+    "translation": {
+      "name": "Перевод",
+      "desc": "Многоязычный перевод и локализация",
+      "auto": {
+        "name": "Умный перевод",
+        "desc": "Автоматическое определение языка и перевод"
+      },
+      "toTarget": {
+        "name": "Перевести на...",
+        "desc": "Выберите целевой язык и переведите"
+      },
+      "explain": {
+        "name": "Перевести и объяснить",
+        "desc": "Перевод с пословным объяснением"
+      },
+      "polish": {
+        "name": "Локализация",
+        "desc": "Сделать перевод более естественным"
+      },
+      "compare": {
+        "name": "Несколько вариантов",
+        "desc": "Предоставить несколько стилей перевода"
+      },
+      "targetLang": "Целевой язык",
+      "lang": {
+        "en": "Английский",
+        "zhCN": "Упрощённый китайский",
+        "zhHant": "Традиционный китайский",
+        "ja": "Японский",
+        "ko": "Корейский",
+        "ar": "Арабский",
+        "de": "Немецкий",
+        "es": "Испанский",
+        "fr": "Французский",
+        "hi": "Хинди",
+        "pt": "Португальский",
+        "ru": "Русский"
+      }
+    },
+    "student": {
+      "name": "Помощник в учёбе",
+      "desc": "Обучение, конспектирование, понимание концепций",
+      "explain": {
+        "name": "Объяснить понятие",
+        "desc": "Объяснить понятие простым языком",
+        "hint": "Введите понятие для объяснения..."
+      },
+      "notes": {
+        "name": "Учебные заметки",
+        "desc": "Структурировать материал в конспект"
+      },
+      "flashcard": {
+        "name": "Карточки",
+        "desc": "Извлечь карточки «вопрос-ответ» из материала"
+      },
+      "mindmap": {
+        "name": "Ментальная карта",
+        "desc": "Сгенерировать ментальную карту в Markdown"
+      },
+      "essayOutline": {
+        "name": "План эссе",
+        "desc": "Сгенерировать план эссе",
+        "hint": "Введите тему эссе..."
+      },
+      "reading": {
+        "name": "Анализ текста",
+        "desc": "Глубокий анализ содержания текста"
+      },
+      "formula": {
+        "name": "Вывод формулы",
+        "desc": "Показать пошаговый вывод формулы",
+        "hint": "Введите название или содержание формулы..."
+      },
+      "compare": {
+        "name": "Сравнить понятия",
+        "desc": "Сравнить два понятия рядом",
+        "hint": "Введите два понятия (напр., TCP vs UDP)..."
+      }
+    },
+    "kids": {
+      "name": "Детское обучение",
+      "desc": "Сказки, развлекательное обучение, интерактивные игры",
+      "story": {
+        "name": "Детская сказка",
+        "desc": "Сгенерировать сказку по ключевым словам",
+        "hint": "Введите ключевые слова (напр., зайчик лес приключение)..."
+      },
+      "poem": {
+        "name": "Детский стишок",
+        "desc": "Создать стишок на заданную тему",
+        "hint": "Введите тему..."
+      },
+      "why": {
+        "name": "Почему? Почему? Почему?",
+        "desc": "AI отвечает на бесконечные вопросы «почему»"
+      },
+      "alphabet": {
+        "name": "Весёлый алфавит",
+        "desc": "Интерактивное изучение букв"
+      },
+      "mathGame": {
+        "name": "Математическая игра",
+        "desc": "Весёлая интерактивная арифметика"
+      },
+      "riddle": {
+        "name": "Загадки",
+        "desc": "AI загадывает загадки для детей"
+      },
+      "drawText": {
+        "name": "Картина-рассказ",
+        "desc": "Опишите сцену, AI напишет историю",
+        "hint": "Опишите сцену..."
+      },
+      "knowledge": {
+        "name": "Интересные факты",
+        "desc": "Природа, наука, энциклопедия животных"
+      }
+    },
+    "marketing": {
+      "name": "Маркетинг",
+      "desc": "Социальные сети, реклама и SEO-копирайтинг",
+      "xiaohongshu": {
+        "name": "Пост для Xiaohongshu",
+        "desc": "Сгенерировать пост в стиле лайфстайл-обзора",
+        "hint": "Введите продукт или тему..."
+      },
+      "twitter": {
+        "name": "Пост Twitter/X",
+        "desc": "Сгенерировать контент в стиле твита",
+        "hint": "Введите тему..."
+      },
+      "slogan": {
+        "name": "Рекламный слоган",
+        "desc": "Сгенерировать запоминающиеся слоганы бренда",
+        "hint": "Введите бренд или продукт..."
+      },
+      "email": {
+        "name": "Маркетинговое письмо",
+        "desc": "Настройте аудиторию и тон для письма",
+        "hint": "Опишите содержание письма..."
+      },
+      "seoArticle": {
+        "name": "SEO Статья",
+        "desc": "Сгенерировать SEO-оптимизированный контент",
+        "hint": "Введите целевые ключевые слова..."
+      },
+      "productDesc": {
+        "name": "Описание продукта",
+        "desc": "Сгенерировать убедительный текст о продукте",
+        "hint": "Введите информацию о продукте..."
+      },
+      "tone": "Тон",
+      "tone.formal": "Официальный",
+      "tone.friendly": "Дружелюбный",
+      "tone.urgent": "Срочный",
+      "tone.humorous": "Юмористический"
+    },
+    "professional": {
+      "name": "Профессиональное",
+      "desc": "Письма, отчёты, протоколы встреч",
+      "email": {
+        "name": "Деловое письмо",
+        "desc": "Настройте сценарий и тон для письма",
+        "hint": "Опишите содержание письма..."
+      },
+      "meeting": {
+        "name": "Протокол встречи",
+        "desc": "Оформить заметки в формальный протокол"
+      },
+      "report": {
+        "name": "Рабочий отчёт",
+        "desc": "Сгенерировать еженедельный/ежемесячный/квартальный отчёт",
+        "hint": "Введите ключевые пункты для отчёта..."
+      },
+      "review": {
+        "name": "Code Review",
+        "desc": "Проверить код и предложить улучшения"
+      },
+      "resume": {
+        "name": "Доработка резюме",
+        "desc": "Оптимизировать резюме методом STAR"
+      },
+      "prd": {
+        "name": "PRD Документ",
+        "desc": "Сгенерировать документ требований к продукту",
+        "hint": "Введите описание функции..."
+      },
+      "tone": "Тон",
+      "tone.concise": "Лаконичный",
+      "reportType": "Тип отчёта",
+      "reportType.weekly": "Еженедельный",
+      "reportType.monthly": "Ежемесячный",
+      "reportType.quarterly": "Квартальный"
+    },
+    "personal": {
+      "name": "Личностный рост",
+      "desc": "Дневник, цели, принятие решений",
+      "journal": {
+        "name": "Помощник для дневника",
+        "desc": "Направленное ведение дневника и рефлексия",
+        "hint": "Что произошло сегодня?..."
+      },
+      "goal": {
+        "name": "Декомпозиция цели",
+        "desc": "Разбить цели на конкретные шаги",
+        "hint": "Введите вашу цель..."
+      },
+      "habit": {
+        "name": "Формирование привычки",
+        "desc": "Создать план формирования привычки",
+        "hint": "Введите привычку, которую хотите выработать..."
+      },
+      "decision": {
+        "name": "Анализ решений",
+        "desc": "Анализ за и против при принятии решений",
+        "hint": "Опишите ваши варианты..."
+      },
+      "bookNotes": {
+        "name": "Заметки о книге",
+        "desc": "Оформить материал в читательские заметки"
+      }
+    },
+    "games_cn": {
+      "name": "Китайские игры",
+      "desc": "Поэтические игры, цепочки идиом, загадки",
+      "feihualing": {
+        "name": "Поэтическое состязание",
+        "desc": "Поочерёдное чтение стихов с заданным иероглифом"
+      },
+      "chengyuChain": {
+        "name": "Цепочка идиом",
+        "desc": "Цепочка идиом по последнему/первому иероглифу"
+      },
+      "riddle": {
+        "name": "Загадки",
+        "desc": "AI даёт подсказки, вы угадываете ответ"
+      },
+      "lanternRiddle": {
+        "name": "Загадки на фонарях",
+        "desc": "Загадки на основе иероглифов"
+      },
+      "poetryFill": {
+        "name": "Дополни стихотворение",
+        "desc": "Вставьте пропущенные слова в стихах"
+      },
+      "storyChain": {
+        "name": "Цепочка историй",
+        "desc": "Поочерёдное продолжение истории"
+      },
+      "characterGame": {
+        "name": "Угадай иероглиф",
+        "desc": "Угадайте иероглиф по подсказкам"
+      },
+      "brainTeaser": {
+        "name": "Головоломки",
+        "desc": "Весёлые головоломки-загадки"
+      },
+      "couplet": {
+        "name": "Парные надписи",
+        "desc": "AI даёт первую строку, вы подбираете пару"
+      },
+      "wordExplain": {
+        "name": "Шарады",
+        "desc": "AI описывает, вы угадываете слово"
+      },
+      "ancientText": {
+        "name": "Классический китайский",
+        "desc": "Перевод классического текста на современный китайский"
+      },
+      "homophone": {
+        "name": "Омофоны",
+        "desc": "Состязание каламбуров-омофонов"
+      }
+    },
+    "games_en": {
+      "name": "Английские игры",
+      "desc": "Цепочка слов, виселица, викторина и другое",
+      "wordChain": {
+        "name": "Цепочка слов",
+        "desc": "Последняя буква начинает следующее слово"
+      },
+      "twentyQuestions": {
+        "name": "20 Вопросов",
+        "desc": "Угадайте предмет за 20 вопросов «да/нет»"
+      },
+      "hangman": {
+        "name": "Виселица",
+        "desc": "Угадайте слово буква за буквой"
+      },
+      "storyBuilder": {
+        "name": "Конструктор историй",
+        "desc": "Поочерёдное создание истории"
+      },
+      "wordAssociation": {
+        "name": "Ассоциации слов",
+        "desc": "Свободная цепочка ассоциаций"
+      },
+      "riddles": {
+        "name": "Загадки",
+        "desc": "Решайте загадки на английском"
+      },
+      "trivia": {
+        "name": "Викторина",
+        "desc": "Вопросы на общую эрудицию"
+      },
+      "rhymeTime": {
+        "name": "Время рифм",
+        "desc": "Создавайте истории с рифмующимися словами"
+      },
+      "acronym": {
+        "name": "Игра в аббревиатуры",
+        "desc": "Придумайте расшифровку случайных аббревиатур"
+      },
+      "taboo": {
+        "name": "Табу",
+        "desc": "Объясните слово, не используя запретные слова"
+      },
+      "sentenceBuilder": {
+        "name": "Конструктор предложений",
+        "desc": "Составьте самое длинное предложение из заданных слов"
+      },
+      "emojiStory": {
+        "name": "Эмодзи-история",
+        "desc": "Рассказывайте истории с помощью эмодзи"
+      }
+    },
+    "quiz": {
+      "name": "Тесты и практика",
+      "desc": "AI-вопросы с оценкой",
+      "practice": {
+        "name": "Универсальный тест",
+        "desc": "Выберите предмет и сложность, AI проверит вас"
+      },
+      "direction": "Предмет",
+      "dir": {
+        "programming": "Программирование",
+        "math": "Математика",
+        "english": "Английский язык",
+        "science": "Естественные науки",
+        "history": "История",
+        "interview": "Подготовка к собеседованию",
+        "custom": "Свой предмет"
+      },
+      "difficulty": "Сложность",
+      "diff": {
+        "easy": "Лёгкий",
+        "medium": "Средний",
+        "hard": "Сложный"
+      }
+    }
+  },
+  "plugins": {
+    "tabs": {
+      "installed": "Установленные",
+      "market": "Маркетплейс"
+    },
+    "installed": {
+      "empty": "Плагины ещё не установлены."
+    },
+    "sandbox": {
+      "label": "Уровень песочницы",
+      "sandbox": "Песочница (JS)",
+      "local": "Локальный (без сети)",
+      "system": "Системный (доступ к сети)"
+    },
+    "permissions": {
+      "label": "Разрешения"
+    },
+    "market": {
+      "search": "Поиск плагинов...",
+      "refresh": "Обновить",
+      "catAll": "Все",
+      "cached": "Показаны кэшированные результаты",
+      "loading": "Загрузка маркетплейса...",
+      "empty": "Плагины не найдены",
+      "install": "Установить",
+      "installed": "Установлено",
+      "installing": "Установка..."
+    },
+    "install": {
+      "fromFile": "Установить из .zip",
+      "urlPlaceholder": "URL репозитория GitHub (https://github.com/...)",
+      "validate": "Импортировать",
+      "confirmUrl": "Установить плагин по URL?",
+      "author": "Автор",
+      "permissions": "Разрешения",
+      "noPermissions": "Нет разрешений"
+    },
+    "verified": "Проверено",
+    "enable": "Включить",
+    "disable": "Отключить",
+    "uninstall": "Удалить",
+    "changelog": "Журнал изменений",
+    "viewSource": "Исходный код",
+    "blacklisted": "В чёрном списке",
+    "blacklistWarning": "Этот плагин добавлен в чёрный список из-за проблемы безопасности. Пожалуйста, удалите его.",
+    "processError": "Процесс плагина завершился аварийно. Переключите для перезапуска.",
+    "error": {
+      "platformNotSupported": "Нет загрузки для вашей платформы."
+    }
+  },
+  "transcription": {
+    "title": "Транскрипция",
+    "recording": "Запись",
+    "connecting": "Подключение...",
+    "paused": "Пауза",
+    "stopping": "Остановка...",
+    "idle": "Готово",
+    "start": "Начать",
+    "stop": "Остановить",
+    "pause": "Пауза",
+    "resume": "Продолжить",
+    "back": "Вернуться в чат",
+    "emptyIdle": "Нажмите «Начать» для записи и транскрипции.",
+    "emptyWaiting": "Ожидание речи...",
+    "summarizeWithAI": "Резюмировать с AI",
+    "saveAsDoc": "Сохранить как документ",
+    "summarizePrompt": "Пожалуйста, создайте резюме встречи по следующей транскрипции. Определите ключевые темы обсуждения, принятые решения и задачи. Оформите в формате Markdown.",
+    "noSpeechConfig": "Провайдер распознавания речи не настроен. Добавьте его в Настройках → Голос.",
+    "noSpeechConfigHint": "Перейдите в Настройки → Голос, чтобы добавить провайдера распознавания речи (напр., Deepgram).",
+    "goToVoiceSettings": "Открыть настройки голоса"
+  },
+  "outline": {
+    "empty": "Нет заголовков"
+  }
+}

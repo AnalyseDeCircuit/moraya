@@ -233,4 +233,15 @@
   :global(.platform-ipados) .titlebar-left {
     padding-left: 0.5rem;
   }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .titlebar-left {
+    padding-left: 0;
+    padding-right: 0.5rem;
+  }
+
+  :global([dir="rtl"].platform-macos) .titlebar-center {
+    padding-left: var(--ai-panel-width, 0px);
+    padding-right: calc(78px + var(--sidebar-visible-width, 0px));
+  }
 </style>

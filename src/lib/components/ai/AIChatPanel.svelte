@@ -168,7 +168,8 @@
       if (resizeRafId !== undefined) return;
       resizeRafId = requestAnimationFrame(() => {
         resizeRafId = undefined;
-        const delta = startX - ev.clientX; // moving left = wider
+        const isRtl = document.documentElement.dir === 'rtl';
+        const delta = isRtl ? (ev.clientX - startX) : (startX - ev.clientX); // RTL: moving right = wider
         panelWidth = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startWidth + delta));
       });
     }
@@ -1724,5 +1725,57 @@
 
   .lightbox-close:hover {
     background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .ai-panel {
+    border-left: none;
+    border-right: 1px solid var(--border-light);
+  }
+
+  :global([dir="rtl"]) .resize-handle {
+    left: auto;
+    right: 0;
+  }
+
+  :global([dir="rtl"]) .message.tool-result {
+    border-left: 1px solid var(--border-light);
+    border-right: 3px solid var(--text-muted);
+  }
+
+  :global([dir="rtl"]) .message.user .message-time {
+    text-align: right;
+  }
+
+  :global([dir="rtl"]) .message-content :global(ul),
+  :global([dir="rtl"]) .message-content :global(ol) {
+    padding-left: 0;
+    padding-right: 1.5em;
+  }
+
+  :global([dir="rtl"]) .message-content :global(blockquote) {
+    border-left: none;
+    border-right: 3px solid var(--accent-color);
+    padding-left: 0;
+    padding-right: 0.6em;
+  }
+
+  :global([dir="rtl"]) .message-content :global(.task-item) {
+    margin-left: 0;
+    margin-right: -1.2em;
+  }
+
+  :global([dir="rtl"]) .message-content :global(.task-checkbox) {
+    margin-right: 0;
+    margin-left: 0.4em;
+  }
+
+  :global([dir="rtl"]) .message-actions {
+    right: auto;
+    left: 0.4rem;
+  }
+
+  :global([dir="rtl"]) .drawer-item {
+    text-align: right;
   }
 </style>

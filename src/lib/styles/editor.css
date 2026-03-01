@@ -699,3 +699,50 @@
   float: left;
   height: 0;
 }
+
+/* ── RTL overrides for editor ── */
+[dir="rtl"] .moraya-editor blockquote {
+  border-left: none;
+  border-right: 3px solid var(--accent-color);
+  padding-left: 0;
+  padding-right: 1em;
+}
+
+[dir="rtl"] .moraya-editor ul,
+[dir="rtl"] .moraya-editor ol {
+  padding-left: 0;
+  padding-right: 1.5em;
+}
+
+[dir="rtl"] .moraya-editor li[data-checked]::before {
+  left: auto;
+  right: -1.5em;
+}
+
+[dir="rtl"] .moraya-editor dd {
+  margin-left: 0;
+  margin-right: 1.5em;
+  padding-left: 0;
+  padding-right: 0.5em;
+  border-left: none;
+  border-right: 2px solid var(--border-light);
+}
+
+[dir="rtl"] .moraya-editor th,
+[dir="rtl"] .moraya-editor td {
+  text-align: right;
+}
+
+[dir="rtl"] .code-lang-suggestion .suggestion-icon {
+  margin-right: 0;
+  margin-left: 2px;
+}
+
+[dir="rtl"] .code-lang-suggestion .suggestion-hint {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+[dir="rtl"] .ProseMirror p.is-editor-empty:first-child::before {
+  float: right;
+}

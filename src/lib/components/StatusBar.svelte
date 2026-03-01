@@ -278,4 +278,14 @@
     width: 16px;
     height: 16px;
   }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .mode-btn {
+    border-right: none;
+    border-left: 1px solid var(--border-light);
+  }
+
+  :global([dir="rtl"]) .mode-btn:last-child {
+    border-left: none;
+  }
 </style>

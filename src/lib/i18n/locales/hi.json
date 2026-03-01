@@ -1,0 +1,1337 @@
+{
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "close": "बंद करें",
+    "add": "जोड़ें",
+    "remove": "हटाएँ",
+    "connect": "कनेक्ट करें",
+    "disconnect": "डिस्कनेक्ट करें",
+    "insert": "डालें",
+    "replace": "बदलें",
+    "copy": "कॉपी करें",
+    "edit": "संपादित करें",
+    "delete": "हटाएँ",
+    "browse": "बदलें",
+    "clear": "रीसेट करें",
+    "play": "चलाएँ",
+    "stop": "रोकें",
+    "untitled": "बिना शीर्षक"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "tabs": {
+      "general": "सामान्य",
+      "editor": "एडिटर",
+      "appearance": "रूप-रंग",
+      "ai": "AI",
+      "mcp": "MCP",
+      "image": "चित्र",
+      "publish": "प्रकाशन",
+      "permissions": "अनुमतियाँ",
+      "voice": "आवाज़",
+      "plugins": "Plugin"
+    },
+    "language": {
+      "label": "भाषा",
+      "system": "सिस्टम के अनुसार"
+    },
+    "theme": {
+      "label": "थीम",
+      "system": "सिस्टम के अनुसार",
+      "light": "लाइट",
+      "dark": "डार्क"
+    },
+    "appearance": {
+      "themeSection": "थीम",
+      "darkModeSection": "डार्क मोड",
+      "fontSection": "फ़ॉन्ट",
+      "separateDarkTheme": "डार्क मोड के लिए अलग थीम उपयोग करें",
+      "darkTheme": "डार्क मोड थीम",
+      "darkModeLabel": "रूप-रंग"
+    },
+    "fontSize": {
+      "label": "फ़ॉन्ट आकार"
+    },
+    "autoSave": {
+      "label": "ऑटो सेव",
+      "interval": "ऑटो सेव अंतराल"
+    },
+    "rememberLastFolder": "पिछला खोला हुआ फ़ोल्डर याद रखें",
+    "editor": {
+      "lineWidth": "एडिटर पंक्ति चौड़ाई",
+      "tabSize": "Tab आकार",
+      "showLineNumbers": "सोर्स मोड में पंक्ति संख्या दिखाएँ"
+    },
+    "version": "Moraya v{version}",
+    "permissions": {
+      "mcpTitle": "MCP अनुमतियाँ",
+      "aiTitle": "AI सेटिंग्स",
+      "aiMaxTokens": "अधिकतम आउटपुट Token",
+      "aiMaxTokensHint": "AI प्रति उत्तर अधिकतम कितने Token उत्पन्न कर सकता है। अधिक मान लंबे उत्तर और टूल कॉल की अनुमति देता है, लेकिन अधिक खर्च होता है।",
+      "aiRulesMaxChars": "नियम फ़ाइल अधिकतम अक्षर",
+      "aiRulesMaxCharsHint": "MORAYA.md नियम फ़ाइल से पढ़े जाने वाले अधिकतम अक्षर। बड़ी नियम फ़ाइलों के लिए बढ़ाएँ। अधिक अक्षर = प्रति अनुरोध अधिक Token।",
+      "aiToolResultMaxChars": "टूल परिणाम अधिकतम अक्षर",
+      "aiToolResultMaxCharsHint": "प्रत्येक MCP टूल परिणाम से रखे जाने वाले अधिकतम अक्षर। बड़े मान अधिक विवरण बनाए रखते हैं लेकिन अधिक संदर्भ का उपभोग करते हैं।",
+      "aiMaxToolRounds": "अधिकतम टूल कॉलिंग राउंड",
+      "aiMaxToolRoundsHint": "AI एक वार्तालाप चरण में अधिकतम कितने टूल कॉल राउंड कर सकता है। जटिल बहु-चरणीय कार्यों के लिए इसे बढ़ाएँ।"
+    },
+    "voice": {
+      "providers": "स्पीच प्रदाता",
+      "addProvider": "प्रदाता जोड़ें",
+      "editProvider": "प्रदाता संपादित करें",
+      "noProviders": "कोई स्पीच प्रदाता कॉन्फ़िगर नहीं है।",
+      "provider": "प्रदाता",
+      "apiKey": "API Key",
+      "apiKeyOptional": "AWS के लिए वैकल्पिक (Access Key का उपयोग करें)",
+      "awsAccessKey": "AWS Access Key ID",
+      "awsSecretKey": "AWS Secret Access Key",
+      "region": "क्षेत्र",
+      "model": "मॉडल",
+      "modelPlaceholder": "मॉडल नाम दर्ज करें",
+      "endpointIdPlaceholder": "Inference endpoint ID दर्ज करें",
+      "language": "भाषा",
+      "langAuto": "स्वतः पहचान",
+      "langMulti": "बहु-भाषा",
+      "baseUrl": "कस्टम WebSocket URL",
+      "testConnection": "कनेक्शन परीक्षण",
+      "testing": "परीक्षण हो रहा है...",
+      "testOk": "कनेक्ट हो गया",
+      "testFailed": "कनेक्शन विफल",
+      "setActive": "डिफ़ॉल्ट सेट करें",
+      "active": "डिफ़ॉल्ट",
+      "custom": "कस्टम",
+      "storage": "भंडारण",
+      "recordingBackupDir": "रिकॉर्डिंग बैकअप",
+      "recordingBackupHint": "प्रत्येक सत्र के बाद पूर्ण रिकॉर्डिंग WAV फ़ाइलों के रूप में सहेजें।",
+      "voiceSyncDir": "वॉइस प्रोफ़ाइल सिंक निर्देशिका",
+      "voiceSyncHint": "क्लाउड स्टोरेज (जैसे iCloud, Dropbox) के माध्यम से वॉइस प्रोफ़ाइल सिंक करें। फ़ोल्डर चुनने के लिए बदलें बटन का उपयोग करें — मौजूदा प्रोफ़ाइल स्वचालित रूप से माइग्रेट होंगी।",
+      "syncDefault": "ऐप डेटा (डिफ़ॉल्ट)",
+      "disabled": "अक्षम",
+      "migratingProfiles": "माइग्रेट हो रहा है...",
+      "migrationFailed": "माइग्रेशन विफल",
+      "profiles": "वॉइस प्रोफ़ाइल",
+      "noProfiles": "अभी कोई वॉइस प्रोफ़ाइल नहीं है। ट्रांसक्रिप्शन सत्र के बाद ये स्वचालित रूप से बनाई जाती हैं।",
+      "naming": {
+        "male": "पुरुष {n}",
+        "female": "महिला {n}",
+        "bystander": "दर्शक {n}",
+        "speaker": "वक्ता {n}"
+      }
+    }
+  },
+  "titlebar": {
+    "unsaved": "सहेजा नहीं गया",
+    "minimize": "छोटा करें",
+    "maximize": "बड़ा करें",
+    "close": "बंद करें"
+  },
+  "sidebar": {
+    "title": "एक्सप्लोरर",
+    "openFolder": "फ़ोल्डर खोलें",
+    "noFolder": "कोई फ़ोल्डर नहीं खुला है",
+    "createKB": "ज्ञान आधार बनाएँ",
+    "emptyDir": "इस निर्देशिका में कोई फ़ाइल नहीं है",
+    "kbSettings": "ज्ञान आधार सेटिंग्स",
+    "treeView": "ट्री दृश्य",
+    "listView": "सूची दृश्य",
+    "search": "फ़ाइलें खोजें...",
+    "contextMenu": {
+      "newFile": "नई फ़ाइल",
+      "searchFiles": "खोजें",
+      "refresh": "ताज़ा करें",
+      "rename": "नाम बदलें",
+      "duplicate": "प्रतिलिपि बनाएँ",
+      "delete": "हटाएँ",
+      "copyPath": "पथ कॉपी करें",
+      "revealInFinder": "Finder में दिखाएँ"
+    },
+    "newFilePrompt": "फ़ाइल का नाम दर्ज करें",
+    "renamePrompt": "नया नाम दर्ज करें",
+    "deleteConfirm": "क्या आप वाकई \"{name}\" को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।"
+  },
+  "statusbar": {
+    "words": "शब्द",
+    "characters": "अक्षर",
+    "format": "Markdown",
+    "sourceMode": "सोर्स",
+    "visualMode": "विज़ुअल",
+    "splitMode": "स्प्लिट",
+    "publishWorkflow": "AI वर्कफ़्लो",
+    "aiTooltip": "AI"
+  },
+  "editor": {
+    "sourceMode": "सोर्स मोड",
+    "visualMode": "विज़ुअल मोड",
+    "splitMode": "स्प्लिट मोड",
+    "unsavedTitle": "सहेजे न गए परिवर्तन",
+    "unsavedNewDocMsg": "आपके पास सहेजी न गई सामग्री है जो खो जाएगी। पहले सहेजें?",
+    "saveFirst": "सहेजें",
+    "discardChanges": "सहेजें नहीं"
+  },
+  "table": {
+    "insertRowAbove": "ऊपर पंक्ति डालें",
+    "insertRowBelow": "नीचे पंक्ति डालें",
+    "deleteRow": "पंक्ति हटाएँ",
+    "insertColLeft": "बाएँ स्तंभ डालें",
+    "insertColRight": "दाएँ स्तंभ डालें",
+    "deleteCol": "स्तंभ हटाएँ",
+    "alignLeft": "बाएँ संरेखित करें",
+    "alignCenter": "केंद्र संरेखित करें",
+    "alignRight": "दाएँ संरेखित करें"
+  },
+  "knowledgeBase": {
+    "title": "ज्ञान आधार",
+    "add": "ज्ञान आधार जोड़ें",
+    "remove": "हटाएँ",
+    "rename": "नाम बदलें",
+    "manage": "ज्ञान आधार प्रबंधित करें...",
+    "empty": "कोई ज्ञान आधार कॉन्फ़िगर नहीं है",
+    "emptyHint": "त्वरित स्विचिंग के लिए ज्ञान आधार के रूप में एक फ़ोल्डर जोड़ें।",
+    "deleteConfirm": "\"{name}\" को ज्ञान आधार से हटाएँ? फ़ोल्डर स्वयं हटाया नहीं जाएगा।",
+    "switchTo": "ज्ञान आधार बदलें",
+    "saveHint": "यह फ़ोल्डर आपके ज्ञान आधार में नहीं है।",
+    "saveAsKB": "ज्ञान आधार के रूप में सहेजें"
+  },
+  "ai": {
+    "title": "AI सहायक",
+    "morayaMdActive": "इस ज्ञान आधार के लिए MORAYA.md नियम सक्रिय हैं",
+    "clearChat": "चैट साफ़ करें",
+    "unconfigured": "AI कॉन्फ़िगर नहीं है।",
+    "unconfiguredHint": "AI सुविधाएँ सक्षम करने के लिए सेटिंग्स ({shortcut}) खोलें और अपनी API key कॉन्फ़िगर करें।",
+    "openSettings": "AI सेटिंग्स खोलें",
+    "openImageSettings": "AIGC सेटिंग्स खोलें",
+    "textAiLabel": "टेक्स्ट AI (प्रॉम्प्ट जनरेशन)",
+    "imageAiLabel": "इमेज AI (इमेज जनरेशन)",
+    "welcomeTitle": "मैं कैसे मदद कर सकता हूँ?",
+    "welcomeHint": "संदेश टाइप करें या कमांड के लिए {kbd} का उपयोग करें",
+    "you": "आप",
+    "assistant": "AI",
+    "typing": "टाइप कर रहा है...",
+    "placeholder": "AI से कुछ भी पूछें... (कमांड के लिए /)",
+    "placeholderSelection": "चयन के बारे में पूछें... (कमांड के लिए /)",
+    "send": "भेजें (⌘↵)",
+    "stop": "रोकें (Esc)",
+    "interrupted": "बाधित",
+    "insertToEditor": "एडिटर में डालें",
+    "replaceSelection": "चयन बदलें",
+    "attachImage": "चित्र संलग्न करें",
+    "attachImageMax": "अधिकतम {max} चित्र",
+    "removeImage": "चित्र हटाएँ",
+    "closePreview": "पूर्वावलोकन बंद करें",
+    "moreActions": "अधिक कार्य",
+    "voiceTranscription": "AI वॉइस ट्रांसक्रिप्शन",
+    "config": {
+      "title": "AI कॉन्फ़िगरेशन",
+      "provider": "प्रदाता",
+      "apiKey": "API Key",
+      "apiKeyPlaceholder": "{provider} API key दर्ज करें",
+      "apiKeyNotRequired": "Ollama के लिए आवश्यक नहीं",
+      "baseUrl": "Base URL",
+      "model": "मॉडल",
+      "modelPlaceholder": "मॉडल नाम दर्ज करें",
+      "maxTokens": "अधिकतम Token",
+      "temperature": "तापमान",
+      "testConnection": "कनेक्शन परीक्षण",
+      "testing": "परीक्षण हो रहा है...",
+      "connected": "कनेक्ट हो गया!",
+      "failed": "विफल"
+    },
+    "providers": {
+      "claude": "Anthropic Claude",
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "deepseek": "DeepSeek",
+      "ollama": "Ollama (लोकल)",
+      "custom": "कस्टम API",
+      "grok": "xAI Grok",
+      "mistral": "Mistral AI",
+      "glm": "Zhipu GLM",
+      "minimax": "MiniMax",
+      "doubao": "Doubao (ByteDance)"
+    },
+    "multiModel": {
+      "addModel": "+ मॉडल जोड़ें",
+      "default": "डिफ़ॉल्ट",
+      "setDefault": "डिफ़ॉल्ट सेट करें",
+      "noModels": "कोई AI मॉडल कॉन्फ़िगर नहीं है",
+      "noModelsHint": "AI सुविधाओं का उपयोग शुरू करने के लिए एक AI मॉडल जोड़ें।",
+      "noImageModels": "कोई इमेज मॉडल कॉन्फ़िगर नहीं है",
+      "noImageModelsHint": "AI इमेज सुविधाओं का उपयोग करने के लिए एक इमेज जनरेशन मॉडल जोड़ें।"
+    },
+    "imageConfig": {
+      "title": "इमेज जनरेशन AI",
+      "provider": "प्रदाता",
+      "providerOpenai": "OpenAI DALL-E",
+      "providerGrok": "Grok (xAI)",
+      "providerCustom": "कस्टम (OpenAI-संगत)",
+      "apiKey": "API Key",
+      "apiKeyPlaceholder": "इमेज API key दर्ज करें",
+      "baseUrl": "Base URL",
+      "model": "मॉडल",
+      "modelPlaceholder": "मॉडल नाम दर्ज करें",
+      "defaultSize": "डिफ़ॉल्ट आकार",
+      "ratio": "पक्षानुपात",
+      "sizeLevel": "आकार",
+      "size_large": "बड़ा",
+      "size_medium": "मध्यम",
+      "size_small": "छोटा",
+      "providerGemini": "Google Gemini Imagen",
+      "providerQwen": "Qwen (Alibaba)",
+      "providerDoubao": "Doubao (ByteDance)"
+    },
+    "commands": {
+      "write": "लिखें",
+      "writeDesc": "आपके प्रॉम्प्ट के आधार पर सामग्री लिखें",
+      "continue": "लिखना जारी रखें",
+      "continueDesc": "जहाँ पाठ रुका था वहाँ से जारी रखें",
+      "summarize": "सारांश",
+      "summarizeDesc": "चयनित पाठ का सारांश बनाएँ",
+      "translate": "अनुवाद",
+      "translateDesc": "पाठ का दूसरी भाषा में अनुवाद करें",
+      "improve": "सुधारें",
+      "improveDesc": "लेखन की गुणवत्ता में सुधार करें",
+      "fixGrammar": "व्याकरण ठीक करें",
+      "fixGrammarDesc": "व्याकरण और वर्तनी की त्रुटियाँ ठीक करें",
+      "simplify": "सरल करें",
+      "simplifyDesc": "जटिल पाठ को सरल बनाएँ",
+      "expand": "विस्तार करें",
+      "expandDesc": "विषय का विस्तार करें",
+      "outline": "रूपरेखा बनाएँ",
+      "outlineDesc": "लेख की रूपरेखा तैयार करें",
+      "explain": "समझाएँ",
+      "explainDesc": "चयनित पाठ को समझाएँ"
+    },
+    "prompts": {
+      "emptyResponse": "आपने एक रिक्त उत्तर दिया। कृपया कार्य जारी रखें: या तो आवश्यक टूल कॉल करें, या जो पूरा हुआ है उसका सारांश दें और शेष आइटम सूचीबद्ध करें। रिक्त संदेश न भेजें।",
+      "emptyResponseContinue": "\n\nआपका अंतिम संदेश था: \"{lastMessage}\"\nकृपया वहाँ से जारी रखें।",
+      "truncationContinue": "आपका पिछला उत्तर आउटपुट लंबाई सीमा के कारण कट गया था। ऊपर का पाठ सहेजा जा चुका है। अब कृपया आवश्यक टूल कॉल करके कार्य पूरा करें। सामग्री दोहराएँ नहीं — इसे सीधे टूल तर्कों में उपयोग करें।",
+      "continuationPrompt": "कृपया जारी रखें और कार्य पूरा करने के लिए आवश्यक टूल कॉल करें। जो पहले कहा जा चुका है उसे दोहराएँ नहीं — सीधे टूल कॉल के साथ आगे बढ़ें।",
+      "mcpToolPrompt": "{toolName} टूल ({serverName} से) का उपयोग करें"
+    },
+    "detection": {
+      "intentPrefixes": "मैं करूंगा|मुझे चाहिए|मुझे करना होगा|पहले|अब|अगला",
+      "actionVerbs": "बनाना|लिखना|पढ़ना|अपडेट|अपलोड|जनरेट|लाना|जांचना|परीक्षण|उपयोग|चलाना|भेजना|खोजना|ढूंढना|सहेजना|हटाना|संपादित|कॉन्फ़िगर|निर्यात|दिखाना",
+      "continuationPhrases": "पहले|अगला|फिर|अब",
+      "remainingPhrases": "शेष|अगला|चरण \\d+",
+      "unfinishedPhrases": "करना है|TODO|अगला चरण|अभी तक नहीं|लंबित"
+    }
+  },
+  "mcp": {
+    "title": "MCP सर्वर",
+    "tabs": {
+      "servers": "सर्वर",
+      "publish": "प्रकाशन",
+      "sync": "सिंक",
+      "marketplace": "मार्केट"
+    },
+    "aiServices": {
+      "empty": "कोई AI-निर्मित सेवाएँ नहीं",
+      "hint": "AI चैट के दौरान MCP सेवाएँ बना सकता है। इसे किसी API के साथ इंटरैक्ट करने के लिए कहें!",
+      "nodeRequired": "Node.js 18+ आवश्यक",
+      "checkingNode": "Node.js की जाँच हो रही है...",
+      "temp": "अस्थायी",
+      "saved": "सहेजा गया",
+      "viewCode": "कोड",
+      "tools": "{count} टूल",
+      "serviceCreated": "AI ने \"{name}\" सेवा बनाई जिसमें {count} टूल हैं",
+      "serviceSaved": "सेवा \"{name}\" सहेजी गई",
+      "serviceRemoved": "सेवा \"{name}\" हटाई गई",
+      "launchConfirmTitle": "AI सेवा सुरक्षा चेतावनी",
+      "launchConfirmMsg": "AI ने एक MCP सेवा जनरेट की है जिसे स्वचालित रूप से जनरेट किया गया कोड चलाना है:\n  सेवा: {name}\n  टूल: {tools}\n\nयह कोड एक स्थानीय Node.js प्रक्रिया में चलेगा।\nकृपया पुष्टि करें कि आप इस AI-जनरेटेड सेवा कोड पर विश्वास करते हैं।",
+      "launchConfirmOk": "चलाएँ",
+      "launchConfirmCancel": "रद्द करें"
+    },
+    "servers": {
+      "empty": "कोई MCP सर्वर कॉन्फ़िगर नहीं है",
+      "localMcp": "लोकल MCP",
+      "addServer": "सर्वर जोड़ें",
+      "addServerPlus": "+ सर्वर जोड़ें",
+      "connected": "कनेक्ट है",
+      "disconnected": "डिस्कनेक्ट है",
+      "serverName": "सर्वर नाम",
+      "serverUrl": "सर्वर URL (जैसे, http://localhost:3000/mcp)",
+      "http": "HTTP",
+      "sse": "SSE (Server-Sent Events)",
+      "stdio": "stdio (लोकल प्रक्रिया)",
+      "command": "कमांड",
+      "commandPlaceholder": "कमांड (जैसे, npx, node, python)",
+      "argsPlaceholder": "तर्क (जैसे, -y @modelcontextprotocol/server-filesystem /path)",
+      "envPlaceholder": "ENV_KEY=value (प्रति पंक्ति एक)",
+      "presets": "रिमोट MCP",
+      "presetsHint": "लोकप्रिय MCP सर्वर एक क्लिक में जोड़ें",
+      "presetDesc": {
+        "filesystem": "स्थानीय फ़ाइलें पढ़ें, खोजें और प्रबंधित करें",
+        "fetch": "वेब पेज लाएँ और Markdown में बदलें",
+        "git": "Git रिपॉजिटरी पढ़ें और खोजें",
+        "memory": "AI मेमोरी के लिए स्थायी ज्ञान ग्राफ़"
+      },
+      "formMode": "फ़ॉर्म",
+      "jsonMode": "JSON",
+      "jsonPlaceholder": "JSON कॉन्फ़िग पेस्ट करें, जैसे:\n{\n  \"mcpServers\": {\n    \"name\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@.../server-xxx\"]\n    }\n  }\n}",
+      "jsonNoConfig": "कोई मान्य MCP सर्वर कॉन्फ़िग नहीं मिला",
+      "jsonParseError": "पार्स त्रुटि",
+      "launchConfirmTitle": "सुरक्षा चेतावनी",
+      "launchConfirmMsg": "बाहरी प्रोग्राम लॉन्च करने वाला है:\n  कमांड: {command}\n  तर्क: {args}\n\nयह MCP सर्वर आपके उपयोगकर्ता अनुमतियों के साथ चलेगा और स्थानीय फ़ाइलों और नेटवर्क तक पहुँच सकता है।\nकृपया पुष्टि करें कि यह MCP सर्वर किसी विश्वसनीय स्रोत से है।",
+      "launchConfirmOk": "लॉन्च करें",
+      "launchConfirmCancel": "रद्द करें",
+      "autoApprove": "MCP लॉन्च ऑटो-अनुमोदित करें",
+      "autoApproveHint": "MCP सर्वर कनेक्ट करते और AI-जनरेटेड सेवाएँ लॉन्च करते समय सुरक्षा पुष्टि छोड़ें। अविश्वसनीय स्रोतों के लिए अनुशंसित नहीं।"
+    },
+    "publish": {
+      "empty": "कोई प्रकाशन लक्ष्य कॉन्फ़िगर नहीं है",
+      "hint": "पहले प्रकाशन क्षमताओं वाला MCP सर्वर कनेक्ट करें।",
+      "button": "प्रकाशित करें",
+      "publishing": "प्रकाशित हो रहा है...",
+      "published": "प्रकाशित! {info}",
+      "failed": "विफल: {message}",
+      "error": "त्रुटि: {message}"
+    },
+    "sync": {
+      "empty": "कोई सिंक कॉन्फ़िगरेशन नहीं",
+      "hint": "पहले MCP सर्वर कनेक्ट करें, फिर सिंक कॉन्फ़िगरेशन जोड़ें।",
+      "syncNow": "अभी सिंक करें",
+      "addSync": "+ सिंक जोड़ें",
+      "name": "कॉन्फ़िगरेशन नाम",
+      "server": "MCP सर्वर",
+      "remotePath": "रिमोट पथ",
+      "localPath": "स्थानीय पथ",
+      "direction": "दिशा",
+      "push": "पुश (स्थानीय → रिमोट)",
+      "pull": "पुल (रिमोट → स्थानीय)",
+      "bidirectional": "द्विदिशात्मक",
+      "lastSync": "अंतिम सिंक: {time}",
+      "syncing": "सिंक हो रहा है...",
+      "success": "सिंक पूर्ण",
+      "error": "सिंक त्रुटि: {message}"
+    },
+    "marketplace": {
+      "title": "मार्केट",
+      "search": "MCP सर्वर खोजें...",
+      "source": "स्रोत",
+      "sourceOfficial": "आधिकारिक",
+      "sourceLobehub": "LobeHub",
+      "sourceSmithery": "Smithery",
+      "install": "इंस्टॉल करें",
+      "installAndConnect": "इंस्टॉल और कनेक्ट करें",
+      "installing": "इंस्टॉल हो रहा है...",
+      "installed": "इंस्टॉल है",
+      "viewDetails": "विवरण",
+      "loadMore": "और लोड करें",
+      "noResults": "कोई MCP सर्वर नहीं मिला",
+      "networkError": "लोड करने में विफल, नेटवर्क जाँचें",
+      "retry": "पुनः प्रयास करें",
+      "envVars": "एनवायरनमेंट वेरिएबल",
+      "envRequired": "(आवश्यक)",
+      "popularity": "उपयोग",
+      "installs": "इंस्टॉल / उपयोग",
+      "verified": "सत्यापित",
+      "cancel": "रद्द करें"
+    }
+  },
+  "imageDialog": {
+    "title": "चित्र डालें",
+    "urlTab": "URL",
+    "fileTab": "स्थानीय फ़ाइल",
+    "urlPlaceholder": "https://example.com/image.png",
+    "altPlaceholder": "चित्र विवरण (वैकल्पिक)",
+    "selectFile": "चित्र चुनें...",
+    "noFileSelected": "कोई फ़ाइल नहीं चुनी गई",
+    "insert": "डालें",
+    "cancel": "रद्द करें"
+  },
+  "imageHost": {
+    "title": "इमेज होस्टिंग",
+    "provider": "प्रदाता",
+    "smms": "SM.MS",
+    "imgur": "Imgur",
+    "github": "GitHub रिपॉजिटरी",
+    "custom": "कस्टम API",
+    "apiToken": "API Token",
+    "apiTokenPlaceholder": "API token दर्ज करें",
+    "customEndpoint": "अपलोड Endpoint",
+    "customEndpointPlaceholder": "https://your-api.com/upload",
+    "customHeaders": "कस्टम Headers (JSON)",
+    "githubRepoUrl": "रिपॉजिटरी URL",
+    "githubRepoUrlPlaceholder": "https://github.com/user/images",
+    "githubBranch": "ब्रांच",
+    "githubDir": "चित्र निर्देशिका",
+    "githubToken": "Personal Access Token",
+    "githubTokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "githubCdn": "URL प्रारूप",
+    "githubCdnRaw": "raw.githubusercontent.com",
+    "githubCdnJsdelivr": "jsDelivr CDN",
+    "importFromPublish": "प्रकाशन लक्ष्य से आयात करें",
+    "autoUpload": "पेस्ट/ड्रॉप पर चित्र ऑटो-अपलोड करें",
+    "testUpload": "अपलोड परीक्षण",
+    "testing": "परीक्षण हो रहा है...",
+    "success": "अपलोड सफल!",
+    "failed": "अपलोड विफल",
+    "addTarget": "इमेज होस्ट जोड़ें",
+    "targetName": "नाम",
+    "targetNamePlaceholder": "जैसे, मेरा ब्लॉग CDN",
+    "settingsEmpty": "कोई इमेज होस्टिंग लक्ष्य कॉन्फ़िगर नहीं है",
+    "settingsHint": "ऑटो-अपलोड सक्षम करने के लिए इमेज होस्टिंग सेवा जोड़ें।",
+    "default": "डिफ़ॉल्ट",
+    "setDefault": "डिफ़ॉल्ट सेट करें",
+    "gitlab": "GitLab रिपॉजिटरी",
+    "git_custom": "कस्टम Git (Gitea/Forgejo)",
+    "qiniu": "Qiniu Kodo",
+    "aliyun_oss": "Aliyun OSS",
+    "tencent_cos": "Tencent COS",
+    "aws_s3": "AWS S3",
+    "google_gcs": "Google Cloud Storage",
+    "groupApi": "API होस्टिंग",
+    "groupGit": "Git रिपॉजिटरी",
+    "groupOss": "ऑब्जेक्ट स्टोरेज",
+    "gitlabRepoUrl": "रिपॉजिटरी URL",
+    "gitlabBranch": "ब्रांच",
+    "gitlabDir": "चित्र निर्देशिका",
+    "gitlabToken": "Personal Access Token",
+    "gitlabTokenPlaceholder": "glpat-xxxxxxxxxxxx",
+    "gitCustomRepoUrl": "रिपॉजिटरी URL",
+    "gitCustomBranch": "ब्रांच",
+    "gitCustomDir": "चित्र निर्देशिका",
+    "gitCustomToken": "Access Token",
+    "gitCustomTokenPlaceholder": "Token दर्ज करें",
+    "ossAccessKey": "Access Key",
+    "ossAccessKeyPlaceholder": "Access Key ID दर्ज करें",
+    "ossSecretKey": "Secret Key",
+    "ossSecretKeyPlaceholder": "Secret Key दर्ज करें",
+    "ossBucket": "Bucket",
+    "ossBucketPlaceholder": "जैसे my-images-bucket",
+    "ossRegion": "क्षेत्र",
+    "ossRegionPlaceholder": "जैसे cn-east-1, us-east-1",
+    "selectRegion": "क्षेत्र चुनें",
+    "ossEndpoint": "कस्टम Endpoint (वैकल्पिक)",
+    "ossEndpointPlaceholder": "जैसे https://s3.custom.com",
+    "ossCdnDomain": "CDN डोमेन (वैकल्पिक)",
+    "ossCdnDomainPlaceholder": "जैसे https://cdn.example.com",
+    "ossPathPrefix": "पथ उपसर्ग (वैकल्पिक)",
+    "ossPathPrefixPlaceholder": "जैसे images/blog/"
+  },
+  "imageMenu": {
+    "resize": "आकार बदलें",
+    "upload": "इमेज होस्ट पर अपलोड करें",
+    "editAlt": "विवरण संपादित करें",
+    "copyUrl": "चित्र URL कॉपी करें",
+    "copyImage": "चित्र कॉपी करें",
+    "openInBrowser": "ब्राउज़र में चित्र खोलें",
+    "saveAs": "चित्र इस रूप में सहेजें...",
+    "delete": "चित्र हटाएँ",
+    "originalSize": "मूल आकार"
+  },
+  "menu": {
+    "file": "फ़ाइल",
+    "edit": "संपादन",
+    "paragraph": "अनुच्छेद",
+    "format": "प्रारूप",
+    "view": "दृश्य",
+    "window": "विंडो",
+    "help": "सहायता",
+    "new": "नया",
+    "newWindow": "नई विंडो",
+    "open": "खोलें...",
+    "save": "सहेजें",
+    "saveAs": "इस रूप में सहेजें...",
+    "export": "निर्यात",
+    "exportHtml": "HTML",
+    "exportPdf": "PDF",
+    "exportImage": "चित्र (PNG)",
+    "exportDoc": "Word (.doc)",
+    "heading1": "शीर्षक 1",
+    "heading2": "शीर्षक 2",
+    "heading3": "शीर्षक 3",
+    "heading4": "शीर्षक 4",
+    "heading5": "शीर्षक 5",
+    "heading6": "शीर्षक 6",
+    "table": "तालिका",
+    "codeBlock": "कोड ब्लॉक",
+    "mathBlock": "गणित ब्लॉक",
+    "quote": "उद्धरण",
+    "bulletList": "बुलेट सूची",
+    "orderedList": "क्रमांकित सूची",
+    "horizontalRule": "क्षैतिज रेखा",
+    "bold": "बोल्ड",
+    "italic": "इटैलिक",
+    "strikethrough": "स्ट्राइकथ्रू",
+    "code": "कोड",
+    "link": "लिंक",
+    "image": "चित्र",
+    "visualMode": "विज़ुअल मोड",
+    "sourceMode": "सोर्स मोड",
+    "splitMode": "स्प्लिट मोड",
+    "toggleSidebar": "साइडबार टॉगल करें",
+    "toggleAIPanel": "AI पैनल टॉगल करें",
+    "toggleOutline": "रूपरेखा टॉगल करें",
+    "zoomIn": "ज़ूम इन",
+    "zoomOut": "ज़ूम आउट",
+    "actualSize": "वास्तविक आकार",
+    "find": "खोजें",
+    "replace": "बदलें",
+    "changelog": "परिवर्तन लॉग",
+    "privacyPolicy": "गोपनीयता नीति",
+    "officialWebsite": "आधिकारिक वेबसाइट",
+    "aboutMoraya": "Moraya के बारे में",
+    "feedback": "प्रतिक्रिया",
+    "settings": "सेटिंग्स...",
+    "versionInfo": "संस्करण जानकारी"
+  },
+  "search": {
+    "findPlaceholder": "खोजें...",
+    "replacePlaceholder": "बदलें...",
+    "noResults": "कोई परिणाम नहीं",
+    "caseSensitive": "केस मिलाएँ",
+    "replace": "बदलें",
+    "replaceAll": "सभी बदलें"
+  },
+  "mermaid": {
+    "loading": "डायग्राम लोड हो रहा है...",
+    "error": "डायग्राम रेंडर विफल",
+    "edit": "संपादित करें",
+    "preview": "पूर्वावलोकन",
+    "empty": "रिक्त डायग्राम"
+  },
+  "export": {
+    "exportAs": "{format} के रूप में निर्यात करें",
+    "pdf": "PDF",
+    "html": "HTML (शैलियों सहित)",
+    "htmlPlain": "HTML (शैलियों के बिना)",
+    "image": "चित्र (PNG)",
+    "doc": "Word (.doc)",
+    "rtf": "RTF",
+    "epub": "Epub",
+    "latex": "LaTeX",
+    "mediawiki": "MediaWiki",
+    "rst": "reStructuredText",
+    "textile": "Textile",
+    "opml": "OPML"
+  },
+  "workflow": {
+    "title": "AI वर्कफ़्लो",
+    "seoStep": "SEO अनुकूलन",
+    "imageGenStep": "AI चित्र",
+    "publishStep": "प्रकाशन",
+    "publishDesc": "लक्ष्य प्लेटफ़ॉर्म पर पुश करें",
+    "optionalAbove": "ऊपर के चरण वैकल्पिक हैं",
+    "selectTargets": "प्रकाशन लक्ष्य चुनें",
+    "confirmPublish": "प्रकाशित करें",
+    "publishing": "प्रकाशित हो रहा है...",
+    "publishSuccess": "सफलतापूर्वक प्रकाशित!",
+    "publishFailed": "प्रकाशन विफल",
+    "mcpEntry": "AI MCP",
+    "mcpServerCount": "सेवाएँ कनेक्ट हैं",
+    "mcpToolCount": "टूल"
+  },
+  "imageGen": {
+    "title": "AI इमेज जनरेशन",
+    "step1Title": "इमेज मोड",
+    "step2Title": "चित्र जनरेट करें",
+    "step3Title": "लेख में डालें",
+    "generatingPrompts": "प्रॉम्प्ट जनरेट हो रहे हैं...",
+    "contentTooShort": "इमेज जनरेशन के लिए लेख सामग्री बहुत छोटी है।",
+    "styleLabel": "शैली",
+    "countLabel": "संख्या",
+    "style_auto": "ऑटो",
+    "style_photo": "फ़ोटो",
+    "style_illustration": "चित्रण",
+    "style_flat": "फ़्लैट",
+    "style_ink": "स्याही चित्र",
+    "style_watercolor": "जल रंग",
+    "style_isometric": "आइसोमेट्रिक",
+    "style_infographic": "इन्फ़ोग्राफ़िक",
+    "style_editorial": "संपादकीय",
+    "style_cartoon": "कार्टून",
+    "style_render": "3D रेंडर",
+    "style_sketch": "स्केच",
+    "style_blueprint": "ब्लूप्रिंट",
+    "style_clay": "क्ले मॉडल",
+    "style_wireframe": "वायरफ़्रेम",
+    "style_exploded": "एक्सप्लोडेड दृश्य",
+    "style_section": "क्रॉस सेक्शन",
+    "style_cad": "CAD ड्रॉइंग",
+    "style_prototype": "प्रोटोटाइप",
+    "style_anime": "एनिमे",
+    "style_comic": "कॉमिक",
+    "style_cinematic": "सिनेमाई",
+    "style_pixel": "पिक्सेल आर्ट",
+    "style_noir": "फ़िल्म नॉयर",
+    "style_manga": "मंगा",
+    "style_realistic": "यथार्थवादी",
+    "style_studio": "स्टूडियो",
+    "style_lifestyle": "लाइफ़स्टाइल",
+    "style_flatlay": "फ़्लैट ले",
+    "style_macro": "मैक्रो",
+    "style_minimalist": "न्यूनतावादी",
+    "style_packaging": "पैकेजिंग",
+    "style_outdoor": "आउटडोर",
+    "style_mood": "मूड",
+    "style_abstract": "अमूर्त",
+    "style_texture": "बनावट",
+    "style_gradient": "ग्रेडिएंट",
+    "style_collage": "कोलाज",
+    "style_vintage": "विंटेज",
+    "style_botanical": "वनस्पति",
+    "style_geometric": "ज्यामितीय",
+    "style_ethereal": "ईथरीय",
+    "style_brutalist": "ब्रूटलिस्ट",
+    "generate": "जनरेट करें",
+    "next": "अगला",
+    "back": "पीछे",
+    "insertConfirm": "डालें",
+    "insertParagraph": "संबंधित अनुच्छेद के बाद डालें (अनुशंसित)",
+    "insertEnd": "लेख के अंत में डालें",
+    "insertReplace": "लेख में चित्र बदलें",
+    "insertClipboard": "Markdown क्लिपबोर्ड में कॉपी करें",
+    "selected": "{count} चयनित",
+    "completed": "चित्र जनरेट हो गए",
+    "stepDescription": "लेख के चित्र जनरेट करें",
+    "mode_article": "लेख",
+    "mode_design": "डिज़ाइन",
+    "mode_storyboard": "स्टोरीबोर्ड",
+    "mode_product": "उत्पाद",
+    "mode_moodboard": "मूडबोर्ड",
+    "mode_portrait": "पोर्ट्रेट",
+    "style_portrait": "पोर्ट्रेट",
+    "style_headshot": "हेडशॉट",
+    "style_fullbody": "पूर्ण शरीर",
+    "style_fashion": "फ़ैशन",
+    "style_street": "स्ट्रीट",
+    "style_glamour": "ग्लैमर",
+    "style_environmental": "पर्यावरणीय",
+    "style_candid": "कैंडिड",
+    "style_group": "समूह",
+    "preDefinedDetected": "दस्तावेज़ में {count} पूर्व-निर्धारित प्रॉम्प्ट पाए गए",
+    "usePredefined": "पूर्व-निर्धारित प्रॉम्प्ट उपयोग करें"
+  },
+  "seo": {
+    "title": "SEO अनुकूलन",
+    "generating": "लेख का विश्लेषण हो रहा है...",
+    "titles": "शीर्षक उम्मीदवार",
+    "customTitle": "कस्टम शीर्षक...",
+    "excerpt": "सारांश",
+    "tags": "टैग",
+    "addTag": "टैग जोड़ें...",
+    "slug": "URL Slug",
+    "metaDescription": "Meta विवरण",
+    "regenerate": "पुनः जनरेट करें",
+    "apply": "लागू करें",
+    "retry": "पुनः प्रयास करें",
+    "contentTooShort": "SEO विश्लेषण के लिए लेख सामग्री बहुत छोटी है।",
+    "completed": "SEO अनुकूलित",
+    "stepDescription": "शीर्षक, सारांश और टैग जनरेट करें"
+  },
+  "publish": {
+    "settingsEmpty": "कोई प्रकाशन लक्ष्य कॉन्फ़िगर नहीं है",
+    "settingsHint": "अपने लेख प्रकाशित करने के लिए GitHub रिपॉजिटरी या कस्टम API endpoint जोड़ें।",
+    "addTarget": "लक्ष्य जोड़ें",
+    "editTarget": "संपादित करें",
+    "deleteTarget": "हटाएँ",
+    "testConnection": "कनेक्शन परीक्षण",
+    "github": "GitHub रिपॉजिटरी",
+    "customApi": "कस्टम API",
+    "targetName": "नाम",
+    "targetNamePlaceholder": "जैसे, मेरा ब्लॉग",
+    "repoUrl": "रिपॉजिटरी URL",
+    "repoUrlPlaceholder": "https://github.com/user/blog",
+    "branch": "ब्रांच",
+    "articlesDir": "लेख निर्देशिका",
+    "articlesDirPlaceholder": "content/posts/",
+    "imagesDir": "चित्र निर्देशिका",
+    "imagesDirPlaceholder": "static/images/",
+    "token": "Personal Access Token",
+    "tokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "frontMatterTemplate": "Front Matter टेम्पलेट",
+    "endpoint": "API Endpoint",
+    "endpointPlaceholder": "https://api.example.com/articles",
+    "method": "HTTP Method",
+    "headers": "Headers (JSON)",
+    "bodyTemplate": "Body टेम्पलेट",
+    "templatePresets": "टेम्पलेट प्रीसेट",
+    "presetHugo": "Hugo",
+    "presetHexo": "Hexo",
+    "presetAstro": "Astro",
+    "presetCustom": "कस्टम",
+    "fileNamePattern": "फ़ाइल नाम पैटर्न",
+    "fileNamePreset": "नाम प्रीसेट",
+    "fileNamePreview": "पूर्वावलोकन",
+    "presetSimple": "सरल (फ़ाइलनाम)",
+    "presetDateSlug": "दिनांक + Slug",
+    "presetDateFilename": "दिनांक + फ़ाइलनाम",
+    "presetYearMonth": "वर्ष/माह/Slug",
+    "fileNameVariables": "चर: {{date}}, {{year}}, {{month}}, {{day}}, {{slug}}, {{filename}}, {{title}}",
+    "rssSection": "RSS फ़ीड",
+    "rssEnable": "RSS फ़ीड जनरेट करें",
+    "rssEnableHint": "प्रकाशन करते समय feed.xml स्वचालित रूप से अपडेट करें",
+    "rssFeedPath": "फ़ीड फ़ाइल पथ",
+    "rssFeedPathPlaceholder": "feed.xml",
+    "rssSiteUrl": "साइट URL",
+    "rssSiteUrlPlaceholder": "https://myblog.com",
+    "rssFeedTitle": "फ़ीड शीर्षक",
+    "rssFeedTitlePlaceholder": "मेरा ब्लॉग",
+    "rssFeedDescription": "फ़ीड विवरण",
+    "rssFeedDescriptionPlaceholder": "लेख जिनके बारे में...",
+    "rssLanguage": "भाषा",
+    "rssAuthorName": "लेखक",
+    "rssAuthorNamePlaceholder": "जॉन डो",
+    "rssMaxItems": "फ़ीड में अधिकतम आइटम",
+    "rssIncludeFullContent": "फ़ीड में पूर्ण लेख सामग्री शामिल करें",
+    "rssFeedEndpoint": "RSS फ़ीड Endpoint",
+    "rssFeedEndpointPlaceholder": "https://api.example.com/rss",
+    "rssUpdateFailed": "RSS फ़ीड अपडेट विफल",
+    "progressTitle": "प्रकाशित हो रहा है...",
+    "progressPublishing": "अपलोड हो रहा है...",
+    "progressRss": "RSS अपडेट हो रहा है...",
+    "progressDone": "पूर्ण",
+    "progressFailed": "विफल"
+  },
+  "update": {
+    "title": "संस्करण जानकारी",
+    "currentVersion": "वर्तमान संस्करण",
+    "latestVersion": "नवीनतम संस्करण",
+    "checking": "अपडेट की जाँच हो रही है...",
+    "upToDate": "आप नवीनतम संस्करण चला रहे हैं!",
+    "checkFailed": "अपडेट जाँच विफल",
+    "releaseNotes": "नया क्या है",
+    "noAsset": "आपके प्लेटफ़ॉर्म के लिए कोई इंस्टॉलर उपलब्ध नहीं है। कृपया मैन्युअल रूप से डाउनलोड करें।",
+    "upgrade": "अपग्रेड करें",
+    "retry": "पुनः प्रयास करें",
+    "viewRelease": "रिलीज़ देखें",
+    "downloading": "डाउनलोड हो रहा है...",
+    "downloadFailed": "डाउनलोड विफल",
+    "installLaunched": "इंस्टॉलर लॉन्च हो गया। Moraya शीघ्र ही बंद होगा।",
+    "newVersionAvailable": "नया संस्करण उपलब्ध है! अपग्रेड करने के लिए क्लिक करें।"
+  },
+  "errors": {
+    "aiNotConfigured": "AI कॉन्फ़िगर नहीं है।",
+    "aiRequestFailed": "AI अनुरोध विफल",
+    "chatRequestFailed": "चैट अनुरोध विफल",
+    "unknownCommand": "अज्ञात AI कमांड: {command}"
+  },
+  "welcome": {
+    "title": "Moraya में आपका स्वागत है",
+    "subtitle": "एक न्यूनतम, AI-सक्षम Markdown एडिटर।",
+    "featuresTitle": "विशेषताएँ",
+    "featureWysiwyg": "**WYSIWYG** Markdown संपादन",
+    "featureMath": "गणित सूत्र समर्थन: $E = mc^2$",
+    "featureThemes": "डार्क और लाइट थीम",
+    "featureAI": "AI-संचालित लेखन सहायक",
+    "featureMCP": "प्रकाशन और सिंक के लिए MCP प्रोटोकॉल",
+    "featureLightweight": "हल्का (~5MB इंस्टॉलर)",
+    "mathTitle": "गणित उदाहरण",
+    "codeTitle": "कोड उदाहरण",
+    "tableTitle": "तालिका उदाहरण",
+    "tableFeature": "विशेषता",
+    "tableStatus": "स्थिति",
+    "tableDone": "पूर्ण",
+    "startWriting": "यहाँ अपने विचार लिखना शुरू करें...",
+    "tip": "**सुझाव:** AI सहायक पैनल टॉगल करने के लिए `Cmd+I` दबाएँ।",
+    "shortcutsTitle": "कीबोर्ड शॉर्टकट",
+    "shortcutSave": "`Cmd+S` — दस्तावेज़ सहेजें",
+    "shortcutOpen": "`Cmd+O` — फ़ाइल खोलें",
+    "shortcutNew": "`Cmd+N` — नया दस्तावेज़",
+    "shortcutToggleMode": "`Cmd+/` — विज़ुअल/सोर्स मोड टॉगल करें",
+    "shortcutSplitMode": "`Cmd+Shift+/` — स्प्लिट मोड टॉगल करें",
+    "shortcutSidebar": "`Cmd+\\` — साइडबार टॉगल करें",
+    "shortcutSettings": "`Cmd+,` — सेटिंग्स खोलें",
+    "shortcutAI": "`Cmd+Shift+I` — AI पैनल टॉगल करें",
+    "shortcutExport": "`Cmd+Shift+E` — HTML के रूप में निर्यात करें",
+    "blockquoteTitle": "उद्धरण उदाहरण",
+    "blockquoteContent": "लिखने की कला उसे खोजने की कला है जिसमें आप विश्वास करते हैं। — गुस्ताव फ़्लॉबेर",
+    "advancedMathTitle": "उन्नत गणित",
+    "listTitle": "नेस्टेड सूची उदाहरण",
+    "listItem1": "शुरुआत करें",
+    "listItem1a": "ऐप्लिकेशन इंस्टॉल करें",
+    "listItem1b": "अपनी प्राथमिकताएँ कॉन्फ़िगर करें",
+    "listItem1c": "लिखना शुरू करें",
+    "listItem2": "उन्नत विशेषताएँ",
+    "listItem2a": "AI-संचालित लेखन सहायता",
+    "listItem2b": "MCP प्रोटोकॉल एकीकरण",
+    "listItem2c": "विभिन्न निर्यात प्रारूप",
+    "listItem3": "अनुकूलन",
+    "listItem3a": "थीम और रूप-रंग",
+    "listItem3b": "एडिटर सेटिंग्स",
+    "listItem3c": "कीबोर्ड शॉर्टकट",
+    "paragraphTitle": "Moraya के बारे में",
+    "paragraph1": "Moraya एक आधुनिक, हल्का Markdown एडिटर है जो Rust और Tauri के साथ बनाया गया है। यह टेक्स्ट एडिटर की सरलता को WYSIWYG इंटरफ़ेस की शक्ति के साथ जोड़ता है, आपको दोनों दुनिया का सर्वश्रेष्ठ देता है।",
+    "paragraph2": "\"Moraya\" नाम \"mora\" (लैटिन में \"एक क्षण\") और \"ya\" (चीनी में \"सुंदरता\") को मिलाकर बना है, जो लेखन के सुंदर क्षणों का प्रतीक है।",
+    "paragraph3": "चाहे आप तकनीकी दस्तावेज़, ब्लॉग पोस्ट, शैक्षणिक पेपर, या व्यक्तिगत नोट्स लिख रहे हों, Moraya एक विचलन-मुक्त वातावरण प्रदान करता है जो आपको सबसे महत्वपूर्ण चीज़ पर ध्यान केंद्रित करने देता है — आपकी सामग्री।",
+    "hrTitle": "क्षैतिज रेखाएँ",
+    "hrDescription": "आप अपने दस्तावेज़ के विभिन्न अनुभागों को अलग करने के लिए क्षैतिज रेखाओं का उपयोग कर सकते हैं:"
+  },
+  "templates": {
+    "gallery": {
+      "title": "AI सहायक",
+      "search": "टेम्पलेट खोजें...",
+      "back": "पीछे",
+      "start": "शुरू करें"
+    },
+    "error": {
+      "noDocument": "कृपया पहले कुछ सामग्री लिखें",
+      "noSelection": "कृपया पहले कुछ पाठ चुनें",
+      "noContent": "कृपया पहले कुछ सामग्री लिखें या पाठ चुनें"
+    },
+    "writing": {
+      "name": "लेखन",
+      "desc": "AI-संचालित लेखन, संपादन और सारांश",
+      "free": {
+        "name": "स्वतंत्र लेखन",
+        "desc": "विषय दर्ज करें और AI सामग्री जनरेट करे",
+        "hint": "लेखन विषय या निर्देश दर्ज करें..."
+      },
+      "continue": {
+        "name": "लिखना जारी रखें",
+        "desc": "दस्तावेज़ के अंत से जारी रखें"
+      },
+      "outline": {
+        "name": "रूपरेखा बनाएँ",
+        "desc": "लेख की रूपरेखा तैयार करें",
+        "hint": "लेख का विषय दर्ज करें..."
+      },
+      "summarize": {
+        "name": "सारांश",
+        "desc": "चयनित पाठ या पूरे दस्तावेज़ का सारांश बनाएँ"
+      },
+      "improve": {
+        "name": "सुधारें",
+        "desc": "लेखन की गुणवत्ता बढ़ाएँ"
+      },
+      "simplify": {
+        "name": "सरल करें",
+        "desc": "जटिल पाठ को सरल बनाएँ"
+      },
+      "expand": {
+        "name": "विस्तार करें",
+        "desc": "अधिक विवरण और स्पष्टीकरण जोड़ें"
+      },
+      "fixGrammar": {
+        "name": "व्याकरण ठीक करें",
+        "desc": "व्याकरण और वर्तनी की त्रुटियाँ ठीक करें"
+      }
+    },
+    "translation": {
+      "name": "अनुवाद",
+      "desc": "बहु-भाषा अनुवाद और स्थानीयकरण",
+      "auto": {
+        "name": "स्मार्ट अनुवाद",
+        "desc": "भाषा स्वतः पहचानें और अनुवाद करें"
+      },
+      "toTarget": {
+        "name": "अनुवाद करें...",
+        "desc": "लक्ष्य भाषा चुनें और अनुवाद करें"
+      },
+      "explain": {
+        "name": "अनुवाद और व्याख्या",
+        "desc": "शब्द-दर-शब्द व्याख्या सहित अनुवाद करें"
+      },
+      "polish": {
+        "name": "स्थानीयकरण",
+        "desc": "अनुवाद को अधिक स्वाभाविक बनाएँ"
+      },
+      "compare": {
+        "name": "बहु-संस्करण",
+        "desc": "विभिन्न अनुवाद शैलियाँ प्रदान करें"
+      },
+      "targetLang": "लक्ष्य भाषा",
+      "lang": {
+        "en": "अंग्रेज़ी",
+        "zhCN": "सरलीकृत चीनी",
+        "zhHant": "पारंपरिक चीनी",
+        "ja": "जापानी",
+        "ko": "कोरियाई",
+        "ar": "अरबी",
+        "de": "जर्मन",
+        "es": "स्पेनिश",
+        "fr": "फ़्रेंच",
+        "hi": "हिन्दी",
+        "pt": "पुर्तगाली",
+        "ru": "रूसी"
+      }
+    },
+    "student": {
+      "name": "अध्ययन सहायक",
+      "desc": "सीखना, नोट्स लेना, अवधारणा समझना",
+      "explain": {
+        "name": "अवधारणा समझाएँ",
+        "desc": "किसी अवधारणा को सरल शब्दों में समझाएँ",
+        "hint": "समझाने के लिए अवधारणा दर्ज करें..."
+      },
+      "notes": {
+        "name": "अध्ययन नोट्स",
+        "desc": "सामग्री को संरचित नोट्स में व्यवस्थित करें"
+      },
+      "flashcard": {
+        "name": "फ़्लैशकार्ड",
+        "desc": "सामग्री से प्रश्न-उत्तर फ़्लैशकार्ड निकालें"
+      },
+      "mindmap": {
+        "name": "माइंड मैप",
+        "desc": "Markdown माइंड मैप जनरेट करें"
+      },
+      "essayOutline": {
+        "name": "निबंध रूपरेखा",
+        "desc": "निबंध की रूपरेखा तैयार करें",
+        "hint": "निबंध का विषय दर्ज करें..."
+      },
+      "reading": {
+        "name": "पठन विश्लेषण",
+        "desc": "पाठ सामग्री का गहन विश्लेषण"
+      },
+      "formula": {
+        "name": "सूत्र व्युत्पन्न",
+        "desc": "गणित सूत्र व्युत्पन्न चरण दिखाएँ",
+        "hint": "सूत्र का नाम या सामग्री दर्ज करें..."
+      },
+      "compare": {
+        "name": "अवधारणा तुलना",
+        "desc": "दो अवधारणाओं की साथ-साथ तुलना करें",
+        "hint": "दो अवधारणाएँ दर्ज करें (जैसे, TCP vs UDP)..."
+      }
+    },
+    "kids": {
+      "name": "बच्चों की शिक्षा",
+      "desc": "कहानियाँ, मज़ेदार शिक्षा, इंटरैक्टिव खेल",
+      "story": {
+        "name": "बच्चों की कहानी",
+        "desc": "कीवर्ड से कहानी जनरेट करें",
+        "hint": "कहानी के कीवर्ड दर्ज करें (जैसे, खरगोश जंगल साहसिक)..."
+      },
+      "poem": {
+        "name": "बालगीत",
+        "desc": "किसी विषय पर तुकबंदी बनाएँ",
+        "hint": "विषय दर्ज करें..."
+      },
+      "why": {
+        "name": "क्यों? क्यों? क्यों?",
+        "desc": "AI अंतहीन 'क्यों' सवालों के जवाब देता है"
+      },
+      "alphabet": {
+        "name": "वर्णमाला मज़ा",
+        "desc": "इंटरैक्टिव अक्षर सीखना"
+      },
+      "mathGame": {
+        "name": "गणित खेल",
+        "desc": "मज़ेदार इंटरैक्टिव अंकगणित"
+      },
+      "riddle": {
+        "name": "पहेलियाँ",
+        "desc": "AI बच्चों के लिए पहेलियाँ देता है"
+      },
+      "drawText": {
+        "name": "चित्र कथा",
+        "desc": "एक दृश्य का वर्णन करें, AI कहानी लिखे",
+        "hint": "एक दृश्य का वर्णन करें..."
+      },
+      "knowledge": {
+        "name": "रोचक तथ्य",
+        "desc": "प्रकृति, विज्ञान, पशु विश्वकोश"
+      }
+    },
+    "marketing": {
+      "name": "मार्केटिंग",
+      "desc": "सोशल मीडिया, विज्ञापन और SEO कॉपीराइटिंग",
+      "xiaohongshu": {
+        "name": "Xiaohongshu पोस्ट",
+        "desc": "लाइफ़स्टाइल-समीक्षा शैली की पोस्ट जनरेट करें",
+        "hint": "उत्पाद या विषय दर्ज करें..."
+      },
+      "twitter": {
+        "name": "Twitter/X पोस्ट",
+        "desc": "ट्वीट-शैली सामग्री जनरेट करें",
+        "hint": "विषय दर्ज करें..."
+      },
+      "slogan": {
+        "name": "विज्ञापन नारा",
+        "desc": "आकर्षक ब्रांड नारे जनरेट करें",
+        "hint": "ब्रांड या उत्पाद दर्ज करें..."
+      },
+      "email": {
+        "name": "मार्केटिंग ईमेल",
+        "desc": "दर्शकों और टोन के अनुसार ईमेल कॉन्फ़िगर करें",
+        "hint": "ईमेल सामग्री का वर्णन करें..."
+      },
+      "seoArticle": {
+        "name": "SEO लेख",
+        "desc": "SEO-अनुकूलित सामग्री जनरेट करें",
+        "hint": "लक्ष्य कीवर्ड दर्ज करें..."
+      },
+      "productDesc": {
+        "name": "उत्पाद विवरण",
+        "desc": "आकर्षक उत्पाद कॉपी जनरेट करें",
+        "hint": "उत्पाद जानकारी दर्ज करें..."
+      },
+      "tone": "टोन",
+      "tone.formal": "औपचारिक",
+      "tone.friendly": "मित्रवत",
+      "tone.urgent": "तत्काल",
+      "tone.humorous": "हास्यपूर्ण"
+    },
+    "professional": {
+      "name": "व्यावसायिक",
+      "desc": "ईमेल, रिपोर्ट, बैठक नोट्स",
+      "email": {
+        "name": "व्यावसायिक ईमेल",
+        "desc": "परिदृश्य और टोन के अनुसार ईमेल कॉन्फ़िगर करें",
+        "hint": "ईमेल सामग्री का वर्णन करें..."
+      },
+      "meeting": {
+        "name": "बैठक नोट्स",
+        "desc": "नोट्स को औपचारिक कार्यवृत्त में व्यवस्थित करें"
+      },
+      "report": {
+        "name": "कार्य रिपोर्ट",
+        "desc": "साप्ताहिक/मासिक/तिमाही रिपोर्ट जनरेट करें",
+        "hint": "रिपोर्ट के मुख्य बिंदु दर्ज करें..."
+      },
+      "review": {
+        "name": "कोड रिव्यू",
+        "desc": "कोड की समीक्षा करें और सुधार सुझाएँ"
+      },
+      "resume": {
+        "name": "रिज़्यूमे पॉलिश",
+        "desc": "STAR विधि से रिज़्यूमे अनुकूलित करें"
+      },
+      "prd": {
+        "name": "PRD दस्तावेज़",
+        "desc": "उत्पाद आवश्यकता दस्तावेज़ जनरेट करें",
+        "hint": "सुविधा विवरण दर्ज करें..."
+      },
+      "tone": "टोन",
+      "tone.concise": "संक्षिप्त",
+      "reportType": "रिपोर्ट प्रकार",
+      "reportType.weekly": "साप्ताहिक",
+      "reportType.monthly": "मासिक",
+      "reportType.quarterly": "तिमाही"
+    },
+    "personal": {
+      "name": "व्यक्तिगत विकास",
+      "desc": "डायरी, लक्ष्य, निर्णय लेना",
+      "journal": {
+        "name": "डायरी सहायक",
+        "desc": "मार्गदर्शित डायरी लेखन और चिंतन",
+        "hint": "आज क्या हुआ?..."
+      },
+      "goal": {
+        "name": "लक्ष्य विभाजन",
+        "desc": "लक्ष्यों को कार्रवाई योग्य चरणों में विभाजित करें",
+        "hint": "अपना लक्ष्य दर्ज करें..."
+      },
+      "habit": {
+        "name": "आदत निर्माता",
+        "desc": "आदत-निर्माण योजना बनाएँ",
+        "hint": "वह आदत दर्ज करें जो आप बनाना चाहते हैं..."
+      },
+      "decision": {
+        "name": "निर्णय विश्लेषण",
+        "desc": "निर्णयों के लिए लाभ/हानि विश्लेषण",
+        "hint": "अपने विकल्पों का वर्णन करें..."
+      },
+      "bookNotes": {
+        "name": "पुस्तक नोट्स",
+        "desc": "सामग्री को पठन नोट्स में व्यवस्थित करें"
+      }
+    },
+    "games_cn": {
+      "name": "चीनी खेल",
+      "desc": "कविता खेल, मुहावरा श्रृंखला, पहेलियाँ",
+      "feihualing": {
+        "name": "कविता चुनौती",
+        "desc": "दिए गए अक्षर वाली कविताएँ बारी-बारी सुनाएँ"
+      },
+      "chengyuChain": {
+        "name": "मुहावरा श्रृंखला",
+        "desc": "अंतिम/पहले अक्षर से मुहावरे जोड़ें"
+      },
+      "riddle": {
+        "name": "पहेलियाँ",
+        "desc": "AI सुराग देता है, आप उत्तर बताएँ"
+      },
+      "lanternRiddle": {
+        "name": "लालटेन पहेलियाँ",
+        "desc": "अक्षर-आधारित पहेली पज़ल"
+      },
+      "poetryFill": {
+        "name": "कविता रिक्त स्थान",
+        "desc": "कविताओं से छूटे शब्द भरें"
+      },
+      "storyChain": {
+        "name": "कहानी श्रृंखला",
+        "desc": "बारी-बारी कहानी आगे बढ़ाएँ"
+      },
+      "characterGame": {
+        "name": "अक्षर अनुमान",
+        "desc": "सुरागों से चीनी अक्षर का अनुमान लगाएँ"
+      },
+      "brainTeaser": {
+        "name": "दिमागी पहेलियाँ",
+        "desc": "मज़ेदार दिमागी पहेली पज़ल"
+      },
+      "couplet": {
+        "name": "दोहे",
+        "desc": "AI पहली पंक्ति देता है, आप मिलाएँ"
+      },
+      "wordExplain": {
+        "name": "शब्द बूझो",
+        "desc": "AI वर्णन करता है, आप शब्द बताएँ"
+      },
+      "ancientText": {
+        "name": "शास्त्रीय चीनी",
+        "desc": "शास्त्रीय को आधुनिक चीनी में अनुवाद करें"
+      },
+      "homophone": {
+        "name": "समध्वनि शब्द",
+        "desc": "समध्वनि श्लेष चुनौती"
+      }
+    },
+    "games_en": {
+      "name": "अंग्रेज़ी खेल",
+      "desc": "Word Chain, Hangman, Trivia और अधिक",
+      "wordChain": {
+        "name": "Word Chain",
+        "desc": "अंतिम अक्षर से अगला शब्द शुरू करें"
+      },
+      "twentyQuestions": {
+        "name": "20 Questions",
+        "desc": "20 हाँ/नहीं सवालों में वस्तु का अनुमान लगाएँ"
+      },
+      "hangman": {
+        "name": "Hangman",
+        "desc": "अक्षर-दर-अक्षर शब्द का अनुमान लगाएँ"
+      },
+      "storyBuilder": {
+        "name": "Story Builder",
+        "desc": "बारी-बारी कहानी बनाएँ"
+      },
+      "wordAssociation": {
+        "name": "Word Association",
+        "desc": "मुक्त साहचर्य शब्द श्रृंखला"
+      },
+      "riddles": {
+        "name": "Riddles",
+        "desc": "अंग्रेज़ी पहेलियाँ हल करें"
+      },
+      "trivia": {
+        "name": "Trivia Quiz",
+        "desc": "सामान्य ज्ञान प्रश्न"
+      },
+      "rhymeTime": {
+        "name": "Rhyme Time",
+        "desc": "तुकबंदी शब्दों से कहानियाँ बनाएँ"
+      },
+      "acronym": {
+        "name": "Acronym Game",
+        "desc": "यादृच्छिक संक्षिप्त रूपों के अर्थ बनाएँ"
+      },
+      "taboo": {
+        "name": "Taboo",
+        "desc": "वर्जित शब्दों के बिना वर्णन करें"
+      },
+      "sentenceBuilder": {
+        "name": "Sentence Builder",
+        "desc": "दिए गए शब्दों से सबसे लंबा वाक्य बनाएँ"
+      },
+      "emojiStory": {
+        "name": "Emoji Story",
+        "desc": "इमोजी का उपयोग करके कहानियाँ सुनाएँ"
+      }
+    },
+    "quiz": {
+      "name": "प्रश्नोत्तरी और अभ्यास",
+      "desc": "AI-जनरेटेड प्रश्न स्कोरिंग सहित",
+      "practice": {
+        "name": "सार्वभौमिक प्रश्नोत्तरी",
+        "desc": "विषय और कठिनाई चुनें, AI आपसे प्रश्न पूछता है"
+      },
+      "direction": "विषय",
+      "dir": {
+        "programming": "प्रोग्रामिंग",
+        "math": "गणित",
+        "english": "अंग्रेज़ी",
+        "science": "विज्ञान",
+        "history": "इतिहास",
+        "interview": "साक्षात्कार तैयारी",
+        "custom": "कस्टम विषय"
+      },
+      "difficulty": "कठिनाई",
+      "diff": {
+        "easy": "आसान",
+        "medium": "मध्यम",
+        "hard": "कठिन"
+      }
+    }
+  },
+  "plugins": {
+    "tabs": {
+      "installed": "इंस्टॉल है",
+      "market": "मार्केटप्लेस"
+    },
+    "installed": {
+      "empty": "अभी कोई Plugin इंस्टॉल नहीं है।"
+    },
+    "sandbox": {
+      "label": "Sandbox स्तर",
+      "sandbox": "Sandboxed (JS)",
+      "local": "लोकल (नेटवर्क रहित)",
+      "system": "सिस्टम (नेटवर्क एक्सेस)"
+    },
+    "permissions": {
+      "label": "अनुमतियाँ"
+    },
+    "market": {
+      "search": "Plugin खोजें...",
+      "refresh": "ताज़ा करें",
+      "catAll": "सभी",
+      "cached": "कैश्ड परिणाम दिखा रहे हैं",
+      "loading": "मार्केटप्लेस लोड हो रहा है...",
+      "empty": "कोई Plugin नहीं मिला",
+      "install": "इंस्टॉल करें",
+      "installed": "इंस्टॉल है",
+      "installing": "इंस्टॉल हो रहा है..."
+    },
+    "install": {
+      "fromFile": ".zip से इंस्टॉल करें",
+      "urlPlaceholder": "GitHub रिपो URL (https://github.com/…)",
+      "validate": "आयात करें",
+      "confirmUrl": "URL से Plugin इंस्टॉल करें?",
+      "author": "लेखक",
+      "permissions": "अनुमतियाँ",
+      "noPermissions": "कोई अनुमति नहीं"
+    },
+    "verified": "सत्यापित",
+    "enable": "सक्षम करें",
+    "disable": "अक्षम करें",
+    "uninstall": "अनइंस्टॉल करें",
+    "changelog": "परिवर्तन लॉग",
+    "viewSource": "स्रोत",
+    "blacklisted": "ब्लैकलिस्ट किया गया",
+    "blacklistWarning": "सुरक्षा समस्या के कारण इस Plugin को ब्लैकलिस्ट किया गया है। कृपया इसे अनइंस्टॉल करें।",
+    "processError": "Plugin प्रक्रिया क्रैश हो गई। पुनः आरंभ करने के लिए टॉगल करें।",
+    "error": {
+      "platformNotSupported": "आपके प्लेटफ़ॉर्म के लिए कोई डाउनलोड उपलब्ध नहीं है।"
+    }
+  },
+  "transcription": {
+    "title": "ट्रांसक्रिप्शन",
+    "recording": "रिकॉर्डिंग",
+    "connecting": "कनेक्ट हो रहा है...",
+    "paused": "रुका हुआ",
+    "stopping": "रोक रहा है...",
+    "idle": "तैयार",
+    "start": "शुरू करें",
+    "stop": "रोकें",
+    "pause": "रोकें",
+    "resume": "जारी रखें",
+    "back": "चैट पर वापस जाएँ",
+    "emptyIdle": "रिकॉर्डिंग और ट्रांसक्रिप्शन शुरू करने के लिए शुरू करें पर क्लिक करें।",
+    "emptyWaiting": "भाषण की प्रतीक्षा...",
+    "summarizeWithAI": "AI से सारांश बनाएँ",
+    "saveAsDoc": "दस्तावेज़ के रूप में सहेजें",
+    "summarizePrompt": "कृपया निम्नलिखित ट्रांसक्रिप्ट से बैठक का सारांश तैयार करें। मुख्य चर्चा बिंदुओं, लिए गए निर्णयों और कार्रवाई मदों की पहचान करें। Markdown के रूप में प्रारूपित करें।",
+    "noSpeechConfig": "कोई स्पीच प्रदाता कॉन्फ़िगर नहीं है। कृपया सेटिंग्स → आवाज़ में एक जोड़ें।",
+    "noSpeechConfigHint": "स्पीच प्रदाता (जैसे Deepgram) जोड़ने के लिए सेटिंग्स → आवाज़ पर जाएँ।",
+    "goToVoiceSettings": "आवाज़ सेटिंग्स खोलें"
+  },
+  "outline": {
+    "empty": "कोई शीर्षक नहीं"
+  }
+}

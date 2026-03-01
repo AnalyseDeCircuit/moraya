@@ -1,0 +1,1337 @@
+{
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "connect": "اتصال",
+    "disconnect": "قطع الاتصال",
+    "insert": "إدراج",
+    "replace": "استبدال",
+    "copy": "نسخ",
+    "edit": "تحرير",
+    "delete": "حذف",
+    "browse": "تغيير",
+    "clear": "إعادة تعيين",
+    "play": "تشغيل",
+    "stop": "إيقاف",
+    "untitled": "بدون عنوان"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "tabs": {
+      "general": "عام",
+      "editor": "المحرر",
+      "appearance": "المظهر",
+      "ai": "AI",
+      "mcp": "MCP",
+      "image": "الصور",
+      "publish": "النشر",
+      "permissions": "الصلاحيات",
+      "voice": "الصوت",
+      "plugins": "الإضافات"
+    },
+    "language": {
+      "label": "اللغة",
+      "system": "اتباع النظام"
+    },
+    "theme": {
+      "label": "السمة",
+      "system": "اتباع النظام",
+      "light": "فاتح",
+      "dark": "داكن"
+    },
+    "appearance": {
+      "themeSection": "السمة",
+      "darkModeSection": "الوضع الداكن",
+      "fontSection": "الخط",
+      "separateDarkTheme": "استخدام سمة منفصلة للوضع الداكن",
+      "darkTheme": "سمة الوضع الداكن",
+      "darkModeLabel": "المظهر"
+    },
+    "fontSize": {
+      "label": "حجم الخط"
+    },
+    "autoSave": {
+      "label": "الحفظ التلقائي",
+      "interval": "فترة الحفظ التلقائي"
+    },
+    "rememberLastFolder": "تذكر آخر مجلد مفتوح",
+    "editor": {
+      "lineWidth": "عرض سطر المحرر",
+      "tabSize": "حجم المسافة البادئة",
+      "showLineNumbers": "عرض أرقام الأسطر في وضع المصدر"
+    },
+    "version": "Moraya v{version}",
+    "permissions": {
+      "mcpTitle": "صلاحيات MCP",
+      "aiTitle": "إعدادات AI",
+      "aiMaxTokens": "الحد الأقصى لرموز الإخراج",
+      "aiMaxTokensHint": "الحد الأقصى لعدد الرموز التي يمكن أن يولدها AI لكل استجابة. القيم الأعلى تسمح باستجابات أطول واستدعاءات أدوات أكثر، لكنها تكلف أكثر.",
+      "aiRulesMaxChars": "الحد الأقصى لأحرف ملف القواعد",
+      "aiRulesMaxCharsHint": "الحد الأقصى للأحرف المقروءة من ملف قواعد MORAYA.md. قم بزيادته لملفات القواعد الكبيرة. المزيد من الأحرف = المزيد من الرموز لكل طلب.",
+      "aiToolResultMaxChars": "الحد الأقصى لأحرف نتيجة الأداة",
+      "aiToolResultMaxCharsHint": "الحد الأقصى للأحرف المحتفظ بها من كل نتيجة أداة MCP. القيم الأكبر تحافظ على تفاصيل أكثر لكنها تستهلك سياقاً أكثر.",
+      "aiMaxToolRounds": "الحد الأقصى لجولات استدعاء الأدوات",
+      "aiMaxToolRoundsHint": "الحد الأقصى لعدد جولات استدعاء الأدوات التي يمكن أن يقوم بها AI في دورة محادثة واحدة. قم بزيادته للمهام المعقدة متعددة الخطوات."
+    },
+    "voice": {
+      "providers": "مزودو خدمة التعرف على الكلام",
+      "addProvider": "إضافة مزود",
+      "editProvider": "تعديل المزود",
+      "noProviders": "لم يتم تكوين أي مزود للتعرف على الكلام.",
+      "provider": "المزود",
+      "apiKey": "مفتاح API",
+      "apiKeyOptional": "اختياري لـ AWS (استخدم مفتاح الوصول بدلاً منه)",
+      "awsAccessKey": "معرف مفتاح وصول AWS",
+      "awsSecretKey": "مفتاح AWS السري",
+      "region": "المنطقة",
+      "model": "النموذج",
+      "modelPlaceholder": "أدخل اسم النموذج",
+      "endpointIdPlaceholder": "أدخل معرف نقطة نهاية الاستدلال",
+      "language": "اللغة",
+      "langAuto": "كشف تلقائي",
+      "langMulti": "متعدد اللغات",
+      "baseUrl": "عنوان WebSocket مخصص",
+      "testConnection": "اختبار الاتصال",
+      "testing": "جارٍ الاختبار...",
+      "testOk": "متصل",
+      "testFailed": "فشل الاتصال",
+      "setActive": "تعيين كافتراضي",
+      "active": "الافتراضي",
+      "custom": "مخصص",
+      "storage": "التخزين",
+      "recordingBackupDir": "نسخ احتياطي للتسجيل",
+      "recordingBackupHint": "حفظ التسجيلات الكاملة كملفات WAV بعد كل جلسة.",
+      "voiceSyncDir": "مجلد مزامنة ملفات الصوت",
+      "voiceSyncHint": "مزامنة ملفات الصوت عبر التخزين السحابي (مثل iCloud أو Dropbox). استخدم زر تغيير لاختيار مجلد — سيتم ترحيل الملفات الموجودة تلقائياً.",
+      "syncDefault": "بيانات التطبيق (افتراضي)",
+      "disabled": "معطل",
+      "migratingProfiles": "جارٍ الترحيل...",
+      "migrationFailed": "فشل الترحيل",
+      "profiles": "ملفات تعريف الصوت",
+      "noProfiles": "لا توجد ملفات تعريف صوتية بعد. يتم إنشاؤها تلقائياً بعد جلسات النسخ.",
+      "naming": {
+        "male": "ذكر {n}",
+        "female": "أنثى {n}",
+        "bystander": "متفرج {n}",
+        "speaker": "متحدث {n}"
+      }
+    }
+  },
+  "titlebar": {
+    "unsaved": "غير محفوظ",
+    "minimize": "تصغير",
+    "maximize": "تكبير",
+    "close": "إغلاق"
+  },
+  "sidebar": {
+    "title": "المستكشف",
+    "openFolder": "فتح مجلد",
+    "noFolder": "لا يوجد مجلد مفتوح",
+    "createKB": "إنشاء قاعدة معرفة",
+    "emptyDir": "لا توجد ملفات في هذا المجلد",
+    "kbSettings": "إعدادات قاعدة المعرفة",
+    "treeView": "عرض شجري",
+    "listView": "عرض قائمة",
+    "search": "البحث في الملفات...",
+    "contextMenu": {
+      "newFile": "ملف جديد",
+      "searchFiles": "بحث",
+      "refresh": "تحديث",
+      "rename": "إعادة تسمية",
+      "duplicate": "إنشاء نسخة",
+      "delete": "حذف",
+      "copyPath": "نسخ المسار",
+      "revealInFinder": "عرض في Finder"
+    },
+    "newFilePrompt": "أدخل اسم الملف",
+    "renamePrompt": "أدخل الاسم الجديد",
+    "deleteConfirm": "هل أنت متأكد من حذف \"{name}\"؟ لا يمكن التراجع عن هذا الإجراء."
+  },
+  "statusbar": {
+    "words": "كلمات",
+    "characters": "أحرف",
+    "format": "Markdown",
+    "sourceMode": "المصدر",
+    "visualMode": "مرئي",
+    "splitMode": "مقسم",
+    "publishWorkflow": "سير عمل AI",
+    "aiTooltip": "AI"
+  },
+  "editor": {
+    "sourceMode": "وضع المصدر",
+    "visualMode": "الوضع المرئي",
+    "splitMode": "الوضع المقسم",
+    "unsavedTitle": "تغييرات غير محفوظة",
+    "unsavedNewDocMsg": "لديك محتوى غير محفوظ سيتم فقدانه. هل تريد حفظه أولاً؟",
+    "saveFirst": "حفظ",
+    "discardChanges": "عدم الحفظ"
+  },
+  "table": {
+    "insertRowAbove": "إدراج صف أعلاه",
+    "insertRowBelow": "إدراج صف أسفله",
+    "deleteRow": "حذف الصف",
+    "insertColLeft": "إدراج عمود يساراً",
+    "insertColRight": "إدراج عمود يميناً",
+    "deleteCol": "حذف العمود",
+    "alignLeft": "محاذاة لليسار",
+    "alignCenter": "محاذاة للوسط",
+    "alignRight": "محاذاة لليمين"
+  },
+  "knowledgeBase": {
+    "title": "قاعدة المعرفة",
+    "add": "إضافة قاعدة معرفة",
+    "remove": "إزالة",
+    "rename": "إعادة تسمية",
+    "manage": "إدارة قواعد المعرفة...",
+    "empty": "لم يتم تكوين قواعد معرفة",
+    "emptyHint": "أضف مجلداً كقاعدة معرفة للتبديل السريع.",
+    "deleteConfirm": "إزالة \"{name}\" من قواعد المعرفة؟ لن يتم حذف المجلد نفسه.",
+    "switchTo": "التبديل إلى قاعدة المعرفة",
+    "saveHint": "هذا المجلد ليس في قواعد المعرفة الخاصة بك.",
+    "saveAsKB": "حفظ كقاعدة معرفة"
+  },
+  "ai": {
+    "title": "مساعد AI",
+    "morayaMdActive": "قواعد MORAYA.md مفعلة لقاعدة المعرفة هذه",
+    "clearChat": "مسح المحادثة",
+    "unconfigured": "لم يتم تكوين AI.",
+    "unconfiguredHint": "افتح الإعدادات ({shortcut}) وقم بتكوين مفتاح API لتفعيل ميزات AI.",
+    "openSettings": "فتح إعدادات AI",
+    "openImageSettings": "فتح إعدادات AIGC",
+    "textAiLabel": "AI النصي (توليد الأوامر)",
+    "imageAiLabel": "AI الصور (توليد الصور)",
+    "welcomeTitle": "كيف يمكنني مساعدتك؟",
+    "welcomeHint": "اكتب رسالة أو استخدم {kbd} للأوامر",
+    "you": "أنت",
+    "assistant": "AI",
+    "typing": "يكتب...",
+    "placeholder": "اسأل AI أي شيء... (/ للأوامر)",
+    "placeholderSelection": "اسأل عن النص المحدد... (/ للأوامر)",
+    "send": "إرسال (⌘↵)",
+    "stop": "إيقاف (Esc)",
+    "interrupted": "تمت المقاطعة",
+    "insertToEditor": "إدراج في المحرر",
+    "replaceSelection": "استبدال التحديد",
+    "attachImage": "إرفاق صورة",
+    "attachImageMax": "الحد الأقصى {max} صور",
+    "removeImage": "إزالة الصورة",
+    "closePreview": "إغلاق المعاينة",
+    "moreActions": "المزيد من الإجراءات",
+    "voiceTranscription": "تفريغ صوتي بالـ AI",
+    "config": {
+      "title": "تكوين AI",
+      "provider": "المزود",
+      "apiKey": "مفتاح API",
+      "apiKeyPlaceholder": "أدخل مفتاح API لـ {provider}",
+      "apiKeyNotRequired": "غير مطلوب لـ Ollama",
+      "baseUrl": "عنوان URL الأساسي",
+      "model": "النموذج",
+      "modelPlaceholder": "أدخل اسم النموذج",
+      "maxTokens": "الحد الأقصى للرموز",
+      "temperature": "درجة الحرارة",
+      "testConnection": "اختبار الاتصال",
+      "testing": "جارٍ الاختبار...",
+      "connected": "متصل!",
+      "failed": "فشل"
+    },
+    "providers": {
+      "claude": "Anthropic Claude",
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "deepseek": "DeepSeek",
+      "ollama": "Ollama (محلي)",
+      "custom": "API مخصص",
+      "grok": "xAI Grok",
+      "mistral": "Mistral AI",
+      "glm": "Zhipu GLM",
+      "minimax": "MiniMax",
+      "doubao": "Doubao (ByteDance)"
+    },
+    "multiModel": {
+      "addModel": "+ إضافة نموذج",
+      "default": "الافتراضي",
+      "setDefault": "تعيين كافتراضي",
+      "noModels": "لم يتم تكوين نماذج AI",
+      "noModelsHint": "أضف نموذج AI لبدء استخدام ميزات AI.",
+      "noImageModels": "لم يتم تكوين نماذج الصور",
+      "noImageModelsHint": "أضف نموذج توليد صور لاستخدام ميزات صور AI."
+    },
+    "imageConfig": {
+      "title": "AI لتوليد الصور",
+      "provider": "المزود",
+      "providerOpenai": "OpenAI DALL-E",
+      "providerGrok": "Grok (xAI)",
+      "providerCustom": "مخصص (متوافق مع OpenAI)",
+      "apiKey": "مفتاح API",
+      "apiKeyPlaceholder": "أدخل مفتاح API للصور",
+      "baseUrl": "عنوان URL الأساسي",
+      "model": "النموذج",
+      "modelPlaceholder": "أدخل اسم النموذج",
+      "defaultSize": "الحجم الافتراضي",
+      "ratio": "نسبة العرض إلى الارتفاع",
+      "sizeLevel": "الحجم",
+      "size_large": "كبير",
+      "size_medium": "متوسط",
+      "size_small": "صغير",
+      "providerGemini": "Google Gemini Imagen",
+      "providerQwen": "Qwen (Alibaba)",
+      "providerDoubao": "Doubao (ByteDance)"
+    },
+    "commands": {
+      "write": "كتابة",
+      "writeDesc": "كتابة محتوى بناءً على طلبك",
+      "continue": "متابعة الكتابة",
+      "continueDesc": "المتابعة من حيث توقف النص",
+      "summarize": "تلخيص",
+      "summarizeDesc": "تلخيص النص المحدد",
+      "translate": "ترجمة",
+      "translateDesc": "ترجمة النص إلى لغة أخرى",
+      "improve": "تحسين",
+      "improveDesc": "تحسين جودة الكتابة",
+      "fixGrammar": "تصحيح القواعد",
+      "fixGrammarDesc": "تصحيح الأخطاء النحوية والإملائية",
+      "simplify": "تبسيط",
+      "simplifyDesc": "تبسيط النص المعقد",
+      "expand": "توسيع",
+      "expandDesc": "التوسع في الموضوع",
+      "outline": "إنشاء مخطط",
+      "outlineDesc": "إنشاء مخطط للمقال",
+      "explain": "شرح",
+      "explainDesc": "شرح النص المحدد"
+    },
+    "prompts": {
+      "emptyResponse": "لقد أعدت استجابة فارغة. يرجى متابعة المهمة: إما قم بإجراء استدعاء(ات) الأداة اللازمة، أو لخص ما تم إنجازه وأدرج أي عناصر متبقية. لا تُرجع رسالة فارغة.",
+      "emptyResponseContinue": "\n\nرسالتك الأخيرة كانت: \"{lastMessage}\"\nيرجى المتابعة من هناك.",
+      "truncationContinue": "تم قطع استجابتك السابقة بسبب حدود طول الإخراج. تم حفظ النص أعلاه. الآن يرجى إكمال المهمة بإجراء استدعاء(ات) الأداة اللازمة. لا تكرر المحتوى — استخدمه مباشرة في وسائط الأداة.",
+      "continuationPrompt": "يرجى المتابعة وإجراء استدعاء(ات) الأداة اللازمة لإكمال المهمة. لا تكرر ما قيل بالفعل — تابع مباشرة مع استدعاءات الأدوات.",
+      "mcpToolPrompt": "استخدم أداة {toolName} (من {serverName})"
+    },
+    "detection": {
+      "intentPrefixes": "سأقوم|أحتاج|يجب أن|دعني|أولاً|الآن|بعد ذلك",
+      "actionVerbs": "إنشاء|كتابة|قراءة|تحديث|رفع|توليد|جلب|التحقق|اختبار|استخدام|تنفيذ|إرسال|بحث|العثور|حفظ|حذف|تعديل|تكوين|تصدير|عرض",
+      "continuationPhrases": "أولاً|بعد ذلك|ثم|الآن",
+      "remainingPhrases": "المتبقي|التالي|الخطوة \\d+",
+      "unfinishedPhrases": "للقيام|TODO|الخطوة التالية|لم يتم بعد|معلق"
+    }
+  },
+  "mcp": {
+    "title": "خوادم MCP",
+    "tabs": {
+      "servers": "الخوادم",
+      "publish": "النشر",
+      "sync": "المزامنة",
+      "marketplace": "السوق"
+    },
+    "aiServices": {
+      "empty": "لا توجد خدمات أنشأها AI",
+      "hint": "يمكن لـ AI إنشاء خدمات MCP أثناء المحادثة. اطلب منه التفاعل مع API!",
+      "nodeRequired": "مطلوب Node.js 18+",
+      "checkingNode": "جارٍ التحقق من Node.js...",
+      "temp": "مؤقت",
+      "saved": "محفوظ",
+      "viewCode": "الكود",
+      "tools": "{count} أدوات",
+      "serviceCreated": "أنشأ AI الخدمة \"{name}\" مع {count} أدوات",
+      "serviceSaved": "تم حفظ الخدمة \"{name}\"",
+      "serviceRemoved": "تم إزالة الخدمة \"{name}\"",
+      "launchConfirmTitle": "تحذير أمان خدمة AI",
+      "launchConfirmMsg": "قام AI بإنشاء خدمة MCP تحتاج لتشغيل كود مُولَّد تلقائياً:\n  الخدمة: {name}\n  الأدوات: {tools}\n\nسيعمل هذا الكود في عملية Node.js محلية.\nيرجى التأكيد أنك تثق بكود هذه الخدمة المُولَّد بالـ AI.",
+      "launchConfirmOk": "تشغيل",
+      "launchConfirmCancel": "إلغاء"
+    },
+    "servers": {
+      "empty": "لم يتم تكوين خوادم MCP",
+      "localMcp": "MCP محلي",
+      "addServer": "إضافة خادم",
+      "addServerPlus": "+ إضافة خادم",
+      "connected": "متصل",
+      "disconnected": "غير متصل",
+      "serverName": "اسم الخادم",
+      "serverUrl": "عنوان URL للخادم (مثال: http://localhost:3000/mcp)",
+      "http": "HTTP",
+      "sse": "SSE (أحداث مُرسَلة من الخادم)",
+      "stdio": "stdio (عملية محلية)",
+      "command": "الأمر",
+      "commandPlaceholder": "الأمر (مثال: npx، node، python)",
+      "argsPlaceholder": "الوسائط (مثال: -y @modelcontextprotocol/server-filesystem /path)",
+      "envPlaceholder": "ENV_KEY=value (واحد لكل سطر)",
+      "presets": "MCP عن بُعد",
+      "presetsHint": "إضافة خوادم MCP شائعة بنقرة واحدة",
+      "presetDesc": {
+        "filesystem": "قراءة وبحث وإدارة الملفات المحلية",
+        "fetch": "جلب صفحات الويب وتحويلها إلى Markdown",
+        "git": "قراءة وبحث مستودعات Git",
+        "memory": "رسم بياني معرفي دائم لذاكرة AI"
+      },
+      "formMode": "نموذج",
+      "jsonMode": "JSON",
+      "jsonPlaceholder": "الصق تكوين JSON، مثال:\n{\n  \"mcpServers\": {\n    \"name\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@.../server-xxx\"]\n    }\n  }\n}",
+      "jsonNoConfig": "لم يتم العثور على تكوين خادم MCP صالح",
+      "jsonParseError": "خطأ في التحليل",
+      "launchConfirmTitle": "تحذير أمني",
+      "launchConfirmMsg": "على وشك تشغيل برنامج خارجي:\n  الأمر: {command}\n  الوسائط: {args}\n\nسيعمل خادم MCP هذا بصلاحيات المستخدم الخاص بك ويمكنه الوصول للملفات المحلية والشبكة.\nيرجى التأكيد أن خادم MCP هذا من مصدر موثوق.",
+      "launchConfirmOk": "تشغيل",
+      "launchConfirmCancel": "إلغاء",
+      "autoApprove": "الموافقة التلقائية على تشغيل MCP",
+      "autoApproveHint": "تخطي تأكيد الأمان عند الاتصال بخوادم MCP وتشغيل الخدمات المُولَّدة بالـ AI. غير مُوصى به للمصادر غير الموثوقة."
+    },
+    "publish": {
+      "empty": "لم يتم تكوين أهداف النشر",
+      "hint": "قم بتوصيل خادم MCP بإمكانيات النشر أولاً.",
+      "button": "نشر",
+      "publishing": "جارٍ النشر...",
+      "published": "تم النشر! {info}",
+      "failed": "فشل: {message}",
+      "error": "خطأ: {message}"
+    },
+    "sync": {
+      "empty": "لا توجد تكوينات مزامنة",
+      "hint": "قم بتوصيل خادم MCP أولاً، ثم أضف تكوين مزامنة.",
+      "syncNow": "مزامنة الآن",
+      "addSync": "+ إضافة مزامنة",
+      "name": "اسم التكوين",
+      "server": "خادم MCP",
+      "remotePath": "المسار البعيد",
+      "localPath": "المسار المحلي",
+      "direction": "الاتجاه",
+      "push": "دفع (محلي ← بعيد)",
+      "pull": "سحب (بعيد ← محلي)",
+      "bidirectional": "ثنائي الاتجاه",
+      "lastSync": "آخر مزامنة: {time}",
+      "syncing": "جارٍ المزامنة...",
+      "success": "اكتملت المزامنة",
+      "error": "خطأ في المزامنة: {message}"
+    },
+    "marketplace": {
+      "title": "السوق",
+      "search": "البحث في خوادم MCP...",
+      "source": "المصدر",
+      "sourceOfficial": "رسمي",
+      "sourceLobehub": "LobeHub",
+      "sourceSmithery": "Smithery",
+      "install": "تثبيت",
+      "installAndConnect": "تثبيت واتصال",
+      "installing": "جارٍ التثبيت...",
+      "installed": "مُثبَّت",
+      "viewDetails": "التفاصيل",
+      "loadMore": "تحميل المزيد",
+      "noResults": "لم يتم العثور على خوادم MCP",
+      "networkError": "فشل التحميل، تحقق من الشبكة",
+      "retry": "إعادة المحاولة",
+      "envVars": "متغيرات البيئة",
+      "envRequired": "(مطلوب)",
+      "popularity": "استخدامات",
+      "installs": "عمليات التثبيت / الاستخدامات",
+      "verified": "موثق",
+      "cancel": "إلغاء"
+    }
+  },
+  "imageDialog": {
+    "title": "إدراج صورة",
+    "urlTab": "عنوان URL",
+    "fileTab": "ملف محلي",
+    "urlPlaceholder": "https://example.com/image.png",
+    "altPlaceholder": "وصف الصورة (اختياري)",
+    "selectFile": "اختيار صورة...",
+    "noFileSelected": "لم يتم اختيار ملف",
+    "insert": "إدراج",
+    "cancel": "إلغاء"
+  },
+  "imageHost": {
+    "title": "استضافة الصور",
+    "provider": "المزود",
+    "smms": "SM.MS",
+    "imgur": "Imgur",
+    "github": "مستودع GitHub",
+    "custom": "API مخصص",
+    "apiToken": "رمز API",
+    "apiTokenPlaceholder": "أدخل رمز API",
+    "customEndpoint": "نقطة نهاية الرفع",
+    "customEndpointPlaceholder": "https://your-api.com/upload",
+    "customHeaders": "ترويسات مخصصة (JSON)",
+    "githubRepoUrl": "عنوان URL للمستودع",
+    "githubRepoUrlPlaceholder": "https://github.com/user/images",
+    "githubBranch": "الفرع",
+    "githubDir": "مجلد الصور",
+    "githubToken": "رمز الوصول الشخصي",
+    "githubTokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "githubCdn": "تنسيق عنوان URL",
+    "githubCdnRaw": "raw.githubusercontent.com",
+    "githubCdnJsdelivr": "jsDelivr CDN",
+    "importFromPublish": "استيراد من هدف النشر",
+    "autoUpload": "رفع الصور تلقائياً عند اللصق/الإسقاط",
+    "testUpload": "اختبار الرفع",
+    "testing": "جارٍ الاختبار...",
+    "success": "تم الرفع بنجاح!",
+    "failed": "فشل الرفع",
+    "addTarget": "إضافة مضيف صور",
+    "targetName": "الاسم",
+    "targetNamePlaceholder": "مثال: CDN مدونتي",
+    "settingsEmpty": "لم يتم تكوين أهداف استضافة الصور",
+    "settingsHint": "أضف خدمة استضافة صور لتفعيل الرفع التلقائي.",
+    "default": "الافتراضي",
+    "setDefault": "تعيين كافتراضي",
+    "gitlab": "مستودع GitLab",
+    "git_custom": "Git مخصص (Gitea/Forgejo)",
+    "qiniu": "Qiniu Kodo",
+    "aliyun_oss": "Aliyun OSS",
+    "tencent_cos": "Tencent COS",
+    "aws_s3": "AWS S3",
+    "google_gcs": "Google Cloud Storage",
+    "groupApi": "استضافة API",
+    "groupGit": "مستودع Git",
+    "groupOss": "تخزين كائنات",
+    "gitlabRepoUrl": "عنوان URL للمستودع",
+    "gitlabBranch": "الفرع",
+    "gitlabDir": "مجلد الصور",
+    "gitlabToken": "رمز الوصول الشخصي",
+    "gitlabTokenPlaceholder": "glpat-xxxxxxxxxxxx",
+    "gitCustomRepoUrl": "عنوان URL للمستودع",
+    "gitCustomBranch": "الفرع",
+    "gitCustomDir": "مجلد الصور",
+    "gitCustomToken": "رمز الوصول",
+    "gitCustomTokenPlaceholder": "أدخل الرمز",
+    "ossAccessKey": "مفتاح الوصول",
+    "ossAccessKeyPlaceholder": "أدخل معرف مفتاح الوصول",
+    "ossSecretKey": "المفتاح السري",
+    "ossSecretKeyPlaceholder": "أدخل المفتاح السري",
+    "ossBucket": "الحاوية",
+    "ossBucketPlaceholder": "مثال: my-images-bucket",
+    "ossRegion": "المنطقة",
+    "ossRegionPlaceholder": "مثال: cn-east-1، us-east-1",
+    "selectRegion": "اختر المنطقة",
+    "ossEndpoint": "نقطة نهاية مخصصة (اختياري)",
+    "ossEndpointPlaceholder": "مثال: https://s3.custom.com",
+    "ossCdnDomain": "نطاق CDN (اختياري)",
+    "ossCdnDomainPlaceholder": "مثال: https://cdn.example.com",
+    "ossPathPrefix": "بادئة المسار (اختياري)",
+    "ossPathPrefixPlaceholder": "مثال: images/blog/"
+  },
+  "imageMenu": {
+    "resize": "تغيير الحجم",
+    "upload": "رفع إلى مضيف الصور",
+    "editAlt": "تعديل الوصف",
+    "copyUrl": "نسخ عنوان URL للصورة",
+    "copyImage": "نسخ الصورة",
+    "openInBrowser": "فتح الصورة في المتصفح",
+    "saveAs": "حفظ الصورة باسم...",
+    "delete": "حذف الصورة",
+    "originalSize": "الحجم الأصلي"
+  },
+  "menu": {
+    "file": "ملف",
+    "edit": "تحرير",
+    "paragraph": "فقرة",
+    "format": "تنسيق",
+    "view": "عرض",
+    "window": "نافذة",
+    "help": "مساعدة",
+    "new": "جديد",
+    "newWindow": "نافذة جديدة",
+    "open": "فتح...",
+    "save": "حفظ",
+    "saveAs": "حفظ باسم...",
+    "export": "تصدير",
+    "exportHtml": "HTML",
+    "exportPdf": "PDF",
+    "exportImage": "صورة (PNG)",
+    "exportDoc": "Word (.doc)",
+    "heading1": "عنوان 1",
+    "heading2": "عنوان 2",
+    "heading3": "عنوان 3",
+    "heading4": "عنوان 4",
+    "heading5": "عنوان 5",
+    "heading6": "عنوان 6",
+    "table": "جدول",
+    "codeBlock": "كتلة برمجية",
+    "mathBlock": "كتلة رياضية",
+    "quote": "اقتباس",
+    "bulletList": "قائمة نقطية",
+    "orderedList": "قائمة مرقمة",
+    "horizontalRule": "خط أفقي",
+    "bold": "غامق",
+    "italic": "مائل",
+    "strikethrough": "يتوسطه خط",
+    "code": "كود",
+    "link": "رابط",
+    "image": "صورة",
+    "visualMode": "الوضع المرئي",
+    "sourceMode": "وضع المصدر",
+    "splitMode": "الوضع المقسم",
+    "toggleSidebar": "إظهار/إخفاء الشريط الجانبي",
+    "toggleAIPanel": "إظهار/إخفاء لوحة AI",
+    "toggleOutline": "إظهار/إخفاء المخطط",
+    "zoomIn": "تكبير",
+    "zoomOut": "تصغير",
+    "actualSize": "الحجم الفعلي",
+    "find": "بحث",
+    "replace": "استبدال",
+    "changelog": "سجل التغييرات",
+    "privacyPolicy": "سياسة الخصوصية",
+    "officialWebsite": "الموقع الرسمي",
+    "aboutMoraya": "حول Moraya",
+    "feedback": "ملاحظات",
+    "settings": "الإعدادات...",
+    "versionInfo": "معلومات الإصدار"
+  },
+  "search": {
+    "findPlaceholder": "بحث...",
+    "replacePlaceholder": "استبدال...",
+    "noResults": "لا توجد نتائج",
+    "caseSensitive": "مطابقة الحالة",
+    "replace": "استبدال",
+    "replaceAll": "استبدال الكل"
+  },
+  "mermaid": {
+    "loading": "جارٍ تحميل المخطط...",
+    "error": "فشل عرض المخطط",
+    "edit": "تحرير",
+    "preview": "معاينة",
+    "empty": "مخطط فارغ"
+  },
+  "export": {
+    "exportAs": "تصدير كـ {format}",
+    "pdf": "PDF",
+    "html": "HTML (مع الأنماط)",
+    "htmlPlain": "HTML (بدون أنماط)",
+    "image": "صورة (PNG)",
+    "doc": "Word (.doc)",
+    "rtf": "RTF",
+    "epub": "Epub",
+    "latex": "LaTeX",
+    "mediawiki": "MediaWiki",
+    "rst": "reStructuredText",
+    "textile": "Textile",
+    "opml": "OPML"
+  },
+  "workflow": {
+    "title": "سير عمل AI",
+    "seoStep": "تحسين SEO",
+    "imageGenStep": "صور AI",
+    "publishStep": "نشر",
+    "publishDesc": "الدفع إلى المنصات المستهدفة",
+    "optionalAbove": "الخطوات أعلاه اختيارية",
+    "selectTargets": "اختر أهداف النشر",
+    "confirmPublish": "نشر",
+    "publishing": "جارٍ النشر...",
+    "publishSuccess": "تم النشر بنجاح!",
+    "publishFailed": "فشل النشر",
+    "mcpEntry": "AI MCP",
+    "mcpServerCount": "خدمات متصلة",
+    "mcpToolCount": "أدوات"
+  },
+  "imageGen": {
+    "title": "توليد صور بالـ AI",
+    "step1Title": "وضع الصورة",
+    "step2Title": "توليد الصور",
+    "step3Title": "إدراج في المقال",
+    "generatingPrompts": "جارٍ توليد الأوامر...",
+    "contentTooShort": "محتوى المقال قصير جداً لتوليد الصور.",
+    "styleLabel": "النمط",
+    "countLabel": "العدد",
+    "style_auto": "تلقائي",
+    "style_photo": "صورة فوتوغرافية",
+    "style_illustration": "رسم توضيحي",
+    "style_flat": "مسطح",
+    "style_ink": "حبر صيني",
+    "style_watercolor": "ألوان مائية",
+    "style_isometric": "إيزومتري",
+    "style_infographic": "إنفوجرافيك",
+    "style_editorial": "تحريري",
+    "style_cartoon": "كرتون",
+    "style_render": "تصيير ثلاثي الأبعاد",
+    "style_sketch": "رسم يدوي",
+    "style_blueprint": "مخطط هندسي",
+    "style_clay": "نموذج صلصال",
+    "style_wireframe": "إطار سلكي",
+    "style_exploded": "عرض مفكك",
+    "style_section": "مقطع عرضي",
+    "style_cad": "رسم CAD",
+    "style_prototype": "نموذج أولي",
+    "style_anime": "أنمي",
+    "style_comic": "قصص مصورة",
+    "style_cinematic": "سينمائي",
+    "style_pixel": "بكسل آرت",
+    "style_noir": "فيلم نوار",
+    "style_manga": "مانغا",
+    "style_realistic": "واقعي",
+    "style_studio": "استوديو",
+    "style_lifestyle": "نمط حياة",
+    "style_flatlay": "تصوير مسطح",
+    "style_macro": "ماكرو",
+    "style_minimalist": "بسيط",
+    "style_packaging": "تغليف",
+    "style_outdoor": "خارجي",
+    "style_mood": "مزاج",
+    "style_abstract": "تجريدي",
+    "style_texture": "ملمس",
+    "style_gradient": "تدرج",
+    "style_collage": "كولاج",
+    "style_vintage": "كلاسيكي",
+    "style_botanical": "نباتي",
+    "style_geometric": "هندسي",
+    "style_ethereal": "أثيري",
+    "style_brutalist": "بروتالي",
+    "generate": "توليد",
+    "next": "التالي",
+    "back": "السابق",
+    "insertConfirm": "إدراج",
+    "insertParagraph": "إدراج بعد الفقرة المقابلة (مُوصى به)",
+    "insertEnd": "إدراج في نهاية المقال",
+    "insertReplace": "استبدال الصور في المقال",
+    "insertClipboard": "نسخ Markdown إلى الحافظة",
+    "selected": "{count} محدد",
+    "completed": "تم توليد الصور",
+    "stepDescription": "توليد رسومات توضيحية للمقال",
+    "mode_article": "مقال",
+    "mode_design": "تصميم",
+    "mode_storyboard": "لوح قصصي",
+    "mode_product": "منتج",
+    "mode_moodboard": "لوح مزاج",
+    "mode_portrait": "بورتريه",
+    "style_portrait": "بورتريه",
+    "style_headshot": "صورة رأس",
+    "style_fullbody": "كامل الجسم",
+    "style_fashion": "أزياء",
+    "style_street": "شارع",
+    "style_glamour": "غلامور",
+    "style_environmental": "بيئي",
+    "style_candid": "عفوي",
+    "style_group": "جماعي",
+    "preDefinedDetected": "تم اكتشاف {count} أمر(أوامر) محددة مسبقاً في المستند",
+    "usePredefined": "استخدام الأوامر المحددة مسبقاً"
+  },
+  "seo": {
+    "title": "تحسين SEO",
+    "generating": "جارٍ تحليل المقال...",
+    "titles": "عناوين مرشحة",
+    "customTitle": "عنوان مخصص...",
+    "excerpt": "المقتطف",
+    "tags": "الوسوم",
+    "addTag": "إضافة وسم...",
+    "slug": "معرف URL",
+    "metaDescription": "الوصف التعريفي",
+    "regenerate": "إعادة التوليد",
+    "apply": "تطبيق",
+    "retry": "إعادة المحاولة",
+    "contentTooShort": "محتوى المقال قصير جداً لتحليل SEO.",
+    "completed": "تم تحسين SEO",
+    "stepDescription": "توليد العنوان والمقتطف والوسوم"
+  },
+  "publish": {
+    "settingsEmpty": "لم يتم تكوين أهداف النشر",
+    "settingsHint": "أضف مستودع GitHub أو نقطة نهاية API مخصصة لنشر مقالاتك.",
+    "addTarget": "إضافة هدف",
+    "editTarget": "تعديل",
+    "deleteTarget": "حذف",
+    "testConnection": "اختبار الاتصال",
+    "github": "مستودع GitHub",
+    "customApi": "API مخصص",
+    "targetName": "الاسم",
+    "targetNamePlaceholder": "مثال: مدونتي",
+    "repoUrl": "عنوان URL للمستودع",
+    "repoUrlPlaceholder": "https://github.com/user/blog",
+    "branch": "الفرع",
+    "articlesDir": "مجلد المقالات",
+    "articlesDirPlaceholder": "content/posts/",
+    "imagesDir": "مجلد الصور",
+    "imagesDirPlaceholder": "static/images/",
+    "token": "رمز الوصول الشخصي",
+    "tokenPlaceholder": "ghp_xxxxxxxxxxxx",
+    "frontMatterTemplate": "قالب Front Matter",
+    "endpoint": "نقطة نهاية API",
+    "endpointPlaceholder": "https://api.example.com/articles",
+    "method": "طريقة HTTP",
+    "headers": "الترويسات (JSON)",
+    "bodyTemplate": "قالب النص",
+    "templatePresets": "قوالب جاهزة",
+    "presetHugo": "Hugo",
+    "presetHexo": "Hexo",
+    "presetAstro": "Astro",
+    "presetCustom": "مخصص",
+    "fileNamePattern": "نمط اسم الملف",
+    "fileNamePreset": "نمط الاسم الجاهز",
+    "fileNamePreview": "معاينة",
+    "presetSimple": "بسيط (اسم الملف)",
+    "presetDateSlug": "التاريخ + المعرف",
+    "presetDateFilename": "التاريخ + اسم الملف",
+    "presetYearMonth": "السنة/الشهر/المعرف",
+    "fileNameVariables": "المتغيرات: {{date}}، {{year}}، {{month}}، {{day}}، {{slug}}، {{filename}}، {{title}}",
+    "rssSection": "موجز RSS",
+    "rssEnable": "توليد موجز RSS",
+    "rssEnableHint": "تحديث feed.xml تلقائياً عند النشر",
+    "rssFeedPath": "مسار ملف الموجز",
+    "rssFeedPathPlaceholder": "feed.xml",
+    "rssSiteUrl": "عنوان URL للموقع",
+    "rssSiteUrlPlaceholder": "https://myblog.com",
+    "rssFeedTitle": "عنوان الموجز",
+    "rssFeedTitlePlaceholder": "مدونتي",
+    "rssFeedDescription": "وصف الموجز",
+    "rssFeedDescriptionPlaceholder": "مقالات حول...",
+    "rssLanguage": "اللغة",
+    "rssAuthorName": "المؤلف",
+    "rssAuthorNamePlaceholder": "محمد أحمد",
+    "rssMaxItems": "الحد الأقصى للعناصر في الموجز",
+    "rssIncludeFullContent": "تضمين المحتوى الكامل للمقال في الموجز",
+    "rssFeedEndpoint": "نقطة نهاية موجز RSS",
+    "rssFeedEndpointPlaceholder": "https://api.example.com/rss",
+    "rssUpdateFailed": "فشل تحديث موجز RSS",
+    "progressTitle": "جارٍ النشر...",
+    "progressPublishing": "جارٍ الرفع...",
+    "progressRss": "جارٍ تحديث RSS...",
+    "progressDone": "تم",
+    "progressFailed": "فشل"
+  },
+  "update": {
+    "title": "معلومات الإصدار",
+    "currentVersion": "الإصدار الحالي",
+    "latestVersion": "أحدث إصدار",
+    "checking": "جارٍ التحقق من التحديثات...",
+    "upToDate": "أنت تستخدم أحدث إصدار!",
+    "checkFailed": "فشل التحقق من التحديثات",
+    "releaseNotes": "ما الجديد",
+    "noAsset": "لا يتوفر مثبت لنظامك. يرجى التنزيل يدوياً.",
+    "upgrade": "ترقية",
+    "retry": "إعادة المحاولة",
+    "viewRelease": "عرض الإصدار",
+    "downloading": "جارٍ التنزيل...",
+    "downloadFailed": "فشل التنزيل",
+    "installLaunched": "تم تشغيل المثبت. سيتم إغلاق Moraya قريباً.",
+    "newVersionAvailable": "يتوفر إصدار جديد! انقر للترقية."
+  },
+  "errors": {
+    "aiNotConfigured": "لم يتم تكوين AI.",
+    "aiRequestFailed": "فشل طلب AI",
+    "chatRequestFailed": "فشل طلب المحادثة",
+    "unknownCommand": "أمر AI غير معروف: {command}"
+  },
+  "welcome": {
+    "title": "مرحباً بك في Moraya",
+    "subtitle": "محرر Markdown بسيط وجاهز للـ AI.",
+    "featuresTitle": "الميزات",
+    "featureWysiwyg": "تحرير Markdown بنمط **WYSIWYG**",
+    "featureMath": "دعم الصيغ الرياضية: $E = mc^2$",
+    "featureThemes": "سمات داكنة وفاتحة",
+    "featureAI": "مساعد كتابة مدعوم بالـ AI",
+    "featureMCP": "بروتوكول MCP للنشر والمزامنة",
+    "featureLightweight": "خفيف الوزن (~5MB مثبت)",
+    "mathTitle": "مثال رياضي",
+    "codeTitle": "مثال برمجي",
+    "tableTitle": "مثال جدول",
+    "tableFeature": "الميزة",
+    "tableStatus": "الحالة",
+    "tableDone": "مكتمل",
+    "startWriting": "ابدأ كتابة أفكارك هنا...",
+    "tip": "**نصيحة:** اضغط `Cmd+I` لإظهار/إخفاء لوحة مساعد AI.",
+    "shortcutsTitle": "اختصارات لوحة المفاتيح",
+    "shortcutSave": "`Cmd+S` — حفظ المستند",
+    "shortcutOpen": "`Cmd+O` — فتح ملف",
+    "shortcutNew": "`Cmd+N` — مستند جديد",
+    "shortcutToggleMode": "`Cmd+/` — التبديل بين الوضع المرئي/المصدر",
+    "shortcutSplitMode": "`Cmd+Shift+/` — التبديل إلى الوضع المقسم",
+    "shortcutSidebar": "`Cmd+\\` — إظهار/إخفاء الشريط الجانبي",
+    "shortcutSettings": "`Cmd+,` — فتح الإعدادات",
+    "shortcutAI": "`Cmd+Shift+I` — إظهار/إخفاء لوحة AI",
+    "shortcutExport": "`Cmd+Shift+E` — تصدير كـ HTML",
+    "blockquoteTitle": "مثال اقتباس",
+    "blockquoteContent": "فن الكتابة هو فن اكتشاف ما تؤمن به. — غوستاف فلوبير",
+    "advancedMathTitle": "رياضيات متقدمة",
+    "listTitle": "مثال قائمة متداخلة",
+    "listItem1": "البدء",
+    "listItem1a": "تثبيت التطبيق",
+    "listItem1b": "تكوين تفضيلاتك",
+    "listItem1c": "ابدأ الكتابة",
+    "listItem2": "الميزات المتقدمة",
+    "listItem2a": "مساعدة كتابة مدعومة بالـ AI",
+    "listItem2b": "تكامل بروتوكول MCP",
+    "listItem2c": "تنسيقات تصدير متعددة",
+    "listItem3": "التخصيص",
+    "listItem3a": "السمات والمظهر",
+    "listItem3b": "إعدادات المحرر",
+    "listItem3c": "اختصارات لوحة المفاتيح",
+    "paragraphTitle": "حول Moraya",
+    "paragraph1": "Moraya هو محرر Markdown حديث وخفيف الوزن مبني بـ Rust و Tauri. يجمع بين بساطة محرر النصوص وقوة واجهة WYSIWYG، مما يمنحك أفضل ما في العالمين.",
+    "paragraph2": "اسم \"Moraya\" يأتي من دمج \"mora\" (لاتينية بمعنى \"لحظة\") مع \"ya\" (صينية بمعنى \"أناقة\")، رمزاً للحظات الأنيقة في الكتابة.",
+    "paragraph3": "سواء كنت تكتب وثائق تقنية، أو مقالات مدونة، أو أوراق أكاديمية، أو ملاحظات شخصية، يوفر Moraya بيئة خالية من المشتتات تتيح لك التركيز على ما يهم أكثر — محتواك.",
+    "hrTitle": "الخطوط الأفقية",
+    "hrDescription": "يمكنك استخدام الخطوط الأفقية لفصل أقسام المستند المختلفة:"
+  },
+  "templates": {
+    "gallery": {
+      "title": "مساعد AI",
+      "search": "البحث في القوالب...",
+      "back": "رجوع",
+      "start": "بدء"
+    },
+    "error": {
+      "noDocument": "يرجى كتابة بعض المحتوى أولاً",
+      "noSelection": "يرجى تحديد بعض النص أولاً",
+      "noContent": "يرجى كتابة بعض المحتوى أو تحديد نص أولاً"
+    },
+    "writing": {
+      "name": "الكتابة",
+      "desc": "كتابة وتحرير وتلخيص مدعوم بالـ AI",
+      "free": {
+        "name": "كتابة حرة",
+        "desc": "أدخل موضوعاً ويقوم AI بتوليد المحتوى",
+        "hint": "أدخل موضوعاً أو تعليمات للكتابة..."
+      },
+      "continue": {
+        "name": "متابعة الكتابة",
+        "desc": "المتابعة من نهاية المستند"
+      },
+      "outline": {
+        "name": "إنشاء مخطط",
+        "desc": "إنشاء مخطط للمقال",
+        "hint": "أدخل موضوع المقال..."
+      },
+      "summarize": {
+        "name": "تلخيص",
+        "desc": "تلخيص النص المحدد أو المستند بالكامل"
+      },
+      "improve": {
+        "name": "تحسين",
+        "desc": "تحسين جودة الكتابة"
+      },
+      "simplify": {
+        "name": "تبسيط",
+        "desc": "تبسيط النص المعقد"
+      },
+      "expand": {
+        "name": "توسيع",
+        "desc": "إضافة المزيد من التفاصيل والشروحات"
+      },
+      "fixGrammar": {
+        "name": "تصحيح القواعد",
+        "desc": "تصحيح الأخطاء النحوية والإملائية"
+      }
+    },
+    "translation": {
+      "name": "الترجمة",
+      "desc": "ترجمة متعددة اللغات وتوطين",
+      "auto": {
+        "name": "ترجمة ذكية",
+        "desc": "كشف اللغة تلقائياً والترجمة"
+      },
+      "toTarget": {
+        "name": "ترجمة إلى...",
+        "desc": "اختر اللغة المستهدفة وترجم"
+      },
+      "explain": {
+        "name": "ترجمة وشرح",
+        "desc": "ترجمة مع شرح كلمة بكلمة"
+      },
+      "polish": {
+        "name": "توطين",
+        "desc": "جعل الترجمات أكثر طبيعية"
+      },
+      "compare": {
+        "name": "نسخ متعددة",
+        "desc": "تقديم أنماط ترجمة متعددة"
+      },
+      "targetLang": "اللغة المستهدفة",
+      "lang": {
+        "en": "الإنجليزية",
+        "zhCN": "الصينية المبسطة",
+        "zhHant": "الصينية التقليدية",
+        "ar": "العربية",
+        "de": "الألمانية",
+        "es": "الإسبانية",
+        "fr": "الفرنسية",
+        "hi": "الهندية",
+        "ja": "اليابانية",
+        "ko": "الكورية",
+        "pt": "البرتغالية",
+        "ru": "الروسية"
+      }
+    },
+    "student": {
+      "name": "مساعد الدراسة",
+      "desc": "التعلم وتدوين الملاحظات وفهم المفاهيم",
+      "explain": {
+        "name": "شرح المفهوم",
+        "desc": "شرح مفهوم بعبارات بسيطة",
+        "hint": "أدخل مفهوماً لشرحه..."
+      },
+      "notes": {
+        "name": "ملاحظات دراسية",
+        "desc": "تنظيم المحتوى في ملاحظات منظمة"
+      },
+      "flashcard": {
+        "name": "بطاقات تعليمية",
+        "desc": "استخراج بطاقات سؤال وجواب من المحتوى"
+      },
+      "mindmap": {
+        "name": "خريطة ذهنية",
+        "desc": "إنشاء خريطة ذهنية بتنسيق Markdown"
+      },
+      "essayOutline": {
+        "name": "مخطط المقال",
+        "desc": "إنشاء مخطط للمقال",
+        "hint": "أدخل موضوع المقال..."
+      },
+      "reading": {
+        "name": "تحليل القراءة",
+        "desc": "تحليل معمق لمحتوى النص"
+      },
+      "formula": {
+        "name": "اشتقاق الصيغة",
+        "desc": "عرض خطوات اشتقاق الصيغ الرياضية",
+        "hint": "أدخل اسم الصيغة أو محتواها..."
+      },
+      "compare": {
+        "name": "مقارنة المفاهيم",
+        "desc": "مقارنة مفهومين جنباً إلى جنب",
+        "hint": "أدخل مفهومين (مثال: TCP مقابل UDP)..."
+      }
+    },
+    "kids": {
+      "name": "تعلم الأطفال",
+      "desc": "قصص وتعلم ممتع وألعاب تفاعلية",
+      "story": {
+        "name": "قصة أطفال",
+        "desc": "توليد قصة من كلمات مفتاحية",
+        "hint": "أدخل كلمات مفتاحية للقصة (مثال: أرنب غابة مغامرة)..."
+      },
+      "poem": {
+        "name": "أنشودة أطفال",
+        "desc": "إنشاء أنشودة حول موضوع",
+        "hint": "أدخل موضوعاً..."
+      },
+      "why": {
+        "name": "لماذا؟ لماذا؟ لماذا؟",
+        "desc": "AI يجيب على أسئلة 'لماذا' اللانهائية"
+      },
+      "alphabet": {
+        "name": "متعة الأبجدية",
+        "desc": "تعلم تفاعلي للحروف"
+      },
+      "mathGame": {
+        "name": "لعبة الحساب",
+        "desc": "حساب تفاعلي ممتع"
+      },
+      "riddle": {
+        "name": "ألغاز",
+        "desc": "AI يطرح ألغازاً للأطفال لحلها"
+      },
+      "drawText": {
+        "name": "حديث الصورة",
+        "desc": "صف مشهداً وAI يكتب قصة",
+        "hint": "صف مشهداً..."
+      },
+      "knowledge": {
+        "name": "حقائق ممتعة",
+        "desc": "موسوعة الطبيعة والعلوم والحيوانات"
+      }
+    },
+    "marketing": {
+      "name": "التسويق",
+      "desc": "وسائل التواصل الاجتماعي والإعلانات وكتابة SEO",
+      "xiaohongshu": {
+        "name": "منشور Xiaohongshu",
+        "desc": "توليد منشور بنمط المراجعات",
+        "hint": "أدخل المنتج أو الموضوع..."
+      },
+      "twitter": {
+        "name": "منشور Twitter/X",
+        "desc": "توليد محتوى بنمط التغريدات",
+        "hint": "أدخل الموضوع..."
+      },
+      "slogan": {
+        "name": "شعار إعلاني",
+        "desc": "توليد شعارات جذابة للعلامة التجارية",
+        "hint": "أدخل العلامة التجارية أو المنتج..."
+      },
+      "email": {
+        "name": "بريد تسويقي",
+        "desc": "تكوين الجمهور والنبرة للبريد الإلكتروني",
+        "hint": "صف محتوى البريد الإلكتروني..."
+      },
+      "seoArticle": {
+        "name": "مقال SEO",
+        "desc": "توليد محتوى محسّن لـ SEO",
+        "hint": "أدخل الكلمات المفتاحية المستهدفة..."
+      },
+      "productDesc": {
+        "name": "وصف المنتج",
+        "desc": "توليد نص منتج مقنع",
+        "hint": "أدخل معلومات المنتج..."
+      },
+      "tone": "النبرة",
+      "tone.formal": "رسمي",
+      "tone.friendly": "ودود",
+      "tone.urgent": "عاجل",
+      "tone.humorous": "فكاهي"
+    },
+    "professional": {
+      "name": "مهني",
+      "desc": "رسائل بريد وتقارير ومحاضر اجتماعات",
+      "email": {
+        "name": "بريد عمل",
+        "desc": "تكوين السيناريو والنبرة للبريد الإلكتروني",
+        "hint": "صف محتوى البريد الإلكتروني..."
+      },
+      "meeting": {
+        "name": "محاضر الاجتماعات",
+        "desc": "تنظيم الملاحظات في محاضر رسمية"
+      },
+      "report": {
+        "name": "تقرير العمل",
+        "desc": "توليد تقرير أسبوعي/شهري/ربع سنوي",
+        "hint": "أدخل النقاط الرئيسية للتقرير..."
+      },
+      "review": {
+        "name": "مراجعة الكود",
+        "desc": "مراجعة الكود واقتراح تحسينات"
+      },
+      "resume": {
+        "name": "تحسين السيرة الذاتية",
+        "desc": "تحسين السيرة الذاتية بطريقة STAR"
+      },
+      "prd": {
+        "name": "مستند PRD",
+        "desc": "توليد مستند متطلبات المنتج",
+        "hint": "أدخل وصف الميزة..."
+      },
+      "tone": "النبرة",
+      "tone.concise": "موجز",
+      "reportType": "نوع التقرير",
+      "reportType.weekly": "أسبوعي",
+      "reportType.monthly": "شهري",
+      "reportType.quarterly": "ربع سنوي"
+    },
+    "personal": {
+      "name": "التطور الشخصي",
+      "desc": "التدوين والأهداف واتخاذ القرارات",
+      "journal": {
+        "name": "مساعد اليوميات",
+        "desc": "كتابة يوميات موجهة وتأمل",
+        "hint": "ماذا حدث اليوم؟..."
+      },
+      "goal": {
+        "name": "تقسيم الأهداف",
+        "desc": "تقسيم الأهداف إلى خطوات قابلة للتنفيذ",
+        "hint": "أدخل هدفك..."
+      },
+      "habit": {
+        "name": "بناء العادات",
+        "desc": "إنشاء خطة لبناء العادات",
+        "hint": "أدخل العادة التي تريد بناءها..."
+      },
+      "decision": {
+        "name": "تحليل القرار",
+        "desc": "تحليل الإيجابيات والسلبيات للقرارات",
+        "hint": "صف خياراتك..."
+      },
+      "bookNotes": {
+        "name": "ملاحظات القراءة",
+        "desc": "تنظيم المحتوى في ملاحظات قراءة"
+      }
+    },
+    "games_cn": {
+      "name": "ألعاب صينية",
+      "desc": "ألعاب الشعر وسلاسل الأمثال والألغاز",
+      "feihualing": {
+        "name": "飞花令",
+        "desc": "تحدي الشعر: تناوب في إلقاء أبيات شعرية تحتوي على حرف معين"
+      },
+      "chengyuChain": {
+        "name": "成语接龙",
+        "desc": "سلسلة الأمثال الصينية: ربط الأمثال بالحرف الأخير/الأول"
+      },
+      "riddle": {
+        "name": "猜谜语",
+        "desc": "AI يعطي أدلة وأنت تخمن الإجابة"
+      },
+      "lanternRiddle": {
+        "name": "猜灯谜",
+        "desc": "ألغاز الحروف الصينية"
+      },
+      "poetryFill": {
+        "name": "诗词填空",
+        "desc": "املأ الكلمات الناقصة من القصائد"
+      },
+      "storyChain": {
+        "name": "故事接龙",
+        "desc": "تناوب في متابعة القصة"
+      },
+      "characterGame": {
+        "name": "猜字游戏",
+        "desc": "خمن الحرف الصيني من الأدلة"
+      },
+      "brainTeaser": {
+        "name": "脑筋急转弯",
+        "desc": "ألغاز ذكاء ممتعة"
+      },
+      "couplet": {
+        "name": "对联",
+        "desc": "AI يعطي السطر الأول وأنت تكمله"
+      },
+      "wordExplain": {
+        "name": "你说我猜",
+        "desc": "AI يصف وأنت تخمن الكلمة"
+      },
+      "ancientText": {
+        "name": "文言文翻译",
+        "desc": "ترجمة النص الكلاسيكي إلى الصينية الحديثة"
+      },
+      "homophone": {
+        "name": "谐音梗",
+        "desc": "تحدي التلاعب بالألفاظ المتشابهة"
+      }
+    },
+    "games_en": {
+      "name": "ألعاب إنجليزية",
+      "desc": "سلسلة الكلمات، Hangman، أسئلة ثقافية والمزيد",
+      "wordChain": {
+        "name": "Word Chain",
+        "desc": "الحرف الأخير يبدأ الكلمة التالية"
+      },
+      "twentyQuestions": {
+        "name": "20 Questions",
+        "desc": "خمن الشيء في 20 سؤال نعم/لا"
+      },
+      "hangman": {
+        "name": "Hangman",
+        "desc": "خمن الكلمة حرفاً بحرف"
+      },
+      "storyBuilder": {
+        "name": "Story Builder",
+        "desc": "تناوب في بناء قصة"
+      },
+      "wordAssociation": {
+        "name": "Word Association",
+        "desc": "سلسلة تداعي الكلمات الحر"
+      },
+      "riddles": {
+        "name": "Riddles",
+        "desc": "حل الألغاز الإنجليزية"
+      },
+      "trivia": {
+        "name": "Trivia Quiz",
+        "desc": "أسئلة معرفة عامة"
+      },
+      "rhymeTime": {
+        "name": "Rhyme Time",
+        "desc": "إنشاء قصص بكلمات مقفاة"
+      },
+      "acronym": {
+        "name": "Acronym Game",
+        "desc": "ابتكر معاني لاختصارات عشوائية"
+      },
+      "taboo": {
+        "name": "Taboo",
+        "desc": "صف دون استخدام الكلمات المحظورة"
+      },
+      "sentenceBuilder": {
+        "name": "Sentence Builder",
+        "desc": "كوّن أطول جملة بكلمات محددة"
+      },
+      "emojiStory": {
+        "name": "Emoji Story",
+        "desc": "احكِ قصصاً باستخدام الرموز التعبيرية"
+      }
+    },
+    "quiz": {
+      "name": "اختبار وتمرين",
+      "desc": "أسئلة مُولَّدة بالـ AI مع تقييم",
+      "practice": {
+        "name": "اختبار شامل",
+        "desc": "اختر المادة والصعوبة وAI يختبرك"
+      },
+      "direction": "المادة",
+      "dir": {
+        "programming": "البرمجة",
+        "math": "الرياضيات",
+        "english": "الإنجليزية",
+        "science": "العلوم",
+        "history": "التاريخ",
+        "interview": "التحضير للمقابلات",
+        "custom": "مادة مخصصة"
+      },
+      "difficulty": "الصعوبة",
+      "diff": {
+        "easy": "سهل",
+        "medium": "متوسط",
+        "hard": "صعب"
+      }
+    }
+  },
+  "plugins": {
+    "tabs": {
+      "installed": "المُثبَّتة",
+      "market": "السوق"
+    },
+    "installed": {
+      "empty": "لم يتم تثبيت إضافات بعد."
+    },
+    "sandbox": {
+      "label": "مستوى العزل",
+      "sandbox": "معزول (JS)",
+      "local": "محلي (بدون شبكة)",
+      "system": "النظام (وصول للشبكة)"
+    },
+    "permissions": {
+      "label": "الصلاحيات"
+    },
+    "market": {
+      "search": "البحث في الإضافات...",
+      "refresh": "تحديث",
+      "catAll": "الكل",
+      "cached": "عرض نتائج مخزنة مؤقتاً",
+      "loading": "جارٍ تحميل السوق...",
+      "empty": "لم يتم العثور على إضافات",
+      "install": "تثبيت",
+      "installed": "مُثبَّت",
+      "installing": "جارٍ التثبيت..."
+    },
+    "install": {
+      "fromFile": "تثبيت من ملف .zip",
+      "urlPlaceholder": "رابط مستودع GitHub (https://github.com/…)",
+      "validate": "استيراد",
+      "confirmUrl": "تثبيت الإضافة من عنوان URL؟",
+      "author": "المؤلف",
+      "permissions": "الصلاحيات",
+      "noPermissions": "لا توجد صلاحيات"
+    },
+    "verified": "موثق",
+    "enable": "تفعيل",
+    "disable": "تعطيل",
+    "uninstall": "إلغاء التثبيت",
+    "changelog": "سجل التغييرات",
+    "viewSource": "المصدر",
+    "blacklisted": "محظور",
+    "blacklistWarning": "تم حظر هذه الإضافة بسبب مشكلة أمنية. يرجى إلغاء تثبيتها.",
+    "processError": "تعطلت عملية الإضافة. قم بالتبديل لإعادة التشغيل.",
+    "error": {
+      "platformNotSupported": "لا يتوفر تنزيل لنظامك."
+    }
+  },
+  "transcription": {
+    "title": "التفريغ النصي",
+    "recording": "تسجيل",
+    "connecting": "جارٍ الاتصال...",
+    "paused": "متوقف مؤقتاً",
+    "stopping": "جارٍ الإيقاف...",
+    "idle": "جاهز",
+    "start": "بدء",
+    "stop": "إيقاف",
+    "pause": "إيقاف مؤقت",
+    "resume": "استئناف",
+    "back": "العودة للمحادثة",
+    "emptyIdle": "انقر بدء لبدء التسجيل والتفريغ النصي.",
+    "emptyWaiting": "في انتظار الكلام...",
+    "summarizeWithAI": "تلخيص بالـ AI",
+    "saveAsDoc": "حفظ كمستند",
+    "summarizePrompt": "يرجى توليد ملخص اجتماع من النص التالي. حدد نقاط النقاش الرئيسية والقرارات المتخذة وبنود العمل. قم بالتنسيق كـ Markdown.",
+    "noSpeechConfig": "لم يتم تكوين مزود التعرف على الكلام. يرجى إضافة واحد في الإعدادات ← الصوت.",
+    "noSpeechConfigHint": "اذهب إلى الإعدادات ← الصوت لإضافة مزود للتعرف على الكلام (مثال: Deepgram).",
+    "goToVoiceSettings": "فتح إعدادات الصوت"
+  },
+  "outline": {
+    "empty": "لا توجد عناوين"
+  }
+}

@@ -579,7 +579,7 @@
   <button
     class="tree-item"
     class:is-dir={entry.is_dir}
-    style="padding-left: {0.75 + depth * 1}rem"
+    style="padding-inline-start: {0.75 + depth * 1}rem"
     onclick={() => handleFileClick(entry)}
     oncontextmenu={(e) => handleContextMenu(e, entry.is_dir ? 'folder' : 'file', entry.path, entry.name)}
   >
@@ -995,5 +995,27 @@
     font-size: 1rem;
     line-height: 1;
     padding: 0 0.15rem;
+  }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .sidebar {
+    border-right: none;
+    border-left: 1px solid var(--border-light);
+  }
+
+  :global([dir="rtl"]) .tree-item {
+    text-align: right;
+  }
+
+  :global([dir="rtl"]) .tree-icon.expanded {
+    transform: rotate(-90deg);
+  }
+
+  :global([dir="rtl"]) .list-item {
+    text-align: right;
+  }
+
+  :global([dir="rtl"]) .kb-dropdown-item {
+    text-align: right;
   }
 </style>
