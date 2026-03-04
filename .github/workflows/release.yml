@@ -32,9 +32,9 @@ jobs:
           - platform: ubuntu-22.04
             args: ''
             rust-targets: ''
-          # Linux aarch64
+          # Linux aarch64 (deb + rpm only, skip AppImage)
           - platform: ubuntu-24.04-arm
-            args: ''
+            args: '--bundles deb,rpm'
             rust-targets: ''
 
     runs-on: ${{ matrix.platform }}
