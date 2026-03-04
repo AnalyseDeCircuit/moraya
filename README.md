@@ -240,6 +240,6 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 | v0.21.0 | AI-powered rule file automatic splitting engine | Complete |
 | v0.22.0 | Built-in plugins, 10 new mainstream plugins added |
 
-## License
+## ⭐ Star Growth trend (updated in real time)
 
-[Apache License 2.0](LICENSE)
+![Star History Chart](https://api.star-history.com/svg?repos=zouwei/moraya&type=Date)
