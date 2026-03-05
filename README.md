@@ -1,9 +1,9 @@
 # Moraya — The Elegantly Minimal Markdown AI Agent for the Local AI Era
 
-**Moraya** is a free, open-source, ultra-lightweight (\~10MB) WYSIWYG Markdown editor built with Rust + Tauri v2. Inspired by minimalist seamless editing, it delivers an elegant writing experience while integrating **the most advanced local AI ecosystem and MCP (Model Context Protocol) capabilities** — turning your editor into a powerful, privacy-first AI agent platform.
+> Discover Moraya, the epitome of elegant simplicity in an open-source Markdown AI agent that bridges cutting-edge AI power with unwavering user sovereignty—empowering you to create, collaborate, and innovate in total privacy.
 
-> **mora** (Latin: "a moment") + **ya** (Chinese: "elegance") = **Moraya**  
-> Privacy-first • Fully local • Infinitely extensible AI
+**Moraya** is a free, open-source, ultra-lightweight (~10MB) WYSIWYG Markdown editor crafted with Rust and Tauri v2, drawing inspiration from minimalist, seamless editing to deliver an unparalleled writing experience. Seamlessly integrating the most advanced local AI ecosystems and MCP (Model Context Protocol) capabilities, it transforms your editor into a robust, privacy-first AI agent platform. In a world where AI is everywhere, **Moraya serves as your secure, open "Personal Assistant", putting intelligent tools at your fingertips without compromising control**. Derived from "mora" (Latin for "a moment") and "ya" (Chinese for "elegance"), Moraya embodies privacy-first design, fully local operation, and infinitely extensible AI features.
+
 
 ![](https://raw.githubusercontent.com/zouwei/resource/master/images/moraya/20260302-184554.-image.png)
 
@@ -327,4 +327,4 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 
 ## ⭐ Star Growth trend (updated in real time)
 
-![Star History Chart](https://api.star-history.com/svg?repos=zouwei/moraya&type=Date)
+![Star History Chart](https://api.star-history.com/svg?repos=zouwei/moraya&type=Date&commit=${{github.sha}})
