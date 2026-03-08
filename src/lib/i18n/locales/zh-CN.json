@@ -214,6 +214,13 @@
   },
   "ai": {
     "title": "AI 助手",
+    "modelShort": {
+      "none": "未配置任何模型",
+      "chat": "对话",
+      "realtime": "实时",
+      "image": "生图",
+      "speech": "语音"
+    },
     "rulesActive": "MORAYA.md 规则已激活（{count} 个段落）",
     "clearChat": "清空对话",
     "unconfigured": "AI 未配置。",
@@ -254,6 +261,8 @@
     "realtime": {
       "chatModelGroup": "对话模型",
       "realtimeModelGroup": "端到端对话模型",
+      "imageModelGroup": "AIGC 生图",
+      "speechModelGroup": "语音转写",
       "addModel": "+ 添加语音模型",
       "noModels": "未配置端到端语音模型",
       "noModelsHint": "添加实时语音模型后，输入区可使用波浪按钮发起语音对话。",

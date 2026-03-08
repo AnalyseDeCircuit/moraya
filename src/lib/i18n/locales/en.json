@@ -214,6 +214,13 @@
   },
   "ai": {
     "title": "AI Assistant",
+    "modelShort": {
+      "none": "No models configured",
+      "chat": "Chat",
+      "realtime": "RT Voice",
+      "image": "Image",
+      "speech": "Voice"
+    },
     "rulesActive": "MORAYA.md rules active ({count} sections)",
     "clearChat": "Clear chat",
     "unconfigured": "AI is not configured.",
@@ -254,6 +261,8 @@
     "realtime": {
       "chatModelGroup": "Chat Models",
       "realtimeModelGroup": "End-to-End Models",
+      "imageModelGroup": "Image Generation",
+      "speechModelGroup": "Voice Transcription",
       "addModel": "+ Add Voice Model",
       "noModels": "No end-to-end voice models configured",
       "noModelsHint": "Add a realtime voice model to enable wave-button voice chat.",

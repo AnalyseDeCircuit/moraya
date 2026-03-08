@@ -14,7 +14,7 @@
   import { settingsStore } from '$lib/stores/settings-store';
   import { startTranscription, stopTranscription } from '$lib/services/voice/speech-service';
   import type { TranscriptSegment } from '$lib/services/voice/types';
-  import type { SpeechProviderConfig } from '$lib/services/ai/types';
+  import type { SpeechProviderConfig, ImageProviderConfig } from '$lib/services/ai/types';
   import { REALTIME_VOICE_BASE_URLS } from '$lib/services/ai/types';
   import { mcpStore } from '$lib/services/mcp';
   import { filesStore } from '$lib/stores/files-store';
@@ -117,6 +117,14 @@
   let inlineCommittedTexts = $state<string[]>([]);
   let inlineInterimText = $state('');
 
+  // Inline recording frequency visualization (non-reactive refs)
+  let _vizStream: MediaStream | null = null;
+  let _vizCtx: AudioContext | null = null;
+  let _vizRafId: number | null = null;
+  let _vizLastSample = 0;
+  const VIZ_COLS = 60;
+  let vizHistory = $state<number[]>(new Array(VIZ_COLS).fill(0));
+
   // MORAYA.md indicator
   let morayaMdActive = $state(false);
   let rulesSectionCount = $state(0);
@@ -129,6 +137,19 @@
     return s.speechProviderConfigs.find(c => c.id === s.activeSpeechConfigId) ?? null;
   });
   let voiceProfiles = $derived($settingsStore.voiceProfiles ?? []);
+  let imageConfigs = $derived<ImageProviderConfig[]>($settingsStore.imageProviderConfigs ?? []);
+  let activeImageId = $derived($settingsStore.activeImageConfigId);
+  let speechConfigs = $derived<SpeechProviderConfig[]>($settingsStore.speechProviderConfigs ?? []);
+  let activeSpeechId = $derived($settingsStore.activeSpeechConfigId);
+
+  let modelTriggerLabel = $derived.by((): string => {
+    const parts: string[] = [];
+    if (providerConfigs.length > 0) parts.push($t('ai.modelShort.chat'));
+    if (realtimeVoiceConfigs.length > 0) parts.push($t('ai.modelShort.realtime'));
+    if (imageConfigs.length > 0) parts.push($t('ai.modelShort.image'));
+    if (speechConfigs.length > 0) parts.push($t('ai.modelShort.speech'));
+    return parts.length > 0 ? parts.join(' · ') : $t('ai.modelShort.none');
+  });
 
   // Top-level store subscriptions — do NOT wrap in $effect().
   // In Svelte 5, $effect tracks reads inside subscribe callbacks, causing
@@ -790,7 +811,45 @@
     return rows.join('\n');
   }
 
+  async function startVizAnalyser() {
+    try {
+      _vizStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      _vizCtx = new AudioContext();
+      const analyser = _vizCtx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.5;
+      _vizCtx.createMediaStreamSource(_vizStream).connect(analyser);
+      const buf = new Uint8Array(analyser.frequencyBinCount);
+      _vizLastSample = 0;
+      const NOISE_FLOOR = 0.08;
+      function tick() {
+        const now = performance.now();
+        if (now - _vizLastSample >= 400) {
+          _vizLastSample = now;
+          analyser.getByteFrequencyData(buf);
+          // Average mid-range frequency magnitudes (0-255 → 0-1)
+          const slice = buf.slice(2, 40);
+          const avg = slice.reduce((a, b) => a + b, 0) / slice.length / 255;
+          // Noise gate: zero out ambient noise below floor
+          vizHistory = [...vizHistory.slice(1), avg > NOISE_FLOOR ? avg : 0];
+        }
+        _vizRafId = requestAnimationFrame(tick);
+      }
+      _vizRafId = requestAnimationFrame(tick);
+    } catch { /* visualization is non-critical */ }
+  }
+
+  function stopVizAnalyser() {
+    if (_vizRafId !== null) { cancelAnimationFrame(_vizRafId); _vizRafId = null; }
+    _vizStream?.getTracks().forEach(t => t.stop());
+    _vizStream = null;
+    _vizCtx?.close().catch(() => {});
+    _vizCtx = null;
+    vizHistory = new Array(VIZ_COLS).fill(0);
+  }
+
   function resetInlineRecordingState() {
+    stopVizAnalyser();
     inlineRecordingState = 'idle';
     inlineSessionId = null;
     inlineCommittedTexts = [];
@@ -831,6 +890,7 @@
     inlineRecordingState = 'recording';
     inlineCommittedTexts = [];
     inlineInterimText = '';
+    startVizAnalyser();
 
     try {
       const sid = await startTranscription(
@@ -1085,38 +1145,34 @@
   <div class="ai-header">
     <div class="ai-header-left">
       <span class="ai-title">{$t('ai.title')}</span>
-      {#if providerConfigs.length + realtimeVoiceConfigs.length > 1}
-        <div class="model-dropdown-wrap">
+      <div class="model-dropdown-wrap">
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <!-- svelte-ignore a11y_click_events_have_key_events -->
           <div
             class="model-dropdown-trigger"
+            class:model-trigger-empty={providerConfigs.length + realtimeVoiceConfigs.length + imageConfigs.length + speechConfigs.length === 0}
             bind:this={modelDropdownTriggerEl}
             onclick={() => showModelDropdown = !showModelDropdown}
           >
-            <span class="model-trigger-text">
-              {providerConfigs.find(c => c.id === activeConfigId)?.model
-                || providerConfigs.find(c => c.id === activeConfigId)?.provider
-                || providerConfigs[0]?.model || ''}
-            </span>
+            <span class="model-trigger-text">{modelTriggerLabel}</span>
             <svg width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" style="flex-shrink:0;opacity:0.5">
               <path d={showModelDropdown ? 'M7 4L4 1 1 4' : 'M1 1l3 3 3-3'} stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
           {#if showModelDropdown}
             <div class="model-dropdown-panel" bind:this={modelDropdownEl}>
-              {#if realtimeVoiceConfigs.length > 0}
+              {#if providerConfigs.length > 0}
                 <div class="model-group-label">{$t('ai.realtime.chatModelGroup')}</div>
+                {#each providerConfigs as cfg}
+                  <button
+                    class="model-dropdown-item"
+                    onclick={() => { aiStore.setActiveConfig(cfg.id); showModelDropdown = false; }}
+                  >
+                    <span class="model-item-dot">{cfg.id === activeConfigId ? '•' : ''}</span>
+                    <span class="model-item-name">{cfg.model || cfg.provider}</span>
+                  </button>
+                {/each}
               {/if}
-              {#each providerConfigs as cfg}
-                <button
-                  class="model-dropdown-item"
-                  onclick={() => { aiStore.setActiveConfig(cfg.id); showModelDropdown = false; }}
-                >
-                  <span class="model-item-dot">{cfg.id === activeConfigId ? '•' : ''}</span>
-                  <span class="model-item-name">{cfg.model || cfg.provider}</span>
-                </button>
-              {/each}
               {#if realtimeVoiceConfigs.length > 0}
                 <div class="model-group-divider"></div>
                 <div class="model-group-label">{$t('ai.realtime.realtimeModelGroup')}</div>
@@ -1130,12 +1186,35 @@
                   </button>
                 {/each}
               {/if}
+              {#if imageConfigs.length > 0}
+                <div class="model-group-divider"></div>
+                <div class="model-group-label">{$t('ai.realtime.imageModelGroup')}</div>
+                {#each imageConfigs as cfg}
+                  <button
+                    class="model-dropdown-item"
+                    onclick={() => { settingsStore.update({ activeImageConfigId: cfg.id }); showModelDropdown = false; }}
+                  >
+                    <span class="model-item-dot">{cfg.id === activeImageId ? '•' : ''}</span>
+                    <span class="model-item-name">{cfg.model || cfg.provider}</span>
+                  </button>
+                {/each}
+              {/if}
+              {#if speechConfigs.length > 0}
+                <div class="model-group-divider"></div>
+                <div class="model-group-label">{$t('ai.realtime.speechModelGroup')}</div>
+                {#each speechConfigs as cfg}
+                  <button
+                    class="model-dropdown-item"
+                    onclick={() => { settingsStore.update({ activeSpeechConfigId: cfg.id }); showModelDropdown = false; }}
+                  >
+                    <span class="model-item-dot">{cfg.id === activeSpeechId ? '•' : ''}</span>
+                    <span class="model-item-name">{cfg.model || cfg.provider}</span>
+                  </button>
+                {/each}
+              {/if}
             </div>
           {/if}
         </div>
-      {:else if providerConfigs.length === 1 && realtimeVoiceConfigs.length === 0}
-        <span class="model-name">{providerConfigs[0].model || providerConfigs[0].provider}</span>
-      {/if}
       {#if mcpToolCount > 0}
         <span class="mcp-badge" title="{mcpToolCount} MCP tools available">{mcpToolCount} tools</span>
       {/if}
@@ -1388,8 +1467,8 @@
           ></textarea>
         </div>
 
-        <div class="input-action-row">
-          <div class="input-action-left">
+        <div class="input-action-row" class:recording={inlineRecordingState === 'recording'}>
+          <div class="input-action-left" class:hidden={inlineRecordingState === 'recording'}>
             {#if !isRealtimeVoiceActive}
               <button
                 class="icon-btn plus-btn"
@@ -1414,7 +1493,7 @@
             </button>
           </div>
 
-          <div class="input-action-right">
+          <div class="input-action-right" class:recording-fullrow={inlineRecordingState === 'recording'}>
             {#if isLoading}
               <button class="icon-btn primary-btn stop-btn" onclick={abortAIRequest} title={$t('ai.stop')}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1444,15 +1523,16 @@
                 </svg>
               </button>
             {:else if inlineRecordingState === 'recording'}
-              <span class="recording-wave" aria-hidden="true">
-                <svg viewBox="0 0 24 16" fill="none">
-                  <rect class="wave-bar wave-bar-1" x="1" y="5" width="3" height="6" rx="1.5" fill="currentColor"></rect>
-                  <rect class="wave-bar wave-bar-2" x="6" y="2" width="3" height="12" rx="1.5" fill="currentColor"></rect>
-                  <rect class="wave-bar wave-bar-3" x="11" y="4" width="3" height="8" rx="1.5" fill="currentColor"></rect>
-                  <rect class="wave-bar wave-bar-4" x="16" y="1" width="3" height="14" rx="1.5" fill="currentColor"></rect>
-                  <rect class="wave-bar wave-bar-5" x="21" y="5" width="3" height="6" rx="1.5" fill="currentColor"></rect>
-                </svg>
-              </span>
+              <div class="inline-wave-bars" aria-hidden="true">
+                {#each vizHistory as v}
+                  {@const active = v >= 0.04}
+                  <div
+                    class="freq-slot"
+                    class:freq-slot--active={active}
+                    style="height:{Math.max(3, v * 42)}px; border-radius:{active ? '1px' : '50%'}"
+                  ></div>
+                {/each}
+              </div>
               <button class="icon-btn ghost-btn" onclick={cancelInlineRecording} title={$t('ai.voice.cancel')}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1609,6 +1689,11 @@
     user-select: none;
   }
 
+  .model-trigger-empty .model-trigger-text {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
   .model-dropdown-trigger:hover {
     border-color: var(--accent-color);
     color: var(--text-primary);
@@ -1674,7 +1759,7 @@
     width: 1rem;
     flex-shrink: 0;
     color: var(--accent-color);
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1;
     text-align: center;
   }
@@ -2302,6 +2387,41 @@
     align-items: center;
     gap: 0.3rem;
     min-height: 2rem;
+  }
+
+  .input-action-left.hidden {
+    display: none;
+  }
+
+  .input-action-right.recording-fullrow {
+    flex: 1;
+    gap: 0.3rem;
+  }
+
+  .inline-wave-bars {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 1.95rem;
+    overflow: hidden;
+  }
+
+  .freq-slot {
+    width: 2px;
+    flex-shrink: 0;
+    max-height: 100%;
+    background: var(--text-tertiary, #bbb);
+    align-self: center;
+    transition: opacity 2s ease-out, border-radius 2s ease-out;
+    opacity: 0.25;
+  }
+
+  .freq-slot--active {
+    background: linear-gradient(to top, var(--accent-color), color-mix(in srgb, var(--accent-color) 55%, white));
+    opacity: 0.9;
+    box-shadow: 0 0 3px color-mix(in srgb, var(--accent-color) 70%, transparent),
+                0 0 7px color-mix(in srgb, var(--accent-color) 35%, transparent);
   }
 
   .icon-btn {
