@@ -1425,7 +1425,7 @@
       {#if activeTemplate && !showParamPanel}
         <div class="template-hint">
           <span class="template-hint-label">{activeTemplate.icon} {$t(activeTemplate.nameKey)}</span>
-          <button class="template-hint-close" onclick={() => { activeTemplate = null; inputPlaceholderOverride = null; }}>
+          <button class="template-hint-close" aria-label={$t('common.close')} onclick={() => { activeTemplate = null; inputPlaceholderOverride = null; }}>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
               <path d="M8 2L2 8m0-6l6 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
             </svg>
