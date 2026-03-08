@@ -531,7 +531,9 @@
     "ossCdnDomain": "CDN 加速網域（可選）",
     "ossCdnDomainPlaceholder": "例如 https://cdn.example.com",
     "ossPathPrefix": "路徑前綴（可選）",
-    "ossPathPrefixPlaceholder": "例如 images/blog/"
+    "ossPathPrefixPlaceholder": "例如 images/blog/",
+    "required": "必填",
+    "qiniuCdnRequired": "七牛雲需要設定 CDN 加速網域才能產生可存取的圖片連結。"
   },
   "imageMenu": {
     "resize": "調整大小",

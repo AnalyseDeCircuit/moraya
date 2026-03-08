@@ -859,10 +859,10 @@
     </div>
   {/if}
 
-  {#if inputDialog}
+  {#if inputDialog && inputDialog.mode !== 'rename'}
     <div class="input-dialog">
       <span class="input-dialog-label">
-        {inputDialog.mode === 'new-file' ? $t('sidebar.newFilePrompt') : inputDialog.mode === 'new-folder' ? $t('sidebar.newFolderPrompt') : $t('sidebar.renamePrompt')}
+        {inputDialog.mode === 'new-file' ? $t('sidebar.newFilePrompt') : $t('sidebar.newFolderPrompt')}
       </span>
       <input
         bind:this={inputDialogEl}
@@ -914,34 +914,56 @@
 </div>
 
 {#snippet fileTreeItem(entry: FileEntry, depth: number)}
-  <button
-    class="tree-item"
-    class:is-dir={entry.is_dir}
-    class:drop-target={entry.is_dir && dropTargetPath === entry.path}
-    style="padding-inline-start: {0.75 + depth * 1}rem"
-    data-folder-path={entry.is_dir ? entry.path : undefined}
-    data-file-path={!entry.is_dir ? entry.path : undefined}
-    onclick={() => handleFileClick(entry)}
-    oncontextmenu={(e) => handleContextMenu(e, entry.is_dir ? 'folder' : 'file', entry.path, entry.name)}
-    onmousedown={!entry.is_dir ? (e) => startFileDrag(e, entry) : undefined}
-  >
-    {#if entry.is_dir}
-      <span class="tree-icon" class:expanded={expandedDirs.has(entry.path)}>
-        <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
-          <path d="M2 1l4 3-4 3z"/>
-        </svg>
+  {#if inputDialog?.mode === 'rename' && inputDialog.targetPath === entry.path}
+    <div class="inline-rename" style="padding-inline-start: {0.75 + depth * 1}rem">
+      {#if entry.is_dir}
+        <span class="tree-icon expanded">
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
+        </span>
+      {:else}
+        <span class="tree-icon file-icon">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" opacity="0.5"><path d="M2 1h5l3 3v7H2V1zm5 0v3h3"/></svg>
+        </span>
+      {/if}
+      <input
+        bind:this={inputDialogEl}
+        type="text"
+        class="inline-rename-input"
+        bind:value={inputDialog.value}
+        onkeydown={handleInputDialogKeydown}
+        onblur={() => { inputDialog = null; }}
+      />
+    </div>
+  {:else}
+    <button
+      class="tree-item"
+      class:is-dir={entry.is_dir}
+      class:drop-target={entry.is_dir && dropTargetPath === entry.path}
+      style="padding-inline-start: {0.75 + depth * 1}rem"
+      data-folder-path={entry.is_dir ? entry.path : undefined}
+      data-file-path={!entry.is_dir ? entry.path : undefined}
+      onclick={() => handleFileClick(entry)}
+      oncontextmenu={(e) => handleContextMenu(e, entry.is_dir ? 'folder' : 'file', entry.path, entry.name)}
+      onmousedown={!entry.is_dir ? (e) => startFileDrag(e, entry) : undefined}
+    >
+      {#if entry.is_dir}
+        <span class="tree-icon" class:expanded={expandedDirs.has(entry.path)}>
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+            <path d="M2 1l4 3-4 3z"/>
+          </svg>
+        </span>
+      {:else}
+        <span class="tree-icon file-icon">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" opacity="0.5">
+            <path d="M2 1h5l3 3v7H2V1zm5 0v3h3"/>
+          </svg>
+        </span>
+      {/if}
+      <span class="tree-name" class:moraya-rule={!entry.is_dir && entry.name === 'MORAYA.md'}>
+        {entry.is_dir ? entry.name : getDisplayName(entry.name)}
       </span>
-    {:else}
-      <span class="tree-icon file-icon">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" opacity="0.5">
-          <path d="M2 1h5l3 3v7H2V1zm5 0v3h3"/>
-        </svg>
-      </span>
-    {/if}
-    <span class="tree-name" class:moraya-rule={!entry.is_dir && entry.name === 'MORAYA.md'}>
-      {entry.is_dir ? entry.name : getDisplayName(entry.name)}
-    </span>
-  </button>
+    </button>
+  {/if}
 
   {#if entry.is_dir && entry.children && expandedDirs.has(entry.path)}
     {#each entry.children.filter(c => !isReservedDir(c)) as child}
@@ -952,43 +974,75 @@
 
 {#snippet listItem(entry: FileEntry, depth: number)}
   {#if entry.is_dir}
-    <!-- Directory row: folder name + chevron; also a drop target via data-folder-path -->
-    <button
-      class="list-dir-item"
-      class:drop-target={dropTargetPath === entry.path}
-      style="padding-inline-start: {0.75 + depth}rem"
-      data-folder-path={entry.path}
-      onclick={() => toggleDir(entry.path)}
-      oncontextmenu={(e) => handleContextMenu(e, 'folder', entry.path, entry.name)}
-    >
-      <span class="tree-icon" class:expanded={expandedDirs.has(entry.path)}>
-        <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
-          <path d="M2 1l4 3-4 3z"/>
-        </svg>
-      </span>
-      <span class="list-dir-name">{entry.name}</span>
-    </button>
+    {#if inputDialog?.mode === 'rename' && inputDialog.targetPath === entry.path}
+      <div class="inline-rename" style="padding-inline-start: {0.75 + depth}rem">
+        <span class="tree-icon expanded">
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
+        </span>
+        <input
+          bind:this={inputDialogEl}
+          type="text"
+          class="inline-rename-input"
+          bind:value={inputDialog.value}
+          onkeydown={handleInputDialogKeydown}
+          onblur={() => { inputDialog = null; }}
+        />
+      </div>
+    {:else}
+      <!-- Directory row: folder name + chevron; also a drop target via data-folder-path -->
+      <button
+        class="list-dir-item"
+        class:drop-target={dropTargetPath === entry.path}
+        style="padding-inline-start: {0.75 + depth}rem"
+        data-folder-path={entry.path}
+        onclick={() => toggleDir(entry.path)}
+        oncontextmenu={(e) => handleContextMenu(e, 'folder', entry.path, entry.name)}
+      >
+        <span class="tree-icon" class:expanded={expandedDirs.has(entry.path)}>
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+            <path d="M2 1l4 3-4 3z"/>
+          </svg>
+        </span>
+        <span class="list-dir-name">{entry.name}</span>
+      </button>
+    {/if}
     {#if expandedDirs.has(entry.path) && entry.children}
       {#each entry.children.filter(c => !isReservedDir(c)) as child}
         {@render listItem(child, depth + 1)}
       {/each}
     {/if}
   {:else}
-    <!-- File row: name + preview excerpt; mouse-based drag to move between folders -->
-    {@const preview = previewMap.get(entry.path)}
-    <button
-      class="list-item"
-      style="padding-inline-start: {0.75 + depth + 1}rem"
-      data-file-path={entry.path}
-      onclick={() => onFileSelect(entry.path)}
-      oncontextmenu={(e) => handleContextMenu(e, 'file', entry.path, entry.name)}
-      onmousedown={(e) => startFileDrag(e, entry)}
-    >
-      <span class="list-item-title" class:moraya-rule={entry.name === 'MORAYA.md'}>{getDisplayName(entry.name)}</span>
-      {#if preview?.preview}
-        <span class="list-item-preview" class:moraya-rule-preview={entry.name === 'MORAYA.md'}>{preview.preview}</span>
-      {/if}
-    </button>
+    {#if inputDialog?.mode === 'rename' && inputDialog.targetPath === entry.path}
+      <div class="inline-rename" style="padding-inline-start: {0.75 + depth + 1}rem">
+        <span class="tree-icon file-icon">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" opacity="0.5"><path d="M2 1h5l3 3v7H2V1zm5 0v3h3"/></svg>
+        </span>
+        <input
+          bind:this={inputDialogEl}
+          type="text"
+          class="inline-rename-input"
+          bind:value={inputDialog.value}
+          onkeydown={handleInputDialogKeydown}
+          onblur={() => { inputDialog = null; }}
+        />
+      </div>
+    {:else}
+      <!-- File row: name + preview excerpt; mouse-based drag to move between folders -->
+      {@const preview = previewMap.get(entry.path)}
+      <button
+        class="list-item"
+        style="padding-inline-start: {0.75 + depth + 1}rem"
+        data-file-path={entry.path}
+        onclick={() => onFileSelect(entry.path)}
+        oncontextmenu={(e) => handleContextMenu(e, 'file', entry.path, entry.name)}
+        onmousedown={(e) => startFileDrag(e, entry)}
+      >
+        <span class="list-item-title" class:moraya-rule={entry.name === 'MORAYA.md'}>{getDisplayName(entry.name)}</span>
+        {#if preview?.preview}
+          <span class="list-item-preview" class:moraya-rule-preview={entry.name === 'MORAYA.md'}>{preview.preview}</span>
+        {/if}
+      </button>
+    {/if}
   {/if}
 {/snippet}
 
@@ -1077,6 +1131,27 @@
 
   .search-input:focus {
     border-color: var(--accent-color);
+  }
+
+  .inline-rename {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-block: 0.15rem;
+    padding-inline-end: 0.5rem;
+    min-height: 28px;
+  }
+
+  .inline-rename-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.15rem 0.3rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 3px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--font-size-xs);
+    outline: none;
   }
 
   .input-dialog {

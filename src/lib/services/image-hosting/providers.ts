@@ -283,6 +283,13 @@ async function uploadToObjectStorage(blob: Blob, config: ImageHostConfig): Promi
     throw new Error('Object storage is not configured (missing bucket or region)');
   }
 
+  // Qiniu upload API returns only the object key, not a full URL.
+  // A CDN domain is required to construct a valid download URL.
+  // Without it, the upload "succeeds" but sets src to just a filename, breaking the image.
+  if (config.provider === 'qiniu' && !config.ossCdnDomain) {
+    throw new Error('七牛云上传失败：请先在图床设置中配置 CDN 加速域名（CDN Domain），否则无法生成可访问的图片链接。');
+  }
+
   const arrayBuffer = await blob.arrayBuffer();
   const bytes = Array.from(new Uint8Array(arrayBuffer));
   const fileName = timestampedName((blob as File).name || 'image.png');

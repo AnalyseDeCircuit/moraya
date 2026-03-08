@@ -531,7 +531,9 @@
     "ossCdnDomain": "CDN домен (необязательно)",
     "ossCdnDomainPlaceholder": "напр., https://cdn.example.com",
     "ossPathPrefix": "Префикс пути (необязательно)",
-    "ossPathPrefixPlaceholder": "напр., images/blog/"
+    "ossPathPrefixPlaceholder": "напр., images/blog/",
+    "required": "Обязательно",
+    "qiniuCdnRequired": "Qiniu требует домен CDN для создания доступных URL изображений."
   },
   "imageMenu": {
     "resize": "Изменить размер",

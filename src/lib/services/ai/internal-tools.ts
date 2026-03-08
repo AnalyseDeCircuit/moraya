@@ -172,7 +172,9 @@ export const INTERNAL_TOOLS: ToolDefinition[] = [
       'Do NOT use this tool when the user asks to modify a specific named file (e.g. MORAYA.md, rules.md, or any path) ' +
       'unless that exact file is already open in the editor. ' +
       'For writing to a specific file by path, use write_file instead. ' +
-      'Correct uses: (1) filling a new unsaved document, (2) replacing the content of the file the user is currently editing.',
+      'Correct uses: (1) filling a new unsaved document, (2) replacing the content of the file the user is currently editing. ' +
+      'CRITICAL: NEVER pass rule/configuration file content (e.g. content read from MORAYA.md or .moraya/rules/) as the content argument — ' +
+      'the content must be the actual article/document the user wants to write, not rules or system instructions.',
     input_schema: {
       type: 'object',
       properties: {

@@ -531,7 +531,9 @@
     "ossCdnDomain": "نطاق CDN (اختياري)",
     "ossCdnDomainPlaceholder": "مثال: https://cdn.example.com",
     "ossPathPrefix": "بادئة المسار (اختياري)",
-    "ossPathPrefixPlaceholder": "مثال: images/blog/"
+    "ossPathPrefixPlaceholder": "مثال: images/blog/",
+    "required": "مطلوب",
+    "qiniuCdnRequired": "يتطلب Qiniu نطاقاً للشبكة CDN لإنشاء روابط صور يمكن الوصول إليها."
   },
   "imageMenu": {
     "resize": "تغيير الحجم",

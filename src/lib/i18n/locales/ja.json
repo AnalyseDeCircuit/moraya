@@ -531,7 +531,9 @@
     "ossCdnDomain": "CDN ドメイン（任意）",
     "ossCdnDomainPlaceholder": "例：https://cdn.example.com",
     "ossPathPrefix": "パスプレフィックス（任意）",
-    "ossPathPrefixPlaceholder": "例：images/blog/"
+    "ossPathPrefixPlaceholder": "例：images/blog/",
+    "required": "必須",
+    "qiniuCdnRequired": "Qiniuはアクセス可能な画像URLを生成するためにCDNドメインが必要です。"
   },
   "imageMenu": {
     "resize": "リサイズ",

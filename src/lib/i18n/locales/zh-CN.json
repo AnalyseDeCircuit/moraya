@@ -585,7 +585,9 @@
     "ossCdnDomain": "CDN 加速域名（可选）",
     "ossCdnDomainPlaceholder": "例如 https://cdn.example.com",
     "ossPathPrefix": "路径前缀（可选）",
-    "ossPathPrefixPlaceholder": "例如 images/blog/"
+    "ossPathPrefixPlaceholder": "例如 images/blog/",
+    "required": "必填",
+    "qiniuCdnRequired": "七牛云需要配置 CDN 加速域名才能生成可访问的图片链接。"
   },
   "imageMenu": {
     "resize": "调整大小",

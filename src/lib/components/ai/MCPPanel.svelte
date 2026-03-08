@@ -86,6 +86,14 @@
   let editArgs = $state('');
   let editUrl = $state('');
   let editEnv = $state('');
+  let editEnvEl = $state<HTMLTextAreaElement | null>(null);
+  let newServerEnvEl = $state<HTMLTextAreaElement | null>(null);
+
+  // Plain JS variables (NOT $state) for env textarea raw content.
+  // WKWebView may truncate textarea.value or bind:value for multi-line content.
+  // undefined = not yet initialized; string = set by startEdit() or oninput.
+  let _editEnvRaw: string | undefined = undefined;
+  let _newServerEnvRaw: string | undefined = undefined;
 
   // Top-level store subscriptions — do NOT wrap in $effect().
   // Svelte 5 $effect tracks reads in subscribe callbacks, causing infinite loops.
@@ -136,7 +144,8 @@
 
   /** Parse "KEY=VALUE" lines into a Record, returns undefined if empty */
   function parseEnvString(envStr: string): Record<string, string> | undefined {
-    const lines = envStr.trim().split('\n').filter(l => l.trim());
+    // Split on \r\n, \r, or \n to handle all line-ending styles (WKWebView may use \r)
+    const lines = envStr.trim().split(/\r\n|\r|\n/).filter(l => l.trim());
     if (lines.length === 0) return undefined;
     const env: Record<string, string> = {};
     for (const line of lines) {
@@ -161,7 +170,10 @@
     if (newServerTransport === 'stdio') {
       if (!newServerCommand.trim()) return;
       const args = newServerArgs.trim() ? newServerArgs.trim().split(/\s+/) : [];
-      transport = { type: 'stdio', command: newServerCommand.trim(), args, env: parseEnvString(newServerEnv) };
+      // Use _newServerEnvRaw (plain variable updated by oninput) as primary source.
+      // Use ?? so an intentionally-cleared (empty) textarea is respected.
+      const envText = _newServerEnvRaw !== undefined ? _newServerEnvRaw : (newServerEnvEl?.value ?? newServerEnv);
+      transport = { type: 'stdio', command: newServerCommand.trim(), args, env: parseEnvString(envText) };
     } else {
       if (!newServerUrl.trim()) return;
       transport = { type: newServerTransport, url: newServerUrl.trim() };
@@ -180,6 +192,7 @@
     newServerCommand = '';
     newServerArgs = '';
     newServerEnv = '';
+    _newServerEnvRaw = undefined;
     showAddServer = false;
   }
 
@@ -277,6 +290,7 @@
       editCommand = server.transport.command;
       editArgs = (server.transport.args || []).join(' ');
       editEnv = envToString(server.transport.env);
+      _editEnvRaw = editEnv; // initialize plain var from source data directly
       editUrl = '';
     } else {
       editCommand = '';
@@ -288,6 +302,7 @@
 
   function cancelEdit() {
     editingServerId = null;
+    _editEnvRaw = undefined;
   }
 
   async function handleSaveEdit() {
@@ -297,7 +312,10 @@
     if (editTransport === 'stdio') {
       if (!editCommand.trim()) return;
       const args = editArgs.trim() ? editArgs.trim().split(/\s+/) : [];
-      transport = { type: 'stdio', command: editCommand.trim(), args, env: parseEnvString(editEnv) };
+      // Use _editEnvRaw (plain variable updated by oninput) as primary source.
+      // Use ?? so an intentionally-cleared (empty) textarea is respected.
+      const envText = _editEnvRaw !== undefined ? _editEnvRaw : (editEnvEl?.value ?? editEnv);
+      transport = { type: 'stdio', command: editCommand.trim(), args, env: parseEnvString(envText) };
     } else {
       if (!editUrl.trim()) return;
       transport = { type: editTransport, url: editUrl.trim() };
@@ -322,6 +340,7 @@
     }
 
     editingServerId = null;
+    _editEnvRaw = undefined;
   }
 
   async function handlePublish(targetId: string) {
@@ -630,9 +649,14 @@
                 />
                 <textarea
                   class="form-input env-input"
+                  bind:this={editEnvEl}
                   bind:value={editEnv}
+                  oninput={(e) => { _editEnvRaw = (e.currentTarget as HTMLTextAreaElement).value; }}
                   placeholder={$t('mcp.servers.envPlaceholder')}
-                  rows="2"
+                  rows="4"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
                 ></textarea>
               {:else}
                 <input
@@ -730,9 +754,14 @@
               />
               <textarea
                 class="form-input env-input"
+                bind:this={newServerEnvEl}
                 bind:value={newServerEnv}
+                oninput={(e) => { _newServerEnvRaw = (e.currentTarget as HTMLTextAreaElement).value; }}
                 placeholder={$t('mcp.servers.envPlaceholder')}
-                rows="2"
+                rows="4"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
               ></textarea>
             {:else}
               <input

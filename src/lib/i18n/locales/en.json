@@ -585,7 +585,9 @@
     "ossCdnDomain": "CDN Domain (optional)",
     "ossCdnDomainPlaceholder": "e.g. https://cdn.example.com",
     "ossPathPrefix": "Path Prefix (optional)",
-    "ossPathPrefixPlaceholder": "e.g. images/blog/"
+    "ossPathPrefixPlaceholder": "e.g. images/blog/",
+    "required": "Required",
+    "qiniuCdnRequired": "Qiniu requires a CDN domain to generate accessible image URLs."
   },
   "imageMenu": {
     "resize": "Resize",

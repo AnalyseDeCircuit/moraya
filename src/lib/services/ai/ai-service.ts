@@ -852,7 +852,13 @@ function buildSystemPrompt(
   if (currentDir) prompt += `\n\nCurrent working directory: ${currentDir}`;
   if (currentFilePath) prompt += `\nCurrent file: ${currentFilePath}`;
   if (documentContext) {
-    prompt += `\n\n${documentContext ? `Current document context (last 1000 chars):\n${documentContext.slice(-1000)}` : ''}`;
+    // NEVER inject MORAYA.md content as document context — that is the rules file, not user content.
+    // Injecting it would confuse the AI into writing rules back into articles.
+    if (currentFilePath && currentFilePath.endsWith('/MORAYA.md')) {
+      prompt += '\n\nCurrent document context: [MORAYA.md — rules file, content omitted to prevent confusion]';
+    } else {
+      prompt += `\n\nCurrent document context (last 1000 chars):\n${documentContext.slice(-1000)}`;
+    }
   }
 
   return prompt;

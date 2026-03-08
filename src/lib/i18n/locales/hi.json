@@ -531,7 +531,9 @@
     "ossCdnDomain": "CDN डोमेन (वैकल्पिक)",
     "ossCdnDomainPlaceholder": "जैसे https://cdn.example.com",
     "ossPathPrefix": "पथ उपसर्ग (वैकल्पिक)",
-    "ossPathPrefixPlaceholder": "जैसे images/blog/"
+    "ossPathPrefixPlaceholder": "जैसे images/blog/",
+    "required": "आवश्यक",
+    "qiniuCdnRequired": "Qiniu को सुलभ छवि URLs बनाने के लिए एक CDN डोमेन की आवश्यकता है।"
   },
   "imageMenu": {
     "resize": "आकार बदलें",

@@ -531,7 +531,9 @@
     "ossCdnDomain": "CDN 도메인 (선택 사항)",
     "ossCdnDomainPlaceholder": "예: https://cdn.example.com",
     "ossPathPrefix": "경로 접두사 (선택 사항)",
-    "ossPathPrefixPlaceholder": "예: images/blog/"
+    "ossPathPrefixPlaceholder": "예: images/blog/",
+    "required": "필수",
+    "qiniuCdnRequired": "Qiniu는 액세스 가능한 이미지 URL을 생성하려면 CDN 도메인이 필요합니다."
   },
   "imageMenu": {
     "resize": "크기 조절",

@@ -403,9 +403,18 @@
             bind:value={editingTarget.ossEndpoint} placeholder={tr('imageHost.ossEndpointPlaceholder')} />
         </div>
         <div class="setting-group">
-          <label class="setting-label" for="imghost-oss-cdn">{tr('imageHost.ossCdnDomain')}</label>
+          <label class="setting-label" for="imghost-oss-cdn">
+            {tr('imageHost.ossCdnDomain')}
+            {#if editingTarget.provider === 'qiniu'}
+              <span class="required-badge">* {tr('imageHost.required')}</span>
+            {/if}
+          </label>
           <input id="imghost-oss-cdn" type="text" class="setting-input"
+            class:input-required={editingTarget.provider === 'qiniu' && !editingTarget.ossCdnDomain}
             bind:value={editingTarget.ossCdnDomain} placeholder={tr('imageHost.ossCdnDomainPlaceholder')} />
+          {#if editingTarget.provider === 'qiniu' && !editingTarget.ossCdnDomain}
+            <p class="field-hint field-hint-error">{tr('imageHost.qiniuCdnRequired')}</p>
+          {/if}
         </div>
         <div class="setting-group">
           <label class="setting-label" for="imghost-oss-prefix">{tr('imageHost.ossPathPrefix')}</label>
@@ -838,5 +847,29 @@
     font-size: var(--font-size-xs);
     color: #dc3545;
     word-break: break-all;
+  }
+
+  .required-badge {
+    font-size: var(--font-size-xs);
+    color: #dc3545;
+    font-weight: 600;
+  }
+
+  .field-hint {
+    margin: 2px 0 0 0;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+  }
+
+  .field-hint-error {
+    color: #dc3545;
+  }
+
+  .input-required {
+    border-color: #dc3545;
+  }
+
+  .input-required:focus {
+    border-color: #dc3545;
   }
 </style>
