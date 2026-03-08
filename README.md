@@ -12,7 +12,7 @@
 
 ![](https://raw.githubusercontent.com/zouwei/resource/master/images/moraya/20260214-165329.-image.png)
 
-![](https://raw.githubusercontent.com/zouwei/resource/master/images/moraya/20260223-014749.-image.png)
+![](https://raw.githubusercontent.com/zouwei/resource/master/images/moraya/20260308-100641.-image.png)
 
 ![](https://raw.githubusercontent.com/zouwei/resource/master/images/moraya/20260307-051230.-image.png)
 
@@ -184,7 +184,7 @@ Download the latest release from [GitHub Releases](https://github.com/zouwei/mor
 
 > **macOS note**: The app is not code-signed. If you see *"Moraya is damaged and can't be opened"*, run this in Terminal:
 >
-> ```bash  
+> ```bash
 > xattr -cr /Applications/Moraya.app  
 > ```
 >
