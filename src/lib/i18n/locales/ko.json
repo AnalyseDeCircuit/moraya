@@ -202,7 +202,12 @@
     "deleteCol": "열 삭제",
     "alignLeft": "왼쪽 정렬",
     "alignCenter": "가운데 정렬",
-    "alignRight": "오른쪽 정렬"
+    "alignRight": "오른쪽 정렬",
+    "copyTable": "표 복사",
+    "formatTableSource": "표 소스 포맷",
+    "deleteTable": "표 삭제",
+    "copied": "표가 복사되었습니다",
+    "formattedCopied": "포맷된 표가 복사되었습니다"
   },
   "knowledgeBase": {
     "title": "지식 베이스",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "제목 없음"
+  },
+  "pluginAction": {
+    "title": "플러그인 실행",
+    "runAction": "실행",
+    "invoking": "실행 중...",
+    "success": "플러그인 적용됨",
+    "noChanges": "변경 없음",
+    "noPlugins": "실행 중인 플러그인 없음"
   }
 }

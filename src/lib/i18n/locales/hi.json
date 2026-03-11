@@ -202,7 +202,12 @@
     "deleteCol": "स्तंभ हटाएँ",
     "alignLeft": "बाएँ संरेखित करें",
     "alignCenter": "केंद्र संरेखित करें",
-    "alignRight": "दाएँ संरेखित करें"
+    "alignRight": "दाएँ संरेखित करें",
+    "copyTable": "तालिका कॉपी करें",
+    "formatTableSource": "तालिका स्रोत फ़ॉर्मेट करें",
+    "deleteTable": "तालिका हटाएं",
+    "copied": "तालिका कॉपी की गई",
+    "formattedCopied": "फ़ॉर्मेटेड तालिका कॉपी की गई"
   },
   "knowledgeBase": {
     "title": "ज्ञान आधार",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "कोई शीर्षक नहीं"
+  },
+  "pluginAction": {
+    "title": "प्लगइन चलाएं",
+    "runAction": "चलाएं",
+    "invoking": "चल रहा है...",
+    "success": "प्लगइन लागू हुआ",
+    "noChanges": "कोई बदलाव नहीं",
+    "noPlugins": "कोई चालू प्लगइन नहीं"
   }
 }

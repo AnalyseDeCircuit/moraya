@@ -202,7 +202,12 @@
     "deleteCol": "Spalte löschen",
     "alignLeft": "Linksbündig",
     "alignCenter": "Zentriert",
-    "alignRight": "Rechtsbündig"
+    "alignRight": "Rechtsbündig",
+    "copyTable": "Tabelle kopieren",
+    "formatTableSource": "Tabellenquelle formatieren",
+    "deleteTable": "Tabelle löschen",
+    "copied": "Tabelle kopiert",
+    "formattedCopied": "Formatierte Tabelle kopiert"
   },
   "knowledgeBase": {
     "title": "Wissensbasis",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "Keine Überschriften"
+  },
+  "pluginAction": {
+    "title": "Plugin ausführen",
+    "runAction": "Ausführen",
+    "invoking": "Wird ausgeführt...",
+    "success": "Plugin angewendet",
+    "noChanges": "Keine Änderungen",
+    "noPlugins": "Keine laufenden Plugins"
   }
 }

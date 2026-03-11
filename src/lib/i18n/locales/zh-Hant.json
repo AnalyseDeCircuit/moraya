@@ -202,7 +202,12 @@
     "deleteCol": "刪除欄",
     "alignLeft": "靠左對齊",
     "alignCenter": "置中對齊",
-    "alignRight": "靠右對齊"
+    "alignRight": "靠右對齊",
+    "copyTable": "複製表格",
+    "formatTableSource": "格式化表格原始碼",
+    "deleteTable": "刪除表格",
+    "copied": "表格已複製",
+    "formattedCopied": "格式化表格已複製"
   },
   "knowledgeBase": {
     "title": "知識庫",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "暫無標題"
+  },
+  "pluginAction": {
+    "title": "執行插件",
+    "runAction": "執行",
+    "invoking": "執行中...",
+    "success": "插件已套用",
+    "noChanges": "無變更",
+    "noPlugins": "沒有執行中的插件"
   }
 }

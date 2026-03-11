@@ -202,7 +202,12 @@
     "deleteCol": "Excluir coluna",
     "alignLeft": "Alinhar à esquerda",
     "alignCenter": "Centralizar",
-    "alignRight": "Alinhar à direita"
+    "alignRight": "Alinhar à direita",
+    "copyTable": "Copiar tabela",
+    "formatTableSource": "Formatar fonte da tabela",
+    "deleteTable": "Excluir tabela",
+    "copied": "Tabela copiada",
+    "formattedCopied": "Tabela formatada copiada"
   },
   "knowledgeBase": {
     "title": "Base de conhecimento",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "Sem títulos"
+  },
+  "pluginAction": {
+    "title": "Executar plugin",
+    "runAction": "Executar",
+    "invoking": "Executando...",
+    "success": "Plugin aplicado",
+    "noChanges": "Sem alterações",
+    "noPlugins": "Nenhum plugin em execução"
   }
 }

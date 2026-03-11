@@ -11,6 +11,7 @@
     addColumnAfter,
     deleteRow,
     deleteColumn,
+    deleteTable,
   } from 'prosemirror-tables';
   import { getCurrentWebview } from '@tauri-apps/api/webview';
   import type { UnlistenFn } from '@tauri-apps/api/event';
@@ -27,7 +28,7 @@
   import { invoke } from '@tauri-apps/api/core';
   import { openUrl } from '@tauri-apps/plugin-opener';
   import { isTauri } from '$lib/utils/platform';
-  import TableToolbar from './TableToolbar.svelte';
+  import TableContextMenu from './TableContextMenu.svelte';
   import ImageContextMenu from './ImageContextMenu.svelte';
   import ImageToolbar from './ImageToolbar.svelte';
   import ImageAltEditor from './ImageAltEditor.svelte';
@@ -36,6 +37,12 @@
   const IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp', 'ico', 'tiff', 'tif', 'avif']);
 
   import { extractFrontmatter } from '../utils/frontmatter';
+  import { t } from '$lib/i18n';
+  import { get } from 'svelte/store';
+  import { pluginStore } from '$lib/services/plugin';
+  import { filesStore } from '$lib/stores/files-store';
+  import type { InstalledPlugin } from '$lib/services/plugin/types';
+  import PluginContextMenu from './PluginContextMenu.svelte';
 
   /** Stored frontmatter block (including `---` fences and trailing newline) */
   let storedFrontmatter = '';
@@ -224,8 +231,8 @@
 
     return result.join('\n');
   }
-  let showTableToolbar = $state(false);
-  let tableToolbarPosition = $state({ top: 0, left: 0 });
+  let showTableMenu = $state(false);
+  let tableMenuPosition = $state({ top: 0, left: 0 });
 
   // Image context menu state
   let showImageMenu = $state(false);
@@ -238,6 +245,12 @@
   let showAltEditor = $state(false);
   let altEditorPosition = $state({ top: 0, left: 0 });
   let altEditorInitialValue = $state('');
+
+  // Plugin context menu state
+  let showPluginMenu = $state(false);
+  let pluginMenuPosition = $state({ top: 0, left: 0 });
+  let pluginMenuPlugins = $state<InstalledPlugin[]>([]);
+  let pluginInvokingId = $state<string | null>(null);
 
   // Image click toolbar state
   let showImageToolbar = $state(false);
@@ -272,31 +285,118 @@
     }
   }
 
-  function updateTableToolbarImmediate() {
-    if (!editor) return;
-    const inTable = isInsideTable();
-    if (inTable) {
-      try {
-        const view = editor.view;
-        const { from } = view.state.selection;
-        const coords = view.coordsAtPos(from);
-        tableToolbarPosition = { top: coords.top, left: coords.left };
-        showTableToolbar = true;
-      } catch {
-        showTableToolbar = false;
+  /** Get the markdown source of the current table node, or null if not in a table. */
+  function getTableMarkdown(): string | null {
+    if (!editor) return null;
+    try {
+      const view = editor.view;
+      const selFrom = view.state.selection.$from;
+      for (let d = selFrom.depth; d > 0; d--) {
+        if (selFrom.node(d).type.name === 'table') {
+          const tableNode = selFrom.node(d);
+          const tempDoc = schema.node('doc', null, [tableNode]);
+          return serializeMarkdown(tempDoc).trim();
+        }
       }
-    } else {
-      showTableToolbar = false;
+      return null;
+    } catch {
+      return null;
     }
   }
 
-  // RAF-throttled version for high-frequency events (keyup)
-  function updateTableToolbar() {
-    if (tableToolbarRaf) return;
-    tableToolbarRaf = requestAnimationFrame(() => {
-      tableToolbarRaf = undefined;
-      updateTableToolbarImmediate();
+  /** Format a markdown table with padded columns for readability. */
+  function formatMarkdownTable(md: string): string {
+    const lines = md.trim().split('\n').filter(l => l.trim().startsWith('|'));
+    if (lines.length < 2) return md;
+    const rows = lines.map(line =>
+      line.replace(/^\s*\||\|\s*$/g, '').split('|').map(c => c.trim())
+    );
+    const colCount = Math.max(...rows.map(r => r.length));
+    const normalized = rows.map(r => {
+      while (r.length < colCount) r.push('');
+      return r;
     });
+    const widths: number[] = Array(colCount).fill(3);
+    normalized.forEach((row, ri) => {
+      if (ri === 1) return;
+      row.forEach((cell, ci) => { widths[ci] = Math.max(widths[ci], cell.length); });
+    });
+    return normalized.map((row, ri) => {
+      const cells = row.map((cell, ci) => {
+        const w = widths[ci];
+        if (ri === 1) {
+          if (cell.startsWith(':') && cell.endsWith(':')) return ':' + '-'.repeat(Math.max(w - 2, 1)) + ':';
+          if (cell.endsWith(':')) return '-'.repeat(Math.max(w - 1, 1)) + ':';
+          if (cell.startsWith(':')) return ':' + '-'.repeat(Math.max(w - 1, 1));
+          return '-'.repeat(w);
+        }
+        return cell.padEnd(w);
+      });
+      return '| ' + cells.join(' | ') + ' |';
+    }).join('\n');
+  }
+
+  function handleCopyTable() {
+    const md = getTableMarkdown();
+    if (!md) return;
+    navigator.clipboard.writeText(md).then(() => {
+      onNotify?.(get(t)('table.copied'), 'success');
+    });
+  }
+
+  function handleFormatTableSource() {
+    const md = getTableMarkdown();
+    if (!md) return;
+    const formatted = formatMarkdownTable(md);
+    navigator.clipboard.writeText(formatted).then(() => {
+      onNotify?.(get(t)('table.formattedCopied'), 'success');
+    });
+  }
+
+  function handleDeleteTable() {
+    if (!editor) return;
+    try {
+      deleteTable(editor.view.state, editor.view.dispatch);
+    } catch {
+      // Delete table failed
+    }
+  }
+
+  /** Invoke a plugin with the current editor content (Gap 1+2+3). */
+  async function handlePluginAction(pluginId: string) {
+    pluginInvokingId = pluginId;
+    try {
+      // Gap 1: read current editor markdown
+      const markdown = getFullMarkdown();
+
+      // Gap 3: get active knowledge base directory
+      const filesState = filesStore.getState();
+      const activeKb = filesState.knowledgeBases.find(
+        kb => kb.id === filesState.activeKnowledgeBaseId
+      );
+      const kbDir = activeKb?.path ?? null;
+
+      const filePath = editorStore.getState().currentFilePath ?? null;
+
+      const result = await pluginStore.invokePlugin(pluginId, 'run', {
+        markdown,
+        filePath,
+        kbDir,
+      }) as { markdown?: string } | null;
+
+      // Gap 2: write modified content back to editor
+      if (result && typeof result.markdown === 'string' && result.markdown !== markdown) {
+        syncContent(result.markdown);
+        onNotify?.(get(t)('pluginAction.success'), 'success');
+      } else {
+        onNotify?.(get(t)('pluginAction.noChanges'), 'success');
+      }
+    } catch (e) {
+      onNotify?.(e instanceof Error ? e.message : String(e), 'error');
+    } finally {
+      pluginInvokingId = null;
+      showPluginMenu = false;
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -485,10 +585,45 @@
     }
   }
 
-  /** Handle right-click on images */
+  /** Walk up DOM tree to check if element is inside a table cell (td/th). */
+  function isInsideTableEl(el: HTMLElement): boolean {
+    let node: HTMLElement | null = el;
+    while (node && node !== mountedProseMirrorEl) {
+      if (node.tagName === 'TD' || node.tagName === 'TH') return true;
+      node = node.parentElement;
+    }
+    return false;
+  }
+
+  /** Handle right-click: image context menu, table context menu, or plugin menu */
   function handleContextMenu(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (target.tagName !== 'IMG') return;
+
+    // Table right-click — show table context menu
+    if (isInsideTableEl(target)) {
+      event.preventDefault();
+      event.stopPropagation();
+      tableMenuPosition = { top: event.clientY, left: event.clientX };
+      showTableMenu = true;
+      return;
+    }
+
+    // Image right-click — handled below
+    if (target.tagName !== 'IMG') {
+      // Gap 4: general editor right-click — show plugin context menu
+      const running = get(pluginStore).installed.filter(
+        p => p.enabled && p.processState === 'running'
+      );
+      if (running.length > 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        pluginMenuPosition = { top: event.clientY, left: event.clientX };
+        pluginMenuPlugins = running;
+        showPluginMenu = true;
+      }
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
 
@@ -987,18 +1122,14 @@
     // Suppress native WKWebView context menu (Reload / Inspect Element) for editor area.
     editorEl.addEventListener('contextmenu', handleEditorContextmenu, true);
 
-    // Single combined click handler to avoid 3 separate DOM traversals per click.
-    // Previously: updateTableToolbar + handleImageClick + handleCheckboxClick as 3 listeners.
     const handleProseMirrorClick = (e: MouseEvent) => {
       handleCheckboxClick(e);
       handleImageClick(e);
-      updateTableToolbar();
     };
 
     if (proseMirrorEl) {
       proseMirrorEl.addEventListener('click', handleProseMirrorClick as EventListener);
       proseMirrorEl.addEventListener('mousemove', handleCheckboxHover as EventListener);
-      proseMirrorEl.addEventListener('keyup', updateTableToolbar);
       proseMirrorEl.addEventListener('paste', handlePaste as EventListener);
       proseMirrorEl.addEventListener('contextmenu', handleContextMenu as EventListener);
     }
@@ -1407,7 +1538,7 @@
     isMounted = false; // Signal async callbacks to stop
     if (syncResetTimer) clearTimeout(syncResetTimer);
     if (externalSyncTimer) clearTimeout(externalSyncTimer);
-    if (tableToolbarRaf) cancelAnimationFrame(tableToolbarRaf);
+    if (tableToolbarRaf) cancelAnimationFrame(tableToolbarRaf); // legacy guard, noop
     if (hoverRaf) cancelAnimationFrame(hoverRaf);
     if (outlineTimer) clearTimeout(outlineTimer);
     if (scrollRafOutline) cancelAnimationFrame(scrollRafOutline);
@@ -1424,7 +1555,7 @@
     if (mountedProseMirrorEl && mountedHandlers) {
       mountedProseMirrorEl.removeEventListener('click', mountedHandlers.handleProseMirrorClick as EventListener);
       mountedProseMirrorEl.removeEventListener('mousemove', handleCheckboxHover as EventListener);
-      mountedProseMirrorEl.removeEventListener('keyup', updateTableToolbar);
+
       mountedProseMirrorEl.removeEventListener('paste', handlePaste as EventListener);
       mountedProseMirrorEl.removeEventListener('contextmenu', handleContextMenu as EventListener);
     }
@@ -1533,18 +1664,29 @@
   </div>
 </div>
 
-{#if showTableToolbar}
-  <TableToolbar
-    position={tableToolbarPosition}
+{#if showPluginMenu}
+  <PluginContextMenu
+    position={pluginMenuPosition}
+    plugins={pluginMenuPlugins}
+    invokingId={pluginInvokingId}
+    onInvoke={handlePluginAction}
+    onClose={() => showPluginMenu = false}
+  />
+{/if}
+
+{#if showTableMenu}
+  <TableContextMenu
+    position={tableMenuPosition}
     onAddRowBefore={() => runTableCmd(addRowBefore)}
     onAddRowAfter={() => runTableCmd(addRowAfter)}
     onAddColBefore={() => runTableCmd(addColumnBefore)}
     onAddColAfter={() => runTableCmd(addColumnAfter)}
     onDeleteRow={handleDeleteRow}
     onDeleteCol={handleDeleteCol}
-    onAlignLeft={() => handleSetAlign('left')}
-    onAlignCenter={() => handleSetAlign('center')}
-    onAlignRight={() => handleSetAlign('right')}
+    onCopyTable={handleCopyTable}
+    onFormatTableSource={handleFormatTableSource}
+    onDeleteTable={handleDeleteTable}
+    onClose={() => showTableMenu = false}
   />
 {/if}
 

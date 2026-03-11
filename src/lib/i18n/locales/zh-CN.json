@@ -202,7 +202,12 @@
     "deleteCol": "删除列",
     "alignLeft": "左对齐",
     "alignCenter": "居中对齐",
-    "alignRight": "右对齐"
+    "alignRight": "右对齐",
+    "copyTable": "复制表格",
+    "formatTableSource": "格式化表格源码",
+    "deleteTable": "删除表格",
+    "copied": "表格已复制",
+    "formattedCopied": "格式化表格已复制"
   },
   "knowledgeBase": {
     "title": "知识库",
@@ -1455,5 +1460,13 @@
   },
   "outline": {
     "empty": "暂无标题"
+  },
+  "pluginAction": {
+    "title": "运行插件",
+    "runAction": "运行",
+    "invoking": "运行中...",
+    "success": "插件已应用",
+    "noChanges": "无变更",
+    "noPlugins": "没有运行中的插件"
   }
 }

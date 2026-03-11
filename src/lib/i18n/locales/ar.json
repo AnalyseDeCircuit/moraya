@@ -202,7 +202,12 @@
     "deleteCol": "حذف العمود",
     "alignLeft": "محاذاة لليسار",
     "alignCenter": "محاذاة للوسط",
-    "alignRight": "محاذاة لليمين"
+    "alignRight": "محاذاة لليمين",
+    "copyTable": "نسخ الجدول",
+    "formatTableSource": "تنسيق مصدر الجدول",
+    "deleteTable": "حذف الجدول",
+    "copied": "تم نسخ الجدول",
+    "formattedCopied": "تم نسخ الجدول المنسق"
   },
   "knowledgeBase": {
     "title": "قاعدة المعرفة",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "لا توجد عناوين"
+  },
+  "pluginAction": {
+    "title": "تشغيل الإضافة",
+    "runAction": "تشغيل",
+    "invoking": "جارٍ التشغيل...",
+    "success": "تم تطبيق الإضافة",
+    "noChanges": "لا تغييرات",
+    "noPlugins": "لا توجد إضافات قيد التشغيل"
   }
 }

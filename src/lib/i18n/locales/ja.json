@@ -202,7 +202,12 @@
     "deleteCol": "列を削除",
     "alignLeft": "左揃え",
     "alignCenter": "中央揃え",
-    "alignRight": "右揃え"
+    "alignRight": "右揃え",
+    "copyTable": "テーブルをコピー",
+    "formatTableSource": "テーブルソースをフォーマット",
+    "deleteTable": "テーブルを削除",
+    "copied": "テーブルをコピーしました",
+    "formattedCopied": "フォーマット済みテーブルをコピーしました"
   },
   "knowledgeBase": {
     "title": "ナレッジベース",
@@ -1376,5 +1381,13 @@
   },
   "outline": {
     "empty": "見出しがありません"
+  },
+  "pluginAction": {
+    "title": "プラグイン実行",
+    "runAction": "実行",
+    "invoking": "実行中...",
+    "success": "プラグインを適用しました",
+    "noChanges": "変更なし",
+    "noPlugins": "実行中のプラグインなし"
   }
 }
