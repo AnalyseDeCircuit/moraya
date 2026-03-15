@@ -3,9 +3,6 @@ use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::sync::Mutex;
 use tauri::{Emitter, Manager};
 
-#[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-use std::collections::VecDeque;
-
 mod commands;
 #[cfg(target_os = "macos")]
 mod dock;
@@ -67,26 +64,6 @@ static SAVED_WINDOW_POSITIONS: Mutex<Option<HashMap<String, (f64, f64)>>> = Mute
 /// intercepts the key before WebView2 opens DevTools.
 #[cfg(target_os = "windows")]
 static FOCUSED_WINDOW_COUNT: AtomicU32 = AtomicU32::new(0);
-
-/// Pool of pre-created hidden windows for Windows/Linux.
-/// WebView2 creation via `build()` hangs at runtime because wry's nested
-/// message pump conflicts with the running event loop. Windows are pre-created
-/// during `setup()` (before the event loop starts, where direct creation works)
-/// and reused at runtime via `navigate()` + `show()`.
-#[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-pub struct WindowPool(pub Mutex<VecDeque<String>>);
-
-/// Number of windows to pre-create in the pool.
-#[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-const WINDOW_POOL_SIZE: usize = 2;
-
-/// Get the app URL from the main window (works in both dev and production).
-#[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-fn app_url(app: &tauri::AppHandle) -> tauri::Url {
-    app.get_webview_window("main")
-        .and_then(|w| w.url().ok())
-        .unwrap_or_else(|| "http://localhost:1420/".parse().unwrap())
-}
 
 /// Windows/Linux: shrink window if it exceeds the available screen area.
 /// Reserves space for OS taskbar (~48px) and window decorations (~52px).
@@ -179,61 +156,13 @@ pub(crate) fn create_editor_window(
         .map(|n| n.to_string_lossy().into_owned())
         .unwrap_or_else(|| "Moraya".to_string());
 
-    // Windows/Linux: try pre-created pool window first (instant activation).
-    // build() hangs at runtime due to WebView2 nested message pump deadlock,
-    // so pool windows are created during setup() where direct creation works.
-    // If the pool is empty, fall back to spawning a new Moraya process —
-    // the new process creates its own window in setup() (no deadlock).
+    // Windows/Linux: spawn a new Moraya process.
+    // WebviewWindowBuilder::build() hangs at runtime on Windows due to a
+    // WebView2 nested message pump deadlock with the running event loop.
+    // Spawning a new process avoids this — the new process creates its
+    // window during setup() before the event loop starts (no deadlock).
     #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
     {
-        let pool_label = app
-            .try_state::<WindowPool>()
-            .and_then(|p| p.0.lock().ok()?.pop_front());
-
-        if let Some(label) = pool_label {
-            let win = app
-                .get_webview_window(&label)
-                .ok_or("Pool window not found")?;
-
-            // Store pending file for the window to pick up via get_opened_file()
-            if let Some(ref p) = path {
-                pending.0.lock().unwrap().insert(label.clone(), p.clone());
-            }
-
-            // Navigate from about:blank to the app URL — triggers full SvelteKit load.
-            // navigate() uses the existing WebView2 controller (no nested pump needed).
-            let _ = win.navigate(app_url(app));
-
-            let _ = win.set_title(&title);
-
-            // Cascade from focused window
-            let cascaded = app
-                .webview_windows()
-                .values()
-                .find(|w| w.is_focused().unwrap_or(false))
-                .and_then(|f| {
-                    let pos = f.outer_position().ok()?;
-                    let scale = f.scale_factor().unwrap_or(1.0);
-                    win.set_position(tauri::LogicalPosition::new(
-                        pos.x as f64 / scale + 30.0,
-                        pos.y as f64 / scale + 30.0,
-                    ))
-                    .ok()
-                })
-                .is_some();
-            if !cascaded {
-                let _ = win.center();
-            }
-
-            fit_window_to_screen(&win);
-            let _ = win.show();
-            let _ = win.set_focus();
-            return Ok(label);
-        }
-
-        // Pool exhausted — spawn a new Moraya process.
-        // The new process creates its own window during setup() where
-        // WebView2 creation works (event loop hasn't started yet).
         let exe = std::env::current_exe()
             .map_err(|_| "Failed to locate executable".to_string())?;
         let mut cmd = std::process::Command::new(exe);
@@ -376,36 +305,9 @@ fn detach_tab_to_window(
         return Err("Multi-window is not supported on iPad".to_string());
     }
 
-    // Windows/Linux: try pool first, fall back to process spawn
+    // Windows/Linux: save content to temp file and spawn a new process.
     #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
     {
-        let pool_label = app
-            .try_state::<WindowPool>()
-            .and_then(|p| p.0.lock().ok()?.pop_front());
-
-        if let Some(label) = pool_label {
-            let win = app
-                .get_webview_window(&label)
-                .ok_or("Pool window not found")?;
-
-            let title = if tab_data.file_name.is_empty() {
-                "Moraya".to_string()
-            } else {
-                tab_data.file_name.clone()
-            };
-
-            pending_tab.0.lock().unwrap().insert(label.clone(), tab_data);
-
-            let _ = win.navigate(app_url(&app));
-            let _ = win.set_title(&title);
-            let _ = win.set_position(tauri::LogicalPosition::new(x, y));
-            fit_window_to_screen(&win);
-            let _ = win.show();
-            // Don't set_focus — drag may still be in progress
-            return Ok(label);
-        }
-
-        // Pool exhausted — save content to temp file and spawn a new process.
         let temp_dir = std::env::temp_dir();
         let temp_name = format!(
             "moraya-detach-{}.md",
@@ -780,46 +682,6 @@ pub fn run() {
                 });
             }
 
-            // Windows/Linux: pre-create hidden window pool.
-            // build() works here because the main event loop hasn't started yet
-            // (Tauri uses direct creation, not the async dispatch that deadlocks).
-            // Pool windows start with about:blank and are navigated to the app URL
-            // when activated via create_editor_window / detach_tab_to_window.
-            #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-            {
-                let mut pool_labels = VecDeque::new();
-                for i in 0..WINDOW_POOL_SIZE {
-                    let pool_label = format!("moraya-pool-{}", i);
-                    match tauri::WebviewWindowBuilder::new(
-                        app.handle(),
-                        &pool_label,
-                        tauri::WebviewUrl::External(
-                            "about:blank".parse().unwrap(),
-                        ),
-                    )
-                    .visible(false)
-                    .inner_size(1200.0, 800.0)
-                    .min_inner_size(600.0, 400.0)
-                    .decorations(true)
-                    .build()
-                    {
-                        Ok(ref w) => {
-                            fit_window_to_screen(w);
-                            pool_labels.push_back(pool_label);
-                        }
-                        Err(e) => {
-                            eprintln!("[window-pool] Failed to create pool window {}: {}", i, e);
-                            break;
-                        }
-                    }
-                }
-                println!(
-                    "[window-pool] Created {} pool windows",
-                    pool_labels.len()
-                );
-                app.manage(WindowPool(Mutex::new(pool_labels)));
-            }
-
             let _ = window;
             Ok(())
         })
@@ -849,70 +711,6 @@ pub fn run() {
                         let prev = FOCUSED_WINDOW_COUNT.fetch_sub(1, Ordering::SeqCst);
                         if prev == 1 {
                             let _ = _app.global_shortcut().unregister(shortcut);
-                        }
-                    }
-                }
-            }
-
-            // Windows/Linux: recycle pool windows on close instead of destroying them.
-            // Hides the window, navigates to about:blank (triggers SvelteKit cleanup),
-            // and returns the label to the pool for reuse.
-            // Also handles app exit when the last visible window closes.
-            #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-            {
-                if let tauri::RunEvent::WindowEvent {
-                    label,
-                    event: tauri::WindowEvent::CloseRequested { api, .. },
-                    ..
-                } = &_event
-                {
-                    if label.starts_with("moraya-pool-") {
-                        api.prevent_close();
-                        if let Some(win) = _app.get_webview_window(label) {
-                            let _ = win.hide();
-                            let _ = win.set_title("Moraya");
-                            if let Ok(url) = "about:blank".parse() {
-                                let _ = win.navigate(url);
-                            }
-                        }
-                        if let Some(pool) = _app.try_state::<WindowPool>() {
-                            if let Ok(mut labels) = pool.0.lock() {
-                                labels.push_back(label.to_string());
-                            }
-                        }
-                        // Exit if no visible windows remain after recycling
-                        let has_visible = _app
-                            .webview_windows()
-                            .iter()
-                            .any(|(l, w)| {
-                                l.as_str() != label.as_str()
-                                    && w.is_visible().unwrap_or(false)
-                            });
-                        if !has_visible {
-                            _app.exit(0);
-                        }
-                    }
-                }
-
-                // When a non-pool window is destroyed (e.g. main window closed),
-                // check if any visible windows remain. If not, exit the app.
-                // Without this, hidden pool windows keep the process alive.
-                if let tauri::RunEvent::WindowEvent {
-                    label,
-                    event: tauri::WindowEvent::Destroyed,
-                    ..
-                } = &_event
-                {
-                    if !label.starts_with("moraya-pool-") {
-                        let has_visible = _app
-                            .webview_windows()
-                            .iter()
-                            .any(|(l, w)| {
-                                l.as_str() != label.as_str()
-                                    && w.is_visible().unwrap_or(false)
-                            });
-                        if !has_visible {
-                            _app.exit(0);
                         }
                     }
                 }
