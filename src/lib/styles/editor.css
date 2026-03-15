@@ -633,13 +633,45 @@
   width: 100%;
 }
 
-/* Image wrapper (for onerror broken-image handling) */
-.moraya-editor .image-node {
-  display: inline;
+/* Image wrapper — block display so each image occupies its own line (Typora-style) */
+.moraya-editor .image-node,
+.moraya-editor .html-img-wrapper {
+  display: block;
+  line-height: 0;
+  font-size: 0;
 }
 
-.moraya-editor .html-img-wrapper {
-  display: inline;
+/* Remove inline baseline gap below <img> and center within wrapper */
+.moraya-editor .image-node img,
+.moraya-editor .html-img-wrapper img {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Remove paragraph margin when it contains images */
+.moraya-editor p:has(> .image-node),
+.moraya-editor p:has(> .html-img-wrapper) {
+  margin: 0;
+}
+
+/* Hide hardbreak and trailing-break nodes adjacent to block images —
+   the block display already handles line separation, and ProseMirror's
+   trailing <br> would otherwise add an extra line-height gap. */
+.moraya-editor .image-node + br,
+.moraya-editor .image-node + [data-type="hardbreak"],
+.moraya-editor .html-img-wrapper + br,
+.moraya-editor .html-img-wrapper + [data-type="hardbreak"] {
+  display: none;
+}
+.moraya-editor p:has(> .image-node) > br.ProseMirror-trailingBreak,
+.moraya-editor p:has(> .html-img-wrapper) > br.ProseMirror-trailingBreak {
+  display: none;
+}
+
+/* No selection outline for image wrappers — images use the resize toolbar instead */
+.moraya-editor .image-node.ProseMirror-selectednode,
+.moraya-editor .html-img-wrapper.ProseMirror-selectednode {
+  outline: none;
 }
 
 /* Broken image display: icon + source code */

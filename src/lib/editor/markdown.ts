@@ -334,9 +334,24 @@ class MorayaMarkdownParser extends MarkdownParser {
     const defaultHtmlBlock = h['html_block'];
     h['html_block'] = (state, tok, tokens, i) => {
       const content = tok.content.trim();
+      // Check if the block contains <img> tag(s)
       if (/^<img\s/i.test(content)) {
+        // Extract all <img> tags — put them in ONE paragraph with inline
+        // hardbreaks between them, matching markdown image behavior.
+        // This prevents the serializer from inserting blank lines between images.
+        const imgPattern = /<img\s[^>]*\/?>/gi;
+        const imgs = content.match(imgPattern);
         state.openNode(schema.nodes.paragraph, null);
-        state.addNode(schema.nodes.html_inline, { value: content });
+        if (imgs && imgs.length > 0) {
+          for (let j = 0; j < imgs.length; j++) {
+            if (j > 0) {
+              state.addNode(schema.nodes.hardbreak, { isInline: true });
+            }
+            state.addNode(schema.nodes.html_inline, { value: imgs[j] });
+          }
+        } else {
+          state.addNode(schema.nodes.html_inline, { value: content });
+        }
         state.closeNode();
       } else {
         defaultHtmlBlock(state, tok, tokens, i);
@@ -668,8 +683,35 @@ function normalizeMathBlocks(text: string): string {
 /**
  * Parse a markdown string into a ProseMirror document node.
  */
+/**
+ * Normalize smart/curly quotes to straight quotes in markdown syntax positions.
+ * Only targets image/link title delimiters to preserve intentional smart quotes in prose.
+ * Pattern: `](url "title")` or `](url 'title')` with curly quotes.
+ */
+function normalizeSmartQuotes(text: string): string {
+  // Quick bail: no curly quotes at all
+  if (!/[\u201C\u201D\u201E\u201F\u2018\u2019\u201A\u201B]/.test(text)) return text;
+
+  // Normalize curly double quotes in markdown link/image title positions:
+  // Matches: (url "title") where " are curly quotes
+  return text
+    .replace(
+      /(\]\([^\n)]*\s)\u201C([^\u201D\n]*)\u201D(\s*\))/g,
+      (_m, pre, title, post) => `${pre}"${title}"${post}`,
+    )
+    .replace(
+      /(\]\([^\n)]*\s)\u201C([^\u201D\n]*)\u201D(\s*\))/g,
+      (_m, pre, title, post) => `${pre}"${title}"${post}`,
+    )
+    // Also handle single curly quotes as title delimiters
+    .replace(
+      /(\]\([^\n)]*\s)\u2018([^\u2019\n]*)\u2019(\s*\))/g,
+      (_m, pre, title, post) => `${pre}'${title}'${post}`,
+    );
+}
+
 export function parseMarkdown(markdown: string): PmNode {
-  return parser.parse(normalizeMathBlocks(markdown));
+  return parser.parse(normalizeSmartQuotes(normalizeMathBlocks(markdown)));
 }
 
 const ASYNC_PARSE_THRESHOLD = 50_000;
@@ -679,7 +721,7 @@ const ASYNC_PARSE_THRESHOLD = 50_000;
  * event loop via setTimeout(0) so the main thread stays responsive.
  */
 export function parseMarkdownAsync(markdown: string): Promise<PmNode> {
-  const normalized = normalizeMathBlocks(markdown);
+  const normalized = normalizeSmartQuotes(normalizeMathBlocks(markdown));
   if (normalized.length < ASYNC_PARSE_THRESHOLD) {
     return Promise.resolve(parser.parse(normalized));
   }

@@ -132,6 +132,77 @@
     }
   }
 
+  /** Normalize smart/curly quotes to straight quotes. */
+  function straightenQuotes(text: string): string {
+    return text
+      .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+      .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'");
+  }
+
+  // Track newline insertion to suppress auto-inserted quotes (macOS text system artifact).
+  let justInsertedNewline = false;
+  let newlineTimer: ReturnType<typeof setTimeout> | undefined;
+
+  /**
+   * Prevent macOS/WebKit smart quote substitution and auto-inserted quotes after Enter.
+   */
+  function handleBeforeInput(event: InputEvent) {
+    // Track newline insertions
+    if (event.inputType === 'insertLineBreak' || event.inputType === 'insertParagraph') {
+      justInsertedNewline = true;
+      clearTimeout(newlineTimer);
+      newlineTimer = setTimeout(() => { justInsertedNewline = false; }, 100);
+      return;
+    }
+
+    if (event.inputType !== 'insertReplacementText' && event.inputType !== 'insertText') return;
+    const data = event.data;
+    if (!data) return;
+
+    // Suppress auto-inserted quote right after Enter (macOS text system artifact:
+    // pressing Enter after ..."title") auto-inserts a stray " on the new line)
+    if (justInsertedNewline && data === '"') {
+      event.preventDefault();
+      justInsertedNewline = false;
+      return;
+    }
+    justInsertedNewline = false;
+
+    // Normalize smart/curly quotes to straight quotes
+    const normalized = straightenQuotes(data);
+    if (normalized !== data) {
+      event.preventDefault();
+      const textarea = event.target as HTMLTextAreaElement;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      content = content.substring(0, start) + normalized + content.substring(end);
+      requestAnimationFrame(() => {
+        const newPos = start + normalized.length;
+        textarea.selectionStart = textarea.selectionEnd = newPos;
+      });
+    }
+  }
+
+  /**
+   * Normalize smart quotes in pasted text (from external sources).
+   */
+  function handlePaste(event: ClipboardEvent) {
+    const text = event.clipboardData?.getData('text/plain');
+    if (!text) return;
+    const normalized = straightenQuotes(text);
+    if (normalized === text) return; // No smart quotes — let default paste proceed
+    event.preventDefault();
+    const textarea = event.target as HTMLTextAreaElement;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    content = content.substring(0, start) + normalized + content.substring(end);
+    requestAnimationFrame(() => {
+      const newPos = start + normalized.length;
+      textarea.selectionStart = textarea.selectionEnd = newPos;
+    });
+    handleInput();
+  }
+
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Tab') {
       event.preventDefault();
@@ -152,6 +223,9 @@
     if (showOutline) extractHeadingsFromMarkdown();
 
     if (textareaEl) {
+      // Disable macOS smart quotes/dashes in the source editor textarea
+      textareaEl.setAttribute('autocorrect', 'off');
+      textareaEl.setAttribute('autocapitalize', 'off');
       const { cursorOffset: offset, scrollFraction } = editorStore.getState();
       const clamped = Math.min(offset, content.length);
       textareaEl.selectionStart = clamped;
@@ -197,6 +271,7 @@
     }
     if (outlineTimer) clearTimeout(outlineTimer);
     if (scrollRafOutline) cancelAnimationFrame(scrollRafOutline);
+    clearTimeout(newlineTimer);
     unsubSettings();
   });
 
@@ -372,6 +447,8 @@
         class="source-textarea"
         bind:value={content}
         oninput={handleInput}
+        onbeforeinput={handleBeforeInput}
+        onpaste={handlePaste}
         onkeydown={handleKeydown}
         spellcheck="true"
       ></textarea>

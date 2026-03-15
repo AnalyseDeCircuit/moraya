@@ -197,9 +197,6 @@ pub(crate) fn create_editor_window(
         .build()
         .map_err(|e| format!("Failed to create window: {}", e))?;
 
-    // Bring new window to front so the user can see it immediately.
-    let _ = _window.set_focus();
-
     // Runtime fallback: ensure overlay is set even if the builder didn't apply it
     #[cfg(target_os = "macos")]
     {
@@ -207,15 +204,24 @@ pub(crate) fn create_editor_window(
         let _ = _window.set_title_bar_style(TitleBarStyle::Overlay);
     }
 
-    // Windows/Linux: each window needs its own menu bar (macOS has a single app-level menu).
-    // Also shrink window to fit screen (taskbar/decorations).
+    // Windows/Linux: reuse the app-level menu (set during setup) instead of creating
+    // a brand-new set of menu items. Creating duplicate MenuItem/CheckMenuItem objects
+    // with the same accelerators can cause registration conflicts on Windows, and
+    // bloats the internal muda registry. If no app menu exists (should not happen),
+    // fall back to creating a fresh menu.
     #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
     {
-        if let Ok(win_menu) = menu::create_menu(app) {
+        if let Some(app_menu) = app.menu() {
+            let _ = _window.set_menu(app_menu);
+        } else if let Ok(win_menu) = menu::create_menu(app) {
             let _ = _window.set_menu(win_menu);
         }
         fit_window_to_screen(&_window);
     }
+
+    // Bring new window to front so the user can see it immediately.
+    // Done AFTER menu/fit so the window is fully configured before gaining focus.
+    let _ = _window.set_focus();
 
     Ok(label)
 }
@@ -354,7 +360,9 @@ fn detach_tab_to_window(
 
         #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
         {
-            if let Ok(win_menu) = menu::create_menu(&app) {
+            if let Some(app_menu) = app.menu() {
+                let _ = window.set_menu(app_menu);
+            } else if let Ok(win_menu) = menu::create_menu(&app) {
                 let _ = window.set_menu(win_menu);
             }
             fit_window_to_screen(&window);

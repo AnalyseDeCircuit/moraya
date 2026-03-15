@@ -27,6 +27,17 @@ function extractHtmlAttr(html: string, name: string): string | null {
   return m ? (m[1] ?? m[2] ?? m[3] ?? null) : null;
 }
 
+/** Extract all attributes from an HTML tag string as key-value pairs. */
+function extractAllHtmlAttrs(html: string): Record<string, string> {
+  const attrs: Record<string, string> = {};
+  const re = /([a-zA-Z_][\w:.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) !== null) {
+    attrs[m[1].toLowerCase()] = m[2] ?? m[3] ?? m[4] ?? '';
+  }
+  return attrs;
+}
+
 /** Replace element content with broken-image icon + source code display. */
 function showBrokenImage(container: HTMLElement, sourceText: string): void {
   container.textContent = '';
@@ -386,17 +397,25 @@ const html_inline: NodeSpec = {
   toDOM(node) {
     const value = node.attrs.value as string;
 
-    // Render <img> tags as actual images (with broken image fallback)
+    // Render <img> tags as actual images (with broken image fallback).
+    // All HTML attributes (width, height, style, title, class, etc.) are
+    // preserved from the original tag and applied to the rendered <img>.
     if (/^<img\s/i.test(value)) {
       const wrapper = document.createElement('span');
       wrapper.dataset.type = 'html-inline';
       wrapper.dataset.value = value;
       wrapper.className = 'html-img-wrapper';
 
-      const src = extractHtmlAttr(value, 'src') || '';
+      const attrs = extractAllHtmlAttrs(value);
+      const src = attrs.src || '';
       if (src) {
         const img = document.createElement('img');
-        img.alt = extractHtmlAttr(value, 'alt') || '';
+        // Apply all attributes from the original HTML tag
+        for (const [key, val] of Object.entries(attrs)) {
+          if (key === 'src') continue; // set src separately for local file handling
+          if (key === 'onerror' || key === 'onload' || key.startsWith('on')) continue; // skip event handlers (XSS)
+          img.setAttribute(key, val);
+        }
         img.onerror = () => {
           showBrokenImage(wrapper, value);
         };

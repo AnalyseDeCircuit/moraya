@@ -6,11 +6,11 @@
  * parsing/serialization.
  */
 
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorState, Plugin, PluginKey, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { keymap } from 'prosemirror-keymap';
 import { history } from 'prosemirror-history';
-import { baseKeymap, toggleMark, setBlockType } from 'prosemirror-commands';
+import { baseKeymap, toggleMark, setBlockType, joinForward } from 'prosemirror-commands';
 import { inputRules, textblockTypeInputRule, wrappingInputRule, InputRule } from 'prosemirror-inputrules';
 import { splitListItem, sinkListItem, liftListItem } from 'prosemirror-schema-list';
 import { dropCursor } from 'prosemirror-dropcursor';
@@ -283,6 +283,34 @@ function buildKeymap() {
         dispatch(state.tr.replaceSelectionWith(schema.nodes.hardbreak.create()).scrollIntoView());
       }
       return true;
+    },
+
+    // Backspace: when cursor is at the end of a paragraph right after an
+    // atom node (image / html_inline) and a next block exists, join forward
+    // (merge with next paragraph) instead of deleting the atom.
+    // This gives the user a chance to remove the paragraph break first,
+    // then delete the image with a second backspace.
+    'Backspace': (state, dispatch) => {
+      const sel = state.selection;
+      if (!sel.empty || !(sel instanceof TextSelection)) return false;
+      const $cursor = sel.$cursor;
+      if (!$cursor) return false;
+
+      const { parent, parentOffset } = $cursor;
+      if (parent.type.name !== 'paragraph') return false;
+      // Must be at the end of the paragraph
+      if (parentOffset !== parent.content.size) return false;
+      // Node before cursor must be an atom (image, html_inline)
+      const nodeBefore = $cursor.nodeBefore;
+      if (!nodeBefore || !nodeBefore.isAtom) return false;
+      // There must be a next sibling block to join with
+      const afterPos = $cursor.after();
+      if (afterPos >= state.doc.content.size) return false;
+      const nextNode = state.doc.resolve(afterPos).nodeAfter;
+      if (!nextNode || !nextNode.isBlock) return false;
+
+      // Join forward: merge next block into current paragraph
+      return joinForward(state, dispatch);
     },
   });
 }

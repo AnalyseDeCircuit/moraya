@@ -272,6 +272,12 @@ ${tr('welcome.tip')}
 
   function handleEditorReady(editor: MorayaEditor) {
     morayaEditor = editor;
+    // Ensure the editor receives keyboard focus, especially in new windows
+    // where WebView2 on Windows may not forward input events until the
+    // contenteditable element has explicit focus.
+    requestAnimationFrame(() => {
+      try { editor.view.focus(); } catch { /* editor may have been destroyed */ }
+    });
   }
 
   /** Get the current document content on-demand.
@@ -1737,12 +1743,18 @@ ${tr('welcome.tip')}
       onVVResize();
     }
 
-    // Tauri desktop: nudge WKWebView to recalculate viewport units (100dvh/100vh)
+    // Tauri desktop: nudge WebView to recalculate viewport units (100dvh/100vh)
     // after the native window has fully settled. Prevents stale layout in new windows.
+    // Also explicitly request focus — on Windows, WebView2 in new windows may not
+    // receive keyboard input until the native window + WebView both have focus.
     if (isTauri && !isIPadOS) {
       requestAnimationFrame(() => {
         window.dispatchEvent(new Event('resize'));
+        window.focus();
       });
+      // On Windows, WebView2 needs an extra focus nudge after the initial render
+      // completes. The first requestAnimationFrame runs before layout settles.
+      setTimeout(() => { window.focus(); }, 100);
     }
 
     // Preload enhancement plugins in background (warms cache for editor creation)
@@ -1830,7 +1842,7 @@ ${tr('welcome.tip')}
       const menuHandlers: Record<string, (payload?: any) => void> = {
         // File
         'menu:file_new': () => handleNewFile(),
-        'menu:file_new_window': () => isIPadOS ? handleNewFile() : invoke('create_new_window').catch(() => {}),
+        'menu:file_new_window': () => isIPadOS ? handleNewFile() : invoke('create_new_window').catch(e => { console.error('[NewWindow] create_new_window failed:', e); }),
         'menu:file_open': () => handleOpenFile(),
         'menu:file_save': () => handleSave(),
         'menu:file_save_as': () => handleSave(true),
