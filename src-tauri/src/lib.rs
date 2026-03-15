@@ -179,54 +179,70 @@ pub(crate) fn create_editor_window(
         .map(|n| n.to_string_lossy().into_owned())
         .unwrap_or_else(|| "Moraya".to_string());
 
-    // Windows/Linux: use pre-created window from pool.
-    // build() hangs at runtime due to WebView2 nested message pump deadlock.
-    // Pool windows are created during setup() where direct creation works.
+    // Windows/Linux: try pre-created pool window first (instant activation).
+    // build() hangs at runtime due to WebView2 nested message pump deadlock,
+    // so pool windows are created during setup() where direct creation works.
+    // If the pool is empty, fall back to spawning a new Moraya process —
+    // the new process creates its own window in setup() (no deadlock).
     #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
     {
-        let label = app
+        let pool_label = app
             .try_state::<WindowPool>()
-            .and_then(|p| p.0.lock().ok()?.pop_front())
-            .ok_or("No windows available in pool")?;
+            .and_then(|p| p.0.lock().ok()?.pop_front());
 
-        let win = app
-            .get_webview_window(&label)
-            .ok_or("Pool window not found")?;
+        if let Some(label) = pool_label {
+            let win = app
+                .get_webview_window(&label)
+                .ok_or("Pool window not found")?;
 
-        // Store pending file for the window to pick up via get_opened_file()
+            // Store pending file for the window to pick up via get_opened_file()
+            if let Some(ref p) = path {
+                pending.0.lock().unwrap().insert(label.clone(), p.clone());
+            }
+
+            // Navigate from about:blank to the app URL — triggers full SvelteKit load.
+            // navigate() uses the existing WebView2 controller (no nested pump needed).
+            let _ = win.navigate(app_url(app));
+
+            let _ = win.set_title(&title);
+
+            // Cascade from focused window
+            let cascaded = app
+                .webview_windows()
+                .values()
+                .find(|w| w.is_focused().unwrap_or(false))
+                .and_then(|f| {
+                    let pos = f.outer_position().ok()?;
+                    let scale = f.scale_factor().unwrap_or(1.0);
+                    win.set_position(tauri::LogicalPosition::new(
+                        pos.x as f64 / scale + 30.0,
+                        pos.y as f64 / scale + 30.0,
+                    ))
+                    .ok()
+                })
+                .is_some();
+            if !cascaded {
+                let _ = win.center();
+            }
+
+            fit_window_to_screen(&win);
+            let _ = win.show();
+            let _ = win.set_focus();
+            return Ok(label);
+        }
+
+        // Pool exhausted — spawn a new Moraya process.
+        // The new process creates its own window during setup() where
+        // WebView2 creation works (event loop hasn't started yet).
+        let exe = std::env::current_exe()
+            .map_err(|_| "Failed to locate executable".to_string())?;
+        let mut cmd = std::process::Command::new(exe);
         if let Some(ref p) = path {
-            pending.0.lock().unwrap().insert(label.clone(), p.clone());
+            cmd.arg(p);
         }
-
-        // Navigate from about:blank to the app URL — triggers full SvelteKit load.
-        // navigate() uses the existing WebView2 controller (no nested pump needed).
-        let _ = win.navigate(app_url(app));
-
-        let _ = win.set_title(&title);
-
-        // Cascade from focused window
-        let cascaded = app
-            .webview_windows()
-            .values()
-            .find(|w| w.is_focused().unwrap_or(false))
-            .and_then(|f| {
-                let pos = f.outer_position().ok()?;
-                let scale = f.scale_factor().unwrap_or(1.0);
-                win.set_position(tauri::LogicalPosition::new(
-                    pos.x as f64 / scale + 30.0,
-                    pos.y as f64 / scale + 30.0,
-                ))
-                .ok()
-            })
-            .is_some();
-        if !cascaded {
-            let _ = win.center();
-        }
-
-        fit_window_to_screen(&win);
-        let _ = win.show();
-        let _ = win.set_focus();
-        return Ok(label);
+        cmd.spawn()
+            .map_err(|_| "Failed to start new window".to_string())?;
+        return Ok("spawned".to_string());
     }
 
     // macOS: direct build (WKWebView doesn't have the hang issue)
@@ -360,33 +376,55 @@ fn detach_tab_to_window(
         return Err("Multi-window is not supported on iPad".to_string());
     }
 
-    // Windows/Linux: use pool window
+    // Windows/Linux: try pool first, fall back to process spawn
     #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
     {
-        let label = app
+        let pool_label = app
             .try_state::<WindowPool>()
-            .and_then(|p| p.0.lock().ok()?.pop_front())
-            .ok_or("No windows available in pool")?;
+            .and_then(|p| p.0.lock().ok()?.pop_front());
 
-        let win = app
-            .get_webview_window(&label)
-            .ok_or("Pool window not found")?;
+        if let Some(label) = pool_label {
+            let win = app
+                .get_webview_window(&label)
+                .ok_or("Pool window not found")?;
 
-        let title = if tab_data.file_name.is_empty() {
-            "Moraya".to_string()
-        } else {
-            tab_data.file_name.clone()
-        };
+            let title = if tab_data.file_name.is_empty() {
+                "Moraya".to_string()
+            } else {
+                tab_data.file_name.clone()
+            };
 
-        pending_tab.0.lock().unwrap().insert(label.clone(), tab_data);
+            pending_tab.0.lock().unwrap().insert(label.clone(), tab_data);
 
-        let _ = win.navigate(app_url(&app));
-        let _ = win.set_title(&title);
-        let _ = win.set_position(tauri::LogicalPosition::new(x, y));
-        fit_window_to_screen(&win);
-        let _ = win.show();
-        // Don't set_focus — drag may still be in progress
-        return Ok(label);
+            let _ = win.navigate(app_url(&app));
+            let _ = win.set_title(&title);
+            let _ = win.set_position(tauri::LogicalPosition::new(x, y));
+            fit_window_to_screen(&win);
+            let _ = win.show();
+            // Don't set_focus — drag may still be in progress
+            return Ok(label);
+        }
+
+        // Pool exhausted — save content to temp file and spawn a new process.
+        let temp_dir = std::env::temp_dir();
+        let temp_name = format!(
+            "moraya-detach-{}.md",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_millis()
+        );
+        let temp_path = temp_dir.join(&temp_name);
+        std::fs::write(&temp_path, &tab_data.content)
+            .map_err(|_| "Failed to save tab content".to_string())?;
+
+        let exe = std::env::current_exe()
+            .map_err(|_| "Failed to locate executable".to_string())?;
+        std::process::Command::new(exe)
+            .arg(temp_path.to_string_lossy().as_ref())
+            .spawn()
+            .map_err(|_| "Failed to start new window".to_string())?;
+        return Ok("spawned".to_string());
     }
 
     // macOS: direct build
