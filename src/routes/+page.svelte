@@ -792,7 +792,7 @@ ${tr('welcome.tip')}
       return;
     }
 
-    if (mod && event.key === 'n') {
+    if (mod && !event.shiftKey && (event.key === 'n' || event.key === 'N')) {
       event.preventDefault();
       handleNewFile();
       return;

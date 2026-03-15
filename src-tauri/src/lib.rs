@@ -78,7 +78,7 @@ pub struct WindowPool(pub Mutex<VecDeque<String>>);
 
 /// Number of windows to pre-create in the pool.
 #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
-const WINDOW_POOL_SIZE: usize = 5;
+const WINDOW_POOL_SIZE: usize = 2;
 
 /// Get the app URL from the main window (works in both dev and production).
 #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
@@ -324,6 +324,7 @@ fn create_new_window(
 fn get_all_window_bounds(app: tauri::AppHandle) -> Vec<(String, f64, f64, f64, f64, f64)> {
     app.webview_windows()
         .iter()
+        .filter(|(_, w)| w.is_visible().unwrap_or(false))
         .filter_map(|(label, w)| {
             let pos = w.outer_position().ok()?;
             let size = w.outer_size().ok()?;
@@ -706,12 +707,24 @@ pub fn run() {
                     let id = event.id().0.as_str();
                     let event_name = format!("menu:{}", id);
 
-                    // Find the focused window to emit to (avoids broadcast to all windows).
-                    let focused_label = app_handle_for_events
-                        .webview_windows()
+                    // Find target window: prefer focused, fall back to first visible
+                    // non-pool window. NEVER broadcast to all windows — that causes
+                    // duplicate actions (e.g., "New Window" creating N windows).
+                    let windows = app_handle_for_events.webview_windows();
+                    let target_label = windows
                         .iter()
                         .find(|(_, w)| w.is_focused().unwrap_or(false))
+                        .or_else(|| {
+                            windows.iter().find(|(l, w)| {
+                                !l.starts_with("moraya-pool-")
+                                    && w.is_visible().unwrap_or(false)
+                            })
+                        })
                         .map(|(label, _)| label.clone());
+
+                    let Some(label) = target_label else {
+                        return;
+                    };
 
                     // For CheckMenuItem items, emit the current check state as
                     // payload so the frontend can SET (not toggle) the value.
@@ -719,19 +732,11 @@ pub fn run() {
                         "view_mode_visual" | "view_mode_source" | "view_mode_split"
                         | "view_sidebar" | "view_ai_panel" | "view_outline" => {
                             if let Some(checked) = menu::get_check_state(&app_handle_for_events, id) {
-                                if let Some(label) = &focused_label {
-                                    let _ = app_handle_for_events.emit_to(label, &event_name, checked);
-                                } else {
-                                    let _ = app_handle_for_events.emit(&event_name, checked);
-                                }
+                                let _ = app_handle_for_events.emit_to(&label, &event_name, checked);
                             }
                         }
                         _ => {
-                            if let Some(label) = &focused_label {
-                                let _ = app_handle_for_events.emit_to(label, &event_name, ());
-                            } else {
-                                let _ = app_handle_for_events.emit(&event_name, ());
-                            }
+                            let _ = app_handle_for_events.emit_to(&label, &event_name, ());
                         }
                     }
                 });
@@ -814,6 +819,7 @@ pub fn run() {
             // Windows/Linux: recycle pool windows on close instead of destroying them.
             // Hides the window, navigates to about:blank (triggers SvelteKit cleanup),
             // and returns the label to the pool for reuse.
+            // Also handles app exit when the last visible window closes.
             #[cfg(all(not(target_os = "macos"), not(target_os = "ios")))]
             {
                 if let tauri::RunEvent::WindowEvent {
@@ -835,6 +841,40 @@ pub fn run() {
                             if let Ok(mut labels) = pool.0.lock() {
                                 labels.push_back(label.to_string());
                             }
+                        }
+                        // Exit if no visible windows remain after recycling
+                        let has_visible = _app
+                            .webview_windows()
+                            .iter()
+                            .any(|(l, w)| {
+                                l.as_str() != label.as_str()
+                                    && w.is_visible().unwrap_or(false)
+                            });
+                        if !has_visible {
+                            _app.exit(0);
+                        }
+                    }
+                }
+
+                // When a non-pool window is destroyed (e.g. main window closed),
+                // check if any visible windows remain. If not, exit the app.
+                // Without this, hidden pool windows keep the process alive.
+                if let tauri::RunEvent::WindowEvent {
+                    label,
+                    event: tauri::WindowEvent::Destroyed,
+                    ..
+                } = &_event
+                {
+                    if !label.starts_with("moraya-pool-") {
+                        let has_visible = _app
+                            .webview_windows()
+                            .iter()
+                            .any(|(l, w)| {
+                                l.as_str() != label.as_str()
+                                    && w.is_visible().unwrap_or(false)
+                            });
+                        if !has_visible {
+                            _app.exit(0);
                         }
                     }
                 }
