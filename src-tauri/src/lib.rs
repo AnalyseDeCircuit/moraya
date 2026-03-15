@@ -166,25 +166,27 @@ pub(crate) fn create_editor_window(
         pending_map.insert(label.clone(), p.clone());
     }
 
-    // ── DIAGNOSTIC: minimal build to isolate WebView2 hang ──
-    // Test A: absolute minimum — no cascade, no size, no devtools.
-    // If this still hangs, the issue is fundamental to runtime WebView2 creation.
-    // If this works, we add options back one by one.
-    println!("[create_window] DIAG-A: minimal build, label={}", label);
+    // ── DIAGNOSTIC Test B: explicit External URL ──
+    // WebviewUrl::default() = App("index.html") goes through Tauri's asset resolver,
+    // CSP injection, and custom protocol registration. External URL bypasses all of that.
+    // If build() succeeds with External URL, the hang is in Tauri's URL/protocol setup.
+    // If it still hangs, the issue is in WebView2 controller creation itself.
+    let dev_url: tauri::Url = "http://localhost:1420/".parse().unwrap();
+    println!("[create_window] DIAG-B: external URL build, label={}, url={}", label, dev_url);
     let _window = tauri::WebviewWindowBuilder::new(
         app,
         &label,
-        tauri::WebviewUrl::default(),
+        tauri::WebviewUrl::External(dev_url),
     )
     .title(&title)
     .inner_size(1200.0, 800.0)
     .decorations(true)
     .build()
     .map_err(|e| {
-        println!("[create_window] DIAG-A FAILED: {}", e);
+        println!("[create_window] DIAG-B FAILED: {}", e);
         format!("Failed to create window: {}", e)
     })?;
-    println!("[create_window] DIAG-A OK — build() returned!");
+    println!("[create_window] DIAG-B OK — build() returned!");
 
     #[cfg(target_os = "macos")]
     {
