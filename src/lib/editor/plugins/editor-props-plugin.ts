@@ -303,6 +303,7 @@ export function createEditorPropsPlugin(): Plugin {
        * Intercept before native menu accelerator and dispatch proper AllSelection.
        */
       handleKeyDown(view, event) {
+        // ── Cmd/Ctrl+A → proper AllSelection ──
         const mod = event.metaKey || event.ctrlKey;
         if (mod && !event.shiftKey && !event.altKey && event.key === 'a') {
           event.preventDefault();
@@ -310,6 +311,27 @@ export function createEditorPropsPlugin(): Plugin {
           view.dispatch(tr);
           return true;
         }
+
+        // ── Fast AllSelection / full-range deletion ──
+        // ProseMirror's default AllSelection delete is very slow on large docs
+        // (it builds step-by-step replacements). Replace the entire content with
+        // a single empty paragraph in one transaction for instant deletion.
+        if (event.key === 'Backspace' || event.key === 'Delete') {
+          const sel = view.state.selection;
+          const docSize = view.state.doc.content.size;
+          const isAllSelected =
+            sel instanceof AllSelection ||
+            (docSize > 0 && sel.from <= 1 && sel.to >= docSize - 1);
+          if (isAllSelected) {
+            event.preventDefault();
+            const emptyParagraph = view.state.schema.nodes.paragraph.create();
+            const tr = view.state.tr.replaceWith(0, docSize, emptyParagraph);
+            tr.setSelection(TextSelection.create(tr.doc, 1));
+            view.dispatch(tr);
+            return true;
+          }
+        }
+
         return false;
       },
 

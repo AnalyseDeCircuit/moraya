@@ -6,7 +6,7 @@
  * parsing/serialization.
  */
 
-import { EditorState, Plugin, PluginKey, Selection, TextSelection, NodeSelection } from 'prosemirror-state';
+import { AllSelection, EditorState, Plugin, PluginKey, Selection, TextSelection, NodeSelection } from 'prosemirror-state';
 import { EditorView, Decoration, DecorationSet } from 'prosemirror-view';
 import { keymap } from 'prosemirror-keymap';
 import { history } from 'prosemirror-history';
@@ -332,6 +332,25 @@ function buildKeymap() {
     // native behavior runs unchecked. We must handle it ourselves.
     'Backspace': (state, dispatch) => {
       const sel = state.selection;
+
+      // Case 0: Fast AllSelection / full-range deletion.
+      // ProseMirror's default AllSelection delete is very slow on large docs
+      // (step-by-step replacement). Replace entire content with a single empty
+      // paragraph in one transaction for instant deletion.
+      {
+        const docSize = state.doc.content.size;
+        const isAllSelected =
+          sel instanceof AllSelection ||
+          (docSize > 0 && sel.from <= 1 && sel.to >= docSize - 1);
+        if (isAllSelected && dispatch) {
+          const emptyParagraph = state.schema.nodes.paragraph.create();
+          const tr = state.tr.replaceWith(0, docSize, emptyParagraph);
+          tr.setSelection(TextSelection.create(tr.doc, 1));
+          dispatch(tr);
+          return true;
+        }
+        if (isAllSelected) return true; // no dispatch but still consumed
+      }
 
       // Case 1: NodeSelection on a block atom (via arrow keys) — move cursor
       // to nearest previous text position instead of deleting the atom.
