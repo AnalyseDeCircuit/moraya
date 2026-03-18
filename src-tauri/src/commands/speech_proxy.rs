@@ -2075,7 +2075,7 @@ const DOUBAO_EVENT_CONNECTION_STARTED: i32 = 50;
 const DOUBAO_EVENT_SESSION_STARTED: i32 = 150;
 
 // Server message type upper nibbles
-const DOUBAO_TYPE_FULL_SERVER: u8 = 0b1001;
+const _DOUBAO_TYPE_FULL_SERVER: u8 = 0b1001;
 const DOUBAO_TYPE_AUDIO_SERVER: u8 = 0b1011;
 const DOUBAO_TYPE_ERROR: u8 = 0b1111;
 
@@ -2199,7 +2199,7 @@ fn build_rt_dialogue_request(
     base_url: &str,
     api_key: &str,
     app_id: &str,
-    secret_key: &str,
+    _secret_key: &str,
     resource_id: &str,
     connect_id: &str,
 ) -> Result<WsRequest, String> {

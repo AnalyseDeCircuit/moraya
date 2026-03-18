@@ -9,9 +9,20 @@
     imgRatio: null as string | null,
     imgSizeLevel: null as string | null,
   };
+
+  // Per-document prompt cache: persists across dialog open/close within app session.
+  // Keyed by file path so each document retains its own generated prompts.
+  interface CachedPromptState {
+    prompts: Array<{ prompt: string; target: number; reason: string }>;
+    mode: string;
+    style: string;
+    count: number;
+  }
+  export const _promptCache = new Map<string, CachedPromptState>();
 </script>
 
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import { t } from '$lib/i18n';
   import { aiStore } from '$lib/services/ai';
   import { settingsStore } from '$lib/stores/settings-store';
@@ -125,6 +136,7 @@
     prompts = preDefinedPrompts;
     imageCount = preDefinedPrompts.length;
     hasGenerated = true;
+    savePromptsToCache();
   }
 
   // Step 1: Generate prompts
@@ -146,6 +158,7 @@
     try {
       prompts = await generateImagePrompts(textAIConfig, content, imageCount, imageStyle, imageMode);
       hasGenerated = true;
+      savePromptsToCache();
     } catch (e) {
       promptError = e instanceof Error ? e.message : 'Failed to generate prompts';
     } finally {
@@ -155,6 +168,7 @@
 
   function removePrompt(idx: number) {
     prompts = prompts.filter((_, i) => i !== idx);
+    savePromptsToCache();
   }
 
   function goToStep2() {
@@ -263,6 +277,39 @@
   }
 
   let hasGenerated = $state(false);
+
+  // --- Per-document prompt cache ---
+  function getDocCacheKey(): string {
+    return editorStore.getState().currentFilePath || '';
+  }
+
+  function savePromptsToCache() {
+    if (!hasGenerated || prompts.length === 0) return;
+    const key = getDocCacheKey();
+    if (!key) return;
+    _promptCache.set(key, {
+      prompts: prompts.map(p => ({ prompt: p.prompt, target: p.target, reason: p.reason })),
+      mode: imageMode,
+      style: imageStyle,
+      count: imageCount,
+    });
+  }
+
+  // Restore cached prompts for current document on dialog open
+  {
+    const docKey = getDocCacheKey();
+    const cached = docKey ? _promptCache.get(docKey) : null;
+    if (cached && cached.prompts.length > 0) {
+      prompts = cached.prompts.map(p => ({ ...p }));
+      imageMode = cached.mode as ImageGenMode;
+      imageStyle = cached.style as ImageStyle;
+      imageCount = cached.count;
+      hasGenerated = true;
+    }
+  }
+
+  // Save cache on dialog close (captures textarea edits)
+  onDestroy(savePromptsToCache);
 
   let isTextAIReady = $derived(!!(textAIConfig && textAIConfig.apiKey));
   let isImageAIReady = $derived(!!(imageConfig && imageConfig.apiKey));

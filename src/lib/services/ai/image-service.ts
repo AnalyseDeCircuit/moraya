@@ -43,76 +43,211 @@ function dashScopeBase(baseURL: string): string {
 }
 
 /**
- * Generate an image using DashScope native async task API.
- * Flow: POST create task → poll GET task status → return image URL.
- * Used for Alibaba Cloud wanx / qwen image models.
+ * DashScope endpoint candidates for image generation.
+ * Phase 1: OpenAI-compatible endpoints (tried first).
+ * Phase 2: DashScope native async task endpoints (fallback).
  */
-async function generateImageDashScope(
+function dashScopeOpenAICandidates(baseURL: string): string[] {
+  const base = dashScopeBase(baseURL);
+  return [
+    `${base}/compatible-mode/v1/images/generations`,
+    `${base}/v1/images/generations`,
+  ];
+}
+
+/** DashScope native endpoint candidates with their API format. */
+type DashScopeFormat = 'task' | 'multimodal';
+interface NativeCandidate { url: string; format: DashScopeFormat }
+
+function dashScopeNativeCandidates(baseURL: string): NativeCandidate[] {
+  const base = dashScopeBase(baseURL);
+  return [
+    // z-image-turbo, qwen-image-2.0 — messages format, sync
+    { url: `${base}/api/v1/services/aigc/multimodal-generation/generation`, format: 'multimodal' },
+    // wanx-v1, wanx2.1-* — prompt format, async task polling
+    { url: `${base}/api/v1/services/aigc/text2image/image-synthesis`, format: 'task' },
+    // flux-* models — prompt format
+    { url: `${base}/api/v1/services/aigc/text2image/text-to-image`, format: 'task' },
+  ];
+}
+
+/**
+ * Per-config endpoint cache: configId → resolved endpoint info.
+ * `native` + `format` determine which API call function to use.
+ */
+interface ResolvedEndpoint { url: string; native?: boolean; format?: DashScopeFormat }
+const _qwenEndpointCache = new Map<string, ResolvedEndpoint>();
+
+/** Shared OpenAI-compatible image API call. */
+async function callOpenAIImageAPI(
   config: ImageProviderConfig,
   prompt: string,
-  size?: string,
+  size: string,
+  url: string,
 ): Promise<ImageGenerationResult> {
-  const base = dashScopeBase(config.baseURL);
-  const url = `${base}/api/v1/services/aigc/text2image/image-synthesis`;
+  const bodyPayload = JSON.stringify({
+    model: config.model,
+    prompt,
+    n: 1,
+    size,
+    response_format: 'url',
+  });
 
-  const resolvedSize = size || resolveImageSize(config.defaultRatio, config.defaultSizeLevel);
-  const dsSize = resolvedSize.replace('x', '*');
-
-  // Step 1: Create async task
-  const createResponse = await invoke<string>('ai_proxy_fetch', {
+  const responseText = await invoke<string>('ai_proxy_fetch', {
     configId: config.id,
     keyPrefix: 'image-key:',
     apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
     provider: 'openai',
     url,
-    body: JSON.stringify({
-      model: config.model,
-      input: { prompt },
-      parameters: { size: dsSize, n: 1 },
-    }),
-    headers: { 'X-DashScope-Async': 'enable' },
+    body: bodyPayload,
   });
 
-  const createData = JSON.parse(createResponse);
-  const taskId = createData.output?.task_id;
-  if (!taskId) {
-    throw new Error(`Failed to create DashScope task: ${JSON.stringify(createData).slice(0, 500)}`);
+  const data = JSON.parse(responseText);
+  const item = data.data?.[0];
+
+  if (!item?.url) {
+    throw new Error('No image URL in response');
   }
 
-  // Step 2: Poll for task completion (max 120s)
-  const taskUrl = `${base}/api/v1/tasks/${taskId}`;
-  const maxAttempts = 60;
+  return { url: item.url, revisedPrompt: item.revised_prompt };
+}
 
-  for (let i = 0; i < maxAttempts; i++) {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+/** Extract image URL from DashScope response (multiple possible locations). */
+function extractDashScopeImageUrl(data: Record<string, unknown>): string | null {
+  const output = data.output as Record<string, unknown> | undefined;
+  if (!output) return null;
+  // results[0].url (wanx async task)
+  const results = output.results as Array<Record<string, unknown>> | undefined;
+  if (results?.[0]?.url) return results[0].url as string;
+  // result.url (some models)
+  const result = output.result as Record<string, unknown> | undefined;
+  if (result?.url) return result.url as string;
+  // choices[0].message.content[].image (multimodal-generation: z-image-turbo, qwen-image-2.0)
+  const choices = output.choices as Array<Record<string, unknown>> | undefined;
+  const message = choices?.[0]?.message as Record<string, unknown> | undefined;
+  const content = message?.content as Array<Record<string, unknown>> | undefined;
+  if (content) {
+    for (const item of content) {
+      if (typeof item.image === 'string') return item.image;
+    }
+  }
+  return null;
+}
 
-    const statusResponse = await invoke<string>('ai_proxy_fetch', {
-      configId: config.id,
-      keyPrefix: 'image-key:',
-      apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
-      provider: 'openai',
-      url: taskUrl,
-      method: 'GET',
-    });
+/**
+ * DashScope native task API (input.prompt format).
+ * Used by wanx-v1, wanx2.1-* on /text2image/image-synthesis.
+ * Tries sync then async; handles 403 sync/async mode errors.
+ */
+async function callDashScopeTaskAPI(
+  config: ImageProviderConfig,
+  prompt: string,
+  size: string,
+  url: string,
+): Promise<ImageGenerationResult> {
+  const dsSize = size.replace('x', '*');
+  const body = JSON.stringify({
+    model: config.model,
+    input: { prompt },
+    parameters: { size: dsSize, n: 1 },
+  });
 
-    const statusData = JSON.parse(statusResponse);
-    const taskStatus = statusData.output?.task_status;
+  for (const mode of ['sync', 'async'] as const) {
+    try {
+      const response = await invoke<string>('ai_proxy_fetch', {
+        configId: config.id,
+        keyPrefix: 'image-key:',
+        apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+        provider: 'openai',
+        url,
+        body,
+        ...(mode === 'async' ? { headers: { 'X-DashScope-Async': 'enable' } } : {}),
+      });
 
-    if (taskStatus === 'SUCCEEDED') {
-      const imageUrl = statusData.output?.results?.[0]?.url;
-      if (!imageUrl) {
-        throw new Error(`No image URL in DashScope result: ${JSON.stringify(statusData).slice(0, 500)}`);
+      const data = JSON.parse(response);
+
+      const directUrl = extractDashScopeImageUrl(data);
+      if (directUrl) return { url: directUrl };
+
+      // Async task → poll
+      const taskId = data.output?.task_id;
+      if (taskId) {
+        const base = url.replace(/\/services\/.*$/, '');
+        const taskUrl = `${base}/tasks/${taskId}`;
+
+        for (let i = 0; i < 60; i++) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          const statusResponse = await invoke<string>('ai_proxy_fetch', {
+            configId: config.id,
+            keyPrefix: 'image-key:',
+            apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+            provider: 'openai',
+            url: taskUrl,
+            method: 'GET',
+          });
+          const statusData = JSON.parse(statusResponse);
+          const taskStatus = statusData.output?.task_status;
+          if (taskStatus === 'SUCCEEDED') {
+            const imageUrl = extractDashScopeImageUrl(statusData);
+            if (!imageUrl) throw new Error('No image URL in DashScope result');
+            return { url: imageUrl };
+          }
+          if (taskStatus === 'FAILED') {
+            throw new Error(`DashScope task failed: ${statusData.output?.message || 'Unknown error'}`);
+          }
+        }
+        throw new Error('DashScope image generation timed out (120s)');
       }
-      return { url: imageUrl };
-    }
 
-    if (taskStatus === 'FAILED') {
-      throw new Error(`DashScope task failed: ${statusData.output?.message || 'Unknown error'}`);
+      throw new Error('No task_id or image URL in DashScope response');
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      const lower = msg.toLowerCase();
+      if (msg.includes('(403)') && (lower.includes('async') || lower.includes('synchronous'))) {
+        continue;
+      }
+      throw e;
     }
-    // PENDING / RUNNING → continue polling
   }
 
-  throw new Error('DashScope image generation timed out (120s)');
+  throw new Error('DashScope: neither sync nor async mode succeeded');
+}
+
+/**
+ * DashScope multimodal-generation API (input.messages format).
+ * Used by z-image-turbo, qwen-image-2.0 on /multimodal-generation/generation.
+ * Response: output.choices[0].message.content[].image
+ */
+async function callDashScopeMultimodalAPI(
+  config: ImageProviderConfig,
+  prompt: string,
+  size: string,
+  url: string,
+): Promise<ImageGenerationResult> {
+  const dsSize = size.replace('x', '*');
+  const body = JSON.stringify({
+    model: config.model,
+    input: {
+      messages: [{ role: 'user', content: [{ text: prompt }] }],
+    },
+    parameters: { size: dsSize, n: 1 },
+  });
+
+  const response = await invoke<string>('ai_proxy_fetch', {
+    configId: config.id,
+    keyPrefix: 'image-key:',
+    apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+    provider: 'openai',
+    url,
+    body,
+  });
+
+  const data = JSON.parse(response);
+  const imageUrl = extractDashScopeImageUrl(data);
+  if (!imageUrl) {
+    throw new Error(`No image URL in DashScope multimodal response: ${JSON.stringify(data).slice(0, 300)}`);
+  }
+  return { url: imageUrl };
 }
 
 /**
@@ -156,9 +291,9 @@ async function generateImageGemini(
 /**
  * Generate an image using the configured AIGC provider.
  *
- * Routing by provider:
- * - qwen   → DashScope native async task API (text2image + polling)
+ * Routing:
  * - gemini → Imagen predict API (non-OpenAI format)
+ * - qwen   → Unified OpenAI-compatible with endpoint auto-discovery & caching
  * - others → OpenAI-compatible /images/generations (VolcEngine, OpenAI, Grok, custom)
  */
 export async function generateImage(
@@ -166,49 +301,72 @@ export async function generateImage(
   prompt: string,
   size?: string,
 ): Promise<ImageGenerationResult> {
-  // DashScope (qwen): native async task API (no OpenAI-compatible image endpoint)
-  if (config.provider === 'qwen') {
-    return generateImageDashScope(config, prompt, size);
-  }
-
   // Gemini Imagen has a completely different API format (predict endpoint)
   if (config.provider === 'gemini') {
     return generateImageGemini(config, prompt);
   }
 
-  // Standard OpenAI-compatible path — via Rust proxy
-  const url = openaiEndpoint(config.baseURL, '/images/generations');
+  const resolvedSize = size || (config.provider === 'doubao'
+    ? (DOUBAO_SIZE_MAP[config.defaultRatio]?.[config.defaultSizeLevel] ?? '2048x2048')
+    : resolveImageSize(config.defaultRatio, config.defaultSizeLevel));
 
-  const bodyPayload = JSON.stringify({
-    model: config.model,
-    prompt,
-    n: 1,
-    size: size || (config.provider === 'doubao'
-      ? (DOUBAO_SIZE_MAP[config.defaultRatio]?.[config.defaultSizeLevel] ?? '2048x2048')
-      : resolveImageSize(config.defaultRatio, config.defaultSizeLevel)),
-    response_format: 'url',
-  });
+  // DashScope (qwen): two-phase endpoint auto-discovery with caching.
+  // Phase 1: OpenAI-compatible endpoints.
+  // Phase 2: DashScope native endpoints (task API + multimodal API).
+  if (config.provider === 'qwen') {
+    function callByEndpoint(ep: ResolvedEndpoint, p: string, s: string) {
+      if (!ep.native) return callOpenAIImageAPI(config, p, s, ep.url);
+      if (ep.format === 'multimodal') return callDashScopeMultimodalAPI(config, p, s, ep.url);
+      return callDashScopeTaskAPI(config, p, s, ep.url);
+    }
 
-  const responseText = await invoke<string>('ai_proxy_fetch', {
-    configId: config.id,
-    keyPrefix: 'image-key:',
-    apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
-    provider: 'openai',
-    url,
-    body: bodyPayload,
-  });
+    // Try cached endpoint first
+    const cached = _qwenEndpointCache.get(config.id);
+    if (cached) {
+      try {
+        return await callByEndpoint(cached, prompt, resolvedSize);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        if (msg.includes('(401)')) throw e;
+        _qwenEndpointCache.delete(config.id);
+      }
+    }
 
-  const data = JSON.parse(responseText);
-  const item = data.data?.[0];
+    let lastError: unknown;
 
-  if (!item?.url) {
-    throw new Error('No image URL in response');
+    // Phase 1: OpenAI-compatible candidates
+    for (const url of dashScopeOpenAICandidates(config.baseURL)) {
+      try {
+        const result = await callOpenAIImageAPI(config, prompt, resolvedSize, url);
+        _qwenEndpointCache.set(config.id, { url });
+        return result;
+      } catch (e) {
+        lastError = e;
+        const msg = e instanceof Error ? e.message : String(e);
+        if (msg.includes('(401)')) throw e;
+      }
+    }
+
+    // Phase 2: DashScope native endpoints (each with its own format)
+    for (const { url, format } of dashScopeNativeCandidates(config.baseURL)) {
+      try {
+        const ep: ResolvedEndpoint = { url, native: true, format };
+        const result = await callByEndpoint(ep, prompt, resolvedSize);
+        _qwenEndpointCache.set(config.id, ep);
+        return result;
+      } catch (e) {
+        lastError = e;
+        const msg = e instanceof Error ? e.message : String(e);
+        if (msg.includes('(401)')) throw e;
+      }
+    }
+
+    throw lastError;
   }
 
-  return {
-    url: item.url,
-    revisedPrompt: item.revised_prompt,
-  };
+  // Standard OpenAI-compatible path
+  const url = openaiEndpoint(config.baseURL, '/images/generations');
+  return callOpenAIImageAPI(config, prompt, resolvedSize, url);
 }
 
 /**
@@ -221,30 +379,102 @@ export async function testImageConnection(config: ImageProviderConfig): Promise<
   }
 
   if (config.provider === 'qwen') {
-    // DashScope: POST to text2image endpoint with minimal payload.
-    // 200 = task created (auth OK), 400 = bad params (auth OK), 401/403 = bad key.
-    const base = dashScopeBase(config.baseURL);
-    const url = `${base}/api/v1/services/aigc/text2image/image-synthesis`;
-    try {
-      await invoke<string>('ai_proxy_fetch', {
-        configId: config.id,
-        keyPrefix: 'image-key:',
-        apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
-        provider: 'openai',
-        url,
-        body: JSON.stringify({
-          model: config.model,
-          input: { prompt: 'test' },
-          parameters: { n: 1 },
-        }),
-        headers: { 'X-DashScope-Async': 'enable' },
-      });
-      return { success: true };
-    } catch (e: unknown) {
-      const msg = errMsg(e);
-      if (msg.includes('(400)') || msg.includes('(422)')) return { success: true };
-      return { success: false, error: msg };
+    // DashScope: two-phase endpoint discovery.
+    // 200 = auth OK, 400/422 = auth OK but bad params → endpoint valid.
+    // EXCEPTION: 400 "url error" = endpoint doesn't match model → try next.
+    // 403 "async" = endpoint valid but async not supported → still valid.
+    // 401/403 (non-async) = bad API key → stop.
+    let lastError: string | undefined;
+
+    function isDashScopeCallModeError(msg: string): boolean {
+      const lower = msg.toLowerCase();
+      return msg.includes('(403)') && (lower.includes('async') || lower.includes('synchronous'));
     }
+
+    function isDashScopeTestOK(msg: string): boolean {
+      // 403 sync/async is NOT proof the endpoint works — only that the call mode is wrong.
+      // Let the loop try the other mode; only 400/422 (non-url-error) proves endpoint validity.
+      if ((msg.includes('(400)') || msg.includes('(422)')) && !msg.toLowerCase().includes('url error')) return true;
+      return false;
+    }
+
+    function isDashScopeAuthError(msg: string): boolean {
+      if (msg.includes('(401)')) return true;
+      // 403 NOT about sync/async = real auth/permission error
+      if (msg.includes('(403)') && !isDashScopeCallModeError(msg)) return true;
+      return false;
+    }
+
+    // Phase 1: OpenAI-compatible endpoints
+    for (const url of dashScopeOpenAICandidates(config.baseURL)) {
+      try {
+        await invoke<string>('ai_proxy_fetch', {
+          configId: config.id,
+          keyPrefix: 'image-key:',
+          apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+          provider: 'openai',
+          url,
+          body: JSON.stringify({ model: config.model, prompt: 'test', n: 1 }),
+        });
+        _qwenEndpointCache.set(config.id, { url });
+        return { success: true };
+      } catch (e: unknown) {
+        const msg = errMsg(e);
+        if (isDashScopeTestOK(msg)) {
+          _qwenEndpointCache.set(config.id, { url });
+          return { success: true };
+        }
+        if (isDashScopeAuthError(msg)) return { success: false, error: msg };
+        lastError = msg;
+      }
+    }
+
+    // Phase 2: DashScope native endpoints — each has its own request format.
+    for (const { url, format } of dashScopeNativeCandidates(config.baseURL)) {
+      // Build test body matching the format: multimodal uses input.messages, task uses input.prompt.
+      // Include size '1*1' (invalid) to trigger model-endpoint validation without generating.
+      const testBody = format === 'multimodal'
+        ? JSON.stringify({
+            model: config.model,
+            input: { messages: [{ role: 'user', content: [{ text: 'test' }] }] },
+            parameters: { size: '1*1', n: 1 },
+          })
+        : JSON.stringify({
+            model: config.model,
+            input: { prompt: 'test' },
+            parameters: { size: '1*1', n: 1 },
+          });
+
+      // Try sync first, then async (some models only support one mode)
+      for (const asyncMode of [false, true]) {
+        try {
+          await invoke<string>('ai_proxy_fetch', {
+            configId: config.id,
+            keyPrefix: 'image-key:',
+            apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+            provider: 'openai',
+            url,
+            body: testBody,
+            ...(asyncMode ? { headers: { 'X-DashScope-Async': 'enable' } } : {}),
+          });
+          _qwenEndpointCache.set(config.id, { url, native: true, format });
+          return { success: true };
+        } catch (e: unknown) {
+          const msg = errMsg(e);
+          if (isDashScopeTestOK(msg)) {
+            _qwenEndpointCache.set(config.id, { url, native: true, format });
+            return { success: true };
+          }
+          if (isDashScopeAuthError(msg)) {
+            if (msg.toLowerCase().includes('synchronous') || msg.toLowerCase().includes('async')) continue;
+            return { success: false, error: msg };
+          }
+          lastError = msg;
+        }
+      }
+    }
+
+    return { success: false, error: lastError };
   }
 
   if (config.provider === 'gemini') {

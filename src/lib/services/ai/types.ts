@@ -200,7 +200,7 @@ export const DEFAULT_IMAGE_MODELS: Record<ImageProvider, string[]> = {
   openai: ['dall-e-3', 'dall-e-2', 'gpt-image-1'],
   grok:   ['aurora'],
   gemini: ['imagen-3.0-generate-002', 'imagen-3.0-fast-generate-001'],
-  qwen:   ['wanx2.1-t2i-turbo', 'wanx2.1-t2i-plus', 'wanx-v1'],
+  qwen:   ['wanx2.1-t2i-turbo', 'wanx2.1-t2i-plus', 'wan2.6-t2i', 'flux-schnell', 'flux-dev', 'wanx-v1'],
   doubao: ['doubao-seedream-5-0-260128', 'doubao-seedream-3-0-t2i-250415'],
   custom: [],
 };
