@@ -163,10 +163,25 @@ pub async fn download_update(
         let _ = std::fs::set_permissions(&dest_path, std::fs::Permissions::from_mode(0o755));
     }
 
-    // Open the installer with the OS default handler (macOS: mounts DMG)
+    // Open the installer with the OS default handler
+    // macOS: mounts DMG → user drags .app to /Applications
+    // Windows: launches NSIS/MSI installer → replaces app files
+    // Linux: opens AppImage/deb with default handler
     println!("[update] Opening installer...");
     match open::that(&dest_path) {
-        Ok(()) => println!("[update] Installer opened successfully"),
+        Ok(()) => {
+            println!("[update] Installer opened successfully");
+            // Auto-exit after brief delay so frontend can show completion message.
+            // macOS: frees /Applications/Moraya.app so drag-replace works
+            // Windows: releases locked DLLs/EXEs so NSIS/MSI can overwrite
+            // Linux: avoids duplicate AppImage instances
+            let app_handle = app.clone();
+            tokio::spawn(async move {
+                tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+                println!("[update] Auto-exiting for update installation...");
+                app_handle.exit(0);
+            });
+        }
         Err(e) => eprintln!("[update] Failed to open installer: {} (file is in Downloads)", e),
     }
 

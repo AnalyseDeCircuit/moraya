@@ -171,6 +171,8 @@ export function createLinkTextPlugin(): Plugin {
         // Decorations depend only on document content, not cursor position.
         // Selection-only changes can reuse existing decorations via mapping.
         if (!tr.docChanged) return old;
+        // Full-delete: new doc is tiny, rebuild directly (skip mapping old decos)
+        if (tr.getMeta('full-delete')) return DecorationSet.empty;
         return buildDecorations(newState);
       },
     },
@@ -182,6 +184,9 @@ export function createLinkTextPlugin(): Plugin {
     appendTransaction(transactions, oldState, newState) {
       // Skip if this plugin already produced a transaction in this batch
       if (transactions.some((tr) => tr.getMeta(pluginKey))) return null;
+
+      // Skip for full-delete transactions (entire document replaced)
+      if (transactions.some((tr) => tr.getMeta('full-delete'))) return null;
 
       const selChanged = transactions.some((tr) => tr.selectionSet);
       const docChanged = transactions.some((tr) => tr.docChanged);

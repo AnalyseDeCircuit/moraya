@@ -273,6 +273,95 @@ export function createEditorPropsPlugin(): Plugin {
           if (event.key === 'Meta' || event.key === 'Control') {
             view.dom.classList.add('link-hover');
           }
+
+          // ── handleDOMEvents.keydown fires BEFORE handleKeyDown and captureKeyDown ──
+          // This is the highest priority interception point within ProseMirror.
+          if ((event.key === 'Backspace' || event.key === 'Delete') && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+            // ── Fast AllSelection / full-range deletion ──
+            // On macOS, Cmd+A is handled by PredefinedMenuItem::select_all
+            // (native menu accelerator) which changes the DOM selection but
+            // ProseMirror's selectionchange observer may NOT have synced yet.
+            // Force flush + use robust DOM Range comparison for detection.
+            try { (view as any).domObserver?.flush?.(); } catch { /* internal API */ }
+
+            const docSize = view.state.doc.content.size;
+            let isAllSelected = false;
+
+            // Check 1: ProseMirror's internal selection (post-flush, should be current)
+            const sel = view.state.selection;
+            if (sel instanceof AllSelection ||
+                (docSize > 0 && sel.from <= 1 && sel.to >= docSize - 1)) {
+              isAllSelected = true;
+            }
+
+            // Check 2: DOM Range comparison (no posAtDOM — always reliable)
+            if (!isAllSelected && docSize > 0) {
+              try {
+                const domSel = window.getSelection();
+                if (domSel && !domSel.isCollapsed && domSel.rangeCount > 0) {
+                  const range = domSel.getRangeAt(0);
+                  const editorRange = document.createRange();
+                  editorRange.selectNodeContents(view.dom);
+                  if (range.compareBoundaryPoints(Range.START_TO_START, editorRange) <= 0 &&
+                      range.compareBoundaryPoints(Range.END_TO_END, editorRange) >= 0) {
+                    isAllSelected = true;
+                  }
+                }
+              } catch { /* Range API edge cases */ }
+            }
+
+            // Check 3: Text content length comparison (last resort)
+            if (!isAllSelected && docSize > 0) {
+              try {
+                const domSel = window.getSelection();
+                if (domSel && !domSel.isCollapsed) {
+                  const selectedText = domSel.toString();
+                  const fullText = view.dom.textContent || '';
+                  if (selectedText.length > 0 && fullText.length > 0 &&
+                      selectedText.length >= fullText.length * 0.9) {
+                    isAllSelected = true;
+                  }
+                }
+              } catch { /* ignore */ }
+            }
+
+            if (isAllSelected) {
+              event.preventDefault();
+              const emptyParagraph = view.state.schema.nodes.paragraph.create();
+              const tr = view.state.tr.replaceWith(0, docSize, emptyParagraph);
+              tr.setSelection(TextSelection.create(tr.doc, 1));
+              tr.setMeta('full-delete', true);
+              view.dispatch(tr);
+              return true;
+            }
+
+            // ── WKWebView end-of-textblock Backspace fix ──
+            // ProseMirror's captureKeyDown → stopNativeHorizontalDelete uses
+            // view.endOfTextblock("backward") which relies on WebKit's
+            // Selection.modify(). In WKWebView this can return incorrect
+            // results at paragraph boundaries, causing joinBackward to merge
+            // paragraphs instead of deleting the character before the cursor.
+            if (event.key === 'Backspace') {
+              if (sel instanceof TextSelection && sel.empty && sel.$cursor) {
+                const { parent, parentOffset } = sel.$cursor;
+                if (parent.isTextblock && parentOffset === parent.content.size && parentOffset > 0) {
+                  const nb = sel.$cursor.nodeBefore;
+                  if (nb) {
+                    event.preventDefault();
+                    if (nb.isText && nb.text) {
+                      const code = nb.text.charCodeAt(nb.text.length - 1);
+                      const delLen = (code >= 0xDC00 && code <= 0xDFFF) ? 2 : 1;
+                      view.dispatch(view.state.tr.delete(sel.from - delLen, sel.from).scrollIntoView());
+                    } else {
+                      view.dispatch(view.state.tr.delete(sel.from - nb.nodeSize, sel.from).scrollIntoView());
+                    }
+                    return true;
+                  }
+                }
+              }
+            }
+          }
+
           return false;
         },
         keyup(view, event) {
@@ -327,6 +416,7 @@ export function createEditorPropsPlugin(): Plugin {
             const emptyParagraph = view.state.schema.nodes.paragraph.create();
             const tr = view.state.tr.replaceWith(0, docSize, emptyParagraph);
             tr.setSelection(TextSelection.create(tr.doc, 1));
+            tr.setMeta('full-delete', true);
             view.dispatch(tr);
             return true;
           }

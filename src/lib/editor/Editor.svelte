@@ -1339,11 +1339,59 @@
       if ((e.key === 'Backspace' || e.key === 'Delete') && editor) {
         try {
           const view = editor.view;
-          const sel = view.state.selection;
           const docSize = view.state.doc.content.size;
-          const isAllSelected =
-            sel instanceof AllSelection ||
-            (docSize > 0 && sel.from <= 1 && sel.to >= docSize - 1);
+          if (docSize <= 0) return;
+
+          // On macOS, Cmd+A is handled by the native menu accelerator
+          // (PredefinedMenuItem::select_all), which changes the DOM selection
+          // but ProseMirror's selectionchange observer may NOT have synced
+          // yet — view.state.selection can be STALE. Check multiple sources.
+
+          // Force ProseMirror to process any pending DOM mutations/selection
+          // changes so view.state.selection is up-to-date.
+          try { (view as any).domObserver?.flush?.(); } catch { /* internal API */ }
+
+          let isAllSelected = false;
+
+          // Check 1: ProseMirror internal selection
+          const sel = view.state.selection;
+          if (sel instanceof AllSelection ||
+              (docSize > 0 && sel.from <= 1 && sel.to >= docSize - 1)) {
+            isAllSelected = true;
+          }
+
+          // Check 2: DOM Range comparison (robust, no posAtDOM needed)
+          // Compare the native selection range against the editor's full content range.
+          if (!isAllSelected && docSize > 0) {
+            try {
+              const domSel = window.getSelection();
+              if (domSel && !domSel.isCollapsed && domSel.rangeCount > 0) {
+                const range = domSel.getRangeAt(0);
+                const editorRange = document.createRange();
+                editorRange.selectNodeContents(view.dom);
+                // Selection starts at or before editor start AND ends at or after editor end
+                if (range.compareBoundaryPoints(Range.START_TO_START, editorRange) <= 0 &&
+                    range.compareBoundaryPoints(Range.END_TO_END, editorRange) >= 0) {
+                  isAllSelected = true;
+                }
+              }
+            } catch { /* Range API can throw in edge cases */ }
+          }
+
+          // Check 3: Text content length comparison (last resort fallback)
+          if (!isAllSelected && docSize > 0) {
+            try {
+              const domSel = window.getSelection();
+              if (domSel && !domSel.isCollapsed) {
+                const selectedText = domSel.toString();
+                const fullText = view.dom.textContent || '';
+                if (selectedText.length > 0 && fullText.length > 0 &&
+                    selectedText.length >= fullText.length * 0.9) {
+                  isAllSelected = true;
+                }
+              }
+            } catch { /* ignore */ }
+          }
 
           if (isAllSelected) {
             e.preventDefault();
@@ -1351,14 +1399,10 @@
             const emptyParagraph = view.state.schema.nodes.paragraph.create();
             const tr = view.state.tr.replaceWith(0, docSize, emptyParagraph);
             tr.setSelection(TextSelection.create(tr.doc, 1));
+            tr.setMeta('full-delete', true);
             view.dispatch(tr);
-            // Reset scroll position — content is now empty but the wrapper
-            // may still have scrollTop from the previous content, keeping the
-            // scrollbar visible even though there's nothing to scroll.
             const wrapper = editorEl?.closest('.editor-wrapper') as HTMLElement | null;
             if (wrapper) wrapper.scrollTop = 0;
-            // WKWebView may lose the native caret after bulk deletion.
-            // Re-focus to ensure the CSS fake caret appears.
             requestAnimationFrame(() => {
               try { if (editor && !editor.view.hasFocus()) editor.view.focus(); } catch {}
             });

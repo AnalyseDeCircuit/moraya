@@ -255,7 +255,7 @@ export const IMAGE_PROVIDER_PRESETS: Record<ImageProvider, { baseURL: string; mo
   openai:  { baseURL: 'https://api.openai.com/v1',                          model: 'dall-e-3' },
   grok:    { baseURL: 'https://api.x.ai/v1',                                model: 'aurora' },
   gemini:  { baseURL: 'https://generativelanguage.googleapis.com',           model: 'imagen-3.0-generate-002' },
-  qwen:    { baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',   model: 'wanx2.1-t2i-turbo' },
+  qwen:    { baseURL: 'https://dashscope.aliyuncs.com',                      model: 'wanx2.1-t2i-turbo' },
   doubao:  { baseURL: 'https://ark.cn-beijing.volces.com/api/v3',            model: 'doubao-seedream-5-0-260128' },
   custom:  { baseURL: '', model: '' },
 };

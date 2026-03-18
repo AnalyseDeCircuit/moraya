@@ -346,6 +346,7 @@ function buildKeymap() {
           const emptyParagraph = state.schema.nodes.paragraph.create();
           const tr = state.tr.replaceWith(0, docSize, emptyParagraph);
           tr.setSelection(TextSelection.create(tr.doc, 1));
+          tr.setMeta('full-delete', true);
           dispatch(tr);
           return true;
         }
@@ -409,15 +410,41 @@ function buildKeymap() {
       }
 
       // Case 4: End of paragraph after an inline atom — join forward
-      if (parent.type.name !== 'paragraph') return false;
-      if (parentOffset !== parent.content.size) return false;
-      const nodeBefore = $cursor.nodeBefore;
-      if (!nodeBefore || !nodeBefore.isAtom) return false;
-      const afterPos2 = $cursor.after();
-      if (afterPos2 >= state.doc.content.size) return false;
-      const nextNode2 = state.doc.resolve(afterPos2).nodeAfter;
-      if (!nextNode2 || !nextNode2.isBlock) return false;
-      return joinForward(state, dispatch);
+      if (parent.type.name === 'paragraph' && parentOffset === parent.content.size) {
+        const nodeBeforeAtom = $cursor.nodeBefore;
+        if (nodeBeforeAtom && nodeBeforeAtom.isAtom) {
+          const afterPos2 = $cursor.after();
+          if (afterPos2 < state.doc.content.size) {
+            const nextNode2 = state.doc.resolve(afterPos2).nodeAfter;
+            if (nextNode2 && nextNode2.isBlock) {
+              return joinForward(state, dispatch);
+            }
+          }
+        }
+      }
+
+      // Case 5: Cursor at END of a textblock — delete previous char explicitly.
+      // WKWebView's Selection.modify("move","backward","character") can fail
+      // at the end of a contenteditable block, causing endOfTextblock("backward")
+      // to incorrectly return true. This makes baseKeymap's joinBackward merge
+      // the current paragraph with the next one instead of deleting a character.
+      // Handle the deletion via ProseMirror transaction to avoid the bug.
+      if (parent.isTextblock && parentOffset === parent.content.size && parentOffset > 0) {
+        if (dispatch) {
+          const nb = $cursor.nodeBefore;
+          if (nb && nb.isText && nb.text) {
+            // Handle surrogate pairs (emoji etc.)
+            const code = nb.text.charCodeAt(nb.text.length - 1);
+            const delLen = (code >= 0xDC00 && code <= 0xDFFF) ? 2 : 1;
+            dispatch(state.tr.delete(sel.from - delLen, sel.from).scrollIntoView());
+          } else if (nb) {
+            dispatch(state.tr.delete(sel.from - nb.nodeSize, sel.from).scrollIntoView());
+          }
+        }
+        return true;
+      }
+
+      return false;
     },
 
     // Delete: protect block atom nodes from deletion.

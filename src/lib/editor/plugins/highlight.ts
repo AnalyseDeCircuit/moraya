@@ -250,6 +250,14 @@ export function createHighlightPlugin(): Plugin {
           return getDecorations(newState.doc);
         }
 
+        // Full-delete: new doc is tiny (single empty paragraph), skip O(n)
+        // scans and directly rebuild decorations on the minimal document.
+        if (tr.getMeta('full-delete')) {
+          if (debounceTimer !== null) { clearTimeout(debounceTimer); debounceTimer = null; }
+          needsRefresh = false;
+          return getDecorations(newState.doc);
+        }
+
         // Map existing decorations cheaply through the transaction
         // (adjusts positions for insertions/deletions — no hljs calls).
         const mapped = decorationSet.map(tr.mapping, newState.doc);

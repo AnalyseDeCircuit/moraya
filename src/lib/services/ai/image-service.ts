@@ -37,11 +37,82 @@ export type ImageStyle =
   // Portrait
   | 'portrait' | 'headshot' | 'fullbody' | 'fashion' | 'street' | 'glamour' | 'environmental' | 'candid' | 'group';
 
+/** Strip compatible-mode or api suffixes to get the DashScope base domain. */
+function dashScopeBase(baseURL: string): string {
+  return baseURL.replace(/\/+$/, '').replace(/\/(compatible-mode|api)\/v\d+(\/.*)?$/, '');
+}
+
 /**
- * Detect if the base URL points to Alibaba Cloud DashScope.
+ * Generate an image using DashScope native async task API.
+ * Flow: POST create task → poll GET task status → return image URL.
+ * Used for Alibaba Cloud wanx / qwen image models.
  */
-function isDashScope(baseURL: string): boolean {
-  return /dashscope/i.test(baseURL);
+async function generateImageDashScope(
+  config: ImageProviderConfig,
+  prompt: string,
+  size?: string,
+): Promise<ImageGenerationResult> {
+  const base = dashScopeBase(config.baseURL);
+  const url = `${base}/api/v1/services/aigc/text2image/image-synthesis`;
+
+  const resolvedSize = size || resolveImageSize(config.defaultRatio, config.defaultSizeLevel);
+  const dsSize = resolvedSize.replace('x', '*');
+
+  // Step 1: Create async task
+  const createResponse = await invoke<string>('ai_proxy_fetch', {
+    configId: config.id,
+    keyPrefix: 'image-key:',
+    apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+    provider: 'openai',
+    url,
+    body: JSON.stringify({
+      model: config.model,
+      input: { prompt },
+      parameters: { size: dsSize, n: 1 },
+    }),
+    headers: { 'X-DashScope-Async': 'enable' },
+  });
+
+  const createData = JSON.parse(createResponse);
+  const taskId = createData.output?.task_id;
+  if (!taskId) {
+    throw new Error(`Failed to create DashScope task: ${JSON.stringify(createData).slice(0, 500)}`);
+  }
+
+  // Step 2: Poll for task completion (max 120s)
+  const taskUrl = `${base}/api/v1/tasks/${taskId}`;
+  const maxAttempts = 60;
+
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const statusResponse = await invoke<string>('ai_proxy_fetch', {
+      configId: config.id,
+      keyPrefix: 'image-key:',
+      apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
+      provider: 'openai',
+      url: taskUrl,
+      method: 'GET',
+    });
+
+    const statusData = JSON.parse(statusResponse);
+    const taskStatus = statusData.output?.task_status;
+
+    if (taskStatus === 'SUCCEEDED') {
+      const imageUrl = statusData.output?.results?.[0]?.url;
+      if (!imageUrl) {
+        throw new Error(`No image URL in DashScope result: ${JSON.stringify(statusData).slice(0, 500)}`);
+      }
+      return { url: imageUrl };
+    }
+
+    if (taskStatus === 'FAILED') {
+      throw new Error(`DashScope task failed: ${statusData.output?.message || 'Unknown error'}`);
+    }
+    // PENDING / RUNNING → continue polling
+  }
+
+  throw new Error('DashScope image generation timed out (120s)');
 }
 
 /**
@@ -83,71 +154,24 @@ async function generateImageGemini(
 }
 
 /**
- * Generate an image using DashScope's native multimodal-generation API.
- * Used for Alibaba Cloud qwen-image / wanx models.
- */
-async function generateImageDashScope(
-  config: ImageProviderConfig,
-  prompt: string,
-  size?: string,
-): Promise<ImageGenerationResult> {
-  const base = config.baseURL.replace(/\/+$/, '').replace(/\/compatible-mode\/v1$/, '');
-  const url = `${base}/api/v1/services/aigc/multimodal-generation/generation`;
-
-  // Convert "1024x1024" to "1024*1024" for DashScope
-  const resolvedSize = size || resolveImageSize(config.defaultRatio, config.defaultSizeLevel);
-  const dsSize = resolvedSize.replace('x', '*');
-
-  const bodyPayload = JSON.stringify({
-    model: config.model,
-    input: {
-      messages: [{
-        role: 'user',
-        content: [{ text: prompt }],
-      }],
-    },
-    parameters: {
-      size: dsSize,
-      watermark: false,
-    },
-  });
-
-  // Route through Rust AI proxy (key injected from keychain)
-  const responseText = await invoke<string>('ai_proxy_fetch', {
-    configId: config.id,
-    keyPrefix: 'image-key:',
-    apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
-    provider: 'dashscope',
-    url,
-    body: bodyPayload,
-  });
-
-  const data = JSON.parse(responseText);
-
-  // DashScope response: output.choices[0].message.content[0].image
-  const imageUrl = data.output?.choices?.[0]?.message?.content?.[0]?.image;
-  if (!imageUrl) {
-    throw new Error(`No image URL in DashScope response: ${JSON.stringify(data).slice(0, 500)}`);
-  }
-
-  return { url: imageUrl };
-}
-
-/**
  * Generate an image using the configured AIGC provider.
- * Supports OpenAI-compatible (/images/generations) and DashScope native API.
+ *
+ * Routing by provider:
+ * - qwen   → DashScope native async task API (text2image + polling)
+ * - gemini → Imagen predict API (non-OpenAI format)
+ * - others → OpenAI-compatible /images/generations (VolcEngine, OpenAI, Grok, custom)
  */
 export async function generateImage(
   config: ImageProviderConfig,
   prompt: string,
   size?: string,
 ): Promise<ImageGenerationResult> {
-  // Route to DashScope adapter for Alibaba Cloud
-  if (isDashScope(config.baseURL)) {
+  // DashScope (qwen): native async task API (no OpenAI-compatible image endpoint)
+  if (config.provider === 'qwen') {
     return generateImageDashScope(config, prompt, size);
   }
 
-  // Route to Gemini Imagen adapter
+  // Gemini Imagen has a completely different API format (predict endpoint)
   if (config.provider === 'gemini') {
     return generateImageGemini(config, prompt);
   }
@@ -196,26 +220,29 @@ export async function testImageConnection(config: ImageProviderConfig): Promise<
     return typeof e === 'string' ? e : (e instanceof Error ? e.message : 'Connection failed');
   }
 
-  if (isDashScope(config.baseURL)) {
-    // DashScope: verify auth via native API POST with test input
-    const base = config.baseURL.replace(/\/+$/, '').replace(/\/compatible-mode\/v1$/, '');
-    const url = `${base}/api/v1/services/aigc/multimodal-generation/generation`;
+  if (config.provider === 'qwen') {
+    // DashScope: POST to text2image endpoint with minimal payload.
+    // 200 = task created (auth OK), 400 = bad params (auth OK), 401/403 = bad key.
+    const base = dashScopeBase(config.baseURL);
+    const url = `${base}/api/v1/services/aigc/text2image/image-synthesis`;
     try {
       await invoke<string>('ai_proxy_fetch', {
         configId: config.id,
         keyPrefix: 'image-key:',
         apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
-        provider: 'dashscope',
+        provider: 'openai',
         url,
         body: JSON.stringify({
           model: config.model,
-          input: { messages: [{ role: 'user', content: [{ text: 'test' }] }] },
+          input: { prompt: 'test' },
+          parameters: { n: 1 },
         }),
+        headers: { 'X-DashScope-Async': 'enable' },
       });
       return { success: true };
     } catch (e: unknown) {
       const msg = errMsg(e);
-      if (msg.includes('(400)')) return { success: true };
+      if (msg.includes('(400)') || msg.includes('(422)')) return { success: true };
       return { success: false, error: msg };
     }
   }
@@ -241,41 +268,24 @@ export async function testImageConnection(config: ImageProviderConfig): Promise<
     }
   }
 
-  if (config.provider === 'doubao') {
-    // VolcEngine /models only accepts GET; use /images/generations POST instead
-    const url = openaiEndpoint(config.baseURL, '/images/generations');
-    try {
-      await invoke<string>('ai_proxy_fetch', {
-        configId: config.id,
-        keyPrefix: 'image-key:',
-        apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
-        provider: 'openai',
-        url,
-        body: JSON.stringify({ model: config.model, prompt: 'test', n: 1 }),
-      });
-      return { success: true };
-    } catch (e: unknown) {
-      const msg = errMsg(e);
-      // 400/422 = valid key but bad params, 401/403 = bad key
-      if (msg.includes('(400)') || msg.includes('(422)')) return { success: true };
-      return { success: false, error: msg };
-    }
-  }
-
-  // Standard: check /models endpoint via proxy
+  // Standard: POST to /images/generations with minimal payload.
+  // Not all providers support /models for image endpoints (DashScope, VolcEngine, etc.),
+  // so test the actual endpoint. 400/422 = auth OK but bad params = success.
   try {
-    const url = openaiEndpoint(config.baseURL, '/models');
+    const url = openaiEndpoint(config.baseURL, '/images/generations');
     await invoke<string>('ai_proxy_fetch', {
       configId: config.id,
       keyPrefix: 'image-key:',
       apiKeyOverride: config.apiKey !== '***' ? config.apiKey : undefined,
       provider: 'openai',
       url,
-      body: '{}',
+      body: JSON.stringify({ model: config.model, prompt: 'test', n: 1 }),
     });
     return { success: true };
   } catch (e: unknown) {
-    return { success: false, error: errMsg(e) };
+    const msg = errMsg(e);
+    if (msg.includes('(400)') || msg.includes('(422)')) return { success: true };
+    return { success: false, error: msg };
   }
 }
 
