@@ -32,12 +32,14 @@
       "publish": "Publish",
       "permissions": "Permissions",
       "voice": "Voice",
+      "knowledgeBase": "Knowledge Base",
       "plugins": "Plugins"
     },
     "groups": {
       "general": "General",
       "ai": "AI",
-      "extensions": "Extensions"
+      "extensions": "Extensions",
+      "knowledgeBase": "Knowledge Base"
     },
     "language": {
       "label": "Language",
@@ -1541,5 +1543,44 @@
   "link": {
     "open": "Open link",
     "remove": "Remove link"
+  },
+  "kb": {
+    "indexAll": "Index All Documents",
+    "indexFile": "Index File",
+    "indexing": "Indexing...",
+    "indexComplete": "Index Complete",
+    "searchPlaceholder": "Search knowledge base...",
+    "noIndex": "No index found. Right-click the knowledge base to build one.",
+    "staleIndex": "Index is outdated. {count} files changed since last index.",
+    "dimensions": "Dimensions",
+    "autoIndex": "Auto-index on save",
+    "provider": "Embedding Provider",
+    "model": "Embedding Model",
+    "deleteIndex": "Delete Index",
+    "reindexAll": "Re-index All",
+    "deleteConfirm": "Are you sure you want to delete the index?",
+    "useSameAsAI": "Use same as AI Chat",
+    "dimensionWarning": "Max for this model: {max}. Using {actual}.",
+    "status": {
+      "indexed": "Indexed ({chunks} chunks, {files} files)",
+      "notIndexed": "Not indexed",
+      "stale": "{count} files changed"
+    },
+    "progress": {
+      "scanning": "Scanning files...",
+      "chunking": "Chunking documents... ({current}/{total})",
+      "embedding": "Generating embeddings... ({current}/{total})",
+      "indexing": "Building index...",
+      "done": "Done"
+    },
+    "providerNoEmbedding": "Current AI Chat provider does not support embedding. Please select an embedding provider above."
+  },
+  "commandPalette": {
+    "placeholder": "Search files, commands, or knowledge base...",
+    "files": "Files",
+    "commands": "Commands",
+    "semanticSearch": "Semantic Search",
+    "keywordSearch": "Keyword Search",
+    "noResults": "No results found"
   }
 }

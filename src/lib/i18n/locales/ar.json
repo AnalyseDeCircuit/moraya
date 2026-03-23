@@ -32,12 +32,14 @@
       "publish": "النشر",
       "permissions": "الصلاحيات",
       "voice": "نموذج الصوت",
+      "knowledgeBase": "قاعدة المعرفة",
       "plugins": "الإضافات"
     },
     "groups": {
       "general": "عام",
       "ai": "إعدادات الذكاء الاصطناعي",
-      "extensions": "الإضافات"
+      "extensions": "الإضافات",
+      "knowledgeBase": "قاعدة المعرفة"
     },
     "language": {
       "label": "اللغة",
@@ -1462,5 +1464,44 @@
   "link": {
     "open": "فتح الرابط",
     "remove": "إزالة الرابط"
+  },
+  "kb": {
+    "indexAll": "فهرسة جميع المستندات",
+    "indexFile": "فهرسة الملف",
+    "indexing": "جارٍ الفهرسة...",
+    "indexComplete": "اكتملت الفهرسة",
+    "searchPlaceholder": "البحث في قاعدة المعرفة...",
+    "noIndex": "لم يتم العثور على فهرس. انقر بزر الماوس الأيمن على قاعدة المعرفة لإنشاء فهرس.",
+    "staleIndex": "الفهرس قديم. تم تغيير {count} ملفات منذ آخر فهرسة.",
+    "dimensions": "الأبعاد",
+    "autoIndex": "فهرسة تلقائية عند الحفظ",
+    "provider": "مزود التضمين",
+    "model": "نموذج التضمين",
+    "deleteIndex": "حذف الفهرس",
+    "reindexAll": "إعادة فهرسة الكل",
+    "deleteConfirm": "هل أنت متأكد أنك تريد حذف الفهرس؟",
+    "useSameAsAI": "استخدام نفس إعدادات محادثة الذكاء الاصطناعي",
+    "dimensionWarning": "الحد الأقصى لهذا النموذج: {max}. المستخدم: {actual}.",
+    "status": {
+      "indexed": "مفهرس ({chunks} أجزاء، {files} ملفات)",
+      "notIndexed": "غير مفهرس",
+      "stale": "{count} ملفات تم تغييرها"
+    },
+    "progress": {
+      "scanning": "جارٍ مسح الملفات...",
+      "chunking": "جارٍ تقسيم المستندات... ({current}/{total})",
+      "embedding": "جارٍ إنشاء التضمينات... ({current}/{total})",
+      "indexing": "جارٍ بناء الفهرس...",
+      "done": "تم"
+    },
+    "providerNoEmbedding": "مزود دردشة الذكاء الاصطناعي الحالي لا يدعم Embedding. يرجى اختيار مزود Embedding أعلاه."
+  },
+  "commandPalette": {
+    "placeholder": "البحث في الملفات أو الأوامر أو قاعدة المعرفة...",
+    "files": "الملفات",
+    "commands": "الأوامر",
+    "semanticSearch": "البحث الدلالي",
+    "keywordSearch": "البحث بالكلمات المفتاحية",
+    "noResults": "لم يتم العثور على نتائج"
   }
 }

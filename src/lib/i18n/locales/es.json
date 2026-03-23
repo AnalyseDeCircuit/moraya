@@ -32,12 +32,14 @@
       "publish": "Publicar",
       "permissions": "Permisos",
       "voice": "Voz IA",
+      "knowledgeBase": "Base de conocimiento",
       "plugins": "Plugins"
     },
     "groups": {
       "general": "General",
       "ai": "Configuración IA",
-      "extensions": "Extensiones"
+      "extensions": "Extensiones",
+      "knowledgeBase": "Base de Conocimiento"
     },
     "language": {
       "label": "Idioma",
@@ -1458,5 +1460,44 @@
   "link": {
     "open": "Abrir enlace",
     "remove": "Eliminar enlace"
+  },
+  "kb": {
+    "indexAll": "Indexar todos los documentos",
+    "indexFile": "Indexar archivo",
+    "indexing": "Indexando...",
+    "indexComplete": "Indexación completa",
+    "searchPlaceholder": "Buscar en la base de conocimiento...",
+    "noIndex": "No se encontró índice. Haz clic derecho en la base de conocimiento para crear uno.",
+    "staleIndex": "El índice está desactualizado. {count} archivos cambiaron desde la última indexación.",
+    "dimensions": "Dimensiones",
+    "autoIndex": "Indexar automáticamente al guardar",
+    "provider": "Proveedor de embedding",
+    "model": "Modelo de embedding",
+    "deleteIndex": "Eliminar índice",
+    "reindexAll": "Reindexar todo",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar el índice?",
+    "useSameAsAI": "Usar la misma configuración que el chat de IA",
+    "dimensionWarning": "Máximo para este modelo: {max}. Usando: {actual}.",
+    "status": {
+      "indexed": "Indexado ({chunks} fragmentos, {files} archivos)",
+      "notIndexed": "No indexado",
+      "stale": "{count} archivos cambiados"
+    },
+    "progress": {
+      "scanning": "Escaneando archivos...",
+      "chunking": "Dividiendo documentos... ({current}/{total})",
+      "embedding": "Generando embeddings... ({current}/{total})",
+      "indexing": "Construyendo índice...",
+      "done": "Hecho"
+    },
+    "providerNoEmbedding": "El proveedor de chat AI actual no admite embedding. Seleccione un proveedor de embedding arriba."
+  },
+  "commandPalette": {
+    "placeholder": "Buscar archivos, comandos o base de conocimientos...",
+    "files": "Archivos",
+    "commands": "Comandos",
+    "semanticSearch": "Búsqueda semántica",
+    "keywordSearch": "Búsqueda por palabras clave",
+    "noResults": "No se encontraron resultados"
   }
 }

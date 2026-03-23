@@ -32,12 +32,14 @@
       "publish": "发布",
       "permissions": "权限",
       "voice": "语音模型",
+      "knowledgeBase": "知识库",
       "plugins": "插件"
     },
     "groups": {
       "general": "通用",
       "ai": "AI 设置",
-      "extensions": "扩展"
+      "extensions": "扩展",
+      "knowledgeBase": "知识库"
     },
     "language": {
       "label": "语言",
@@ -1541,5 +1543,44 @@
   "link": {
     "open": "打开链接",
     "remove": "移除链接"
+  },
+  "kb": {
+    "indexAll": "索引全部文档",
+    "indexFile": "索引文件",
+    "indexing": "正在索引...",
+    "indexComplete": "索引完成",
+    "searchPlaceholder": "搜索知识库...",
+    "noIndex": "未找到索引。右键点击知识库目录来构建索引。",
+    "staleIndex": "索引已过期。自上次索引以来有 {count} 个文件发生变更。",
+    "dimensions": "向量维度",
+    "autoIndex": "保存时自动索引",
+    "provider": "Embedding 服务商",
+    "model": "Embedding 模型",
+    "deleteIndex": "删除索引",
+    "reindexAll": "重新索引全部",
+    "deleteConfirm": "确定要删除索引吗？",
+    "useSameAsAI": "使用与 AI 对话相同的配置",
+    "dimensionWarning": "此模型最高支持：{max}。当前使用：{actual}。",
+    "status": {
+      "indexed": "已索引（{chunks} 个片段，{files} 个文件）",
+      "notIndexed": "未索引",
+      "stale": "{count} 个文件已变更"
+    },
+    "progress": {
+      "scanning": "正在扫描文件...",
+      "chunking": "正在分块... ({current}/{total})",
+      "embedding": "正在生成向量... ({current}/{total})",
+      "indexing": "正在构建索引...",
+      "done": "完成"
+    },
+    "providerNoEmbedding": "当前 AI 对话服务商不支持 Embedding，请在上方选择一个 Embedding 服务商。"
+  },
+  "commandPalette": {
+    "placeholder": "搜索文件、命令或知识库...",
+    "files": "文件",
+    "commands": "命令",
+    "semanticSearch": "语义搜索",
+    "keywordSearch": "关键词搜索",
+    "noResults": "未找到结果"
   }
 }

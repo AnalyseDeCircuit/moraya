@@ -32,12 +32,14 @@
       "publish": "Publication",
       "permissions": "Permissions",
       "voice": "Voix IA",
+      "knowledgeBase": "Base de connaissances",
       "plugins": "Plugins"
     },
     "groups": {
       "general": "Général",
       "ai": "Paramètres IA",
-      "extensions": "Extensions"
+      "extensions": "Extensions",
+      "knowledgeBase": "Base de Connaissances"
     },
     "language": {
       "label": "Langue",
@@ -1458,5 +1460,44 @@
   "link": {
     "open": "Ouvrir le lien",
     "remove": "Supprimer le lien"
+  },
+  "kb": {
+    "indexAll": "Indexer tous les documents",
+    "indexFile": "Indexer le fichier",
+    "indexing": "Indexation en cours...",
+    "indexComplete": "Indexation terminée",
+    "searchPlaceholder": "Rechercher dans la base de connaissances...",
+    "noIndex": "Aucun index trouvé. Faites un clic droit sur la base de connaissances pour en créer un.",
+    "staleIndex": "L'index est obsolète. {count} fichiers ont changé depuis la dernière indexation.",
+    "dimensions": "Dimensions",
+    "autoIndex": "Indexer automatiquement lors de la sauvegarde",
+    "provider": "Fournisseur d'embedding",
+    "model": "Modèle d'embedding",
+    "deleteIndex": "Supprimer l'index",
+    "reindexAll": "Tout réindexer",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer l'index ?",
+    "useSameAsAI": "Utiliser la même configuration que le chat IA",
+    "dimensionWarning": "Maximum pour ce modèle : {max}. Utilisation actuelle : {actual}.",
+    "status": {
+      "indexed": "Indexé ({chunks} fragments, {files} fichiers)",
+      "notIndexed": "Non indexé",
+      "stale": "{count} fichiers modifiés"
+    },
+    "progress": {
+      "scanning": "Analyse des fichiers...",
+      "chunking": "Découpage des documents... ({current}/{total})",
+      "embedding": "Génération des embeddings... ({current}/{total})",
+      "indexing": "Construction de l'index...",
+      "done": "Terminé"
+    },
+    "providerNoEmbedding": "Le fournisseur de chat AI actuel ne prend pas en charge l'embedding. Veuillez sélectionner un fournisseur d'embedding ci-dessus."
+  },
+  "commandPalette": {
+    "placeholder": "Rechercher des fichiers, commandes ou base de connaissances...",
+    "files": "Fichiers",
+    "commands": "Commandes",
+    "semanticSearch": "Recherche sémantique",
+    "keywordSearch": "Recherche par mots-clés",
+    "noResults": "Aucun résultat trouvé"
   }
 }

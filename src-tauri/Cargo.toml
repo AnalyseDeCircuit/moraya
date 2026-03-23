@@ -34,6 +34,8 @@ futures-util = "0.3"
 dirs = "6"
 zip = { version = "2", default-features = false, features = ["deflate"] }
 keyring = { version = "3", features = ["apple-native", "windows-native", "sync-secret-service"] }
+hnsw_rs = "0.3"
+anndists = "0.1"
 open = "5"
 tauri-plugin-global-shortcut = "2"
 

@@ -32,12 +32,14 @@
       "publish": "公開",
       "permissions": "権限",
       "voice": "音声AI",
+      "knowledgeBase": "ナレッジベース",
       "plugins": "プラグイン"
     },
     "groups": {
       "general": "一般",
       "ai": "AI 設定",
-      "extensions": "拡張"
+      "extensions": "拡張",
+      "knowledgeBase": "ナレッジベース"
     },
     "tabDesc": {
       "image": "ドキュメントからアップロードした画像をホストするクラウドストレージプロバイダーを設定します。",
@@ -1462,5 +1464,44 @@
   "link": {
     "open": "リンクを開く",
     "remove": "リンクを削除"
+  },
+  "kb": {
+    "indexAll": "全ドキュメントをインデックス",
+    "indexFile": "ファイルをインデックス",
+    "indexing": "インデックス中...",
+    "indexComplete": "インデックス完了",
+    "searchPlaceholder": "ナレッジベースを検索...",
+    "noIndex": "インデックスが見つかりません。ナレッジベースを右クリックしてインデックスを作成してください。",
+    "staleIndex": "インデックスが古くなっています。前回のインデックス以降、{count} 件のファイルが変更されました。",
+    "dimensions": "次元数",
+    "autoIndex": "保存時に自動インデックス",
+    "provider": "Embedding プロバイダー",
+    "model": "Embedding モデル",
+    "deleteIndex": "インデックスを削除",
+    "reindexAll": "全て再インデックス",
+    "deleteConfirm": "インデックスを削除してもよろしいですか？",
+    "useSameAsAI": "AI チャットと同じ設定を使用",
+    "dimensionWarning": "このモデルの最大値: {max}。使用中: {actual}。",
+    "status": {
+      "indexed": "インデックス済み（{chunks} チャンク、{files} ファイル）",
+      "notIndexed": "未インデックス",
+      "stale": "{count} 件のファイルが変更"
+    },
+    "progress": {
+      "scanning": "ファイルをスキャン中...",
+      "chunking": "ドキュメントを分割中... ({current}/{total})",
+      "embedding": "埋め込みを生成中... ({current}/{total})",
+      "indexing": "インデックスを構築中...",
+      "done": "完了"
+    },
+    "providerNoEmbedding": "現在のAIチャットプロバイダーはEmbeddingに対応していません。上でEmbeddingプロバイダーを選択してください。"
+  },
+  "commandPalette": {
+    "placeholder": "ファイル、コマンド、ナレッジベースを検索...",
+    "files": "ファイル",
+    "commands": "コマンド",
+    "semanticSearch": "セマンティック検索",
+    "keywordSearch": "キーワード検索",
+    "noResults": "結果が見つかりません"
   }
 }

@@ -40,7 +40,7 @@ fn strip_unc_prefix(p: PathBuf) -> PathBuf {
 ///    - /Volumes/* on macOS (external drives, e.g. USB / HDD mounted by the OS)
 ///    - /media/* or /mnt/* on Linux (external drive mount points)
 ///    - Any drive letter other than C:\ on Windows is permitted (non-system volumes)
-fn validate_path(path: &str) -> Result<PathBuf, String> {
+pub(crate) fn validate_path(path: &str) -> Result<PathBuf, String> {
     let canonical = std::fs::canonicalize(path)
         .or_else(|_| {
             // File/directory may not exist yet (write scenario).

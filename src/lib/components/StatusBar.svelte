@@ -18,6 +18,9 @@
     searchCurrentMatch = 0,
     searchRegexError = '',
     hideModeSwitcher = false,
+    indexingPhase = '',
+    indexingCurrent = 0,
+    indexingTotal = 0,
   }: {
     onShowUpdateDialog?: () => void;
     onToggleAI?: () => void;
@@ -32,6 +35,9 @@
     searchCurrentMatch?: number;
     searchRegexError?: string;
     hideModeSwitcher?: boolean;
+    indexingPhase?: string;
+    indexingCurrent?: number;
+    indexingTotal?: number;
   } = $props();
 
   const aiShortcutHint = isMacOS || isIPadOS ? '⇧⌘I' : 'Ctrl+Shift+I';
@@ -79,6 +85,29 @@
           {$t('search.matchStatus', { current: String(searchCurrentMatch), total: String(searchMatchCount) })}
         {:else}
           {$t('search.noResults')}
+        {/if}
+      </span>
+    {/if}
+    {#if indexingPhase === 'error'}
+      <span class="status-item indexing-error">Embedding error</span>
+    {:else if indexingPhase && indexingPhase !== 'done'}
+      <span class="status-item indexing-status">
+        <span class="indexing-spinner"></span>
+        {#if indexingPhase === 'scanning'}
+          {$t('kb.progress.scanning')}
+        {:else if indexingPhase === 'chunking' && indexingTotal > 0}
+          {$t('kb.progress.chunking').replace('{current}', String(indexingCurrent)).replace('{total}', String(indexingTotal))}
+        {:else if indexingPhase === 'embedding' && indexingTotal > 0}
+          {$t('kb.progress.embedding').replace('{current}', String(indexingCurrent)).replace('{total}', String(indexingTotal))}
+        {:else if indexingPhase === 'indexing'}
+          {$t('kb.progress.indexing')}
+        {:else}
+          {$t('kb.indexing')}
+        {/if}
+        {#if indexingTotal > 0}
+          <span class="indexing-bar">
+            <span class="indexing-fill" style="width: {Math.round((indexingCurrent / indexingTotal) * 100)}%"></span>
+          </span>
         {/if}
       </span>
     {/if}
@@ -163,6 +192,46 @@
 
   .search-status.search-error {
     color: var(--color-error, #e53e3e);
+  }
+
+  .indexing-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent-color);
+  }
+
+  .indexing-error {
+    color: var(--color-error, #e53e3e);
+  }
+
+  .indexing-spinner {
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--accent-color);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .indexing-bar {
+    width: 60px;
+    height: 4px;
+    background: var(--border-light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .indexing-fill {
+    display: block;
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 2px;
+    transition: width 0.3s ease;
   }
 
   .mode-switcher {

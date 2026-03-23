@@ -32,12 +32,14 @@
       "publish": "게시",
       "permissions": "권한",
       "voice": "음성 AI",
+      "knowledgeBase": "지식 베이스",
       "plugins": "플러그인"
     },
     "groups": {
       "general": "일반",
       "ai": "AI 설정",
-      "extensions": "확장"
+      "extensions": "확장",
+      "knowledgeBase": "지식 베이스"
     },
     "tabDesc": {
       "image": "문서에서 업로드한 이미지를 호스팅할 클라우드 스토리지 제공업체를 설정합니다.",
@@ -1462,5 +1464,44 @@
   "link": {
     "open": "링크 열기",
     "remove": "링크 제거"
+  },
+  "kb": {
+    "indexAll": "모든 문서 인덱싱",
+    "indexFile": "파일 인덱싱",
+    "indexing": "인덱싱 중...",
+    "indexComplete": "인덱싱 완료",
+    "searchPlaceholder": "지식 베이스 검색...",
+    "noIndex": "인덱스를 찾을 수 없습니다. 지식 베이스를 우클릭하여 인덱스를 생성하세요.",
+    "staleIndex": "인덱스가 오래되었습니다. 마지막 인덱싱 이후 {count}개 파일이 변경되었습니다.",
+    "dimensions": "차원",
+    "autoIndex": "저장 시 자동 인덱싱",
+    "provider": "임베딩 제공업체",
+    "model": "임베딩 모델",
+    "deleteIndex": "인덱스 삭제",
+    "reindexAll": "전체 재인덱싱",
+    "deleteConfirm": "인덱스를 삭제하시겠습니까?",
+    "useSameAsAI": "AI 채팅과 동일하게 사용",
+    "dimensionWarning": "이 모델의 최대값: {max}. 현재 사용 중: {actual}.",
+    "status": {
+      "indexed": "인덱싱됨 ({chunks}개 청크, {files}개 파일)",
+      "notIndexed": "인덱싱되지 않음",
+      "stale": "{count}개 파일 변경됨"
+    },
+    "progress": {
+      "scanning": "파일 스캔 중...",
+      "chunking": "문서 분할 중... ({current}/{total})",
+      "embedding": "임베딩 생성 중... ({current}/{total})",
+      "indexing": "인덱스 구축 중...",
+      "done": "완료"
+    },
+    "providerNoEmbedding": "현재 AI 채팅 제공업체는 임베딩을 지원하지 않습니다. 위에서 임베딩 제공업체를 선택하세요."
+  },
+  "commandPalette": {
+    "placeholder": "파일, 명령 또는 지식 베이스 검색...",
+    "files": "파일",
+    "commands": "명령",
+    "semanticSearch": "의미 검색",
+    "keywordSearch": "키워드 검색",
+    "noResults": "결과를 찾을 수 없습니다"
   }
 }

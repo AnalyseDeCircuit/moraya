@@ -48,6 +48,11 @@ export async function saveFile(content: string): Promise<boolean> {
     await invoke('write_file', { path: state.currentFilePath, content });
     invalidateDocCache(state.currentFilePath);
     editorStore.setDirty(false);
+    // Auto-index on save (best-effort, non-blocking)
+    const filePath = state.currentFilePath;
+    import('$lib/services/kb').then(({ autoIndexOnSave }) => {
+      autoIndexOnSave(filePath).catch(() => {});
+    }).catch(() => {});
     return true;
   }
 

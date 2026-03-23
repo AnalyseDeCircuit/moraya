@@ -56,6 +56,14 @@ interface Settings {
   outlineWidth: number;
   aiPanelWidth: number | null;   // null = use default (33% of window)
   rulesHistoryCount: number;
+  // Knowledge base embedding settings
+  embeddingProvider: string | null;       // null = follow AI chat provider
+  embeddingConfigId: string;             // provider config ID for keychain
+  embeddingModel: string;                // embedding model name
+  embeddingDimensions: number;           // 384-2560, default 1024
+  embeddingBaseUrl: string;              // custom base URL
+  autoIndexOnSave: boolean;              // auto-index file on save
+  localEmbeddingModelId: string | null;  // Phase 4 offline model ID
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -96,6 +104,13 @@ const DEFAULT_SETTINGS: Settings = {
   outlineWidth: 200,
   aiPanelWidth: null,
   rulesHistoryCount: 10,
+  embeddingProvider: null,
+  embeddingConfigId: '',
+  embeddingModel: '',
+  embeddingDimensions: 1024,
+  embeddingBaseUrl: '',
+  autoIndexOnSave: false,
+  localEmbeddingModelId: null,
 };
 
 function resolveLocale(selection: LocaleSelection): SupportedLocale {

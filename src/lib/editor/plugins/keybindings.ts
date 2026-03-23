@@ -72,6 +72,7 @@ export const viewShortcuts: KeyBinding[] = [
   { key: '0', mod: true, shift: true, action: 'zoom-reset', description: 'Reset Zoom' },
   { key: 'F11', mod: false, action: 'fullscreen', description: 'Toggle Fullscreen' },
   { key: 'p', mod: true, action: 'quick-open', description: 'Quick Open' },
+  { key: 'p', mod: true, shift: true, action: 'command-palette', description: 'Command Palette' },
 ];
 
 export const allShortcuts: KeyBinding[] = [

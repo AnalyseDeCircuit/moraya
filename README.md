@@ -241,6 +241,9 @@ cd src-tauri && cargo check
 | Toggle Split Mode | `Cmd+Shift+/` | `Ctrl+Shift+/` |
 | Toggle Sidebar | `Cmd+\` | `Ctrl+\` |
 | Toggle AI Panel | `Cmd+Shift+I` | `Ctrl+Shift+I` |
+| Toggle Outline | `Cmd+Shift+O` | `Ctrl+Shift+O` |
+| Quick Open | `Cmd+P` | `Ctrl+P` |
+| Command Palette | `Cmd+Shift+P` | `Ctrl+Shift+P` |
 | Export HTML | `Cmd+Shift+E` | `Ctrl+Shift+E` |
 | Heading 1–6 | `Cmd+1`–`6` | `Ctrl+1`–`6` |
 | Bold | `Cmd+B` | `Ctrl+B` |
@@ -314,27 +317,29 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 
 | Version | Feature | Status |
 | --- | --- | --- |
-| v0.1.0-v0.3.0 | Core Editor, AI Integration, MCP Ecosystem | Complete |
-| v0.4.0 | MCP Container & Dynamic Services | Complete |
-| v0.5.0 | Publish Workflow (SEO, AIGC, GitHub/RSS) | Complete |
-| v0.6.0 | Security Hardening (Keychain, CSP, Path validation) | Complete |
-| v0.7.0-v0.8.0 | Image Scaling, Image Hosting (5 providers) | Complete |
-| v0.9.0-v0.10.0 | AI Prompt Templates, Editor UX Enhancement | Complete |
-| v0.11.0 | Multi-Tab Editing | Complete |
-| v0.12.0 | Plugin System | Complete |
-| v0.13.0 | Mermaid Diagram Support | Complete |
-| v0.14.0 | AI Model & Image Hosting Enhancement | Complete |
-| v0.15.0 | AI Voice Transcription | Complete |
-| v0.16.0-v0.17.0 | Search & Replace, ProseMirror Performance | Complete |
-| v0.18.0 | Document Outline, Table Keys, Freeze Fix | Complete |
-| v0.19.0 | Rendering Pipeline v2 (Doc Cache, hljs Cache, Async Parse) | Complete |
-| v0.20.0 | Multi-Language Support (12 locales, RTL) | Complete |
-| v0.21.0 | AI-powered rule file automatic splitting engine | Complete |
-| v0.22.0 | Built-in plugins, 10 new mainstream plugins added | Complete |
-| v0.23.0 | AI input interaction and real-time voice dialogue upgrade | Complete |
-| v0.24.0 | Fix KB subdirs, AI image storage; add drag-drop, MCP rules, MORAYA.md highlight | Complete |
-| v0.25.0 | Regex Search & Replace & Base64 Image Support | Complete |
-| v0.26.0 | Prompt Template management, 6 new MCP, Workflow adjustments, full-tree + image preview Tab | Complete |
+| v0.1.0-v0.3.0 | Core Editor, AI Integration, MCP Ecosystem | ✅ |
+| v0.4.0 | MCP Container & Dynamic Services | ✅ |
+| v0.5.0 | Publish Workflow (SEO, AIGC, GitHub/RSS) | ✅ |
+| v0.6.0 | Security Hardening (Keychain, CSP, Path validation) | ✅ |
+| v0.7.0-v0.8.0 | Image Scaling, Image Hosting (5 providers) | ✅ |
+| v0.9.0-v0.10.0 | AI Prompt Templates, Editor UX Enhancement | ✅ |
+| v0.11.0 | Multi-Tab Editing | ✅ |
+| v0.12.0 | Plugin System | ✅ |
+| v0.13.0 | Mermaid Diagram Support | ✅ |
+| v0.14.0 | AI Model & Image Hosting Enhancement | ✅ |
+| v0.15.0 | AI Voice Transcription | ✅ |
+| v0.16.0-v0.17.0 | Search & Replace, ProseMirror Performance | ✅ |
+| v0.18.0 | Document Outline, Table Keys, Freeze Fix | ✅ |
+| v0.19.0 | Rendering Pipeline v2 (Doc Cache, hljs Cache, Async Parse) | ✅ |
+| v0.20.0 | Multi-Language Support (12 locales, RTL) | ✅ |
+| v0.21.0 | AI-powered rule file automatic splitting engine | ✅ |
+| v0.22.0 | Built-in plugins, 10 new mainstream plugins added | ✅ |
+| v0.23.0 | AI input interaction and real-time voice dialogue upgrade | ✅ |
+| v0.24.0 | Fix KB subdirs, AI image storage; add drag-drop, MCP rules, MORAYA.md highlight | ✅ |
+| v0.25.0 | Regex Search & Replace & Base64 Image Support | ✅ |
+| v0.26.0 | Prompt Template management, 6 new MCP, Workflow adjustments, full-tree + image preview Tab | ✅ |
+| v0.27.0 | Knowledge Base Vector Search + Command Palette + Offline Models | ✅ |
+
 
 ## ⭐ Star Growth trend (updated in real time)
 

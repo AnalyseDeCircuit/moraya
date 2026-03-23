@@ -32,12 +32,14 @@
       "publish": "發佈",
       "permissions": "權限",
       "voice": "語音模型",
+      "knowledgeBase": "知識庫",
       "plugins": "外掛"
     },
     "groups": {
       "general": "通用",
       "ai": "AI 設定",
-      "extensions": "擴充"
+      "extensions": "擴充",
+      "knowledgeBase": "知識庫"
     },
     "language": {
       "label": "語言",
@@ -1462,5 +1464,44 @@
   "link": {
     "open": "開啟連結",
     "remove": "移除連結"
+  },
+  "kb": {
+    "indexAll": "索引全部文件",
+    "indexFile": "索引檔案",
+    "indexing": "正在索引...",
+    "indexComplete": "索引完成",
+    "searchPlaceholder": "搜尋知識庫...",
+    "noIndex": "未找到索引。右鍵點擊知識庫目錄來建立索引。",
+    "staleIndex": "索引已過期。自上次索引以來有 {count} 個檔案發生變更。",
+    "dimensions": "向量維度",
+    "autoIndex": "儲存時自動索引",
+    "provider": "Embedding 服務商",
+    "model": "Embedding 模型",
+    "deleteIndex": "刪除索引",
+    "reindexAll": "重新索引全部",
+    "deleteConfirm": "確定要刪除索引嗎？",
+    "useSameAsAI": "使用與 AI 對話相同的設定",
+    "dimensionWarning": "此模型最高支援：{max}。目前使用：{actual}。",
+    "status": {
+      "indexed": "已索引（{chunks} 個片段，{files} 個檔案）",
+      "notIndexed": "未索引",
+      "stale": "{count} 個檔案已變更"
+    },
+    "progress": {
+      "scanning": "正在掃描檔案...",
+      "chunking": "正在分塊... ({current}/{total})",
+      "embedding": "正在產生向量... ({current}/{total})",
+      "indexing": "正在建立索引...",
+      "done": "完成"
+    },
+    "providerNoEmbedding": "目前 AI 對話服務商不支援 Embedding，請在上方選擇一個 Embedding 服務商。"
+  },
+  "commandPalette": {
+    "placeholder": "搜尋檔案、指令或知識庫...",
+    "files": "檔案",
+    "commands": "指令",
+    "semanticSearch": "語意搜尋",
+    "keywordSearch": "關鍵字搜尋",
+    "noResults": "未找到結果"
   }
 }

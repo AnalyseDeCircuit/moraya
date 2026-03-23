@@ -14,10 +14,12 @@
     onFileSelect,
     onOpenKBManager,
     onRename,
+    onOpenSettings,
   }: {
-    onFileSelect: (path: string) => void;
+    onFileSelect: (path: string, scrollOffset?: number) => void;
     onOpenKBManager?: () => void;
     onRename?: (oldPath: string, newPath: string) => void;
+    onOpenSettings?: (tab: string) => void;
   } = $props();
 
   let fileTree = $state<FileEntry[]>([]);
@@ -334,6 +336,83 @@
     if (event.key === 'Escape') {
       showSearch = false;
       searchQuery = '';
+      contentSearchResults = [];
+    }
+  }
+
+  // --------------- Content search (BM25) ---------------
+  interface ContentSearchResult {
+    filePath: string;
+    heading?: string;
+    preview: string;
+    score: number;
+    offset: number;
+  }
+  let contentSearchResults: ContentSearchResult[] = $state([]);
+  let contentSearchTimer: ReturnType<typeof setTimeout> | undefined;
+
+  $effect(() => {
+    if (searchQuery.length >= 2) {
+      clearTimeout(contentSearchTimer);
+      contentSearchTimer = setTimeout(() => doContentSearch(), 300);
+    } else {
+      contentSearchResults = [];
+    }
+  });
+
+  /** Highlight search keywords in text by wrapping in <mark> tags */
+  function highlightKeywords(text: string, query: string): string {
+    if (!query) return escapeHtml(text);
+    const escaped = escapeHtml(text);
+    // Collect terms: full query + whitespace-split words + individual CJK chars
+    const terms = new Set<string>();
+    const q = query.trim();
+    if (q.length >= 2) terms.add(q);
+    for (const w of q.split(/\s+/)) {
+      if (w.length >= 2) terms.add(w);
+    }
+    for (const ch of q) {
+      if (/[\u4e00-\u9fff\u3400-\u4dbf\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/.test(ch)) terms.add(ch);
+    }
+    if (terms.size === 0) return escaped;
+    // Sort by length descending so longer matches take priority
+    const sorted = [...terms].sort((a, b) => b.length - a.length);
+    const pattern = sorted.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    try {
+      return escaped.replace(new RegExp(`(${pattern})`, 'gi'), '<mark>$1</mark>');
+    } catch {
+      return escaped;
+    }
+  }
+
+  function escapeHtml(text: string): string {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  async function doContentSearch() {
+    const fsState = filesStore.getState();
+    const kb = fsState.knowledgeBases.find((k) => k.id === fsState.activeKnowledgeBaseId);
+    if (!kb) return;
+    try {
+      const { invoke } = await import('@tauri-apps/api/core');
+      const results = await invoke<Array<{
+        file_path: string; heading: string | null; preview: string;
+        score: number; offset: number; source: string;
+      }>>('kb_search', {
+        kbPath: kb.path, query: searchQuery,
+        configId: '', keyPrefix: null, provider: 'openai',
+        model: '', dimensions: 0, baseUrl: null,
+        topK: 10, mode: 'bm25',
+      });
+      contentSearchResults = results.map((r) => ({
+        filePath: r.file_path,
+        heading: r.heading ?? undefined,
+        preview: r.preview,
+        score: r.score,
+        offset: r.offset,
+      }));
+    } catch {
+      contentSearchResults = [];
     }
   }
 
@@ -475,6 +554,41 @@
   async function handleRefresh() {
     if (folderPath) {
       await refreshFileTree(folderPath);
+    }
+  }
+
+  async function handleIndexAll() {
+    if (!folderPath) return;
+    try {
+      const { getEmbeddingConfig, indexKnowledgeBase } = await import('$lib/services/kb');
+      const config = getEmbeddingConfig();
+      if (!config) {
+        // Notify user: need to configure embedding provider
+        if (onOpenSettings) onOpenSettings('knowledge-base');
+        return;
+      }
+      console.log('[KB] Starting index all:', folderPath, JSON.stringify(config));
+      const status = await indexKnowledgeBase(folderPath, config);
+      console.log('[KB] Index complete:', JSON.stringify(status));
+    } catch (e: any) {
+      console.error('[KB] Index all FAILED:', typeof e === 'string' ? e : e?.message || JSON.stringify(e));
+    }
+  }
+
+  async function handleIndexFile() {
+    if (!folderPath || !contextMenu.targetPath) return;
+    try {
+      const { getEmbeddingConfig, indexSingleFile } = await import('$lib/services/kb');
+      const config = getEmbeddingConfig();
+      if (!config) {
+        if (onOpenSettings) onOpenSettings('knowledge-base');
+        return;
+      }
+      console.log('[KB] Indexing file:', contextMenu.targetPath);
+      await indexSingleFile(folderPath, contextMenu.targetPath, config);
+      console.log('[KB] File indexed');
+    } catch (e) {
+      console.error('[KB] Index file failed:', e);
     }
   }
 
@@ -891,6 +1005,18 @@
     </div>
   {/if}
 
+  {#if showSearch && contentSearchResults.length > 0}
+    <div class="content-search-results">
+      <div class="content-search-label">{$t('commandPalette.semanticSearch')}</div>
+      {#each contentSearchResults as result}
+        <button class="content-search-item" onclick={() => onFileSelect(result.filePath, result.offset)}>
+          <div class="csr-file">{result.filePath.split('/').pop()}</div>
+          <div class="csr-preview">{#if result.heading}<span class="csr-heading">{result.heading}:</span> {/if}{@html highlightKeywords(result.preview, searchQuery)}</div>
+        </button>
+      {/each}
+    </div>
+  {/if}
+
   {#if showSaveAsKBHint && folderPath}
     <div class="kb-save-hint">
       <span>{$t('knowledgeBase.saveHint')}</span>
@@ -1162,6 +1288,8 @@
     onRevealInFinder={handleRevealInFinder}
     historyVersions={contextMenu.targetName === 'MORAYA.md' ? contextMenuHistoryVersions : undefined}
     onRestoreVersion={restoreHistoryVersion}
+    onIndexAll={handleIndexAll}
+    onIndexFile={handleIndexFile}
     onClose={closeContextMenu}
   />
 {/if}
@@ -1230,6 +1358,75 @@
 
   .search-input:focus {
     border-color: var(--accent-color);
+  }
+
+  .content-search-results {
+    border-bottom: 1px solid var(--border-light);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .content-search-results::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/WebKit */
+  }
+
+  .content-search-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    padding: 6px 12px 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .content-search-item {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .content-search-item:hover {
+    background: var(--bg-hover);
+  }
+
+  .csr-file {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .csr-heading {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  .csr-preview {
+    color: var(--text-secondary);
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 3px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-all;
+  }
+
+  .csr-preview :global(mark) {
+    background: rgba(255, 200, 0, 0.4);
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
   }
 
   .inline-rename {

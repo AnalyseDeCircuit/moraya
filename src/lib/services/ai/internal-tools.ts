@@ -235,6 +235,27 @@ export const INTERNAL_TOOLS: ToolDefinition[] = [
       required: ['url'],
     },
   },
+  {
+    name: 'search_knowledge_base',
+    description:
+      'Search the active knowledge base using semantic vector search and keyword matching. ' +
+      'Returns relevant document chunks with file paths and text snippets. ' +
+      'Use this when the user asks about content in their knowledge base or needs to find specific information across their documents.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'The search query',
+        },
+        top_k: {
+          type: 'number',
+          description: 'Maximum number of results to return (default: 5)',
+        },
+      },
+      required: ['query'],
+    },
+  },
 ];
 
 /** Check if a tool name belongs to an internal tool. */
@@ -263,6 +284,8 @@ export async function executeInternalTool(
       return handleFetchImageToLocal(tc.arguments);
     case 'save_image_to_kb':
       return handleSaveImageToKb(tc.arguments);
+    case 'search_knowledge_base':
+      return handleSearchKnowledgeBase(tc.arguments);
     default:
       return { content: `Unknown internal tool: ${tc.name}`, isError: true };
   }
@@ -684,4 +707,72 @@ async function handleUpdateEditorContent(
     content: `Content filled into editor (${markdownContent.length} chars). The document is unsaved — user can save with Cmd+S.`,
     isError: false,
   };
+}
+
+// ---------------------------------------------------------------------------
+// search_knowledge_base
+// ---------------------------------------------------------------------------
+
+async function handleSearchKnowledgeBase(
+  args: Record<string, unknown>,
+): Promise<{ content: string; isError: boolean }> {
+  const query = args.query as string;
+  if (!query) {
+    return { content: 'Missing required parameter: query', isError: true };
+  }
+  const topK = (args.top_k as number) || 5;
+
+  // Get active knowledge base path
+  const fsState = filesStore.getState();
+  const activeKB = fsState.knowledgeBases.find(
+    (kb) => kb.id === fsState.activeKnowledgeBaseId,
+  );
+  if (!activeKB) {
+    return {
+      content: 'No active knowledge base. Open a folder first.',
+      isError: true,
+    };
+  }
+
+  try {
+    const { getEmbeddingConfig, searchKnowledgeBase } = await import(
+      '$lib/services/kb'
+    );
+    const config = getEmbeddingConfig();
+    if (!config) {
+      return {
+        content:
+          'Embedding not configured. Set up in Settings > Knowledge Base.',
+        isError: true,
+      };
+    }
+
+    const results = await searchKnowledgeBase(
+      activeKB.path,
+      query,
+      config,
+      topK,
+    );
+
+    if (results.length === 0) {
+      return {
+        content: `No results found for "${query}" in the knowledge base.`,
+        isError: false,
+      };
+    }
+
+    const formatted = results
+      .map(
+        (r, i) =>
+          `[${i + 1}] ${r.filePath}${r.heading ? ` > ${r.heading}` : ''} (score: ${r.score.toFixed(2)})\n${r.preview}`,
+      )
+      .join('\n\n');
+
+    return {
+      content: `Found ${results.length} results for "${query}":\n\n${formatted}`,
+      isError: false,
+    };
+  } catch (e: unknown) {
+    return { content: `Search failed: ${errMsg(e)}`, isError: true };
+  }
 }

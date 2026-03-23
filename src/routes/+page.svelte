@@ -229,6 +229,13 @@ ${tr('welcome.tip')}
   let showPublishConfirm = $state(false);
   let showUpdateDialog = $state(false);
   let showKBManager = $state(false);
+  let showCommandPalette = $state(false);
+  let commandPaletteMode: 'files' | 'commands' = $state('files');
+
+  // KB indexing progress
+  let indexingPhase = $state('');
+  let indexingCurrent = $state(0);
+  let indexingTotal = $state(0);
   let seoCompleted = $state(false);
   let imageGenCompleted = $state(false);
   let currentSEOData = $state<SEOData | null>(null);
@@ -806,6 +813,10 @@ ${tr('welcome.tip')}
 
   // Minimalist-style keyboard shortcuts
   function handleKeydown(event: KeyboardEvent) {
+    // When Command Palette is open, only allow Escape (handled by palette itself)
+    // Skip all global shortcuts to prevent Cmd+O etc. from firing while typing
+    if (showCommandPalette) return;
+
     const mod = event.metaKey || event.ctrlKey;
 
     // Undo: Cmd+Z / Ctrl+Z on all platforms
@@ -911,6 +922,22 @@ ${tr('welcome.tip')}
     if (mod && event.shiftKey && event.key === 'E') {
       event.preventDefault();
       exportDocument(getCurrentContent(), 'html');
+      return;
+    }
+
+    // Command Palette: Cmd+Shift+P → command mode
+    if (mod && event.shiftKey && (event.key === 'p' || event.key === 'P')) {
+      event.preventDefault();
+      commandPaletteMode = 'commands';
+      showCommandPalette = true;
+      return;
+    }
+
+    // Quick Open: Cmd+P → file search mode
+    if (mod && !event.shiftKey && event.key === 'p') {
+      event.preventDefault();
+      commandPaletteMode = 'files';
+      showCommandPalette = true;
       return;
     }
 
@@ -1066,10 +1093,77 @@ ${tr('welcome.tip')}
   let fileSelectSerial = 0;
   let fileSelectDebounce: ReturnType<typeof setTimeout> | undefined;
 
-  function handleFileSelect(path: string) {
+  /** Pending character offset to scroll to after file opens (set by search result click) */
+  let pendingScrollCharOffset = 0;
+
+  function handleFileSelect(path: string, scrollOffset?: number) {
+    pendingScrollCharOffset = scrollOffset || 0;
     const mySerial = ++fileSelectSerial;
     clearTimeout(fileSelectDebounce);
     fileSelectDebounce = setTimeout(() => doFileSelect(path, mySerial), 50);
+  }
+
+  /** Handle command execution from Command Palette */
+  function handlePaletteCommand(action: string) {
+    const paletteActions: Record<string, () => void> = {
+      // File
+      'new-file': () => handleNewFile(),
+      'new-window': () => { /* handled by native menu */ },
+      'open-file': () => handleOpenFile(),
+      'save': () => handleSave(false),
+      'save-as': () => handleSave(true),
+      // Edit
+      'undo': () => runCmd(undo),
+      'redo': () => runCmd(redo),
+      // Paragraph
+      'heading-1': () => runCmd(setHeading(1)),
+      'heading-2': () => runCmd(setHeading(2)),
+      'heading-3': () => runCmd(setHeading(3)),
+      'heading-4': () => runCmd(setHeading(4)),
+      'heading-5': () => runCmd(setHeading(5)),
+      'heading-6': () => runCmd(setHeading(6)),
+      'paragraph': () => runCmd(setHeading(0)),
+      'table': () => runCmd(insertTable(3, 3)),
+      'code-block': () => runCmd(insertCodeBlock),
+      'math-block': () => runCmd(insertMathBlockCmd),
+      'blockquote': () => runCmd(wrapInBlockquote),
+      'bullet-list': () => runCmd(wrapInBulletList),
+      'ordered-list': () => runCmd(wrapInOrderedList),
+      // Format
+      'bold': () => runCmd(toggleBold),
+      'italic': () => runCmd(toggleItalic),
+      'strikethrough': () => runCmd(toggleStrikethrough),
+      'code': () => runCmd(toggleCode),
+      'link': () => runCmd(toggleLink({ href: '' })),
+      'image': () => { showImageDialog = true; },
+      // View
+      'toggle-sidebar': () => settingsStore.toggleSidebar(),
+      'toggle-source': () => {
+        const newMode: EditorMode = editorMode === 'visual' ? 'source' : 'visual';
+        editorMode = newMode;
+        editorStore.setEditorMode(newMode);
+      },
+      'zoom-in': () => {
+        const s = settingsStore.getState();
+        const sz = Math.min(s.fontSize + 1, 24);
+        settingsStore.update({ fontSize: sz });
+        document.documentElement.style.setProperty('--font-size-base', `${sz}px`);
+      },
+      'zoom-out': () => {
+        const s = settingsStore.getState();
+        const sz = Math.max(s.fontSize - 1, 12);
+        settingsStore.update({ fontSize: sz });
+        document.documentElement.style.setProperty('--font-size-base', `${sz}px`);
+      },
+      'zoom-reset': () => {
+        settingsStore.update({ fontSize: 16 });
+        document.documentElement.style.setProperty('--font-size-base', '16px');
+      },
+      // Custom
+      'settings': () => { showSettings = true; },
+      'index-kb': () => { settingsInitialTab = 'knowledge-base' as any; showSettings = true; },
+    };
+    paletteActions[action]?.();
   }
 
 
@@ -1336,6 +1430,30 @@ ${tr('welcome.tip')}
     // skipSync=true: we already synced above before loadFile polluted editorStore
     tabsStore.openFileTab(path, fileName, fileContent, mtime, true);
     resetWorkflowState();
+
+    // Scroll to search result offset if pending
+    if (pendingScrollCharOffset > 0) {
+      const offset = pendingScrollCharOffset;
+      pendingScrollCharOffset = 0;
+      // Wait for editor to render the new content, then scroll
+      setTimeout(() => {
+        try {
+          if (morayaEditor?.view) {
+            const view = morayaEditor.view;
+            // Convert character offset to ProseMirror position (approximate: +1 for doc start)
+            const pos = Math.min(offset + 1, view.state.doc.content.size - 1);
+            if (pos > 0) {
+              const coords = view.coordsAtPos(pos);
+              const wrapper = document.querySelector('.editor-wrapper') as HTMLElement | null;
+              if (wrapper && coords) {
+                const wrapperRect = wrapper.getBoundingClientRect();
+                wrapper.scrollTo({ top: wrapper.scrollTop + coords.top - wrapperRect.top - 100, behavior: 'smooth' });
+              }
+            }
+          }
+        } catch { /* scroll best-effort */ }
+      }, 300);
+    }
   }
 
   function handleContentChange(newContent: string) {
@@ -2041,7 +2159,12 @@ ${tr('welcome.tip')}
       };
 
       Object.entries(menuHandlers).forEach(([event, handler]) => {
-        listen(event, (e) => handler(e.payload)).then(unlisten => menuUnlisteners.push(unlisten));
+        listen(event, (e) => {
+          // Suppress menu events when Command Palette is open
+          // (prevents Cmd+O etc. from firing via native menu accelerators while typing)
+          if (showCommandPalette) return;
+          handler(e.payload);
+        }).then(unlisten => menuUnlisteners.push(unlisten));
       });
 
       // Listen for MCP tool clicks from native Workflow → MCP Tools submenu
@@ -2062,6 +2185,21 @@ ${tr('welcome.tip')}
           await sendChatMessage(message, getCurrentContent());
         } catch (e) {
           console.warn('[MCP Menu] Failed to send tool message:', e);
+        }
+      }).then(unlisten => menuUnlisteners.push(unlisten));
+
+      // Listen for KB indexing progress
+      listen<{ phase: string; current: number; total: number; file_name: string }>('kb-index-progress', (event) => {
+        console.log('[KB progress]', event.payload.phase, event.payload.current, '/', event.payload.total, event.payload.file_name);
+        indexingPhase = event.payload.phase;
+        indexingCurrent = event.payload.current;
+        indexingTotal = event.payload.total;
+        // Auto-clear after "done" or "error" phase
+        if (event.payload.phase === 'done') {
+          setTimeout(() => { indexingPhase = ''; }, 2000);
+        } else if (event.payload.phase === 'error') {
+          console.error('[KB] Indexing error:', event.payload.file_name);
+          setTimeout(() => { indexingPhase = ''; }, 5000);
         }
       }).then(unlisten => menuUnlisteners.push(unlisten));
 
@@ -2248,7 +2386,7 @@ ${tr('welcome.tip')}
 
   <div class="app-body">
     {#if showSidebar}
-      <Sidebar onFileSelect={handleFileSelect} onRename={handleFileRename} onOpenKBManager={() => showKBManager = true} />
+      <Sidebar onFileSelect={handleFileSelect} onRename={handleFileRename} onOpenKBManager={() => showKBManager = true} onOpenSettings={(tab) => { settingsInitialTab = tab as any; showSettings = true; }} />
     {/if}
 
     <main class="editor-area">
@@ -2323,6 +2461,9 @@ ${tr('welcome.tip')}
     {searchMatchCount}
     {searchCurrentMatch}
     {searchRegexError}
+    {indexingPhase}
+    {indexingCurrent}
+    {indexingTotal}
   />
 </div>
 
@@ -2385,6 +2526,17 @@ ${tr('welcome.tip')}
 {#if showKBManager}
   {#await import('$lib/components/KnowledgeBaseManager.svelte') then { default: KnowledgeBaseManager }}
     <KnowledgeBaseManager onClose={() => showKBManager = false} />
+  {/await}
+{/if}
+
+{#if showCommandPalette}
+  {#await import('$lib/components/CommandPalette.svelte') then { default: CommandPalette }}
+    <CommandPalette
+      initialMode={commandPaletteMode}
+      onFileSelect={handleFileSelect}
+      onCommand={handlePaletteCommand}
+      onClose={() => showCommandPalette = false}
+    />
   {/await}
 {/if}
 

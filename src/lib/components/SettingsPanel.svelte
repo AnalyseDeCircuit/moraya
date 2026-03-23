@@ -12,8 +12,9 @@
   import PublishSettings from './PublishSettings.svelte';
   import VoiceSettings from './VoiceSettings.svelte';
   import PluginsPanel from './PluginsPanel.svelte';
+  import KBIndexSettings from './KBIndexSettings.svelte';
 
-  type Tab = 'general' | 'editor' | 'appearance' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'permissions' | 'voice' | 'plugins';
+  type Tab = 'general' | 'editor' | 'appearance' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'permissions' | 'voice' | 'plugins' | 'knowledge-base';
 
   let {
     onClose,
@@ -150,6 +151,12 @@
       ],
     },
     {
+      groupKey: 'settings.groups.knowledgeBase',
+      items: [
+        { key: 'knowledge-base', icon: '📚', labelKey: 'settings.tabs.knowledgeBase' },
+      ],
+    },
+    {
       groupKey: 'settings.groups.extensions',
       items: [
         { key: 'image', icon: '▣', labelKey: 'settings.tabs.image' },
@@ -226,6 +233,7 @@
         <div class="tab-pane" class:active={activeTab === 'image'}><ImageHostingSettings /></div>
         <div class="tab-pane" class:active={activeTab === 'publish'}><PublishSettings /></div>
         <div class="tab-pane" class:active={activeTab === 'voice'}><VoiceSettings /></div>
+        <div class="tab-pane" class:active={activeTab === 'knowledge-base'}><KBIndexSettings onOpenKBManager={() => showKBManager = true} /></div>
         <div class="tab-pane" class:active={activeTab === 'plugins'}><PluginsPanel /></div>
 
         {#if activeTab === 'general'}
@@ -304,18 +312,6 @@
               />
             </div>
             <div class="setting-hint">{$t('settings.rulesHistoryCountHint')}</div>
-          </div>
-
-          <div class="setting-section">
-            <div class="section-header">{$t('knowledgeBase.title')}</div>
-            <div class="setting-group">
-              <div class="kb-setting-row">
-                <button class="kb-manage-btn" onclick={() => showKBManager = true}>
-                  {$t('knowledgeBase.manage')}
-                </button>
-                <span class="kb-count">{knowledgeBases.length} {$t('knowledgeBase.title').toLowerCase()}</span>
-              </div>
-            </div>
           </div>
 
         {:else if activeTab === 'editor'}

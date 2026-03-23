@@ -20,6 +20,8 @@
     onRevealInFinder,
     historyVersions,
     onRestoreVersion,
+    onIndexAll,
+    onIndexFile,
     onClose,
   }: {
     position: { top: number; left: number };
@@ -38,6 +40,8 @@
     /** Pre-loaded history versions for MORAYA.md; undefined = not applicable */
     historyVersions?: Array<{ path: string; timestamp: string }>;
     onRestoreVersion?: (versionPath: string) => void;
+    onIndexAll?: () => void;
+    onIndexFile?: () => void;
     onClose: () => void;
   } = $props();
 
@@ -116,6 +120,18 @@
     <button class="menu-item" onclick={() => handleAction(onRefresh)}>
       {tr('sidebar.contextMenu.refresh')}
     </button>
+
+    {#if onIndexAll}
+      <button class="menu-item" onclick={() => handleAction(onIndexAll)}>
+        {tr('kb.indexAll')}
+      </button>
+    {/if}
+
+    {#if onIndexFile && targetType === 'file'}
+      <button class="menu-item" onclick={() => handleAction(onIndexFile)}>
+        {tr('kb.indexFile')}
+      </button>
+    {/if}
 
     {#if targetType !== 'blank'}
       <div class="menu-divider"></div>

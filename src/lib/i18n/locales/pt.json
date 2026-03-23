@@ -32,12 +32,14 @@
       "publish": "Publicar",
       "permissions": "Permissões",
       "voice": "Voz IA",
+      "knowledgeBase": "Base de conhecimento",
       "plugins": "Plugins"
     },
     "groups": {
       "general": "Geral",
       "ai": "Configurações IA",
-      "extensions": "Extensões"
+      "extensions": "Extensões",
+      "knowledgeBase": "Base de Conhecimento"
     },
     "tabDesc": {
       "image": "Configure provedores de armazenamento em nuvem para hospedar imagens carregadas de seus documentos.",
@@ -1462,5 +1464,44 @@
   "link": {
     "open": "Abrir link",
     "remove": "Remover link"
+  },
+  "kb": {
+    "indexAll": "Indexar todos os documentos",
+    "indexFile": "Indexar arquivo",
+    "indexing": "Indexando...",
+    "indexComplete": "Indexação concluída",
+    "searchPlaceholder": "Pesquisar na base de conhecimento...",
+    "noIndex": "Nenhum índice encontrado. Clique com o botão direito na base de conhecimento para criar um.",
+    "staleIndex": "O índice está desatualizado. {count} arquivos foram alterados desde a última indexação.",
+    "dimensions": "Dimensões",
+    "autoIndex": "Indexar automaticamente ao salvar",
+    "provider": "Provedor de embedding",
+    "model": "Modelo de embedding",
+    "deleteIndex": "Excluir índice",
+    "reindexAll": "Reindexar tudo",
+    "deleteConfirm": "Tem certeza de que deseja excluir o índice?",
+    "useSameAsAI": "Usar a mesma configuração do chat de IA",
+    "dimensionWarning": "Máximo para este modelo: {max}. Usando: {actual}.",
+    "status": {
+      "indexed": "Indexado ({chunks} fragmentos, {files} arquivos)",
+      "notIndexed": "Não indexado",
+      "stale": "{count} arquivos alterados"
+    },
+    "progress": {
+      "scanning": "Escaneando arquivos...",
+      "chunking": "Dividindo documentos... ({current}/{total})",
+      "embedding": "Gerando embeddings... ({current}/{total})",
+      "indexing": "Construindo índice...",
+      "done": "Concluído"
+    },
+    "providerNoEmbedding": "O provedor de chat AI atual não suporta embedding. Selecione um provedor de embedding acima."
+  },
+  "commandPalette": {
+    "placeholder": "Pesquisar arquivos, comandos ou base de conhecimento...",
+    "files": "Arquivos",
+    "commands": "Comandos",
+    "semanticSearch": "Pesquisa semântica",
+    "keywordSearch": "Pesquisa por palavras-chave",
+    "noResults": "Nenhum resultado encontrado"
   }
 }

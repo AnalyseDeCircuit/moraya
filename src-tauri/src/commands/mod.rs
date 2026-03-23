@@ -1,5 +1,6 @@
 pub mod ai_proxy;
 pub mod file;
+pub mod kb;
 pub mod keychain;
 pub mod macos_system_audio;
 pub mod mcp;

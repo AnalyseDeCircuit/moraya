@@ -533,6 +533,7 @@ pub fn run() {
         )
         .manage(commands::mcp::MCPProcessManager::new())
         .manage(commands::ai_proxy::AIProxyState::new())
+        .manage(commands::kb::KBIndexState::new())
         .manage(commands::speech_proxy::SpeechProxyState::new())
         .manage(commands::speech_proxy::RtDialogueState::new())
         .manage(commands::plugin_manager::PluginProcessManager::new())
@@ -566,6 +567,11 @@ pub fn run() {
             commands::ai_proxy::ai_proxy_fetch,
             commands::ai_proxy::ai_proxy_stream,
             commands::ai_proxy::ai_proxy_abort,
+            commands::kb::kb_index_files,
+            commands::kb::kb_index_single_file,
+            commands::kb::kb_search,
+            commands::kb::kb_get_index_status,
+            commands::kb::kb_delete_index,
             commands::update::get_platform_info,
             commands::update::exit_app,
             commands::update::download_update,

@@ -32,12 +32,14 @@
       "publish": "Veröffentlichen",
       "permissions": "Berechtigungen",
       "voice": "Sprachmodell",
+      "knowledgeBase": "Wissensdatenbank",
       "plugins": "Plugins"
     },
     "groups": {
       "general": "Allgemein",
       "ai": "KI-Einstellungen",
-      "extensions": "Erweiterungen"
+      "extensions": "Erweiterungen",
+      "knowledgeBase": "Wissensdatenbank"
     },
     "language": {
       "label": "Sprache",
@@ -1462,5 +1464,44 @@
   "link": {
     "open": "Link öffnen",
     "remove": "Link entfernen"
+  },
+  "kb": {
+    "indexAll": "Alle Dokumente indexieren",
+    "indexFile": "Datei indexieren",
+    "indexing": "Indizierung...",
+    "indexComplete": "Indexierung abgeschlossen",
+    "searchPlaceholder": "Wissensdatenbank durchsuchen...",
+    "noIndex": "Kein Index gefunden. Klicken Sie mit der rechten Maustaste auf die Wissensdatenbank, um einen Index zu erstellen.",
+    "staleIndex": "Index ist veraltet. {count} Dateien wurden seit der letzten Indexierung geändert.",
+    "dimensions": "Dimensionen",
+    "autoIndex": "Beim Speichern automatisch indexieren",
+    "provider": "Embedding-Anbieter",
+    "model": "Embedding-Modell",
+    "deleteIndex": "Index löschen",
+    "reindexAll": "Alles neu indexieren",
+    "deleteConfirm": "Möchten Sie den Index wirklich löschen?",
+    "useSameAsAI": "Gleiche Einstellungen wie AI-Chat verwenden",
+    "dimensionWarning": "Maximum für dieses Modell: {max}. Verwendet: {actual}.",
+    "status": {
+      "indexed": "Indexiert ({chunks} Chunks, {files} Dateien)",
+      "notIndexed": "Nicht indexiert",
+      "stale": "{count} Dateien geändert"
+    },
+    "progress": {
+      "scanning": "Dateien werden gescannt...",
+      "chunking": "Dokumente werden aufgeteilt... ({current}/{total})",
+      "embedding": "Embeddings werden generiert... ({current}/{total})",
+      "indexing": "Index wird aufgebaut...",
+      "done": "Fertig"
+    },
+    "providerNoEmbedding": "Der aktuelle AI-Chat-Anbieter unterstützt kein Embedding. Bitte wählen Sie oben einen Embedding-Anbieter aus."
+  },
+  "commandPalette": {
+    "placeholder": "Dateien, Befehle oder Wissensdatenbank durchsuchen...",
+    "files": "Dateien",
+    "commands": "Befehle",
+    "semanticSearch": "Semantische Suche",
+    "keywordSearch": "Stichwortsuche",
+    "noResults": "Keine Ergebnisse gefunden"
   }
 }
