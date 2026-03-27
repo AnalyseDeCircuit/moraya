@@ -7,6 +7,8 @@
     wrapInBlockquote,
     wrapInBulletList,
     wrapInOrderedList,
+    wrapInTaskList,
+
     insertCodeBlock,
     insertHorizontalRule,
     toggleBold,
@@ -756,6 +758,8 @@ ${tr('welcome.tip')}
       para_quote: tr('menu.quote'),
       para_bullet_list: tr('menu.bulletList'),
       para_ordered_list: tr('menu.orderedList'),
+      para_task_list: tr('menu.taskList'),
+
       para_hr: tr('menu.horizontalRule'),
       // Format menu
       fmt_bold: tr('menu.bold'),
@@ -855,7 +859,7 @@ ${tr('welcome.tip')}
       return;
     }
 
-    if (mod && event.key === 'o' && !event.shiftKey) {
+    if (mod && !event.altKey && event.key === 'o' && !event.shiftKey) {
       event.preventDefault();
       handleOpenFile();
       return;
@@ -1238,6 +1242,8 @@ ${tr('welcome.tip')}
       'blockquote': () => runCmd(wrapInBlockquote),
       'bullet-list': () => runCmd(wrapInBulletList),
       'ordered-list': () => runCmd(wrapInOrderedList),
+      'task-list': () => runCmd(wrapInTaskList),
+
       // Format
       'bold': () => runCmd(toggleBold),
       'italic': () => runCmd(toggleItalic),
@@ -2217,6 +2223,8 @@ ${tr('welcome.tip')}
         'menu:para_quote': () => runCmd(wrapInBlockquote),
         'menu:para_bullet_list': () => runCmd(wrapInBulletList),
         'menu:para_ordered_list': () => runCmd(wrapInOrderedList),
+        'menu:para_task_list': () => runCmd(wrapInTaskList),
+
         'menu:para_hr': () => runCmd(insertHorizontalRule),
         // Format
         'menu:fmt_bold': () => runCmd(toggleBold),

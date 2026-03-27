@@ -254,6 +254,9 @@ cd src-tauri && cargo check
 | Insert Image | `Cmd+Shift+G` | `Ctrl+Shift+G` |
 | Code Block | `Cmd+Shift+K` | `Ctrl+Shift+K` |
 | Quote | `Cmd+Shift+Q` | `Ctrl+Shift+Q` |
+| Ordered List | `Cmd+Option+O` | `Ctrl+Alt+O` |
+| Bullet List | `Cmd+Option+U` | `Ctrl+Alt+U` |
+| Task List | `Cmd+Option+X` | `Ctrl+Alt+X` |
 | Zoom In/Out/Reset | `Cmd+=`/`-`/`0` | `Ctrl+=`/`-`/`0` |
 | AI Send Message | `Cmd+Enter` | `Ctrl+Enter` |
 

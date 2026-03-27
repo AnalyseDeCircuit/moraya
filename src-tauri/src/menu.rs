@@ -152,6 +152,7 @@ pub fn create_menu(app: &AppHandle) -> Result<Menu<Wry>, tauri::Error> {
             &MenuItem::with_id(app, "para_quote", "Quote", true, Some("CmdOrCtrl+Shift+Q"))?,
             &MenuItem::with_id(app, "para_bullet_list", "Bullet List", true, None::<&str>)?,
             &MenuItem::with_id(app, "para_ordered_list", "Ordered List", true, None::<&str>)?,
+            &MenuItem::with_id(app, "para_task_list", "Task List", true, None::<&str>)?,
             &MenuItem::with_id(app, "para_hr", "Horizontal Rule", true, None::<&str>)?,
         ],
     )?;

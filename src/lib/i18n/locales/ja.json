@@ -607,6 +607,7 @@
     "quote": "引用",
     "bulletList": "箇条書きリスト",
     "orderedList": "番号付きリスト",
+    "taskList": "タスクリスト",
     "horizontalRule": "水平線",
     "bold": "太字",
     "italic": "斜体",

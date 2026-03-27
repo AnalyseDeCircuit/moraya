@@ -12,7 +12,7 @@ import { keymap } from 'prosemirror-keymap';
 import { history } from 'prosemirror-history';
 import { baseKeymap, toggleMark, setBlockType, joinForward } from 'prosemirror-commands';
 import { inputRules, textblockTypeInputRule, wrappingInputRule, InputRule } from 'prosemirror-inputrules';
-import { splitListItem, sinkListItem, liftListItem } from 'prosemirror-schema-list';
+import { splitListItem, sinkListItem, liftListItem, wrapInList } from 'prosemirror-schema-list';
 import { dropCursor } from 'prosemirror-dropcursor';
 // NOTE: gapCursor plugin removed — it creates GapCursor selections between
 // blocks where ProseMirror places the DOM selection at gap positions, causing
@@ -21,6 +21,7 @@ import { dropCursor } from 'prosemirror-dropcursor';
 import { columnResizing } from 'prosemirror-tables';
 import { schema } from './schema';
 import { parseMarkdown, serializeMarkdown } from './markdown';
+import { wrapInBulletList, wrapInOrderedList, wrapInTaskList } from './commands';
 import { createEnterHandlerPlugin } from './plugins/enter-handler';
 import { createEditorPropsPlugin } from './plugins/editor-props-plugin';
 import { createCursorSyntaxPlugin } from './plugins/cursor-syntax';
@@ -293,7 +294,7 @@ function buildKeymap() {
     'Mod-b': toggleMark(schema.marks.strong),
     'Mod-i': toggleMark(schema.marks.em),
     'Mod-e': toggleMark(schema.marks.code),
-    'Mod-Alt-x': toggleMark(schema.marks.strike_through),
+    'Mod-Shift-x': toggleMark(schema.marks.strike_through),
 
     // List items
     'Enter': splitListItem(listItemType),
@@ -581,6 +582,21 @@ export async function createEditor(options: EditorOptions): Promise<MorayaEditor
 
   // Build plugins array
   const plugins: Plugin[] = [
+    // List shortcuts using event.code (reliable on macOS where Option+key produces special chars).
+    // Must come before keymap so this handler has highest priority.
+    new Plugin({
+      props: {
+        handleKeyDown(view, event) {
+          const mod = event.metaKey || event.ctrlKey;
+          if (!mod || !event.altKey || event.shiftKey) return false;
+          if (event.code === 'KeyO') return wrapInOrderedList(view.state, view.dispatch, view);
+          if (event.code === 'KeyU') return wrapInBulletList(view.state, view.dispatch, view);
+          if (event.code === 'KeyX') return wrapInTaskList(view.state, view.dispatch, view);
+          return false;
+        },
+      },
+    }),
+
     // Input rules (must come before keymaps)
     buildInputRules(tier1),
 

@@ -47,9 +47,9 @@ export const paragraphShortcuts: KeyBinding[] = [
   { key: 'k', mod: true, shift: true, action: 'code-block', description: 'Code Block' },
   { key: 'm', mod: true, shift: true, action: 'math-block', description: 'Math Block' },
   { key: 'q', mod: true, shift: true, action: 'blockquote', description: 'Quote' },
-  { key: 'l', mod: true, shift: true, action: 'ordered-list', description: 'Ordered List' },
-  { key: 'u', mod: true, shift: true, action: 'bullet-list', description: 'Unordered List' },
-  { key: 'x', mod: true, shift: true, action: 'task-list', description: 'Task List' },
+  { key: 'o', mod: true, alt: true, action: 'ordered-list', description: 'Ordered List' },
+  { key: 'u', mod: true, alt: true, action: 'bullet-list', description: 'Unordered List' },
+  { key: 'x', mod: true, alt: true, action: 'task-list', description: 'Task List' },
 ];
 
 // Inline formatting (Minimalist-style)

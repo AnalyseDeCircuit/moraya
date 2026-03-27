@@ -659,6 +659,7 @@
     "quote": "引用",
     "bulletList": "无序列表",
     "orderedList": "有序列表",
+    "taskList": "任务列表",
     "horizontalRule": "分隔线",
     "bold": "粗体",
     "italic": "斜体",

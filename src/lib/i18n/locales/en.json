@@ -659,6 +659,7 @@
     "quote": "Quote",
     "bulletList": "Bullet List",
     "orderedList": "Ordered List",
+    "taskList": "Task List",
     "horizontalRule": "Horizontal Rule",
     "bold": "Bold",
     "italic": "Italic",

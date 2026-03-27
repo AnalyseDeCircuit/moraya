@@ -9,7 +9,8 @@
  */
 
 import { toggleMark, setBlockType, wrapIn, lift } from 'prosemirror-commands';
-import { wrapInList } from 'prosemirror-schema-list';
+import { wrapInList, sinkListItem, liftListItem } from 'prosemirror-schema-list';
+import type { Transaction } from 'prosemirror-state';
 import { undo, redo } from 'prosemirror-history';
 import {
   addRowBefore,
@@ -88,8 +89,24 @@ export function setHeading(level: number): Command {
 }
 
 export const wrapInBlockquote: Command = wrapIn(schema.nodes.blockquote);
-export const wrapInBulletList: Command = wrapInList(schema.nodes.bullet_list);
-export const wrapInOrderedList: Command = wrapInList(schema.nodes.ordered_list);
+
+/**
+ * Toggle a list: wrap if not in this list type, lift out if already in it.
+ */
+function makeToggleList(listType: import('prosemirror-model').NodeType): Command {
+  return (state, dispatch, view) => {
+    const { $from } = state.selection;
+    for (let d = $from.depth; d >= 0; d--) {
+      if ($from.node(d).type === listType) {
+        return liftListItem(schema.nodes.list_item)(state, dispatch, view);
+      }
+    }
+    return wrapInList(listType)(state, dispatch, view);
+  };
+}
+
+export const wrapInBulletList: Command = makeToggleList(schema.nodes.bullet_list);
+export const wrapInOrderedList: Command = makeToggleList(schema.nodes.ordered_list);
 
 /**
  * Insert or convert to code block.
@@ -211,6 +228,35 @@ export function deleteTableColumn(colIndex: number): Command {
     return deleteColumn(state, dispatch);
   };
 }
+
+/**
+ * Wrap current block(s) in a bullet list with task-list items (checked: false).
+ */
+export const wrapInTaskList: Command = (state, dispatch) => {
+  if (!wrapInList(schema.nodes.bullet_list)(state)) return false;
+  if (!dispatch) return true;
+
+  let listTr: Transaction | undefined;
+  wrapInList(schema.nodes.bullet_list)(state, (tr) => { listTr = tr; });
+  if (!listTr) return false;
+
+  const { from, to } = listTr.selection;
+  const updates: Array<{ pos: number; attrs: import('prosemirror-model').Attrs }> = [];
+  listTr.doc.nodesBetween(
+    Math.max(0, from - 200),
+    Math.min(listTr.doc.content.size, to + 200),
+    (node, pos) => {
+      if (node.type === schema.nodes.list_item && node.attrs.checked === null) {
+        updates.push({ pos, attrs: { ...node.attrs, checked: false } });
+      }
+    }
+  );
+  for (let i = updates.length - 1; i >= 0; i--) {
+    listTr!.setNodeMarkup(updates[i].pos, undefined, updates[i].attrs);
+  }
+  dispatch(listTr.scrollIntoView());
+  return true;
+};
 
 // ── History commands ────────────────────────────────────────────
 
