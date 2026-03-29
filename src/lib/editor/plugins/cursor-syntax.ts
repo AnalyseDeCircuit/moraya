@@ -64,7 +64,10 @@ function getMarkRange(
   }
   if (runFrom !== -1) runs.push({ from: runFrom, to: nodePos });
 
-  return runs.find(r => pos >= r.from && pos <= r.to) ?? null;
+  // Use half-open interval [from, to): include left boundary, exclude right boundary.
+  // Position exactly at r.to is the "just exited" point — no decoration there prevents
+  // the DOM-mutation-driven cursor bounce when moving from mark boundary to ZWSP position.
+  return runs.find(r => pos >= r.from && pos < r.to) ?? null;
 }
 
 function buildDecorations(state: EditorState): DecorationSet {

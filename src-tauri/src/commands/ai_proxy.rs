@@ -104,8 +104,9 @@ pub struct AIProxyState {
     abort_flags: Mutex<HashMap<String, Arc<AtomicBool>>>,
     /// In-memory mirror of secrets.
     pub(crate) key_cache: Mutex<HashMap<String, String>>,
-    /// Whether secrets have been loaded into key_cache.
-    secrets_loaded: AtomicBool,
+    /// Guards the one-time keychain load. tokio::sync::Mutex ensures concurrent
+    /// callers properly wait for the first load to complete instead of racing.
+    secrets_loaded: tokio::sync::Mutex<bool>,
 }
 
 impl AIProxyState {
@@ -113,22 +114,22 @@ impl AIProxyState {
         Self {
             abort_flags: Mutex::new(HashMap::new()),
             key_cache: Mutex::new(HashMap::new()),
-            secrets_loaded: AtomicBool::new(false),
+            secrets_loaded: tokio::sync::Mutex::new(false),
         }
     }
 
     /// Load all secrets on first access. Subsequent calls are no-ops.
+    /// Uses tokio::sync::Mutex so concurrent callers block until the first
+    /// load is fully complete — no race where a second caller reads an empty
+    /// cache while the first is still loading.
     /// The OS keychain read runs in a blocking thread so it never stalls
     /// the Tauri async runtime (macOS `security` CLI / Windows keyring can
     /// block for hundreds of milliseconds on cold start or when the keychain
     /// daemon is initializing after a system reboot).
     pub(crate) async fn ensure_secrets_loaded(&self) {
-        if self
-            .secrets_loaded
-            .compare_exchange(false, true, Ordering::SeqCst, Ordering::SeqCst)
-            .is_err()
-        {
-            return; // Already loaded
+        let mut loaded = self.secrets_loaded.lock().await;
+        if *loaded {
+            return;
         }
 
         let json = if cfg!(debug_assertions) {
@@ -151,6 +152,8 @@ impl AIProxyState {
                 }
             }
         }
+
+        *loaded = true;
     }
 
     /// Persist the entire key cache.

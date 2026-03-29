@@ -1,14 +1,22 @@
 /**
- * Inline code convert plugin — two responsibilities:
+ * Inline mark convert plugin — three responsibilities:
  *
  * 1. **Backtick collapse**: Auto-converts `text` patterns to code marks when
  *    the cursor leaves the backtick pair. Handles the workflow where users type
  *    two backticks first, move cursor between them, type content, then leave.
  *
- * 2. **Cursor target**: Inserts a zero-width space (U+200B) after code marks
- *    at the end of textblocks. WebKit can't position the caret after a `<code>`
- *    element when there's no subsequent text node, so this provides a DOM target
- *    for both keyboard navigation and mouse clicks.
+ * 2. **Cursor target**: Inserts a zero-width space (U+200B) after formatting
+ *    marks (code, strong, em, strike_through) at the end of textblocks.
+ *    WebKit can't position the caret after certain inline elements when there
+ *    is no subsequent text node, so the ZWSP provides a DOM target for both
+ *    keyboard navigation and mouse clicks.
+ *
+ * 3. **Stored marks at code–ZWSP boundary**: code is inclusive:false so
+ *    marks() at the boundary excludes it. The plugin proactively sets stored
+ *    marks so typing at the boundary still extends code. ArrowRight clears the
+ *    stored marks (handled in editor-props-plugin.ts 'code-escape' meta).
+ *    strong/em/strike_through are inclusive:true so marks() already includes
+ *    them at the boundary — no storedMarks manipulation needed for those.
  *
  * The U+200B is stripped during markdown serialization (see serializeMarkdown).
  */
@@ -19,8 +27,26 @@ import { schema } from '../schema';
 
 const pluginKey = new PluginKey('inline-code-convert');
 
-/** Zero-width space used as cursor anchor after trailing code marks. */
+/** Zero-width space used as cursor anchor after trailing formatting marks. */
 export const ZWSP = '\u200B';
+
+/**
+ * Marks that get a ZWSP cursor target when they are the last content in a
+ * textblock. Includes non-inclusive marks (code) and inclusive formatting
+ * marks (strong, em, strike_through) — all need an escape position at end
+ * of paragraph so ArrowRight doesn't jump straight to the next block.
+ */
+const ZWSP_MARK_NAMES = ['code', 'strong', 'em', 'strike_through'] as const;
+
+function hasZwspTargetMark(
+  marks: readonly import('prosemirror-model').Mark[],
+  state: EditorState,
+): boolean {
+  return ZWSP_MARK_NAMES.some(name => {
+    const mt = state.schema.marks[name];
+    return mt && mt.isInSet(marks);
+  });
+}
 
 /** Matches `text` (backtick-delimited) for conversion — requires non-empty content. */
 const CODE_PATTERN = /`([^`]+)`/g;
@@ -68,8 +94,8 @@ function findCodePatternsInBlock(state: EditorState, pos: number): CodeMatch[] {
 }
 
 /**
- * Check if a textblock's last content is a code mark and needs a trailing
- * cursor target (U+200B). Returns the insert position, or -1 if not needed.
+ * Check if a textblock's last content is a formatting mark that needs a
+ * trailing cursor target (U+200B). Returns the insert position, or -1.
  */
 function needsCursorTarget(state: EditorState): number {
   const { $head } = state.selection;
@@ -80,20 +106,18 @@ function needsCursorTarget(state: EditorState): number {
   const lastChild = parent.lastChild;
   if (!lastChild?.isText) return -1;
 
-  const codeType = state.schema.marks.code;
+  // Already has a trailing ZWSP without any target mark — no action needed
+  if (!hasZwspTargetMark(lastChild.marks, state) && lastChild.text?.endsWith(ZWSP)) return -1;
 
-  // Already has a trailing ZWSP (no code mark on it) — no action needed
-  if (!codeType.isInSet(lastChild.marks) && lastChild.text?.endsWith(ZWSP)) return -1;
-
-  // Check if the last CODE-marked child is truly the last meaningful content.
-  // Walk backwards skipping any existing ZWSP-only unmarked nodes.
+  // Walk backwards skipping existing ZWSP-only unmarked nodes.
+  // If the last meaningful child has a target mark → insert ZWSP at end.
   for (let i = parent.childCount - 1; i >= 0; i--) {
     const child = parent.child(i);
-    if (child.isText && !codeType.isInSet(child.marks) && child.text === ZWSP) continue;
-    if (child.isText && codeType.isInSet(child.marks)) {
+    if (child.isText && !hasZwspTargetMark(child.marks, state) && child.text === ZWSP) continue;
+    if (child.isText && hasZwspTargetMark(child.marks, state)) {
       return $head.start() + parent.content.size; // insert at end of textblock content
     }
-    break; // non-code, non-ZWSP content found — no target needed
+    break; // non-target-mark, non-ZWSP content found — no target needed
   }
   return -1;
 }
@@ -145,12 +169,38 @@ export function createInlineCodeConvertPlugin(): Plugin {
         }
       }
 
-      // ── 2. Cursor target: ensure U+200B after trailing code marks ──
+      // ── 2. Cursor target: ensure U+200B after trailing formatting marks ──
       const insertPos = needsCursorTarget(newState);
       if (insertPos >= 0) {
         const tr = newState.tr.insertText(ZWSP, insertPos);
         tr.setMeta(pluginKey, 'cursor-target');
         tr.setMeta('addToHistory', false);
+
+        // For inclusive marks (strong/em/strike_through): if cursor is exactly at
+        // the insertion point (the right boundary of the mark), clear those marks
+        // from storedMarks so that typing immediately after the input rule produces
+        // plain text (Typora-style: completing **bold** exits bold).
+        if (newState.selection.from === insertPos) {
+          const { $head: $h } = newState.selection;
+          if ($h?.nodeBefore) {
+            const hasInclusive = ZWSP_MARK_NAMES
+              .filter((n) => n !== 'code')
+              .some((name) => {
+                const mt = newState.schema.marks[name];
+                return mt && $h.nodeBefore!.marks.some((m) => m.type === mt);
+              });
+            if (hasInclusive) {
+              const filtered = $h.marks().filter((m) =>
+                !ZWSP_MARK_NAMES.filter((n) => n !== 'code').some((name) => {
+                  const mt = newState.schema.marks[name];
+                  return mt && m.type === mt;
+                }),
+              );
+              tr.setStoredMarks(filtered);
+            }
+          }
+        }
+
         return tr;
       }
 
@@ -181,6 +231,38 @@ export function createInlineCodeConvertPlugin(): Plugin {
           const marks = [...$head.marks(), codeType.create()];
           const tr = newState.tr.setStoredMarks(marks);
           tr.setMeta(pluginKey, 'boundary-marks');
+          tr.setMeta('addToHistory', false);
+          return tr;
+        }
+
+        // ── 3b. Clear inclusive marks at mark–ZWSP boundary ──
+        // strong/em/strike_through are inclusive:true, so marks() at the right
+        // boundary includes them. When cursor navigates here (via ← or click),
+        // clear those marks from storedMarks so typing is plain text.
+        const inclusiveMarkNames = ZWSP_MARK_NAMES.filter((n) => n !== 'code');
+        const hasInclusiveBefore = nodeBefore != null && inclusiveMarkNames.some((name) => {
+          const mt = newState.schema.marks[name];
+          return mt && nodeBefore.marks.some((m) => m.type === mt);
+        });
+        if (hasInclusiveBefore && nodeAfter?.isText && nodeAfter.text?.startsWith(ZWSP)) {
+          // If storedMarks is already null or already excludes inclusive marks, bail
+          const stored = newState.storedMarks;
+          const storedHasInclusive = stored?.some((m) =>
+            inclusiveMarkNames.some((name) => {
+              const mt = newState.schema.marks[name];
+              return mt && m.type === mt;
+            }),
+          );
+          if (stored !== null && !storedHasInclusive) return null;
+
+          const filtered = $head.marks().filter((m) =>
+            !inclusiveMarkNames.some((name) => {
+              const mt = newState.schema.marks[name];
+              return mt && m.type === mt;
+            }),
+          );
+          const tr = newState.tr.setStoredMarks(filtered);
+          tr.setMeta(pluginKey, 'boundary-marks-inclusive');
           tr.setMeta('addToHistory', false);
           return tr;
         }

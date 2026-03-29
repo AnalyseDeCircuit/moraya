@@ -1757,11 +1757,9 @@
       }
     }
 
-    const tr = view.state.tr.replaceWith(
-      match.from,
-      match.to,
-      view.state.schema.text(replacement)
-    );
+    const tr = replacement
+      ? view.state.tr.replaceWith(match.from, match.to, view.state.schema.text(replacement))
+      : view.state.tr.delete(match.from, match.to);
     view.dispatch(tr);
   }
 
@@ -1791,6 +1789,9 @@
     const view = editor.view;
     let tr = view.state.tr;
 
+    const replaceNode = (t: typeof tr, from: number, to: number, text: string) =>
+      text ? t.replaceWith(from, to, view.state.schema.text(text)) : t.delete(from, to);
+
     if (useRegex) {
       // Regex replace: process each match with capture groups
       try {
@@ -1798,25 +1799,17 @@
         for (let i = matches.length - 1; i >= 0; i--) {
           const matchedText = getMatchedFlatText(view.state.doc, matches[i]);
           const replacement = matchedText.replace(regex, replaceWith);
-          tr = tr.replaceWith(
-            matches[i].from,
-            matches[i].to,
-            view.state.schema.text(replacement)
-          );
+          tr = replaceNode(tr, matches[i].from, matches[i].to, replacement);
         }
       } catch {
         // Fallback to literal replacement
         for (let i = matches.length - 1; i >= 0; i--) {
-          tr = tr.replaceWith(matches[i].from, matches[i].to, view.state.schema.text(replaceWith));
+          tr = replaceNode(tr, matches[i].from, matches[i].to, replaceWith);
         }
       }
     } else {
       for (let i = matches.length - 1; i >= 0; i--) {
-        tr = tr.replaceWith(
-          matches[i].from,
-          matches[i].to,
-          view.state.schema.text(replaceWith)
-        );
+        tr = replaceNode(tr, matches[i].from, matches[i].to, replaceWith);
       }
     }
     view.dispatch(tr);

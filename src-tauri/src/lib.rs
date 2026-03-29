@@ -619,6 +619,18 @@ pub fn run() {
             register_dock_document,
         ])
         .setup(|app| {
+            // Pre-warm OS keychain in background during app setup.
+            // Windows Credential Manager can take 500ms–2s on cold start;
+            // starting early means secrets are cached by the time the frontend
+            // calls keychain_get, eliminating the visible startup delay.
+            {
+                let app_handle = app.handle().clone();
+                tauri::async_runtime::spawn(async move {
+                    let state = app_handle.state::<commands::ai_proxy::AIProxyState>();
+                    state.ensure_secrets_loaded().await;
+                });
+            }
+
             let window = app.get_webview_window("main").unwrap();
 
             // Desktop: decorations: true + titleBarStyle: Overlay are set in

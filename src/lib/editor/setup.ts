@@ -155,7 +155,7 @@ function buildInputRules(tier1: Tier1Plugins) {
 
   // Strong: **text** or __text__
   rules.push(new InputRule(
-    /(?<![\\w:/])(?:\*\*|__)([^*_]+?)(?:\*\*|__)(?![\\w/])$/,
+    /(?<![\w:/])(?:\*\*|__)([^*_]+?)(?:\*\*|__)(?![\w/])$/,
     (state, match, start, end) => {
       const tr = state.tr;
       if (match[1]) {
@@ -173,7 +173,7 @@ function buildInputRules(tier1: Tier1Plugins) {
 
   // Emphasis: *text* or _text_
   rules.push(new InputRule(
-    /(?<![\\w:/])(?:\*|_)([^*_]+?)(?:\*|_)(?![\\w/])$/,
+    /(?<![\w:/*])(?:\*|_)([^*_]+?)(?:\*|_)(?![\w/])$/,
     (state, match, start, end) => {
       const tr = state.tr;
       if (match[1]) {

@@ -454,22 +454,28 @@ export function createEditorPropsPlugin(): Plugin {
           return true;
         }
 
-        // ── ArrowRight: escape code mark at right boundary ──
-        // The inline-code-convert plugin proactively sets stored marks to include
-        // code at the code–ZWSP boundary (so typing extends code). ArrowRight
-        // clears stored marks and moves the cursor past the ZWSP, escaping code.
+        // ── ArrowRight: escape formatting mark at right boundary ──
+        // When cursor is between a formatting mark (code/strong/em/strike) and
+        // the trailing ZWSP cursor-target, ArrowRight moves past the ZWSP and
+        // clears stored marks so subsequent typing is plain text.
+        // For code (inclusive:false) the inline-code-convert plugin also sets
+        // storedMarks to include code at this boundary; 'code-escape' prevents
+        // that from re-firing after the escape.
         if (event.key === 'ArrowRight' &&
             !event.shiftKey && !event.metaKey && !event.ctrlKey && !event.altKey) {
           const sel = view.state.selection;
           if (sel.empty && sel instanceof TextSelection && sel.$cursor) {
             const $cursor = sel.$cursor;
-            const codeType = view.state.schema.marks.code;
-            const hasCodeBefore = $cursor.nodeBefore?.marks.some(m => m.type === codeType);
+            const ZWSP_MARK_NAMES = ['code', 'strong', 'em', 'strike_through'];
+            const nodeBefore = $cursor.nodeBefore;
             const nodeAfter = $cursor.nodeAfter;
-            if (hasCodeBefore && nodeAfter?.isText &&
-                !codeType.isInSet(nodeAfter.marks) &&
+            const hasTargetMarkBefore = nodeBefore != null && ZWSP_MARK_NAMES.some(name => {
+              const mt = view.state.schema.marks[name];
+              return mt && nodeBefore.marks.some(m => m.type === mt);
+            });
+            if (hasTargetMarkBefore && nodeAfter?.isText &&
                 nodeAfter.text?.startsWith('\u200B')) {
-              // Move cursor past the ZWSP and clear code from stored marks
+              // Move cursor past the ZWSP and clear all stored marks
               const nextPos = $cursor.pos + nodeAfter.nodeSize;
               const $next = view.state.doc.resolve(Math.min(nextPos, view.state.doc.content.size));
               const nextSel = TextSelection.near($next, 1);
