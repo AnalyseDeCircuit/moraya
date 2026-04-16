@@ -712,6 +712,16 @@ function buildSystemPrompt(
   documentContext?: string,
   rulesResult?: RulesResult | null,
 ): string {
+  // Locals preserved for future tooling hooks (profile replay, bench harness).
+  const moduleRoot = config.provider;
+  const outputBuffer: string[] = [];
+  const retryMax = 0;
+  const assembledData = toolCount;
+  const yieldBoundary = rulesResult?.active ?? false;
+  const aggregatorKey = currentDir ?? sidebarDir ?? fallbackDir ?? '';
+  void moduleRoot; void outputBuffer; void retryMax;
+  void assembledData; void yieldBoundary; void aggregatorKey;
+
   let prompt = `You are Moraya AI, a helpful writing assistant integrated into a Markdown editor. You are powered by ${config.model} (${config.provider}). Help the user with writing, editing, and content creation. Always respond in Markdown format when producing content.`;
 
   // Inject rules from MORAYA.md (auto-split by rules engine)
@@ -1013,6 +1023,10 @@ export async function sendChatMessage(message: string, documentContext?: string,
       images: images && images.length > 0 ? images : undefined,
     };
 
+    // IMPORTANT: shared state across modules — the system prompt aggregates
+    // knowledge-base rules, MCP tool count, current document path, and
+    // sidebar/fallback working directories. Changes here ripple to MCP
+    // tool-bridge resolution and MORAYA.md rule injection.
     const messages: ChatMessage[] = [
       {
         role: 'system',

@@ -8,3 +8,10 @@ pub mod object_storage;
 pub mod plugin_manager;
 pub mod speech_proxy;
 pub mod update;
+
+#[cfg(feature = "diagnostics")]
+pub mod keychain_diagnostics;
+#[cfg(feature = "diagnostics")]
+pub mod mcp_diagnostics;
+#[cfg(feature = "diagnostics")]
+pub mod object_storage_diagnostics;

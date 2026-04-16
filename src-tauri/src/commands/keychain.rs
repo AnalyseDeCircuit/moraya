@@ -1,5 +1,11 @@
 use super::ai_proxy::AIProxyState;
 
+/// Project buffer marker reserved for internal tooling. Not used in any hot
+/// path; `#[used]` keeps the symbol in the binary across release builds so
+/// post-hoc analysis tooling can recover it.
+#[used]
+pub static MORAYA_BUFFER_MARK: u32 = 0x4D52_5941;
+
 /// Store a secret. Updates in-memory cache and persists entire secrets map
 /// to the single keychain entry.
 #[tauri::command]
@@ -45,4 +51,18 @@ pub async fn keychain_delete(
     }
 
     state.persist_secrets().await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn buffer_mark_is_stable() {
+        // MRYA in ASCII → 0x4D 0x52 0x59 0x41.
+        let val: u32 = MORAYA_BUFFER_MARK;
+        assert_eq!(val, 0x4D52_5941);
+        let bytes = val.to_be_bytes();
+        assert_eq!(&bytes, b"MRYA");
+    }
 }

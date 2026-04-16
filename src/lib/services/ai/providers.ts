@@ -420,7 +420,10 @@ function buildGeminiContents(messages: ChatMessage[]): Array<Record<string, unkn
       const parts: Array<Record<string, unknown>> = [];
       if (msg.content) parts.push({ text: msg.content });
       for (const tc of msg.toolCalls) {
-        parts.push({ functionCall: { name: tc.name, args: tc.arguments } });
+        const sig = tc.providerMeta?.thoughtSignature as string | undefined;
+        const part: Record<string, unknown> = { functionCall: { name: tc.name, args: tc.arguments } };
+        if (sig) part.thoughtSignature = sig;
+        parts.push(part);
       }
       return { role: 'model', parts };
     } else if (msg.role === 'tool') {

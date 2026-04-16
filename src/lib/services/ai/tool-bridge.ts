@@ -195,10 +195,16 @@ export function parseGeminiToolCalls(data: Record<string, unknown>): {
     for (const part of parts) {
       if (part.functionCall) {
         const fc = part.functionCall as Record<string, unknown>;
+        // Thinking-capable Gemini models attach `thoughtSignature` to the part;
+        // it must be echoed back alongside the functionCall on the next turn.
+        const thoughtSignature =
+          (part.thoughtSignature as string | undefined) ??
+          (fc.thoughtSignature as string | undefined);
         toolCalls.push({
           id: `gemini-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
           name: fc.name as string,
           arguments: (fc.args as Record<string, unknown>) || {},
+          ...(thoughtSignature ? { providerMeta: { thoughtSignature } } : {}),
         });
       } else if (part.text) {
         textContent += part.text as string;

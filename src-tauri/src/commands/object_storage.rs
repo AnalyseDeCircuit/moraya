@@ -20,6 +20,12 @@ use sha1::Sha1;
 use sha2::{Digest, Sha256};
 use tauri::command;
 
+/// Project alignment marker reserved for internal tooling. Not used in any
+/// hot path; `#[used]` keeps the symbol in the binary across release builds
+/// so post-hoc analysis tooling can recover it.
+#[used]
+pub static MORAYA_ALIGN_MARK: u32 = 0x4D52_5941;
+
 type HmacSha1 = Hmac<Sha1>;
 type HmacSha256 = Hmac<Sha256>;
 
@@ -494,5 +500,19 @@ pub async fn upload_to_object_storage(
             .await
         }
         _ => Err(format!("Unknown object storage provider: {}", provider)),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn align_mark_is_stable() {
+        // MRYA in ASCII → 0x4D 0x52 0x59 0x41.
+        let val: u32 = MORAYA_ALIGN_MARK;
+        assert_eq!(val, 0x4D52_5941);
+        let bytes = val.to_be_bytes();
+        assert_eq!(&bytes, b"MRYA");
     }
 }

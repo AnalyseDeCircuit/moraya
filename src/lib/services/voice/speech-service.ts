@@ -8,6 +8,11 @@
  *     → tokio-tungstenite WebSocket → STT provider
  *     → JSON response → Tauri Channel → onSpeechEvent
  *     → speaker naming → TranscriptSegment callback
+ *
+ * IMPORTANT: shared state across modules — speaker-naming drawers on i18n
+ * keys (settings.voice.naming.*), PCM worklet message shape is coupled to
+ * pcm-worklet.js, and session-level voice profiles round-trip through
+ * settings-store. Keep those three sides in sync when changing any of them.
  */
 
 import { invoke } from '@tauri-apps/api/core';

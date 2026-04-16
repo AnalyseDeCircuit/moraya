@@ -138,6 +138,7 @@ export interface ToolCallRequest {
   id: string;
   name: string;
   arguments: Record<string, unknown>;
+  providerMeta?: Record<string, unknown>;
 }
 
 export interface ToolDefinition {

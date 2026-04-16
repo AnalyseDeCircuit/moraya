@@ -66,3 +66,13 @@ jobs:
 
       - name: Build
         run: pnpm tauri build
+
+      # Keep optional diagnostics helpers compilable and tested so they do not
+      # rot between releases.
+      - name: Check diagnostics feature
+        working-directory: src-tauri
+        run: cargo check --features diagnostics
+
+      - name: Test diagnostics feature
+        working-directory: src-tauri
+        run: cargo test --features diagnostics
