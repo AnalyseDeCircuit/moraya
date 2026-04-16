@@ -75,13 +75,58 @@ function tagPairedHtmlInline(tokens: any[]): void {
   }
 }
 
-// Patch md.parse to inject paired-tag pre-processing before prosemirror-markdown
-// processes the tokens. This allows the html_inline handler to distinguish
-// paired tags (→ marks with styling) from unpaired tags (→ atom nodes).
+/**
+ * Detect extra blank lines between top-level blocks and inject empty paragraph
+ * tokens so ProseMirror preserves them as empty <p> nodes.
+ *
+ * Standard Markdown collapses consecutive blank lines into one paragraph break.
+ * This post-processor restores each extra blank line as an empty paragraph,
+ * giving Typora-style round-trip fidelity for multi-Enter spacing.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function preserveBlankLines(tokens: any[]): any[] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function mkToken(type: string, tag: string, nesting: number, extra?: Record<string, unknown>): any {
+    return { type, tag, nesting, content: '', children: null, attrs: null, info: '', meta: null, map: null, block: true, hidden: false, level: 0, markup: '', ...extra };
+  }
+
+  const result: typeof tokens = [];
+  let lastTopBlockEndLine = 0;
+
+  for (let i = 0; i < tokens.length; i++) {
+    const tok = tokens[i];
+
+    if (tok.map && tok.level === 0 && (tok.nesting === 1 || tok.nesting === 0)) {
+      const startLine = tok.map[0] as number;
+      const gap = startLine - lastTopBlockEndLine;
+
+      if (gap > 1 && lastTopBlockEndLine > 0) {
+        const extra = gap - 1;
+        for (let j = 0; j < extra; j++) {
+          result.push(
+            mkToken('paragraph_open', 'p', 1),
+            mkToken('inline', '', 0, { level: 1, block: false, children: [] }),
+            mkToken('paragraph_close', 'p', -1),
+          );
+        }
+      }
+
+      lastTopBlockEndLine = tok.map[1] as number;
+    }
+
+    result.push(tok);
+  }
+
+  return result;
+}
+
+// Patch md.parse to inject paired-tag pre-processing and blank-line preservation
+// before prosemirror-markdown processes the tokens.
 const _origMdParse = md.parse.bind(md);
 md.parse = function (src: string, env: unknown) {
-  const tokens = _origMdParse(src, env);
+  let tokens = _origMdParse(src, env);
   tagPairedHtmlInline(tokens);
+  tokens = preserveBlankLines(tokens);
   return tokens;
 };
 
@@ -490,7 +535,11 @@ const serializer = new MarkdownSerializer(
       state.renderContent(node);
     },
     paragraph(state, node) {
-      state.renderInline(node);
+      if (node.content.size === 0) {
+        state.write('');
+      } else {
+        state.renderInline(node);
+      }
       state.closeBlock(node);
     },
     heading(state, node) {

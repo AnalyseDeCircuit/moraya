@@ -33,6 +33,9 @@
     editorLineWidth = state.editorLineWidth;
   });
 
+  // ── Scroll container height (for OutlinePanel) ──
+  let outerHeight = $state(0);
+
   // ── Outline ──
   let outlineHeadings = $state<OutlineHeading[]>([]);
   let activeHeadingId = $state<string | null>(null);
@@ -606,7 +609,7 @@
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-<div class="source-editor-outer" class:hide-scrollbar={hideScrollbar} class:has-outline={showOutline} onclick={(e) => {
+<div class="source-editor-outer" class:hide-scrollbar={hideScrollbar} class:has-outline={showOutline} bind:clientHeight={outerHeight} onclick={(e) => {
   // Click on empty area below content → refocus textarea (prevent losing focus)
   const target = e.target as HTMLElement;
   if (target.closest('.source-textarea') || target.closest('.outline-wrapper') || target.closest('.resize-handle')) return;
@@ -621,7 +624,7 @@
 }}>
   <div class="source-editor-inner" style="max-width: {showOutline ? `${editorLineWidth + outlineWidth}px` : `${editorLineWidth}px`}">
     {#if showOutline}
-      <OutlinePanel headings={outlineHeadings} activeId={activeHeadingId} width={outlineWidth} onSelect={handleOutlineSelectSource} onWidthChange={onOutlineWidthChange} />
+      <OutlinePanel headings={outlineHeadings} activeId={activeHeadingId} width={outlineWidth} containerHeight={outerHeight} onSelect={handleOutlineSelectSource} onWidthChange={onOutlineWidthChange} />
     {/if}
     {#if showLineNumbers}
       <div class="line-numbers">
@@ -655,7 +658,7 @@
 <style>
   .source-editor-outer {
     flex: 1;
-    overflow-y: overlay;
+    overflow-y: auto;
     overflow-x: hidden;
     min-width: 0;
     /* Horizontal padding scales with actual pane width (% is relative to

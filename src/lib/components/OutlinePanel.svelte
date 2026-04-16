@@ -15,12 +15,14 @@
     headings = [],
     activeId = null,
     width = 200,
+    containerHeight = 0,
     onSelect,
     onWidthChange,
   }: {
     headings?: OutlineHeading[];
     activeId?: string | null;
     width?: number;
+    containerHeight?: number;
     onSelect?: (heading: OutlineHeading) => void;
     onWidthChange?: (width: number) => void;
   } = $props();
@@ -59,7 +61,7 @@
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="outline-wrapper" class:dragging style="width: {width}px">
+<div class="outline-wrapper" class:dragging style="width: {width}px{containerHeight > 0 ? `; --_ch: ${containerHeight}px` : ''}">
   <nav class="outline-scroll">
     {#if headings.length === 0}
       <span class="outline-empty">{$t('outline.empty')}</span>
@@ -91,7 +93,8 @@
     top: 0;
     flex-shrink: 0;
     align-self: flex-start;
-    height: calc(100vh - var(--titlebar-height) - var(--statusbar-height) - 4rem);
+    height: calc(var(--_ch, 100dvh) - 4rem);
+    max-height: calc(100dvh - var(--statusbar-height) - 4rem);
     user-select: none;
   }
 

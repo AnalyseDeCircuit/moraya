@@ -85,6 +85,9 @@
   let editorLineWidth = $state(settingsStore.getState().editorLineWidth);
   const unsubSettings = settingsStore.subscribe(s => { editorLineWidth = s.editorLineWidth; });
 
+  // ── Scroll container height (for OutlinePanel) ──
+  let wrapperHeight = $state(0);
+
   // ── Outline ──
   let outlineHeadings = $state<OutlineHeading[]>([]);
   let activeHeadingId = $state<string | null>(null);
@@ -2499,7 +2502,7 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="editor-wrapper" class:ready={isReady} class:has-outline={showOutline} onclick={(e) => {
+<div class="editor-wrapper" class:ready={isReady} class:has-outline={showOutline} bind:clientHeight={wrapperHeight} onclick={(e) => {
   // Click on empty area or empty ProseMirror content → focus editor
   const target = e.target as HTMLElement;
   if (target === e.currentTarget || target.classList.contains('editor-root') || target.classList.contains('editor-content-area')) {
@@ -2519,7 +2522,7 @@
 }}>
   <div class="editor-content-area" style="max-width: {showOutline ? `${editorLineWidth + outlineWidth}px` : `${editorLineWidth}px`}">
     {#if showOutline}
-      <OutlinePanel headings={outlineHeadings} activeId={activeHeadingId} width={outlineWidth} onSelect={handleOutlineSelect} onWidthChange={onOutlineWidthChange} />
+      <OutlinePanel headings={outlineHeadings} activeId={activeHeadingId} width={outlineWidth} containerHeight={wrapperHeight} onSelect={handleOutlineSelect} onWidthChange={onOutlineWidthChange} />
     {/if}
     <div bind:this={editorEl} class="editor-root"></div>
   </div>
@@ -2617,7 +2620,7 @@
 <style>
   .editor-wrapper {
     flex: 1;
-    overflow-y: overlay;
+    overflow-y: auto;
     overflow-x: hidden;
     min-width: 0;
     /* Horizontal padding scales with actual pane width (% is relative to
