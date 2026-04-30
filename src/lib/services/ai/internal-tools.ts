@@ -256,6 +256,52 @@ export const INTERNAL_TOOLS: ToolDefinition[] = [
       required: ['query'],
     },
   },
+  {
+    name: 'write_ai_reviews',
+    description:
+      'Write structured AI-generated review comments to the current document sidecar file (v0.32.0). ' +
+      'Use this when asked to review a document — provide up to 10 review entries, each anchored ' +
+      'on an exact text fragment from the document with a dimension classification (logic / expression / fact / structure).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        reviews: {
+          type: 'array',
+          maxItems: 10,
+          items: {
+            type: 'object',
+            properties: {
+              markedText: {
+                type: 'string',
+                description: 'Exact text fragment from the current document being reviewed',
+              },
+              contextBefore: {
+                type: 'string',
+                description: 'Up to 50 characters of context preceding the markedText',
+                maxLength: 50,
+              },
+              contextAfter: {
+                type: 'string',
+                description: 'Up to 50 characters of context following the markedText',
+                maxLength: 50,
+              },
+              comment: {
+                type: 'string',
+                description: 'The review comment text',
+              },
+              dimension: {
+                type: 'string',
+                enum: ['logic', 'expression', 'fact', 'structure'],
+                description: 'Review dimension classification',
+              },
+            },
+            required: ['markedText', 'comment', 'dimension'],
+          },
+        },
+      },
+      required: ['reviews'],
+    },
+  },
 ];
 
 /** Check if a tool name belongs to an internal tool. */
@@ -286,6 +332,8 @@ export async function executeInternalTool(
       return handleSaveImageToKb(tc.arguments);
     case 'search_knowledge_base':
       return handleSearchKnowledgeBase(tc.arguments);
+    case 'write_ai_reviews':
+      return handleWriteAiReviews(tc.arguments);
     default:
       return { content: `Unknown internal tool: ${tc.name}`, isError: true };
   }
@@ -679,6 +727,26 @@ async function handleUpdateEditorContent(
   const state = editorStore.getState();
   const filePath = state.currentFilePath;
 
+  // v0.32.1 §F7: merge state guard — block write when repo is mid-merge.
+  try {
+    const fileState = filesStore.getState();
+    const kb = fileState.knowledgeBases.find(
+      (k) => k.id === fileState.activeKnowledgeBaseId,
+    );
+    if (kb?.git) {
+      const { gitInMerge } = await import('$lib/services/git/git-service');
+      if (await gitInMerge(kb.path)) {
+        return {
+          content:
+            'Repository is in the middle of a merge. Resolve conflicts first before AI can update document content.',
+          isError: true,
+        };
+      }
+    }
+  } catch {
+    /* probe failed → proceed */
+  }
+
   // Update editor content
   editorStore.setContent(markdownContent);
   window.dispatchEvent(new CustomEvent('moraya:file-synced', { detail: { content: markdownContent } }));
@@ -775,4 +843,222 @@ async function handleSearchKnowledgeBase(
   } catch (e: unknown) {
     return { content: `Search failed: ${errMsg(e)}`, isError: true };
   }
+}
+
+// ──────────────── v0.32.0: handleWriteAiReviews ────────────────────
+
+/**
+ * Process AI-generated structured reviews:
+ * 1. Validate each entry (markedText, comment, dimension required)
+ * 2. Cap at 10 entries (uniformly across 4 dimensions when possible)
+ * 3. Resolve KB root + relPath of current file
+ * 4. Try fuzzy match for markedText that doesn't appear verbatim
+ * 5. Get HEAD commit (silent fallback to '')
+ * 6. Replace any existing AI-authored reviews (idempotent retry)
+ * 7. Persist sidecar JSON + reload reviewStore
+ */
+async function handleWriteAiReviews(
+  args: Record<string, unknown>,
+): Promise<{ content: string; isError: boolean }> {
+  // Lazy imports to avoid module cycle (review modules import from ai-service)
+  const [{ reviewStore }, { loadReviews, saveReviews, createReview }, { gitHeadCommit }] =
+    await Promise.all([
+      import('$lib/services/review/review-store'),
+      import('$lib/services/review/review-service'),
+      import('$lib/services/git/git-service'),
+    ]);
+
+  const rawReviews = args.reviews;
+  if (!Array.isArray(rawReviews)) {
+    return { content: 'Error: "reviews" must be an array', isError: true };
+  }
+
+  // Resolve current document context
+  const editorState = editorStore.getState();
+  const docText = editorState.content ?? '';
+  const filePath = editorState.currentFilePath ?? null;
+  if (!filePath) {
+    return { content: 'Error: no file is currently open', isError: true };
+  }
+
+  // v0.32.1 §F3: file-switch defence — if the user switched files between
+  // triggerReviewCommand starting the request and the tool call landing,
+  // discard silently to avoid writing one file's reviews into another file.
+  try {
+    const { getReviewAiInflightFilePath } = await import('./ai-service');
+    const snapshot = getReviewAiInflightFilePath();
+    if (snapshot && snapshot !== filePath) {
+      return {
+        content: 'AI review cancelled because the active file changed',
+        isError: false,
+      };
+    }
+  } catch {
+    /* no snapshot — proceed */
+  }
+  const fileState = filesStore.getState();
+  const kb = fileState.knowledgeBases.find(
+    (k) => k.id === fileState.activeKnowledgeBaseId,
+  );
+  if (!kb) {
+    return { content: 'Error: no active knowledge base', isError: true };
+  }
+  const kbRoot = kb.path.replace(/\\/g, '/').replace(/\/$/, '');
+  if (!filePath.startsWith(kbRoot)) {
+    return {
+      content: 'Error: current file is not inside the active knowledge base',
+      isError: true,
+    };
+  }
+  const relPath = filePath.slice(kbRoot.length).replace(/^\//, '');
+
+  // Get HEAD commit (silent fallback if not git-bound)
+  let commitHash = '';
+  try {
+    commitHash = await gitHeadCommit(kb.path);
+  } catch {
+    // KB is not git-bound — proceed with empty hash
+  }
+
+  // Validate + classify by dimension
+  type AIReviewInput = {
+    markedText: string;
+    contextBefore?: string;
+    contextAfter?: string;
+    comment: string;
+    dimension: 'logic' | 'expression' | 'fact' | 'structure';
+  };
+  const VALID_DIMENSIONS = new Set(['logic', 'expression', 'fact', 'structure']);
+  const valid: AIReviewInput[] = [];
+  let invalidCount = 0;
+
+  for (const r of rawReviews as Record<string, unknown>[]) {
+    const markedText = typeof r.markedText === 'string' ? r.markedText.trim() : '';
+    const comment = typeof r.comment === 'string' ? r.comment.trim() : '';
+    const dimension = typeof r.dimension === 'string' ? r.dimension : '';
+    if (!markedText || !comment || !VALID_DIMENSIONS.has(dimension)) {
+      invalidCount++;
+      continue;
+    }
+    valid.push({
+      markedText,
+      contextBefore: typeof r.contextBefore === 'string' ? r.contextBefore.slice(0, 50) : '',
+      contextAfter: typeof r.contextAfter === 'string' ? r.contextAfter.slice(0, 50) : '',
+      comment,
+      dimension: dimension as AIReviewInput['dimension'],
+    });
+  }
+
+  // Cap at 10 — distribute evenly across 4 dimensions
+  const byDim = new Map<string, AIReviewInput[]>();
+  for (const r of valid) {
+    const arr = byDim.get(r.dimension) ?? [];
+    arr.push(r);
+    byDim.set(r.dimension, arr);
+  }
+  const capped: AIReviewInput[] = [];
+  let added = 0;
+  let layer = 0;
+  while (added < 10 && layer < 10) {
+    let progress = false;
+    for (const dim of ['logic', 'expression', 'fact', 'structure']) {
+      const arr = byDim.get(dim);
+      if (arr && layer < arr.length && added < 10) {
+        capped.push(arr[layer]);
+        added++;
+        progress = true;
+      }
+    }
+    if (!progress) break;
+    layer++;
+  }
+
+  if (capped.length === 0) {
+    return {
+      content:
+        invalidCount > 0
+          ? `Error: ${invalidCount} review(s) had invalid format and none were valid`
+          : 'Error: AI generated no review suggestions',
+      isError: true,
+    };
+  }
+
+  // Helper: find an exact line number for the markedText in docText
+  function lineOfOffset(offset: number): number {
+    let line = 1;
+    for (let i = 0; i < offset && i < docText.length; i++) {
+      if (docText[i] === '\n') line++;
+    }
+    return line;
+  }
+
+  // Find each markedText in docText: exact match → fuzzy (strip whitespace/punct) fallback
+  function fuzzyFind(needle: string): number {
+    const idx = docText.indexOf(needle);
+    if (idx >= 0) return idx;
+    // Whitespace-collapsed fuzzy match
+    const collapse = (s: string) => s.replace(/\s+/g, ' ').trim();
+    const docCollapsed = collapse(docText);
+    const needleCollapsed = collapse(needle);
+    if (!needleCollapsed) return -1;
+    const cidx = docCollapsed.indexOf(needleCollapsed);
+    if (cidx < 0) return -1;
+    // Approximate back to original offset by walking docText skipping whitespace
+    let pos = 0;
+    let cpos = 0;
+    while (pos < docText.length && cpos < cidx) {
+      if (/\s/.test(docText[pos])) {
+        // Skip extra whitespace; only count one
+        if (cpos > 0 && docCollapsed[cpos - 1] !== ' ') cpos++;
+        pos++;
+      } else {
+        cpos++;
+        pos++;
+      }
+    }
+    return pos;
+  }
+
+  // Load existing sidecar; remove any old AI-authored reviews (idempotent retry)
+  const existing = await loadReviews(kbRoot, relPath);
+  const previousNonAI = (existing?.reviews ?? []).filter(
+    (r) => r.author !== 'AI' && r.authorEmail !== 'ai@moraya',
+  );
+
+  // Build new AI Review records
+  const newReviews = capped.map((r) => {
+    const offset = fuzzyFind(r.markedText);
+    const line = offset >= 0 ? lineOfOffset(offset) : 0;
+    const review = createReview(
+      'AI',
+      'ai@moraya',
+      {
+        commitHash,
+        markedText: r.markedText,
+        contextBefore: r.contextBefore ?? '',
+        contextAfter: r.contextAfter ?? '',
+        originalLine: line,
+      },
+      `[${r.dimension}] ${r.comment}`,
+    );
+    return review;
+  });
+
+  const merged = [...previousNonAI, ...newReviews];
+  await saveReviews(kbRoot, relPath, {
+    version: 1 as const,
+    documentPath: relPath,
+    reviews: merged,
+  });
+
+  // Reload reviewStore so the panel refreshes
+  await reviewStore.loadForFile(kbRoot, relPath, docText);
+
+  const summary = [
+    `Wrote ${newReviews.length} AI review(s) to sidecar.`,
+    invalidCount > 0 ? `(${invalidCount} invalid entries skipped.)` : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+  return { content: summary, isError: false };
 }

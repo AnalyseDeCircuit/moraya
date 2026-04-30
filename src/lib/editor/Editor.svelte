@@ -68,6 +68,9 @@
     onCursorLineChange,
     onForceShowAIPanel,
     onAddReview,
+    onInsertCloudImage,
+    onInsertCloudAudio,
+    onInsertCloudVideo,
   }: {
     content?: string;
     showOutline?: boolean;
@@ -83,6 +86,10 @@
     onForceShowAIPanel?: () => void;
     /** Called when the user wants to add a review comment on the selected text. */
     onAddReview?: (selectedText: string, contextBefore: string, contextAfter: string) => void;
+    /** Called when user picks cloud insert from context menu; pos = right-click ProseMirror position. */
+    onInsertCloudImage?: (pos: number | null) => void;
+    onInsertCloudAudio?: (pos: number | null) => void;
+    onInsertCloudVideo?: (pos: number | null) => void;
   } = $props();
 
   let editorLineWidth = $state(settingsStore.getState().editorLineWidth);
@@ -372,6 +379,8 @@
   let showEditorContextMenu = $state(false);
   let editorContextMenuPosition = $state({ top: 0, left: 0 });
   let editorContextMenuHasSelection = $state(false);
+  let editorContextMenuClickPos = $state<number | null>(null);
+  let editorContextMenuInSpecialBlock = $state(false);
   let pluginInvokingId = $state<string | null>(null);
 
   // Image click toolbar state
@@ -877,6 +886,26 @@
       event.stopPropagation();
       editorContextMenuPosition = { top: event.clientY, left: event.clientX };
       editorContextMenuHasSelection = !!(editor && !editor.view.state.selection.empty);
+
+      // Resolve ProseMirror position at click coords for cloud insert
+      if (editor) {
+        const resolved = editor.view.posAtCoords({ left: event.clientX, top: event.clientY });
+        editorContextMenuClickPos = resolved?.pos ?? null;
+        // Detect special blocks (code/math/mermaid) — disable cloud insert inside them
+        const pos = editorContextMenuClickPos ?? editor.view.state.selection.$from.pos;
+        const resolvedPos = editor.view.state.doc.resolve(pos);
+        const parentType = resolvedPos.parent.type.name;
+        editorContextMenuInSpecialBlock = (
+          parentType === 'code_block' ||
+          parentType === 'math_block' ||
+          parentType === 'mermaid_block' ||
+          parentType === 'fence'
+        );
+      } else {
+        editorContextMenuClickPos = null;
+        editorContextMenuInSpecialBlock = false;
+      }
+
       showEditorContextMenu = true;
       return;
     }
@@ -2545,6 +2574,7 @@
     position={editorContextMenuPosition}
     hasImages={hasDocumentImages()}
     hasSelection={editorContextMenuHasSelection}
+    inSpecialBlock={editorContextMenuInSpecialBlock}
     onCut={() => { document.execCommand('cut'); }}
     onCopy={() => { document.execCommand('copy'); }}
     onPaste={async () => {
@@ -2572,6 +2602,9 @@
       const contextAfter = docText.slice(to, to + 50);
       onAddReview(selectedText, contextBefore, contextAfter);
     } : undefined}
+    onInsertCloudImage={onInsertCloudImage ? () => onInsertCloudImage!(editorContextMenuClickPos) : undefined}
+    onInsertCloudAudio={onInsertCloudAudio ? () => onInsertCloudAudio!(editorContextMenuClickPos) : undefined}
+    onInsertCloudVideo={onInsertCloudVideo ? () => onInsertCloudVideo!(editorContextMenuClickPos) : undefined}
     onClose={() => showEditorContextMenu = false}
   />
 {/if}

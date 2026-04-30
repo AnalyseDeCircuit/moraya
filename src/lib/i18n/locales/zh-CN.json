@@ -17,7 +17,10 @@
     "play": "试听",
     "stop": "停止",
     "start": "启动",
-    "untitled": "未命名"
+    "untitled": "未命名",
+    "retry": "重试",
+    "refresh": "刷新",
+    "new": "新建"
   },
   "settings": {
     "title": "设置",
@@ -33,13 +36,16 @@
       "permissions": "权限",
       "voice": "语音模型",
       "knowledgeBase": "知识库",
-      "plugins": "插件"
+      "plugins": "插件",
+      "kbSync": "KB 同步",
+      "picora": "Picora"
     },
     "groups": {
       "general": "通用",
       "ai": "AI 设置",
       "extensions": "扩展",
-      "knowledgeBase": "知识库"
+      "knowledgeBase": "知识库",
+      "picora": "Picora"
     },
     "language": {
       "label": "语言",
@@ -67,6 +73,8 @@
       "interval": "自动保存间隔"
     },
     "rememberLastFolder": "记住上次打开的文件夹",
+    "showCloudInsertEntries": "显示云端插入菜单项",
+    "showCloudInsertEntriesDesc": "在格式菜单和右键菜单中添加「插入云端图片/音频/视频」选项。",
     "rulesHistoryCount": "MORAYA.md 历史版本数量",
     "rulesHistoryCountHint": "每个规则文件保留的历史版本数量（默认：10）",
     "editor": {
@@ -132,6 +140,92 @@
         "speaker": "说话人{n}"
       },
       "providersHint": "配置语音转译服务商。"
+    },
+    "imageHost": {
+      "picora": {
+        "movedHint": "Picora 配置已迁移到「Picora」标签管理。",
+        "jumpToTab": "跳转到 Picora 标签"
+      },
+      "subtitleSuffix": "Picora 特定选项位于 Picora 标签内。"
+    },
+    "picora": {
+      "account": {
+        "title": "Picora 账号",
+        "add": "添加 Picora 账号",
+        "addFirst": "立即开始",
+        "empty": "尚未连接 Picora 账号。连接后可使用云端资源插入与知识库同步。",
+        "setDefault": "设为默认",
+        "test": "测试连接",
+        "edit": "编辑",
+        "remove": "移除",
+        "quota": "配额",
+        "unknownEmail": "(未知邮箱)",
+        "noEndpoint": "(未配置 endpoint)",
+        "inUse": "在用 {n} 处",
+        "quotaLoading": "加载配额中…",
+        "quotaUnavailable": "配额不可用 — 点 ↻ 重试",
+        "dataPointNa": "数据点暂不可用",
+        "needsPicoraV017": "需要 Picora v0.17.1+",
+        "notActivated": "尚未激活 Picora 套餐。",
+        "activate": "激活套餐",
+        "removeConfirmTitle": "移除 Picora 账号",
+        "removeConfirmBody": "即将移除：{email}",
+        "cascadeDefault": "此账号是默认 Picora 账号 — 移除后会自动指定新默认账号。",
+        "cascadeImageHost": "此账号是默认上传图床 — 移除后图床默认将被清空。",
+        "cascadeKbBindings": "{n} 个知识库的绑定将被清除。云端数据保留于 Picora。",
+        "cloudDataPreserved": "仅清除本地配置，不会删除云端任何资源。",
+        "confirmRemove": "确认移除"
+      },
+      "editTitle": "编辑 Picora 账号",
+      "kbSync": {
+        "title": "知识库同步",
+        "openManager": "打开 KB 同步设置",
+        "empty": "尚未创建知识库。",
+        "missingTarget": "(账号已移除)",
+        "never": "从未同步",
+        "error": "同步出错",
+        "unboundLabel": "未绑定 Picora：",
+        "bindAction": "绑定到默认账号"
+      },
+      "resources": {
+        "title": "云端资源浏览",
+        "tabs": {
+          "image": "图片",
+          "audio": "音频",
+          "video": "视频"
+        }
+      },
+      "advanced": {
+        "title": "高级",
+        "imgDomain": "默认插入域名",
+        "imgDomainHint": "插入 Picora 图片时使用的公共 URL 前缀。",
+        "rewriteBase64": "上传时自动将文档内 base64 图片重写为 Picora CDN",
+        "sidebarPin": "在主侧栏显示 Picora 快捷入口",
+        "debug": "启用调试日志"
+      },
+      "banner": "全新「Picora」标签上线。所有 Picora 配置已迁移到此标签集中管理；图床标签仍可访问。",
+      "bannerDismiss": "我知道了",
+      "welcome": {
+        "title": "欢迎使用 Picora — 一站式资源托管",
+        "body": "把图片 / 音频 / 视频 / Markdown 文档统一托管到自己的 Picora 账号，跨设备同步知识库，从编辑器一键插入云端资源。",
+        "oneClick": "一键导入（推荐）",
+        "manual": "手动添加 API Key",
+        "or": "或",
+        "register": "还没有 Picora 账号？立即注册"
+      },
+      "quota": {
+        "images": "图片",
+        "docs": "文档",
+        "audio": "音频",
+        "videos": "视频",
+        "kbs": "知识库"
+      },
+      "plan": {
+        "none": "未激活",
+        "trial": "试用",
+        "pro": "Pro",
+        "pro_plus": "Pro+"
+      }
     }
   },
   "titlebar": {
@@ -325,7 +419,8 @@
       "testConnection": "测试连接",
       "testing": "测试中...",
       "connected": "已连接！",
-      "failed": "失败"
+      "failed": "失败",
+      "testFailed": "测试连接失败"
     },
     "providers": {
       "claude": "Anthropic Claude",
@@ -397,7 +492,14 @@
       "emptyResponseContinue": "\n\n你上次说的是：「{lastMessage}」\n请从这里继续。",
       "truncationContinue": "你的回复因输出长度限制被截断了。上面的文本已保存。请继续完成任务，直接进行工具调用。不要重复已输出的内容。",
       "continuationPrompt": "请继续执行，直接调用所需的工具完成任务。不要重复已说过的内容，不要再次描述计划，直接进行工具调用。",
-      "mcpToolPrompt": "请使用 {toolName} 工具（来自 {serverName}）"
+      "mcpToolPrompt": "请使用 {toolName} 工具（来自 {serverName}）",
+      "reviewContext": "---\n本文档当前有 {count} 条待处理评审意见：\n{items}\n---",
+      "reviewContextItem": "[第{line}行] @{author}：「{text}」",
+      "reviewContextItemUnanchored": "[位置丢失] @{author}：「{text}」",
+      "aiReviewRequest": "请评审当前文档，从【逻辑/表达/事实/结构】四个维度发现问题。使用 write_ai_reviews 工具返回最多 10 条结构化评审。每条提供 markedText（来自文档的精确文字片段）、comment（评审意见）、dimension（取值：logic / expression / fact / structure）。如果你的模型不支持工具调用，请以 JSON code block 形式返回相同结构。",
+      "aiImproveRequest": "文档当前有 {count} 条评审意见：\n{items}\n\n请根据这些意见改进文档，使用 update_editor_content 工具写入改进后的完整文档。尽量保留原有格式与结构。",
+      "aiSummaryRequest": "文档有 {count} 条评审意见（含已解决）：\n{items}\n\n请将这些评审按【逻辑/表达/事实/结构】四个维度分类汇总，并对每个维度给出改进优先级（高/中/低）。",
+      "aiRespondRequest": "文档中这段文字：\n「{markedText}」\n\n评审者意见：\n「{commentText}」\n\n请给出具体的修改建议（不要直接修改文档，给出建议即可）。"
     },
     "detection": {
       "intentPrefixes": "让我|我来|我先|我需要|我将|我要|我会",
@@ -405,7 +507,9 @@
       "continuationPhrases": "接下来|下面|现在|然后|让我|继续|处理|开始|上传|发送|调用|查看|获取|提取",
       "remainingPhrases": "还有|剩余|接下来|下一|第\\d+[张个步]",
       "unfinishedPhrases": "还需要|还没有|尚未|待处理"
-    }
+    },
+    "generating": "生成中…",
+    "notConfigured": "AI 服务未配置"
   },
   "mcp": {
     "title": "MCP 服务器",
@@ -728,7 +832,48 @@
     "uploadImageSuccess": "上传成功：{name}",
     "uploadImageFailed": "上传失败：{name} — {error}",
     "uploadAllComplete": "上传完成：{success}/{total} 张成功",
-    "uploadNoConfig": "请先在设置中配置图床"
+    "uploadNoConfig": "请先在设置中配置图床",
+    "insertCloudImage": "插入云端图片…",
+    "insertCloudAudio": "插入云端音频…",
+    "insertCloudVideo": "插入云端视频…"
+  },
+  "cloudPicker": {
+    "titleImage": "插入云端图片",
+    "titleAudio": "插入云端音频",
+    "titleVideo": "插入云端视频",
+    "noTargets": "未配置 Picora 目标，请在设置 → 知识库中添加。",
+    "scopeThisKb": "当前知识库",
+    "scopeAll": "全部文件",
+    "scopeNoKb": "无知识库",
+    "tabRecent": "最近",
+    "tabAll": "全部",
+    "tabFavorites": "收藏",
+    "searchPlaceholder": "搜索…",
+    "gridView": "网格视图",
+    "listView": "列表视图",
+    "errorTitle": "加载失败",
+    "lastCache": "上次加载",
+    "emptyTitle": "未找到文件",
+    "emptySub": "请调整筛选条件或向 Picora 上传文件。",
+    "loadingMore": "加载中…",
+    "selectedCount": "已选 {n} 个",
+    "insertAsHtml": "以 HTML 插入",
+    "insertBtn": "插入",
+    "processing": "处理中",
+    "public": "公开",
+    "private": "私有",
+    "favorite": "收藏",
+    "copyUrl": "复制链接",
+    "privacyTitle": "已选私有文件",
+    "privacyDesc": "{n} 个文件为私有，公开访问可能受限。",
+    "privacyWarn": "设为公开后任何人均可通过链接访问该文件。",
+    "suppressPrivacy": "不再提示",
+    "makePublicInsert": "设为公开并插入",
+    "insertAnyway": "直接插入",
+    "copyMarkdown": "复制 Markdown",
+    "emptyKbScopedSub": "当前知识库下没有文件。早期上传的文件可能未关联到此知识库。",
+    "switchScopeAll": "显示账号下全部文件",
+    "urlMissing": "媒体 URL 缺失 — 该资源可能尚未就绪。"
   },
   "search": {
     "findPlaceholder": "查找...",
@@ -1695,6 +1840,199 @@
     "forceUnlock": "强制解锁",
     "selectTextFirst": "请先选中文本",
     "sourceModeLimitHint": "评审功能仅在可视化模式下可用",
-    "defaultComment": ""
+    "defaultComment": "",
+    "aiImprove": "AI 改进",
+    "aiSummary": "AI 汇总",
+    "aiReview": "AI 评审",
+    "aiRespond": "AI 建议",
+    "aiInProgress": "AI 正在分析文档…",
+    "aiCancel": "取消",
+    "aiNoResults": "AI 未生成评审建议",
+    "aiInvalidFiltered": "{count} 条评审格式异常已忽略",
+    "aiAuthorBadge": "AI",
+    "aiHintFromTool": "AI 已通过工具调用返回评审",
+    "aiHintFromJson": "AI 通过 JSON 兜底返回评审",
+    "aiHintFailed": "此模型不支持 AI 评审，请切换到 Claude / GPT-4 / Gemini",
+    "aiDisclaimerTitle": "启用 AI 评审 — 数据使用提示",
+    "aiDisclaimerBody": "AI 评审会把当前文档的全部内容与所有评审意见发送到你选择的 AI provider：",
+    "aiDisclaimerBodyDetails": "评审中可能包含团队成员姓名与内部讨论。请确认本知识库内容适合云端处理。",
+    "aiDisclaimerLocalHint": "想完全本地化？切换到 Ollama provider 即可绕过云端，所有处理在本机完成。",
+    "aiDisclaimerSwitchLocal": "切换到本地 provider",
+    "aiDisclaimerConfirm": "我了解，启用 AI 评审",
+    "aiDisclaimerDontAsk": "不再询问此 provider",
+    "dimensionLogic": "逻辑",
+    "dimensionExpression": "表达",
+    "dimensionFact": "事实",
+    "dimensionStructure": "结构",
+    "aiInflightCancelled": "AI 评审已因切换文件取消",
+    "aiMergeBlocked": "仓库正在合并中，请先完成"
+  },
+  "history": {
+    "tabLabel": "历史",
+    "title": "{filename} 的提交历史",
+    "exportBtn": "导出",
+    "viewSnapshot": "查看快照",
+    "compareWithCurrent": "与当前对比",
+    "compareWithPrev": "与上一版本对比",
+    "backToList": "← 返回历史",
+    "blameToggle": "显示作者追踪",
+    "blameNotSupportedVisual": "Blame 仅在 Source Mode 可用，请按 ⌘/ 切换",
+    "blameUncommitted": "未提交",
+    "loading": "加载中…",
+    "showingLast": "仅显示最近 {count} 次提交",
+    "renamedFrom": "↪ 来自 {oldPath}",
+    "empty": {
+      "noGit": "当前知识库未关联 Git 仓库",
+      "noGitHint": "历史功能需要 Git 同步支持",
+      "noGitAction": "前往绑定 Git 仓库",
+      "noCommits": "此文件尚无提交记录",
+      "noCommitsHint": "保存并同步到 Git 后可查看历史",
+      "noCommitsAction": "立即保存并提交",
+      "error": "无法读取 Git 历史",
+      "errorHint": "请检查仓库状态",
+      "errorRetry": "重试"
+    },
+    "snapshot": {
+      "label": "快照 @ {hash}",
+      "notice": "这是历史快照（只读）",
+      "copy": "复制此快照",
+      "compare": "与当前对比",
+      "restore": "还原此版本到当前",
+      "confirmRestore": "还原会用此快照内容覆盖编辑器；保存后会创建新 commit。继续？"
+    },
+    "dirtyConfirm": "当前修改未保存，是否继续？",
+    "continueAnyway": "继续",
+    "saveFirst": "先保存",
+    "cancel": "取消",
+    "mergeBlocked": "仓库正在合并中，请先完成"
+  },
+  "diff": {
+    "title": "{filename} · {hash1} ↔ {hash2}",
+    "backToEdit": "← 返回编辑",
+    "noChanges": "两个版本内容相同，无差异",
+    "binaryFile": "此版本包含二进制内容，无法显示文本差异",
+    "addedLine": "新增行",
+    "deletedLine": "删除行",
+    "statsLine": "+{added} 行新增 · -{deleted} 行删除",
+    "leftLabel": "旧",
+    "rightLabel": "新"
+  },
+  "audit": {
+    "reportTitle": "文档审计报告：{filename}",
+    "generatedAt": "生成时间",
+    "knowledgeBase": "知识库",
+    "gitRepo": "Git 仓库",
+    "branch": "分支",
+    "commitHistory": "修改历史",
+    "colTime": "时间",
+    "colAuthor": "作者",
+    "colSummary": "提交摘要",
+    "reviewSummary": "评审汇总",
+    "summaryStats": "总计 {total} 条评审，{resolved} 条已解决，{wontfix} 条不修改，{open} 条仍待处理",
+    "resolvedSection": "已解决（{count} 条）",
+    "wontfixSection": "不修改（{count} 条）",
+    "openSection": "待处理（{count} 条）",
+    "resolvedNote": "已于 {date} 由 {user} 标记解决",
+    "wontfixNote": "已于 {date} 由 {user} 标记不修改",
+    "noReviews": "无评审记录",
+    "showingLastCommits": "（仅显示最近 {count} 次提交）",
+    "notGitBound": "未关联 Git 仓库",
+    "lineN": "第 {n} 行",
+    "unanchoredLabel": "位置丢失",
+    "exportDialogTitle": "导出审计报告",
+    "exportFilename": "文件名",
+    "exportFormat": "格式",
+    "formatMarkdown": "Markdown (.md)",
+    "includeHistory": "修改历史（最近 {count} 次提交）",
+    "includeReviews": "评审汇总（{total} 条评审，{resolved} 已解决）",
+    "anonymizeAuthors": "匿名化作者（@{name} → @reviewer-1）",
+    "includeFullDiscussion": "包含完整评审讨论（默认仅摘要）",
+    "privacyNotice": "报告将保存到本机，不会发送到任何外部服务。",
+    "cancel": "取消",
+    "save": "保存…"
+  },
+  "kbSync": {
+    "card": {
+      "bind": "☁ Picora 同步",
+      "settings": "☁ 已绑定 · 设置"
+    },
+    "bindDialog": {
+      "title": "绑定 Picora 同步 — {name}",
+      "step": "步骤 {current} / {total}",
+      "step1Title": "选择 Picora 账号",
+      "step2Title": "关联或新建云端 KB",
+      "step3Title": "同步策略",
+      "step4Title": "预览首次同步（dry-run）",
+      "noPicora": "未找到 Picora 账号，请先在「设置 → 图床」中添加。",
+      "loadingKbs": "正在加载云端 KB…",
+      "createNew": "在云端新建 KB",
+      "linkExisting": "关联到已有云端 KB",
+      "kbName": "名称",
+      "kbSlug": "Slug（URL 友好标识）",
+      "selectKb": "选择云端 KB…",
+      "back": "← 上一步",
+      "next": "下一步 →",
+      "startSync": "开始同步 ✓",
+      "binding": "绑定中…",
+      "previewing": "正在扫描本地文件…",
+      "willUpload": "↑ 上传到云端（{n} 项）",
+      "willDownload": "↓ 下载到本地（{n} 项）",
+      "willDelete": "⊘ 删除（{n} 项）",
+      "skipped": "⚠ 跳过 — 超出大小限制（{n} 项）",
+      "firstBindHint": "未检测到冲突，所有本地文件将上传。",
+      "confirmLabel": "我了解，本机将作为初始权威来源",
+      "linkExistingInstead": "改为关联已存在的 KB"
+    },
+    "strategy": {
+      "mode": "触发方式",
+      "modeManual": "仅手动",
+      "modeOnSave": "保存即同步（3 秒延迟）",
+      "modeInterval": "定时同步",
+      "modeStartup": "启动与关闭时",
+      "interval60": "每 1 分钟",
+      "interval300": "每 5 分钟",
+      "interval900": "每 15 分钟",
+      "interval1800": "每 30 分钟",
+      "scope": "同步范围",
+      "scopeMdOnly": "仅 Markdown 文件（.md / .markdown）",
+      "scopeMdRules": "Markdown + 规则文件（MORAYA.md / CLAUDE.md / .mdx）",
+      "scopeAll": "全部文本文件（含隐藏目录）",
+      "conflict": "冲突处理",
+      "conflictPrompt": "提示我（推荐）",
+      "conflictLocal": "优先保留本地",
+      "conflictRemote": "优先拉取云端"
+    },
+    "settings": {
+      "globalSwitch": "本机启用 KB 自动同步",
+      "globalSwitchHint": "关闭后所有定时同步暂停，「立即同步」按钮仍可用。",
+      "lastSync": "上次同步",
+      "never": "从未",
+      "unbound": "未绑定 Picora",
+      "syncNow": "立即同步",
+      "syncing": "同步中…",
+      "editStrategy": "编辑策略",
+      "unbind": "解绑",
+      "unbindTitle": "解绑 Picora 同步",
+      "unbindConfirm": "解除「{name}」的 Picora 同步绑定？云端数据将保留。",
+      "viewConflicts": "冲突",
+      "bind": "绑定到 Picora",
+      "noKbs": "尚未添加任何知识库。"
+    },
+    "conflict": {
+      "title": "冲突解决 — {name}（{n} 项）",
+      "noConflicts": "无冲突待解决。",
+      "local": "本地版本",
+      "remote": "云端版本",
+      "noPreview": "（无预览）",
+      "keepLocal": "保留本地（覆盖云端）",
+      "keepRemote": "拉取云端（覆盖本地）",
+      "keepBoth": "保留双份（云端文件另存为 .conflict.md）",
+      "skip": "跳过",
+      "applyOne": "应用此项",
+      "applyAll": "应用全部所选（{n}）"
+    },
+    "statusbar": {
+      "tooltip": "KB 同步状态 — 点击查看详情"
+    }
   }
 }

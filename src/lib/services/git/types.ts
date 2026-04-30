@@ -17,6 +17,8 @@ export interface GitLogEntry {
 	email: string;
 	date: string;
 	message: string;
+	/** v0.32.1: previous filename when this commit renamed/copied the file (only set when --follow is used). */
+	renamed_from?: string | null;
 }
 
 /** Mirrors Rust GitSyncStatus struct */
@@ -31,6 +33,19 @@ export interface GitSyncStatus {
 export interface GitUserInfo {
 	name: string;
 	email: string;
+}
+
+/** Mirrors Rust GitBlameEntry struct (v0.32.0) */
+export interface GitBlameEntry {
+	line: number;          // 1-based final line number
+	hash: string;          // 40-char commit hash; "0000…0" for uncommitted
+	short_hash: string;    // first 8 chars of hash
+	author: string;
+	author_mail: string;
+	author_time: number;   // unix timestamp seconds
+	summary: string;
+	content: string;       // actual line content (without leading \t)
+	uncommitted: boolean;  // true when hash is all zeros
 }
 
 /** Git binding config stored on KnowledgeBase */

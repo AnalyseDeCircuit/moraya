@@ -17,7 +17,10 @@
     "play": "試聽",
     "stop": "停止",
     "start": "啟動",
-    "untitled": "未命名"
+    "untitled": "未命名",
+    "retry": "重試",
+    "refresh": "重新整理",
+    "new": "新增"
   },
   "settings": {
     "title": "設定",
@@ -33,13 +36,16 @@
       "permissions": "權限",
       "voice": "語音模型",
       "knowledgeBase": "知識庫",
-      "plugins": "外掛"
+      "plugins": "外掛",
+      "kbSync": "KB 同步",
+      "picora": "Picora"
     },
     "groups": {
       "general": "通用",
       "ai": "AI 設定",
       "extensions": "擴充",
-      "knowledgeBase": "知識庫"
+      "knowledgeBase": "知識庫",
+      "picora": "Picora"
     },
     "language": {
       "label": "語言",
@@ -67,6 +73,8 @@
       "interval": "自動儲存間隔"
     },
     "rememberLastFolder": "記住上次開啟的資料夾",
+    "showCloudInsertEntries": "顯示雲端插入選單項目",
+    "showCloudInsertEntriesDesc": "在格式選單和右鍵選單中新增「插入雲端圖片/音訊/影片」選項。",
     "rulesHistoryCount": "MORAYA.md 歷史版本數量",
     "rulesHistoryCountHint": "每個規則檔案保留的歷史版本數量（預設：10）",
     "editor": {
@@ -132,6 +140,92 @@
         "speaker": "說話人{n}"
       },
       "providersHint": "設定語音轉譯服務商。"
+    },
+    "imageHost": {
+      "picora": {
+        "movedHint": "Picora 設定已遷移至「Picora」分頁管理。",
+        "jumpToTab": "跳至 Picora 分頁"
+      },
+      "subtitleSuffix": "Picora 專屬選項位於 Picora 分頁內。"
+    },
+    "picora": {
+      "account": {
+        "title": "Picora 帳號",
+        "add": "新增 Picora 帳號",
+        "addFirst": "立即開始",
+        "empty": "尚未連接 Picora 帳號。連接後可使用雲端資源插入與知識庫同步。",
+        "setDefault": "設為預設",
+        "test": "測試連線",
+        "edit": "編輯",
+        "remove": "移除",
+        "quota": "配額",
+        "unknownEmail": "(未知電郵)",
+        "noEndpoint": "(未設定 endpoint)",
+        "inUse": "使用中 {n} 處",
+        "quotaLoading": "載入配額中…",
+        "quotaUnavailable": "配額不可用 — 點 ↻ 重試",
+        "dataPointNa": "資料點暫時不可用",
+        "needsPicoraV017": "需要 Picora v0.17.1+",
+        "notActivated": "尚未啟用 Picora 方案。",
+        "activate": "啟用方案",
+        "removeConfirmTitle": "移除 Picora 帳號",
+        "removeConfirmBody": "即將移除：{email}",
+        "cascadeDefault": "此帳號是預設 Picora 帳號 — 移除後會自動指定新預設帳號。",
+        "cascadeImageHost": "此帳號是預設上傳圖床 — 移除後圖床預設將被清空。",
+        "cascadeKbBindings": "{n} 個知識庫的綁定將被清除。雲端資料保留於 Picora。",
+        "cloudDataPreserved": "僅清除本機設定，不會刪除雲端任何資源。",
+        "confirmRemove": "確認移除"
+      },
+      "editTitle": "編輯 Picora 帳號",
+      "kbSync": {
+        "title": "知識庫同步",
+        "openManager": "開啟 KB 同步設定",
+        "empty": "尚未建立知識庫。",
+        "missingTarget": "(帳號已移除)",
+        "never": "從未同步",
+        "error": "同步錯誤",
+        "unboundLabel": "未綁定 Picora：",
+        "bindAction": "綁定到預設帳號"
+      },
+      "resources": {
+        "title": "雲端資源瀏覽",
+        "tabs": {
+          "image": "圖片",
+          "audio": "音訊",
+          "video": "影片"
+        }
+      },
+      "advanced": {
+        "title": "進階",
+        "imgDomain": "預設插入網域",
+        "imgDomainHint": "插入 Picora 圖片時使用的公開 URL 前綴。",
+        "rewriteBase64": "上傳時自動將文件內 base64 圖片改寫為 Picora CDN",
+        "sidebarPin": "在主側邊欄顯示 Picora 捷徑",
+        "debug": "啟用除錯日誌"
+      },
+      "banner": "全新「Picora」分頁上線。所有 Picora 設定已遷移至此分頁集中管理；圖床分頁仍可使用。",
+      "bannerDismiss": "我知道了",
+      "welcome": {
+        "title": "歡迎使用 Picora — 一站式資源託管",
+        "body": "將圖片 / 音訊 / 影片 / Markdown 文件統一託管至自己的 Picora 帳號，跨裝置同步知識庫，從編輯器一鍵插入雲端資源。",
+        "oneClick": "一鍵匯入（推薦）",
+        "manual": "手動新增 API Key",
+        "or": "或",
+        "register": "還沒有 Picora 帳號？立即註冊"
+      },
+      "quota": {
+        "images": "圖片",
+        "docs": "文件",
+        "audio": "音訊",
+        "videos": "影片",
+        "kbs": "知識庫"
+      },
+      "plan": {
+        "none": "未啟用",
+        "trial": "試用",
+        "pro": "Pro",
+        "pro_plus": "Pro+"
+      }
     }
   },
   "titlebar": {
@@ -269,7 +363,8 @@
       "testConnection": "測試連線",
       "testing": "測試中...",
       "connected": "已連線！",
-      "failed": "失敗"
+      "failed": "失敗",
+      "testFailed": "測試連線失敗"
     },
     "providers": {
       "claude": "Anthropic Claude",
@@ -341,7 +436,14 @@
       "emptyResponseContinue": "\n\n你上次說的是：「{lastMessage}」\n請從這裡繼續。",
       "truncationContinue": "你的回覆因輸出長度限制被截斷了。上面的文字已儲存。請繼續完成任務，直接進行工具呼叫。不要重複已輸出的內容。",
       "continuationPrompt": "請繼續執行，直接呼叫所需的工具完成任務。不要重複已說過的內容，不要再次描述計畫，直接進行工具呼叫。",
-      "mcpToolPrompt": "請使用 {toolName} 工具（來自 {serverName}）"
+      "mcpToolPrompt": "請使用 {toolName} 工具（來自 {serverName}）",
+      "reviewContext": "---\nThis document has {count} pending review comments:\n{items}\n---",
+      "reviewContextItem": "[Line {line}] @{author}: \"{text}\"",
+      "reviewContextItemUnanchored": "[Position lost] @{author}: \"{text}\"",
+      "aiReviewRequest": "Please review the current document and identify issues across four dimensions: logic, expression, fact, and structure. Use the write_ai_reviews tool to return up to 10 structured review comments. For each, provide markedText (an exact text fragment from the document being reviewed), comment (your review), and dimension (one of: logic, expression, fact, structure). If your model does not support tool calls, return the same data as a JSON code block.",
+      "aiImproveRequest": "The document has {count} pending review comments:\n{items}\n\nPlease apply these reviews and improve the document. Use the update_editor_content tool to write the improved full document. Preserve formatting and original structure where possible.",
+      "aiSummaryRequest": "The document has {count} review comments (including resolved):\n{items}\n\nPlease summarize them across four dimensions (logic / expression / fact / structure), and rate the priority (high / medium / low) for each dimension.",
+      "aiRespondRequest": "The document contains this text:\n\"{markedText}\"\n\nThe reviewer commented:\n\"{commentText}\"\n\nPlease provide specific suggestions for revision. Do NOT modify the document — give suggestions only."
     },
     "detection": {
       "intentPrefixes": "讓我|我來|我先|我需要|我將|我要|我會",
@@ -353,7 +455,9 @@
     "sections": {
       "imageAI": "圖像 AI",
       "imageAIHint": "AI 圖像生成模型配置。"
-    }
+    },
+    "generating": "產生中…",
+    "notConfigured": "尚未設定 AI 服務"
   },
   "mcp": {
     "title": "MCP 伺服器",
@@ -676,7 +780,48 @@
     "uploadImageSuccess": "上傳成功：{name}",
     "uploadImageFailed": "上傳失敗：{name} — {error}",
     "uploadAllComplete": "上傳完成：{success}/{total} 張成功",
-    "uploadNoConfig": "請先在設定中配置圖床"
+    "uploadNoConfig": "請先在設定中配置圖床",
+    "insertCloudImage": "插入雲端圖片…",
+    "insertCloudAudio": "插入雲端音訊…",
+    "insertCloudVideo": "插入雲端影片…"
+  },
+  "cloudPicker": {
+    "titleImage": "插入雲端圖片",
+    "titleAudio": "插入雲端音訊",
+    "titleVideo": "插入雲端影片",
+    "noTargets": "未設定 Picora 目標，請在設定 → 知識庫中新增。",
+    "scopeThisKb": "目前知識庫",
+    "scopeAll": "全部檔案",
+    "scopeNoKb": "無知識庫",
+    "tabRecent": "最近",
+    "tabAll": "全部",
+    "tabFavorites": "收藏",
+    "searchPlaceholder": "搜尋…",
+    "gridView": "格狀檢視",
+    "listView": "列表檢視",
+    "errorTitle": "載入失敗",
+    "lastCache": "上次載入",
+    "emptyTitle": "找不到檔案",
+    "emptySub": "請調整篩選條件或上傳檔案至 Picora。",
+    "loadingMore": "載入中…",
+    "selectedCount": "已選 {n} 個",
+    "insertAsHtml": "以 HTML 插入",
+    "insertBtn": "插入",
+    "processing": "處理中",
+    "public": "公開",
+    "private": "私有",
+    "favorite": "收藏",
+    "copyUrl": "複製連結",
+    "privacyTitle": "已選私有檔案",
+    "privacyDesc": "{n} 個檔案為私有，公開存取可能受限。",
+    "privacyWarn": "設為公開後任何人均可透過連結存取該檔案。",
+    "suppressPrivacy": "不再提示",
+    "makePublicInsert": "設為公開並插入",
+    "insertAnyway": "直接插入",
+    "copyMarkdown": "複製 Markdown",
+    "emptyKbScopedSub": "目前知識庫下沒有檔案。較早上傳的檔案可能未關聯至此知識庫。",
+    "switchScopeAll": "顯示帳號下全部檔案",
+    "urlMissing": "媒體 URL 缺失 — 該資源可能尚未就緒。"
   },
   "search": {
     "findPlaceholder": "尋找...",
@@ -1616,6 +1761,199 @@
     "forceUnlock": "強制解鎖",
     "selectTextFirst": "請先選取文字",
     "sourceModeLimitHint": "審閱功能僅在視覺化模式下可用",
-    "defaultComment": ""
+    "defaultComment": "",
+    "aiImprove": "AI Improve",
+    "aiSummary": "AI Summary",
+    "aiReview": "AI Review",
+    "aiRespond": "AI Suggest",
+    "aiInProgress": "AI is analyzing the document…",
+    "aiCancel": "Cancel",
+    "aiNoResults": "AI generated no review suggestions",
+    "aiInvalidFiltered": "{count} review(s) had invalid format and were skipped",
+    "aiAuthorBadge": "AI",
+    "aiHintFromTool": "AI returned reviews via tool call",
+    "aiHintFromJson": "AI returned reviews via JSON fallback",
+    "aiHintFailed": "This model does not support AI Review. Switch to Claude / GPT-4 / Gemini.",
+    "aiDisclaimerTitle": "Enable AI Review — Data Use Notice",
+    "aiDisclaimerBody": "AI Review will send the entire current document and all review comments to your selected AI provider:",
+    "aiDisclaimerBodyDetails": "Reviews may include team members' names and internal discussion. Please confirm this knowledge base is suitable for cloud processing.",
+    "aiDisclaimerLocalHint": "Want to keep everything local? Switch to an Ollama provider — all processing happens on this machine.",
+    "aiDisclaimerSwitchLocal": "Switch to local provider",
+    "aiDisclaimerConfirm": "I understand, enable AI Review",
+    "aiDisclaimerDontAsk": "Don't ask again for this provider",
+    "dimensionLogic": "Logic",
+    "dimensionExpression": "Expression",
+    "dimensionFact": "Fact",
+    "dimensionStructure": "Structure",
+    "aiInflightCancelled": "AI Review cancelled because the active file changed",
+    "aiMergeBlocked": "Repository is in the middle of a merge. Resolve conflicts first."
+  },
+  "history": {
+    "tabLabel": "History",
+    "title": "Commit history of {filename}",
+    "exportBtn": "Export",
+    "viewSnapshot": "View Snapshot",
+    "compareWithCurrent": "Compare with Current",
+    "compareWithPrev": "Compare with Previous",
+    "backToList": "← Back to History",
+    "blameToggle": "Show Author Tracking",
+    "blameNotSupportedVisual": "Blame is only available in Source Mode. Press ⌘/ to switch.",
+    "blameUncommitted": "uncommitted",
+    "loading": "Loading…",
+    "showingLast": "Showing the last {count} commits",
+    "renamedFrom": "↪ from {oldPath}",
+    "empty": {
+      "noGit": "This knowledge base is not linked to Git",
+      "noGitHint": "History requires Git sync support",
+      "noGitAction": "Link a Git repository",
+      "noCommits": "This file has no commit history yet",
+      "noCommitsHint": "Save and sync to Git to view history",
+      "noCommitsAction": "Save and commit now",
+      "error": "Failed to load Git history",
+      "errorHint": "Please check repository status",
+      "errorRetry": "Retry"
+    },
+    "snapshot": {
+      "label": "Snapshot @ {hash}",
+      "notice": "This is a historical snapshot (read-only)",
+      "copy": "Copy snapshot",
+      "compare": "Compare with Current",
+      "restore": "Restore this version",
+      "confirmRestore": "Restoring will replace the editor content with this snapshot. After saving, a new commit will be created. Continue?"
+    },
+    "dirtyConfirm": "The current document has unsaved changes. Continue anyway?",
+    "continueAnyway": "Continue",
+    "saveFirst": "Save first",
+    "cancel": "Cancel",
+    "mergeBlocked": "Repository is in the middle of a merge. Resolve conflicts first."
+  },
+  "diff": {
+    "title": "{filename} · {hash1} ↔ {hash2}",
+    "backToEdit": "← Back to Edit",
+    "noChanges": "The two versions are identical — no differences",
+    "binaryFile": "This version contains binary content and cannot be displayed as text diff",
+    "addedLine": "Added line",
+    "deletedLine": "Deleted line",
+    "statsLine": "+{added} added · -{deleted} deleted",
+    "leftLabel": "Old",
+    "rightLabel": "New"
+  },
+  "audit": {
+    "reportTitle": "Document Audit Report: {filename}",
+    "generatedAt": "Generated at",
+    "knowledgeBase": "Knowledge base",
+    "gitRepo": "Git repository",
+    "branch": "branch",
+    "commitHistory": "Commit History",
+    "colTime": "Time",
+    "colAuthor": "Author",
+    "colSummary": "Summary",
+    "reviewSummary": "Review Summary",
+    "summaryStats": "Total {total} review(s); {resolved} resolved, {wontfix} won't fix, {open} open",
+    "resolvedSection": "Resolved ({count})",
+    "wontfixSection": "Won't Fix ({count})",
+    "openSection": "Open ({count})",
+    "resolvedNote": "resolved at {date} by {user}",
+    "wontfixNote": "marked won't fix at {date} by {user}",
+    "noReviews": "No reviews recorded",
+    "showingLastCommits": "(Showing only the last {count} commits)",
+    "notGitBound": "Not linked to a Git repository",
+    "lineN": "Line {n}",
+    "unanchoredLabel": "Position lost",
+    "exportDialogTitle": "Export Audit Report",
+    "exportFilename": "Filename",
+    "exportFormat": "Format",
+    "formatMarkdown": "Markdown (.md)",
+    "includeHistory": "Commit history (last {count} commits)",
+    "includeReviews": "Review summary ({total} reviews, {resolved} resolved)",
+    "anonymizeAuthors": "Anonymize authors (@{name} → @reviewer-1)",
+    "includeFullDiscussion": "Include full review discussion (default: summary only)",
+    "privacyNotice": "The report will be saved locally. No data is sent to any external service.",
+    "cancel": "Cancel",
+    "save": "Save…"
+  },
+  "kbSync": {
+    "card": {
+      "bind": "☁ Picora 同步",
+      "settings": "☁ 已綁定 · 設定"
+    },
+    "bindDialog": {
+      "title": "綁定 Picora 同步 — {name}",
+      "step": "步驟 {current} / {total}",
+      "step1Title": "選擇 Picora 帳號",
+      "step2Title": "關聯或建立雲端 KB",
+      "step3Title": "同步策略",
+      "step4Title": "預覽首次同步（dry-run）",
+      "noPicora": "未找到 Picora 帳號，請先在「設定 → 圖床」中新增。",
+      "loadingKbs": "正在載入雲端 KB…",
+      "createNew": "在雲端建立 KB",
+      "linkExisting": "關聯至已有雲端 KB",
+      "kbName": "名稱",
+      "kbSlug": "Slug（URL 友好識別碼）",
+      "selectKb": "選擇雲端 KB…",
+      "back": "← 上一步",
+      "next": "下一步 →",
+      "startSync": "開始同步 ✓",
+      "binding": "綁定中…",
+      "previewing": "正在掃描本機檔案…",
+      "willUpload": "↑ 上傳至雲端（{n} 項）",
+      "willDownload": "↓ 下載至本機（{n} 項）",
+      "willDelete": "⊘ 刪除（{n} 項）",
+      "skipped": "⚠ 跳過 — 超出大小限制（{n} 項）",
+      "firstBindHint": "未偵測到衝突，所有本機檔案將上傳。",
+      "confirmLabel": "我瞭解，本機將作為初始權威來源",
+      "linkExistingInstead": "改為關聯已存在的 KB"
+    },
+    "strategy": {
+      "mode": "觸發方式",
+      "modeManual": "僅手動",
+      "modeOnSave": "存檔即同步（3 秒延遲）",
+      "modeInterval": "定時同步",
+      "modeStartup": "啟動與關閉時",
+      "interval60": "每 1 分鐘",
+      "interval300": "每 5 分鐘",
+      "interval900": "每 15 分鐘",
+      "interval1800": "每 30 分鐘",
+      "scope": "同步範圍",
+      "scopeMdOnly": "僅 Markdown 檔案（.md / .markdown）",
+      "scopeMdRules": "Markdown + 規則檔案（MORAYA.md / CLAUDE.md / .mdx）",
+      "scopeAll": "所有文字檔案（含隱藏目錄）",
+      "conflict": "衝突處理",
+      "conflictPrompt": "提示我（建議）",
+      "conflictLocal": "優先保留本機",
+      "conflictRemote": "優先拉取雲端"
+    },
+    "settings": {
+      "globalSwitch": "本機啟用 KB 自動同步",
+      "globalSwitchHint": "關閉後所有定時同步暫停，「立即同步」按鈕仍可用。",
+      "lastSync": "上次同步",
+      "never": "從未",
+      "unbound": "未綁定 Picora",
+      "syncNow": "立即同步",
+      "syncing": "同步中…",
+      "editStrategy": "編輯策略",
+      "unbind": "解綁",
+      "unbindTitle": "解綁 Picora 同步",
+      "unbindConfirm": "解除「{name}」的 Picora 同步綁定？雲端資料將保留。",
+      "viewConflicts": "衝突",
+      "bind": "綁定至 Picora",
+      "noKbs": "尚未新增任何知識庫。"
+    },
+    "conflict": {
+      "title": "衝突解決 — {name}（{n} 項）",
+      "noConflicts": "無衝突待解決。",
+      "local": "本機版本",
+      "remote": "雲端版本",
+      "noPreview": "（無預覽）",
+      "keepLocal": "保留本機（覆蓋雲端）",
+      "keepRemote": "拉取雲端（覆蓋本機）",
+      "keepBoth": "保留雙份（雲端檔案另存為 .conflict.md）",
+      "skip": "跳過",
+      "applyOne": "套用此項",
+      "applyAll": "套用全部所選（{n}）"
+    },
+    "statusbar": {
+      "tooltip": "KB 同步狀態 — 點擊查看詳情"
+    }
   }
 }

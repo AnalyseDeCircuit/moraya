@@ -6,6 +6,8 @@
     position,
     hasImages = false,
     hasSelection = false,
+    inSpecialBlock = false,
+    showCloudInsert = true,
     onCut,
     onCopy,
     onPaste,
@@ -14,11 +16,16 @@
     onImageGen,
     onPublish,
     onAddReview,
+    onInsertCloudImage,
+    onInsertCloudAudio,
+    onInsertCloudVideo,
     onClose,
   }: {
     position: { top: number; left: number };
     hasImages?: boolean;
     hasSelection?: boolean;
+    inSpecialBlock?: boolean;
+    showCloudInsert?: boolean;
     onCut: () => void;
     onCopy: () => void;
     onPaste: () => void;
@@ -27,6 +34,9 @@
     onImageGen: () => void;
     onPublish: () => void;
     onAddReview?: () => void;
+    onInsertCloudImage?: () => void;
+    onInsertCloudAudio?: () => void;
+    onInsertCloudVideo?: () => void;
     onClose: () => void;
   } = $props();
 
@@ -90,6 +100,25 @@
         <span>{$t('review.addReview')}</span>
         <span class="shortcut">⌘⇧R</span>
       </button>
+    {/if}
+
+    {#if showCloudInsert && !inSpecialBlock && (onInsertCloudImage || onInsertCloudAudio || onInsertCloudVideo)}
+      <div class="menu-divider"></div>
+      {#if onInsertCloudImage}
+        <button class="menu-item" onclick={() => { if (onInsertCloudImage) handleAction(onInsertCloudImage); }}>
+          ☁ {$t('contextMenu.insertCloudImage')}
+        </button>
+      {/if}
+      {#if onInsertCloudAudio}
+        <button class="menu-item" onclick={() => { if (onInsertCloudAudio) handleAction(onInsertCloudAudio); }}>
+          ☁ {$t('contextMenu.insertCloudAudio')}
+        </button>
+      {/if}
+      {#if onInsertCloudVideo}
+        <button class="menu-item" onclick={() => { if (onInsertCloudVideo) handleAction(onInsertCloudVideo); }}>
+          ☁ {$t('contextMenu.insertCloudVideo')}
+        </button>
+      {/if}
     {/if}
 
     <div class="menu-divider"></div>

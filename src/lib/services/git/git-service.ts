@@ -4,6 +4,7 @@ import type {
 	GitLogEntry,
 	GitSyncStatus,
 	GitUserInfo,
+	GitBlameEntry,
 } from './types';
 
 /**
@@ -120,6 +121,44 @@ export async function gitSyncStatus(
  */
 export async function gitHeadCommit(path: string): Promise<string> {
 	return invoke<string>('git_head_commit', { path });
+}
+
+/**
+ * Show the contents of a file at a specific commit (v0.32.0).
+ * Returns the full file content as a string. Empty string indicates the
+ * file does not exist at that commit, or is binary (caller should fall
+ * back to a binary-not-displayable message).
+ */
+export async function gitShowFile(
+	path: string,
+	hash: string,
+	file: string,
+): Promise<string> {
+	return invoke<string>('git_show_file', { path, hash, file });
+}
+
+/**
+ * Run `git blame --porcelain` and return parsed entries (v0.32.0).
+ * Each entry corresponds to one line in the current working file.
+ */
+export async function gitBlame(
+	path: string,
+	file: string,
+): Promise<GitBlameEntry[]> {
+	return invoke<GitBlameEntry[]>('git_blame', { path, file });
+}
+
+/**
+ * Detect if the repository is currently in the middle of a merge / rebase /
+ * cherry-pick / revert operation (v0.32.1). Returns false on any error so
+ * callers can use this as a safe gate without blocking valid actions.
+ */
+export async function gitInMerge(path: string): Promise<boolean> {
+	try {
+		return await invoke<boolean>('git_in_merge', { path });
+	} catch {
+		return false;
+	}
 }
 
 /**

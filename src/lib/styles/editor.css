@@ -729,7 +729,15 @@
 }
 
 .moraya-editor .html-media-wrapper video {
+  /* Fill the editor's line width by default; max-height keeps tall portrait
+     videos from dominating the viewport. Aspect ratio resolves to the
+     intrinsic video dimensions once metadata loads. */
+  display: block;
+  width: 100%;
+  height: auto;
   max-width: 100%;
+  max-height: 70vh;
+  background: #000;
   border-radius: 4px;
 }
 
@@ -875,8 +883,12 @@
   border-radius: 4px;
 }
 
-/* Preserved inline HTML atoms (<br>, <span>, <sup>, etc.) */
-.moraya-editor span[data-type="html-inline"] {
+/* Preserved inline HTML atoms (<br>, <span>, <sup>, etc.).
+   EXCLUDES .html-img-wrapper and .html-media-wrapper — those wrap real
+   <img>/<audio>/<video> elements rendered by createMediaElement and must
+   show at full opacity / native sizing, not the muted-debug style intended
+   for raw text-like inline HTML. */
+.moraya-editor span[data-type="html-inline"]:not(.html-img-wrapper):not(.html-media-wrapper) {
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 0.85em;

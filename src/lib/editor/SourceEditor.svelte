@@ -10,6 +10,8 @@
     hideScrollbar = false,
     showOutline = false,
     outlineWidth = 200,
+    showBlame = false,
+    blameData = [],
     onContentChange,
     onOutlineWidthChange,
   }: {
@@ -17,12 +19,26 @@
     hideScrollbar?: boolean;
     showOutline?: boolean;
     outlineWidth?: number;
+    /** v0.32.0: when true, renders blame gutter overlay (left of textarea) */
+    showBlame?: boolean;
+    /** v0.32.0: per-line blame data (1-based, indexed by line number) */
+    blameData?: import('$lib/services/git').GitBlameEntry[];
     onContentChange?: (content: string) => void;
     onOutlineWidthChange?: (width: number) => void;
   } = $props();
 
   let showLineNumbers = $state(false);
   let tabSize = $state(4);
+
+  /** v0.32.1 §F4: blame gutter time-based color gradient. */
+  function blameColorForAge(unixSec: number): string {
+    if (!unixSec) return '#a5d6ff';
+    const ageDays = (Date.now() / 1000 - unixSec) / 86400;
+    if (ageDays <= 7) return '#1f6feb';
+    if (ageDays <= 30) return '#58a6ff';
+    if (ageDays <= 90) return '#79c0ff';
+    return '#a5d6ff';
+  }
   let editorLineWidth = $state(800);
   let textareaEl: HTMLTextAreaElement | undefined = $state();
   let ghostEl: HTMLDivElement | undefined = $state();
@@ -635,6 +651,21 @@
         {/each}
       </div>
     {/if}
+    {#if showBlame}
+      <div class="blame-gutter" aria-hidden="true">
+        {#each lineHeights as h, i}
+          {@const entry = blameData[i] /* 0-based to match lineHeights */}
+          {#if entry}
+            <div class="blame-line" class:uncommitted={entry.uncommitted} style="{h ? `height:${h}px;` : ''}{entry.uncommitted ? '' : `color:${blameColorForAge(entry.author_time)};`}">
+              <span class="bl-hash">{entry.short_hash}</span>
+              <span class="bl-author">· {entry.uncommitted ? '—' : entry.author}</span>
+            </div>
+          {:else}
+            <div class="blame-line empty" style={h ? `height:${h}px` : ''}></div>
+          {/if}
+        {/each}
+      </div>
+    {/if}
     <div class="textarea-grow" style="tab-size: {tabSize}">
       <div bind:this={ghostEl} class="textarea-ghost" aria-hidden="true"></div>
       <div class="current-line-highlight" style="top: {currentLineTop}px; height: {currentLineHeight}px;" aria-hidden="true"></div>
@@ -712,6 +743,47 @@
   .line-number {
     display: block;
     min-width: 2rem;
+  }
+
+  /* v0.32.0 blame gutter */
+  .blame-gutter {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    flex-shrink: 0;
+    padding: 0 8px 0 4px;
+    text-align: left;
+    user-select: none;
+    pointer-events: none;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    font-size: 11px;
+    line-height: 25px;
+    color: var(--text-muted, var(--color-text-muted));
+    border-right: 1px solid var(--border-light, var(--color-border));
+    margin-right: 0.5rem;
+    overflow: hidden;
+  }
+  .blame-line {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #1f6feb;
+  }
+  .blame-line.uncommitted {
+    color: #6e7681;
+    font-style: italic;
+  }
+  .blame-line.empty {}
+  .bl-hash {
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .bl-author {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* CSS grid ghost technique: the ghost div mirrors the content to

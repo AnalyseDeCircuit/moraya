@@ -4,6 +4,9 @@
   import { t } from '$lib/i18n';
   import { isMacOS, isIPadOS } from '$lib/utils/platform';
   import GitSyncStatus from './GitSyncStatus.svelte';
+  import { filesStore } from '$lib/stores/files-store';
+  import { kbSyncStore } from '$lib/services/kb-sync/sync-service';
+  import type { KbSyncState } from '$lib/services/kb-sync/types';
 
   let {
     onShowUpdateDialog,
@@ -53,6 +56,8 @@
   let wordCount = $state(0);
   let charCount = $state(0);
   let updateAvailable = $state(false);
+  let activeKbSyncState = $state<KbSyncState | null>(null);
+  let showSyncPopover = $state(false);
 
   // Top-level store subscriptions — do NOT wrap in $effect().
   // Svelte 5 $effect tracks reads in subscribe callbacks, causing infinite loops.
@@ -62,6 +67,32 @@
   });
   updateStore.subscribe(state => {
     updateAvailable = state.checkStatus === 'available';
+  });
+  filesStore.subscribe(state => {
+    const activeKb = state.activeKnowledgeBaseId
+      ? state.knowledgeBases.find(k => k.id === state.activeKnowledgeBaseId)
+      : null;
+    if (activeKb?.picoraBinding) {
+      // will be filled by kbSyncStore subscription below
+    } else {
+      activeKbSyncState = null;
+    }
+  });
+  kbSyncStore.subscribe(map => {
+    const filesState = filesStore.getState();
+    const activeId = filesState.activeKnowledgeBaseId;
+    const activeKb = activeId ? filesState.knowledgeBases.find(k => k.id === activeId) : null;
+    if (activeKb?.picoraBinding) {
+      activeKbSyncState = map.get(activeId!) ?? {
+        localKbId: activeId!,
+        status: 'idle',
+        conflictCount: 0,
+        pendingConflicts: [],
+        lastError: null,
+      };
+    } else {
+      activeKbSyncState = null;
+    }
   });
 
   const modes: EditorMode[] = ['visual', 'source', 'split'];
@@ -118,6 +149,21 @@
     {/if}
     {#if onGitSync}
       <GitSyncStatus onSync={onGitSync} />
+    {/if}
+    {#if activeKbSyncState !== null}
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <span
+        class="kb-sync-icon"
+        class:sync-idle={activeKbSyncState.status === 'idle'}
+        class:sync-syncing={activeKbSyncState.status === 'syncing'}
+        class:sync-conflict={activeKbSyncState.status === 'conflict'}
+        class:sync-error={activeKbSyncState.status === 'error'}
+        onclick={() => { showSyncPopover = !showSyncPopover; }}
+        title={$t('kbSync.statusbar.tooltip')}
+      >
+        ☁{#if activeKbSyncState.status === 'syncing'} ⟳{:else if activeKbSyncState.status === 'conflict'} ⚠{activeKbSyncState.conflictCount}{:else if activeKbSyncState.status === 'error'} ✗{:else} ✓{/if}
+      </span>
     {/if}
   </div>
   <div class="statusbar-right">
@@ -368,4 +414,19 @@
   :global([dir="rtl"]) .mode-btn:last-child {
     border-left: none;
   }
+
+  .kb-sync-icon {
+    cursor: pointer;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: var(--font-size-xs);
+    transition: background var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .kb-sync-icon:hover { background: var(--bg-hover); }
+  .kb-sync-icon.sync-idle { color: var(--color-success, #38a169); }
+  .kb-sync-icon.sync-syncing { color: var(--accent-color); animation: spin 1s linear infinite; }
+  .kb-sync-icon.sync-conflict { color: var(--warning-color, #e8a838); }
+  .kb-sync-icon.sync-error { color: var(--color-error, #e53e3e); }
 </style>

@@ -344,10 +344,13 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 | v0.27.0 | Knowledge Base Vector Search + Command Palette + Offline Models | ✅ |
 | v0.28.0 | Image Upload Auto-Naming & Storage | ✅ |
 | v0.29.0 | Anti-Clone Protection (Internal) | ✅ |
-| v0.30.0 | [Git Sync Foundation — bind KB to GitHub repo, auto-commit, sync status](docs/iterations/v0.30.0-git-sync.md) | ✅ |
-| v0.31.0 | [Team Review System — sidecar reviews, anchor matching, soft locking](docs/iterations/v0.31.0-team-review.md) | 🚧 |
-| v0.32.0 | [AI Review + Audit — AI reviewer, history timeline, blame, diff](docs/iterations/v0.32.0-ai-review-audit.md) | 📋 |
-| v0.33.0 | [Picora Image Host — recommended image host with one-click deep-link import](docs/iterations/v0.33.0-picora-image-host.md) | 📋 |
+| v0.30.0 | Git Sync Foundation — bind KB to GitHub repo, auto-commit, sync status | ✅ |
+| v0.31.0 | Team Review System — sidecar reviews, anchor matching, soft locking | 🚧 |
+| v0.32.0 | AI Review + Audit — AI reviewer, history timeline, blame, diff | 📋 |
+| v0.33.0 | Picora Image Host — recommended image host with one-click deep-link import | 📋 |
+| v0.35.0 | KB ↔ Picora Doc Sync — namespace per KB, bidirectional sync, conflict UI | ✅ |
+| v0.36.0 | Cloud Resource Insert — pick Picora image/audio/video from menu & right-click | ✅ |
+| v0.37.0 | Picora Settings Tab — unified account/sync/browse panel; image-host entry de-emphasized | ✅ |
 
 ## ⭐ Star Growth trend (updated in real time)
 

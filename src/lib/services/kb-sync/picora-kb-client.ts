@@ -1,0 +1,58 @@
+import { invoke } from '@tauri-apps/api/core';
+import type { PicoraKb, ManifestEntry, SyncOp, SyncBatchResult } from './types';
+
+/** Derive the Picora API base URL from the image upload URL. */
+export function picoraApiBase(picoraApiUrl: string): string {
+  // picoraApiUrl is like https://api.picora.me/v1/images
+  // Strip the path component to get the base
+  try {
+    const u = new URL(picoraApiUrl);
+    return `${u.protocol}//${u.host}`;
+  } catch {
+    return picoraApiUrl.replace(/\/v1\/.*$/, '');
+  }
+}
+
+/** List all Knowledge Bases for the authenticated user. */
+export async function listKbs(apiBase: string, apiKey: string): Promise<PicoraKb[]> {
+  return invoke<PicoraKb[]>('picora_kb_list', { apiBase, apiKey });
+}
+
+/** Create a new Knowledge Base on Picora. */
+export async function createKb(
+  apiBase: string,
+  apiKey: string,
+  name: string,
+  slug?: string,
+): Promise<PicoraKb> {
+  return invoke<PicoraKb>('picora_kb_create', { apiBase, apiKey, name, slug: slug ?? null });
+}
+
+/** Fetch the full manifest (all active docs) for a KB. */
+export async function fetchManifest(
+  apiBase: string,
+  apiKey: string,
+  kbId: string,
+): Promise<ManifestEntry[]> {
+  return invoke<ManifestEntry[]>('picora_kb_manifest', { apiBase, apiKey, kbId });
+}
+
+/** Batch upsert/delete docs in a KB. Returns applied paths + conflict entries. */
+export async function syncBatch(
+  apiBase: string,
+  apiKey: string,
+  kbId: string,
+  ops: SyncOp[],
+): Promise<SyncBatchResult> {
+  return invoke<SyncBatchResult>('picora_kb_sync_batch', { apiBase, apiKey, kbId, ops });
+}
+
+/** Fetch raw content of a single doc by relativePath. */
+export async function fetchRaw(
+  apiBase: string,
+  apiKey: string,
+  kbId: string,
+  relativePath: string,
+): Promise<string> {
+  return invoke<string>('picora_kb_raw', { apiBase, apiKey, kbId, relativePath });
+}

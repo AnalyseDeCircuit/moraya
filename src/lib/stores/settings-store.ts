@@ -64,6 +64,22 @@ interface Settings {
   embeddingBaseUrl: string;              // custom base URL
   autoIndexOnSave: boolean;              // auto-index file on save
   localEmbeddingModelId: string | null;  // Phase 4 offline model ID
+  // v0.32.0: AI Review consent per-provider (P1 privacy disclaimer)
+  aiReviewConsent: Record<string, boolean>;
+  // v0.35.0: Global KB auto-sync toggle
+  kbSyncEnabled: boolean;
+  // v0.36.0: Show cloud resource insert entries in Format menu + right-click menu
+  showCloudInsertEntries: boolean;
+  // v0.37.0: Picora tab — default account for KB sync + cloud resource browse (separate from defaultImageHostId)
+  defaultPicoraAccountId: string;
+  // v0.37.0: Sidebar shortcut to Picora resource browse (default off)
+  picoraSidebarPinned: boolean;
+  // v0.37.0: Show debug log section in Picora tab
+  picoraDebugLogging: boolean;
+  // v0.37.0: Whether the user has dismissed the "new Picora tab" introduction banner
+  picoraTabSeen: boolean;
+  // v0.37.0: Auto-rewrite base64 images in documents to Picora CDN on upload
+  picoraRewriteBase64: boolean;
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -111,6 +127,14 @@ const DEFAULT_SETTINGS: Settings = {
   embeddingBaseUrl: '',
   autoIndexOnSave: false,
   localEmbeddingModelId: null,
+  aiReviewConsent: {},
+  kbSyncEnabled: true,
+  showCloudInsertEntries: true,
+  defaultPicoraAccountId: '',
+  picoraSidebarPinned: false,
+  picoraDebugLogging: false,
+  picoraTabSeen: false,
+  picoraRewriteBase64: false,
 };
 
 function resolveLocale(selection: LocaleSelection): SupportedLocale {
@@ -319,6 +343,17 @@ function createSettingsStore() {
       const state = get({ subscribe });
       return state.imageHostTargets.find(t => t.id === state.defaultImageHostId) || null;
     },
+    /** v0.37.0: Default Picora account (used for KB sync and cloud resource browse). */
+    getDefaultPicoraTarget(): ImageHostTarget | null {
+      const state = get({ subscribe });
+      const picoraTargets = state.imageHostTargets.filter(t => t.provider === 'picora');
+      const byDefault = picoraTargets.find(t => t.id === state.defaultPicoraAccountId);
+      if (byDefault) return byDefault;
+      return picoraTargets[0] ?? null;
+    },
+    setDefaultPicoraAccount(id: string) {
+      update(state => ({ ...state, defaultPicoraAccountId: id }));
+    },
     reset() {
       set(DEFAULT_SETTINGS);
     },
@@ -381,6 +416,15 @@ export async function initSettingsStore() {
             imageHostTargets: [migratedTarget],
             defaultImageHostId: migratedTarget.id,
           });
+        }
+      }
+
+      // v0.37.0 migration: auto-pick the sole Picora target as default Picora account
+      const picoraState = settingsStore.getState();
+      if (!picoraState.defaultPicoraAccountId) {
+        const picoraTargets = picoraState.imageHostTargets.filter(t => t.provider === 'picora');
+        if (picoraTargets.length === 1) {
+          settingsStore.update({ defaultPicoraAccountId: picoraTargets[0].id });
         }
       }
 

@@ -48,6 +48,9 @@ function sidecarDir(kbRoot: string, relPath: string): string {
 /**
  * Load the sidecar review file for a document.
  * Returns null if the file does not exist yet.
+ *
+ * v0.32.0: legacy sidecar JSON without `resolvedCommit` field is normalized
+ * to `null` on read. Empty-string variants are also coerced to `null`.
  */
 export async function loadReviews(
   kbRoot: string,
@@ -56,7 +59,17 @@ export async function loadReviews(
   const path = sidecarPath(kbRoot, relPath);
   try {
     const raw = await invoke<string>('read_file', { path });
-    return JSON.parse(raw) as ReviewFile;
+    const parsed = JSON.parse(raw) as ReviewFile;
+    // Backward-compat: ensure resolvedCommit exists on every review
+    if (parsed.reviews) {
+      for (const r of parsed.reviews) {
+        const rec = r as Review & { resolvedCommit?: string | null };
+        if (rec.resolvedCommit === undefined || rec.resolvedCommit === '') {
+          rec.resolvedCommit = null;
+        }
+      }
+    }
+    return parsed;
   } catch {
     // File not found or parse error → treat as no reviews yet
     return null;
@@ -112,6 +125,7 @@ export function createReview(
     status: 'open',
     resolvedAt: null,
     resolvedBy: null,
+    resolvedCommit: null,
     lastVerifiedCommit: anchor.commitHash,
     anchor,
     comments: [comment],
@@ -139,26 +153,42 @@ export function addComment(
 /**
  * Return a new Review with status = 'resolved'.
  * Does NOT mutate the original.
+ *
+ * v0.32.0: `resolvedCommit` is the HEAD commit hash at the time of resolution.
+ * Caller must pre-compute via `gitHeadCommit()` (silent fallback to null on
+ * failure or non-git KB) and pass it in.
  */
-export function resolveReview(review: Review, resolvedBy: string): Review {
+export function resolveReview(
+  review: Review,
+  resolvedBy: string,
+  resolvedCommit: string | null = null,
+): Review {
   return {
     ...review,
     status: 'resolved',
     resolvedAt: new Date().toISOString(),
     resolvedBy,
+    resolvedCommit,
   };
 }
 
 /**
  * Return a new Review with status = 'wontfix'.
  * Does NOT mutate the original.
+ *
+ * v0.32.0: `resolvedCommit` semantics identical to `resolveReview()`.
  */
-export function wontfixReview(review: Review, resolvedBy: string): Review {
+export function wontfixReview(
+  review: Review,
+  resolvedBy: string,
+  resolvedCommit: string | null = null,
+): Review {
   return {
     ...review,
     status: 'wontfix',
     resolvedAt: new Date().toISOString(),
     resolvedBy,
+    resolvedCommit,
   };
 }
 

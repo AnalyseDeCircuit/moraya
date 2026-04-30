@@ -134,6 +134,14 @@ export const insertHorizontalRule: Command = (state, dispatch) => {
  * Insert image node with given attributes.
  */
 export function insertImage(attrs: { src: string; alt?: string; title?: string }): Command {
+  return insertImageAt(attrs);
+}
+
+/**
+ * Insert an image node at `pos` (defaults to current selection).
+ * Used by both the local image dialog and the cloud picker.
+ */
+export function insertImageAt(attrs: { src: string; alt?: string; title?: string }, pos?: number): Command {
   return (state, dispatch) => {
     if (!dispatch) return true;
     const node = schema.nodes.image.create({
@@ -141,9 +149,67 @@ export function insertImage(attrs: { src: string; alt?: string; title?: string }
       alt: attrs.alt || '',
       title: attrs.title || '',
     });
-    dispatch(state.tr.replaceSelectionWith(node).scrollIntoView());
+    const tr = pos !== undefined
+      ? state.tr.insert(pos, node)
+      : state.tr.replaceSelectionWith(node);
+    dispatch(tr.scrollIntoView());
     return true;
   };
+}
+
+/**
+ * Insert an HTML5 `<audio>` block at `pos` (defaults to current selection).
+ * Audio/video are inserted as html_inline inside a paragraph; ensure surrounding
+ * paragraphs exist so the user can continue typing.
+ */
+export function insertAudioAt(attrs: { src: string; title?: string }, pos?: number): Command {
+  return (state, dispatch) => {
+    if (!dispatch) return true;
+    if (!attrs.src) {
+      // Refuse to insert an empty <audio src=""> — it renders as an invisible
+      // 0-pixel element and the user perceives "nothing inserted".
+      console.warn('[insertAudioAt] refusing insert: src is empty');
+      return false;
+    }
+    const { nodes } = schema;
+    const titleAttr = attrs.title ? ` title="${escapeAttr(attrs.title)}"` : '';
+    const htmlContent = `<audio src="${escapeAttr(attrs.src)}" controls preload="metadata"${titleAttr}></audio>`;
+    // The html_inline node schema uses `value` (not `content`) — see schema.ts.
+    const htmlNode = nodes.html_inline.create({ value: htmlContent });
+    const para = nodes.paragraph.create({}, htmlNode);
+    const insertPos = pos ?? state.selection.$from.pos;
+    const tr = state.tr.insert(insertPos, para);
+    dispatch(tr.scrollIntoView());
+    return true;
+  };
+}
+
+/**
+ * Insert an HTML5 `<video>` block at `pos` (defaults to current selection).
+ */
+export function insertVideoAt(attrs: { src: string; poster?: string; title?: string }, pos?: number): Command {
+  return (state, dispatch) => {
+    if (!dispatch) return true;
+    if (!attrs.src) {
+      console.warn('[insertVideoAt] refusing insert: src is empty');
+      return false;
+    }
+    const { nodes } = schema;
+    const posterAttr = attrs.poster ? ` poster="${escapeAttr(attrs.poster)}"` : '';
+    const titleAttr = attrs.title ? ` title="${escapeAttr(attrs.title)}"` : '';
+    const htmlContent = `<video src="${escapeAttr(attrs.src)}" controls preload="metadata"${posterAttr}${titleAttr}></video>`;
+    // The html_inline node schema uses `value` (not `content`) — see schema.ts.
+    const htmlNode = nodes.html_inline.create({ value: htmlContent });
+    const para = nodes.paragraph.create({}, htmlNode);
+    const insertPos = pos ?? state.selection.$from.pos;
+    const tr = state.tr.insert(insertPos, para);
+    dispatch(tr.scrollIntoView());
+    return true;
+  };
+}
+
+function escapeAttr(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 /**

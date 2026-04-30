@@ -171,6 +171,10 @@ pub fn create_menu(app: &AppHandle) -> Result<Menu<Wry>, tauri::Error> {
             &MenuItem::with_id(app, "fmt_code", "Code", true, Some("CmdOrCtrl+E"))?,
             &MenuItem::with_id(app, "fmt_link", "Link", true, Some("CmdOrCtrl+K"))?,
             &MenuItem::with_id(app, "fmt_image", "Image", true, Some("CmdOrCtrl+Shift+G"))?,
+            &PredefinedMenuItem::separator(app)?,
+            &MenuItem::with_id(app, "insert_cloud_image", "Insert Cloud Image…", true, None::<&str>)?,
+            &MenuItem::with_id(app, "insert_cloud_audio", "Insert Cloud Audio…", true, None::<&str>)?,
+            &MenuItem::with_id(app, "insert_cloud_video", "Insert Cloud Video…", true, None::<&str>)?,
         ],
     )?;
 

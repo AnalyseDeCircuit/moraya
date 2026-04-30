@@ -179,6 +179,40 @@ pub async fn verify_picora_token(
     })
 }
 
+/// Lightweight connection test: GET /v1/auth/verify with Bearer token.
+/// Returns Ok(()) when the token is valid; otherwise a sanitized error.
+/// Used by the "Test Connection" button so we don't upload a placeholder
+/// image to the user's bucket just to check credentials.
+#[command]
+pub async fn test_picora_connection(
+    api_base: String,
+    api_key: String,
+) -> Result<(), String> {
+    if api_base.trim().is_empty() {
+        return Err("Picora endpoint is empty".to_string());
+    }
+    if api_key.trim().is_empty() {
+        return Err("Picora API key is empty".to_string());
+    }
+
+    let url = format!("{}/v1/auth/verify", api_base.trim_end_matches('/'));
+    let client = http_client()?;
+    let res = client
+        .get(&url)
+        .bearer_auth(&api_key)
+        .send()
+        .await
+        .map_err(|_| "Network error contacting Picora".to_string())?;
+
+    if !res.status().is_success() {
+        let status = res.status().as_u16();
+        let body = res.text().await.unwrap_or_default();
+        return Err(build_error_with_body(status, &body, "test"));
+    }
+
+    Ok(())
+}
+
 /// Exchange a one-time export token for the full Picora import payload (V2 flow).
 #[command]
 pub async fn exchange_picora_export_token(

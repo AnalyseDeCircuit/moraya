@@ -1,6 +1,7 @@
 import { writable, get } from 'svelte/store';
 import { load } from '@tauri-apps/plugin-store';
 import { invoke } from '@tauri-apps/api/core';
+import type { KbBinding } from '$lib/services/kb-sync/types';
 
 export interface FileEntry {
   name: string;
@@ -37,7 +38,10 @@ export interface KnowledgeBase {
   path: string;
   lastAccessedAt: number;
   git?: KnowledgeBaseGit;
+  picoraBinding?: KbBinding;
 }
+
+export type { KbBinding };
 
 interface FilesState {
   openFolderPath: string | null;
@@ -226,6 +230,51 @@ function createFilesStore() {
       const state = get({ subscribe });
       if (!state.activeKnowledgeBaseId) return null;
       return state.knowledgeBases.find(k => k.id === state.activeKnowledgeBaseId) ?? null;
+    },
+
+    setKbBinding(id: string, binding: KbBinding) {
+      update(state => {
+        const kbs = state.knowledgeBases.map(kb =>
+          kb.id === id ? { ...kb, picoraBinding: binding } : kb
+        );
+        persistKnowledgeBases(kbs);
+        return { ...state, knowledgeBases: kbs };
+      });
+    },
+
+    clearKbBinding(id: string) {
+      update(state => {
+        const kbs = state.knowledgeBases.map(kb =>
+          kb.id === id ? { ...kb, picoraBinding: undefined } : kb
+        );
+        persistKnowledgeBases(kbs);
+        return { ...state, knowledgeBases: kbs };
+      });
+    },
+
+    updateKbStrategy(id: string, strategy: KbBinding['strategy']) {
+      update(state => {
+        const kbs = state.knowledgeBases.map(kb => {
+          if (kb.id !== id || !kb.picoraBinding) return kb;
+          return { ...kb, picoraBinding: { ...kb.picoraBinding, strategy } };
+        });
+        persistKnowledgeBases(kbs);
+        return { ...state, knowledgeBases: kbs };
+      });
+    },
+
+    updateKbSyncReport(
+      id: string,
+      patch: Pick<KbBinding, 'lastSyncAt' | 'lastSyncReport' | 'lastSyncError'>,
+    ) {
+      update(state => {
+        const kbs = state.knowledgeBases.map(kb => {
+          if (kb.id !== id || !kb.picoraBinding) return kb;
+          return { ...kb, picoraBinding: { ...kb.picoraBinding, ...patch } };
+        });
+        persistKnowledgeBases(kbs);
+        return { ...state, knowledgeBases: kbs };
+      });
     },
 
     /** Check if a path is already a knowledge base. */

@@ -254,7 +254,17 @@ function setMediaSrc(el: HTMLMediaElement | HTMLSourceElement, src: string): voi
   } else if (isRelativePath(src)) {
     loadLocalMediaSrc(el, resolveRelativePath(src));
   } else if (/^https?:\/\//i.test(src)) {
-    loadRemoteMediaSrc(el, src);
+    // For <video>, set src directly so the browser can issue HTTP range
+    // requests and stream playback. The Tauri-HTTP-to-blob proxy used for
+    // <audio> would download the entire file before any frame plays — fine
+    // for a few-MB audio clip, fatal for 10s-of-MB to GB video.
+    // CSP `media-src https:` already permits direct streaming from CDNs.
+    if (el instanceof HTMLVideoElement) {
+      el.src = src;
+      el.load();
+    } else {
+      loadRemoteMediaSrc(el, src);
+    }
   } else {
     el.src = src;
   }
@@ -274,6 +284,14 @@ function createMediaElement(tagName: 'video' | 'audio', value: string): HTMLElem
   wrapper.contentEditable = 'false';
 
   const el = document.createElement(tagName);
+  // Stop ProseMirror from grabbing mousedown for atom-node selection — the
+  // browser's native <audio>/<video> controls (play, scrub, volume) must
+  // receive the events directly, otherwise clicks select the node instead
+  // of triggering playback.
+  const stopForControls = (ev: Event) => ev.stopPropagation();
+  el.addEventListener('mousedown', stopForControls);
+  el.addEventListener('click', stopForControls);
+  el.addEventListener('pointerdown', stopForControls);
 
   // Extract opening tag to parse attributes
   const openTagMatch = value.match(new RegExp(`^<${tagName}\\b[^>]*>`, 'i'));

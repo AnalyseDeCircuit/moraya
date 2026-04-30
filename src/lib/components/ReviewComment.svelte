@@ -11,6 +11,7 @@
 		headCommit = '',
 		onJump,
 		onReanchor,
+		onAiRespond,
 	}: {
 		review: ResolvedReview;
 		currentUser: string;
@@ -18,7 +19,18 @@
 		headCommit?: string;
 		onJump?: (reviewId: string) => void;
 		onReanchor?: (reviewId: string) => void;
+		onAiRespond?: (reviewId: string) => void;
 	} = $props();
+
+	// v0.32.0: AI-authored review distinction
+	const isAiAuthored = $derived(review.author === 'AI' || review.authorEmail === 'ai@moraya');
+	const dimensionLabel = $derived.by(() => {
+		// AI reviews format the comment as "[dimension] body"
+		if (!isAiAuthored) return null;
+		const text = review.comments?.[0]?.text ?? '';
+		const m = text.match(/^\[(logic|expression|fact|structure)\]\s+/);
+		return m ? m[1] : null;
+	});
 
 	let showReplyInput = $state(false);
 	let replyText = $state('');
@@ -46,12 +58,16 @@
 	}
 
 	async function handleResolve() {
-		const updated = resolveReview(review, currentUser);
+		// v0.32.0: pass headCommit (already known by parent) as resolvedCommit;
+		// empty string treated as null per Schema 补丁.
+		const commit = headCommit && headCommit.length > 0 ? headCommit : null;
+		const updated = resolveReview(review, currentUser, commit);
 		await reviewStore.updateReview(review.id, updated);
 	}
 
 	async function handleWontfix() {
-		const updated = wontfixReview(review, currentUser);
+		const commit = headCommit && headCommit.length > 0 ? headCommit : null;
+		const updated = wontfixReview(review, currentUser, commit);
 		await reviewStore.updateReview(review.id, updated);
 	}
 
@@ -107,7 +123,10 @@
 >
 	<!-- Header -->
 	<div class="comment-header">
-		<span class="author">@{review.author}</span>
+		<span class="author" class:ai-author={isAiAuthored}>@{review.author}</span>
+		{#if isAiAuthored && dimensionLabel}
+			<span class="dimension-badge">[{dimensionLabel}]</span>
+		{/if}
 		{#if review.anchorState === 'relocated'}
 			<span class="status-badge relocated" title={$t('review.relocated')}>⚠</span>
 		{/if}
@@ -152,6 +171,11 @@
 				<button class="action-btn" onclick={(e) => { e.stopPropagation(); showReplyInput = !showReplyInput; }}>
 					{$t('review.reply')}
 				</button>
+				{#if onAiRespond && !isAiAuthored}
+					<button class="action-btn ai-btn-inline" onclick={(e) => { e.stopPropagation(); onAiRespond?.(review.id); }}>
+						✨ {$t('review.aiRespond')}
+					</button>
+				{/if}
 				<button class="action-btn" onclick={(e) => { e.stopPropagation(); handleResolve(); }}>
 					{$t('review.resolve')}
 				</button>
@@ -222,6 +246,25 @@
 		font-weight: 600;
 		font-size: var(--font-size-sm);
 		color: var(--color-text);
+	}
+	.author.ai-author {
+		background: rgba(139, 92, 246, 0.18);
+		color: #7c3aed;
+		padding: 1px 6px;
+		border-radius: 3px;
+	}
+	.dimension-badge {
+		font-size: var(--font-size-xs);
+		padding: 1px 5px;
+		border-radius: 3px;
+		background: rgba(99, 102, 241, 0.12);
+		color: var(--color-text-muted);
+		font-family: var(--font-family-mono);
+	}
+	.action-btn.ai-btn-inline {
+		background: rgba(139, 92, 246, 0.08);
+		color: #7c3aed;
+		border-color: rgba(139, 92, 246, 0.3);
 	}
 	.date {
 		margin-left: auto;

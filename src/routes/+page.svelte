@@ -18,6 +18,9 @@
     toggleStrikethrough,
     insertTable,
     insertImage,
+    insertImageAt,
+    insertAudioAt,
+    insertVideoAt,
     insertMathBlock as insertMathBlockCmd,
   } from '$lib/editor/commands';
   import { undo, redo } from 'prosemirror-history';
@@ -31,13 +34,17 @@
   import Toast from '$lib/components/Toast.svelte';
   import type { SEOData } from '$lib/services/ai/types';
   import type { PublishResult } from '$lib/services/publish/types';
+  import type { UnifiedMediaItem } from '$lib/services/cloud-resource/types';
+  import { getMediaDetail, picoraApiBaseFromUploadUrl } from '$lib/services/cloud-resource';
   import { editorStore } from '$lib/stores/editor-store';
   import { settingsStore, initSettingsStore } from '$lib/stores/settings-store';
   import { filesStore, type FileEntry } from '$lib/stores/files-store';
   import { initAIStore, aiStore, sendChatMessage } from '$lib/services/ai';
+  import { abortAIRequest } from '$lib/services/ai/ai-service';
   import { initMCPStore, connectAllServers, mcpStore } from '$lib/services/mcp';
   import { reviewStore } from '$lib/services/review';
   import { initContainerManager } from '$lib/services/mcp/container-manager';
+  import { registerKbInterval, clearAllIntervals, runSync } from '$lib/services/kb-sync/sync-service';
   import { preloadEnhancementPlugins } from '$lib/editor/setup';
   import { openFile, saveFile, saveFileAs, loadFile, getFileNameFromPath, readImageAsBlobUrl, migrateTempImages, isImageFile } from '$lib/services/file-service';
   import { exportDocument, type ExportFormat } from '$lib/services/export-service';
@@ -185,6 +192,11 @@ ${tr('welcome.tip')}
   let settingsInitialTab = $state<'general' | 'ai' | 'voice'>('general');
   let showAIPanel = $state(false);
   let showReviewPanel = $state(false);
+  // v0.32.0: history panel + DiffView state
+  let showHistoryPanel = $state(false);
+  let showBlame = $state(false);
+  let blameData = $state<import('$lib/services/git').GitBlameEntry[]>([]);
+  let diffViewState = $state<null | { leftHash: string | null; rightHash: string | null }>(null);
   let currentFileLock = $state<import('$lib/services/review/types').Lock | null>(null);
   let selfName = $state('');
   let selfEmail = $state('');
@@ -192,6 +204,8 @@ ${tr('welcome.tip')}
   let showOutline = $state(false);
   let outlineWidth = $state(200);
   let showImageDialog = $state(false);
+  // Cloud resource picker state: which type is open + where to insert
+  let cloudPickerState = $state<{ kind: 'image' | 'audio' | 'video'; pos: number | null } | null>(null);
   let showSearch = $state(false);
   let showReplace = $state(false);
   // Image tab preview state — derived from active tab
@@ -476,6 +490,26 @@ ${tr('welcome.tip')}
         createMorayaHistory(newFilePath, latestContent);
       }
 
+      // on-save KB sync: trigger 3 seconds after save to batch rapid saves
+      if (saved && newFilePath) {
+        const activeKb = filesStore.getActiveKnowledgeBase?.();
+        const binding = activeKb?.picoraBinding;
+        if (binding && binding.strategy.mode === 'on-save' && settingsStore.getState().kbSyncEnabled !== false) {
+          const target = settingsStore.getState().imageHostTargets.find(t => t.id === binding.picoraTargetId);
+          if (target) {
+            setTimeout(() => {
+              runSync(binding, activeKb!, target, false, (report) => {
+                filesStore.updateKbSyncReport(activeKb!.id, {
+                  lastSyncAt: new Date().toISOString(),
+                  lastSyncReport: report,
+                  lastSyncError: null,
+                });
+              }).catch(() => {});
+            }, 3000);
+          }
+        }
+      }
+
       // Migrate temp images when article is first saved (prevPath was null → now has a path)
       if (!prevFilePath && newFilePath) {
         const kb = filesStore.getActiveKnowledgeBase?.();
@@ -636,6 +670,16 @@ ${tr('welcome.tip')}
   const unsubEditor = editorStore.subscribe(state => {
     // Only recompute file name when path actually changes
     if (state.currentFilePath !== prevFilePath) {
+      // v0.32.1 §F2: auto-exit DiffView on file switch
+      if (diffViewState) {
+        diffViewState = null;
+      }
+      // v0.32.1 §F3: cancel any in-flight AI review when switching files
+      try {
+        abortAIRequest();
+      } catch {
+        /* noop */
+      }
       prevFilePath = state.currentFilePath;
       currentFileName = state.currentFilePath
         ? getFileNameFromPath(state.currentFilePath)
@@ -778,6 +822,19 @@ ${tr('welcome.tip')}
     unsubMCP();
     unsubGitKB();
     if (autoSyncTimer) clearInterval(autoSyncTimer);
+    clearAllIntervals();
+
+    // on-startup-and-close: fire sync on close (best-effort, fire-and-forget)
+    const fsStateClose = filesStore.getState();
+    const settingsClose = settingsStore.getState();
+    if (settingsClose.kbSyncEnabled !== false) {
+      for (const kb of fsStateClose.knowledgeBases) {
+        const binding = kb.picoraBinding;
+        if (!binding || binding.strategy.mode !== 'on-startup-and-close') continue;
+        const target = settingsClose.imageHostTargets.find(t => t.id === binding.picoraTargetId);
+        if (target) runSync(binding, kb, target, false).catch(() => {});
+      }
+    }
 
     // Release file lock + unload review store on window close
     reviewStore.unload();
@@ -1040,6 +1097,23 @@ ${tr('welcome.tip')}
     if (!isTauri && mod && event.shiftKey && (event.key === 'O' || event.key === 'o')) {
       event.preventDefault();
       settingsStore.update({ showOutline: !showOutline });
+      return;
+    }
+
+    // v0.32.0: History Panel toggle: Cmd+Shift+H / Ctrl+Shift+H
+    if (mod && event.shiftKey && (event.key === 'H' || event.key === 'h')) {
+      event.preventDefault();
+      // If a DiffView is open, close it first instead of toggling history
+      if (diffViewState) {
+        diffViewState = null;
+        showHistoryPanel = true;
+      } else {
+        showHistoryPanel = !showHistoryPanel;
+        if (showHistoryPanel) {
+          showAIPanel = false;
+          showReviewPanel = false;
+        }
+      }
       return;
     }
 
@@ -1892,6 +1966,123 @@ ${tr('welcome.tip')}
     }
   }
 
+  // ── Cloud Resource Insert ─────────────────────────────
+
+  /**
+   * Resolve a media item to a playable URL, fetching the detail endpoint
+   * if the listing response didn't include one. Picora's `/v1/media` listing
+   * may omit `playbackUrl` for performance; the detail endpoint always has it.
+   *
+   * Returns `{ url, error }`. When `url` is empty, `error` describes why so
+   * the caller can surface a useful toast instead of a generic "missing URL".
+   */
+  async function resolveMediaUrl(item: UnifiedMediaItem): Promise<{ url: string; error?: string }> {
+    const direct = item.playbackUrl ?? item.url ?? '';
+    if (direct) return { url: direct };
+    if (item.status && item.status !== 'ready') {
+      return { url: '', error: `media not ready (status=${item.status})` };
+    }
+    const target = settingsStore.getDefaultPicoraTarget?.();
+    if (!target) return { url: '', error: 'no Picora target configured' };
+    try {
+      const apiBase = picoraApiBaseFromUploadUrl(target.picoraApiUrl);
+      const detail = await getMediaDetail(apiBase, target.picoraApiKey, item.type, item.id);
+      const u = detail.playbackUrl ?? detail.url ?? '';
+      if (u) return { url: u };
+      // Fallback diagnostic: list the keys actually present in the detail
+      // response so we can see WHICH fields Picora populated (e.g. streamUrl,
+      // mp4Url, sources[]). Skips obviously-not-URL keys for brevity.
+      const keys = Object.keys(detail as unknown as Record<string, unknown>)
+        .filter(k => k !== 'tags' && k !== 'mimeType')
+        .join(', ');
+      return { url: '', error: `no URL in detail (status=${detail.status ?? 'unknown'}; keys=${keys})` };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { url: '', error: `detail fetch failed: ${msg}` };
+    }
+  }
+
+  async function handleCloudInsert(items: UnifiedMediaItem[], asHtml: boolean, pos?: number) {
+    const mode = editorStore.getState().editorMode;
+    if (mode === 'source') {
+      // Insert as text into source textarea
+      const snippets = items.map(item => {
+        if (item.type === 'audio') {
+          // Picora returns the playable URL as `playbackUrl` for audio (same as video).
+          // Fall back to `url` for legacy/transitional shapes.
+          const src = item.playbackUrl ?? item.url ?? '';
+          return `<audio src="${src}" controls preload="metadata"></audio>`;
+        }
+        if (item.type === 'video') {
+          const src = item.playbackUrl ?? item.url ?? '';
+          const poster = item.thumbnailUrl ? ` poster="${item.thumbnailUrl}"` : '';
+          return `<video src="${src}" controls preload="metadata"${poster}></video>`;
+        }
+        // image
+        const url = item.url ?? '';
+        const alt = item.title ?? item.filename;
+        if (asHtml) return `<img src="${url}" alt="${alt}">`;
+        return `![${alt}](${url})`;
+      });
+      content = content.trimEnd() + '\n\n' + snippets.join('\n\n') + '\n';
+      return;
+    }
+
+    // Visual/split mode — use ProseMirror commands
+    if (items.length === 0 || !morayaEditor) return;
+    const view = morayaEditor.view;
+    const insertPos = pos ?? view.state.selection.$from.pos;
+
+    if (items[0].type === 'image') {
+      // Multi-image: single transaction
+      const { tr } = view.state;
+      let cursor = insertPos;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const url = item.url ?? '';
+        if (asHtml) {
+          const { nodes } = view.state.schema;
+          // html_inline schema attribute is `value`, not `content`.
+          const htmlNode = nodes.html_inline.create({ value: `<img src="${url}" alt="${item.title ?? item.filename}">` });
+          const para = nodes.paragraph.create({}, htmlNode);
+          tr.insert(cursor, para);
+          cursor += para.nodeSize;
+        } else {
+          const imgNode = view.state.schema.nodes.image.create({
+            src: url,
+            alt: item.title ?? item.filename,
+            title: item.title ?? '',
+          });
+          tr.insert(cursor, imgNode);
+          cursor += imgNode.nodeSize;
+        }
+        if (i < items.length - 1) {
+          const emptyPara = view.state.schema.nodes.paragraph.create();
+          tr.insert(cursor, emptyPara);
+          cursor += emptyPara.nodeSize;
+        }
+      }
+      view.dispatch(tr.scrollIntoView());
+    } else if (items[0].type === 'audio') {
+      // Picora's listing endpoint may omit `playbackUrl`; fetch detail if so.
+      const r = await resolveMediaUrl(items[0]);
+      if (!r.url) {
+        const msg = r.error ? `${$t('cloudPicker.urlMissing')} (${r.error})` : $t('cloudPicker.urlMissing');
+        showToast(msg, 'error');
+        return;
+      }
+      runCmd(insertAudioAt({ src: r.url, title: items[0].title }, insertPos));
+    } else if (items[0].type === 'video') {
+      const r = await resolveMediaUrl(items[0]);
+      if (!r.url) {
+        const msg = r.error ? `${$t('cloudPicker.urlMissing')} (${r.error})` : $t('cloudPicker.urlMissing');
+        showToast(msg, 'error');
+        return;
+      }
+      runCmd(insertVideoAt({ src: r.url, poster: items[0].thumbnailUrl, title: items[0].title }, insertPos));
+    }
+  }
+
   // ── Publish Workflow Handlers ─────────────────────────
 
   function handleWorkflowSEO() {
@@ -2395,6 +2586,28 @@ ${tr('welcome.tip')}
             adjustSidebarForFile(filePath);
           }
 
+          // Register KB sync intervals (mode=interval) for all bound KBs
+          if (settings.kbSyncEnabled !== false) {
+            for (const kb of filesState.knowledgeBases) {
+              const binding = kb.picoraBinding;
+              if (!binding) continue;
+              const target = settings.imageHostTargets.find(t => t.id === binding.picoraTargetId);
+              if (!target) continue;
+              if (binding.strategy.mode === 'on-startup-and-close') {
+                // Run once at startup
+                runSync(binding, kb, target, false).catch(() => {});
+              } else if (binding.strategy.mode === 'interval') {
+                registerKbInterval(binding, kb, target, (report) => {
+                  filesStore.updateKbSyncReport(kb.id, {
+                    lastSyncAt: new Date().toISOString(),
+                    lastSyncReport: report,
+                    lastSyncError: null,
+                  });
+                });
+              }
+            }
+          }
+
           // Auto-check for updates (once daily)
           if (shouldCheckToday(settings.lastUpdateCheckDate)) {
             checkForUpdate()
@@ -2535,6 +2748,9 @@ ${tr('welcome.tip')}
         'menu:fmt_code': () => runCmd(toggleCode),
         'menu:fmt_link': () => runCmd(toggleLink({ href: '' })),
         'menu:fmt_image': () => { showImageDialog = true; },
+        'menu:insert_cloud_image': () => { cloudPickerState = { kind: 'image', pos: null }; },
+        'menu:insert_cloud_audio': () => { cloudPickerState = { kind: 'audio', pos: null }; },
+        'menu:insert_cloud_video': () => { cloudPickerState = { kind: 'video', pos: null }; },
         // View — editor modes: payload is boolean (is_checked state from native menu).
         // On macOS, Cocoa auto-toggles CheckMenuItem before firing the event, so the
         // checked item indicates the mode the user selected.
@@ -2852,9 +3068,9 @@ ${tr('welcome.tip')}
           </div>
         </div>
       {:else if editorMode === 'visual'}
-        <Editor bind:this={visualEditorRef} bind:content {showOutline} {outlineWidth} onEditorReady={handleEditorReady} onNotify={showToast} onOutlineWidthChange={(w) => settingsStore.update({ outlineWidth: w })} onWorkflowSEO={handleWorkflowSEO} onWorkflowImageGen={handleWorkflowImageGen} onWorkflowPublish={handleWorkflowPublish} onForceShowAIPanel={() => { showAIPanel = true; }} onAddReview={handleAddReview} />
+        <Editor bind:this={visualEditorRef} bind:content {showOutline} {outlineWidth} onEditorReady={handleEditorReady} onNotify={showToast} onOutlineWidthChange={(w) => settingsStore.update({ outlineWidth: w })} onWorkflowSEO={handleWorkflowSEO} onWorkflowImageGen={handleWorkflowImageGen} onWorkflowPublish={handleWorkflowPublish} onForceShowAIPanel={() => { showAIPanel = true; }} onAddReview={handleAddReview} onInsertCloudImage={(pos) => { cloudPickerState = { kind: 'image', pos }; }} onInsertCloudAudio={(pos) => { cloudPickerState = { kind: 'audio', pos }; }} onInsertCloudVideo={(pos) => { cloudPickerState = { kind: 'video', pos }; }} />
       {:else if editorMode === 'source'}
-        <SourceEditor bind:this={sourceEditorRef} bind:content {showOutline} {outlineWidth} onContentChange={handleContentChange} onOutlineWidthChange={(w) => settingsStore.update({ outlineWidth: w })} />
+        <SourceEditor bind:this={sourceEditorRef} bind:content {showOutline} {outlineWidth} {showBlame} {blameData} onContentChange={handleContentChange} onOutlineWidthChange={(w) => settingsStore.update({ outlineWidth: w })} />
       {:else if editorMode === 'split'}
         <div class="split-container">
           <div class="split-source" bind:this={splitSourceEl}>
@@ -2907,9 +3123,87 @@ ${tr('welcome.tip')}
             {editorMode}
             onJumpToReview={handleJumpToReview}
             onOpenGitBind={() => showKBManager = true}
+            onShowAIPanel={() => { showAIPanel = true; }}
           />
         </div>
       {/await}
+    {/if}
+
+    <!-- v0.32.0: History Panel -->
+    {#if showHistoryPanel}
+      {#await import('$lib/components/HistoryPanel.svelte') then { default: HistoryPanelComp }}
+        <div class="review-panel-outer">
+          <div class="review-panel-header">
+            <span class="review-panel-title">{$t('history.tabLabel')}</span>
+            <button class="review-panel-close" onclick={() => { showHistoryPanel = false; }} aria-label="Close">✕</button>
+          </div>
+          <HistoryPanelComp
+            kb={filesStore.getActiveKnowledgeBase?.() ?? null}
+            filePath={editorStore.getState().currentFilePath}
+            {editorMode}
+            {showBlame}
+            onOpenDiff={(leftHash, rightHash) => {
+              // v0.32.1 §F2: dirty confirmation before entering DiffView
+              if (editorStore.getState().isDirty) {
+                const proceed = confirm($t('history.dirtyConfirm'));
+                if (!proceed) return;
+              }
+              // v0.32.1 §F2: Visual → Source switch (DiffView is line-based)
+              if (editorMode === 'visual') {
+                prevEditorMode = editorMode;
+                editorMode = 'source';
+                editorStore.setEditorMode('source');
+              }
+              diffViewState = { leftHash, rightHash };
+            }}
+            onToggleBlame={async () => {
+              showBlame = !showBlame;
+              if (showBlame) {
+                const kb = filesStore.getActiveKnowledgeBase?.() ?? null;
+                const fp = editorStore.getState().currentFilePath;
+                if (kb && fp && fp.startsWith(kb.path)) {
+                  const rel = fp.slice(kb.path.length).replace(/^\//, '');
+                  try {
+                    const { gitBlame } = await import('$lib/services/git');
+                    blameData = await gitBlame(kb.path, rel);
+                  } catch {
+                    blameData = [];
+                  }
+                }
+              } else {
+                blameData = [];
+              }
+            }}
+            onOpenGitBind={() => showKBManager = true}
+          />
+        </div>
+      {/await}
+    {/if}
+
+    <!-- v0.32.0: Diff View overlay -->
+    {#if diffViewState}
+      {@const kb = filesStore.getActiveKnowledgeBase?.() ?? null}
+      {@const fp = editorStore.getState().currentFilePath}
+      {#if kb && fp && fp.startsWith(kb.path)}
+        {#await import('$lib/components/DiffView.svelte') then { default: DiffViewComp }}
+          <DiffViewComp
+            kbPath={kb.path}
+            relPath={fp.slice(kb.path.length).replace(/^\//, '')}
+            leftHash={diffViewState.leftHash}
+            rightHash={diffViewState.rightHash}
+            currentContent={content}
+            onClose={() => {
+              diffViewState = null;
+              // v0.32.1 §F2: restore prior editor mode (only if we forced visual→source)
+              if (prevEditorMode && prevEditorMode !== editorMode) {
+                editorMode = prevEditorMode;
+                editorStore.setEditorMode(prevEditorMode);
+                prevEditorMode = null;
+              }
+            }}
+          />
+        {/await}
+      {/if}
     {/if}
   </div>
 
@@ -2949,6 +3243,32 @@ ${tr('welcome.tip')}
     <ImageInsertDialog
       onInsert={handleInsertImage}
       onClose={() => showImageDialog = false}
+    />
+  {/await}
+{/if}
+
+{#if cloudPickerState?.kind === 'image'}
+  {#await import('$lib/components/cloud-resource/CloudImagePicker.svelte') then { default: CloudImagePicker }}
+    <CloudImagePicker
+      targetPos={cloudPickerState.pos ?? undefined}
+      onInsert={handleCloudInsert}
+      onClose={() => { cloudPickerState = null; }}
+    />
+  {/await}
+{:else if cloudPickerState?.kind === 'audio'}
+  {#await import('$lib/components/cloud-resource/CloudAudioPicker.svelte') then { default: CloudAudioPicker }}
+    <CloudAudioPicker
+      targetPos={cloudPickerState.pos ?? undefined}
+      onInsert={handleCloudInsert}
+      onClose={() => { cloudPickerState = null; }}
+    />
+  {/await}
+{:else if cloudPickerState?.kind === 'video'}
+  {#await import('$lib/components/cloud-resource/CloudVideoPicker.svelte') then { default: CloudVideoPicker }}
+    <CloudVideoPicker
+      targetPos={cloudPickerState.pos ?? undefined}
+      onInsert={handleCloudInsert}
+      onClose={() => { cloudPickerState = null; }}
     />
   {/await}
 {/if}

@@ -17,7 +17,10 @@
     "play": "Lecture",
     "stop": "Arrêter",
     "start": "Démarrer",
-    "untitled": "Sans titre"
+    "untitled": "Sans titre",
+    "retry": "Réessayer",
+    "refresh": "Actualiser",
+    "new": "Nouveau"
   },
   "settings": {
     "title": "Paramètres",
@@ -33,13 +36,16 @@
       "permissions": "Permissions",
       "voice": "Voix IA",
       "knowledgeBase": "Base de connaissances",
-      "plugins": "Plugins"
+      "plugins": "Plugins",
+      "kbSync": "Sync KB",
+      "picora": "Picora"
     },
     "groups": {
       "general": "Général",
       "ai": "Paramètres IA",
       "extensions": "Extensions",
-      "knowledgeBase": "Base de Connaissances"
+      "knowledgeBase": "Base de Connaissances",
+      "picora": "Picora"
     },
     "language": {
       "label": "Langue",
@@ -67,6 +73,8 @@
       "interval": "Intervalle d'enregistrement automatique"
     },
     "rememberLastFolder": "Se souvenir du dernier dossier ouvert",
+    "showCloudInsertEntries": "Afficher les options d'insertion cloud",
+    "showCloudInsertEntriesDesc": "Ajouter les options 'Insérer image/audio/vidéo cloud' aux menus Format et contextuel.",
     "rulesHistoryCount": "Versions d'historique MORAYA.md",
     "rulesHistoryCountHint": "Nombre de versions historiques à conserver par fichier de règles (défaut : 10)",
     "editor": {
@@ -128,6 +136,92 @@
         "speaker": "Locuteur {n}"
       },
       "providersHint": "Configurer les fournisseurs de parole pour la transcription."
+    },
+    "imageHost": {
+      "picora": {
+        "movedHint": "Les paramètres Picora se trouvent désormais dans l’onglet Picora.",
+        "jumpToTab": "Aller à l’onglet Picora"
+      },
+      "subtitleSuffix": "Les options spécifiques à Picora sont dans l’onglet Picora."
+    },
+    "picora": {
+      "account": {
+        "title": "Comptes Picora",
+        "add": "Ajouter un compte Picora",
+        "addFirst": "Commencer",
+        "empty": "Aucun compte Picora pour le moment. Connectez votre compte pour activer l’insertion de médias cloud et la synchronisation KB.",
+        "setDefault": "Définir par défaut",
+        "test": "Tester la connexion",
+        "edit": "Modifier",
+        "remove": "Supprimer",
+        "quota": "Quota",
+        "unknownEmail": "(pas d’e-mail)",
+        "noEndpoint": "(pas d’endpoint)",
+        "inUse": "Utilisé par {n}",
+        "quotaLoading": "Chargement du quota…",
+        "quotaUnavailable": "Quota indisponible — ↻ pour réessayer",
+        "dataPointNa": "Point de données indisponible",
+        "needsPicoraV017": "Nécessite Picora v0.17.1+",
+        "notActivated": "Vous n’avez pas encore activé de plan Picora.",
+        "activate": "Activer le plan",
+        "removeConfirmTitle": "Supprimer le compte Picora",
+        "removeConfirmBody": "Va supprimer : {email}",
+        "cascadeDefault": "Ceci est le compte Picora par défaut — un nouveau défaut sera choisi automatiquement.",
+        "cascadeImageHost": "Ceci est l’hôte d’images par défaut — le défaut sera effacé.",
+        "cascadeKbBindings": "{n} bases de connaissances seront déliées. Les données cloud sont conservées sur Picora.",
+        "cloudDataPreserved": "Seule la configuration locale sera supprimée. Les données cloud sur Picora sont conservées.",
+        "confirmRemove": "Supprimer"
+      },
+      "editTitle": "Modifier le compte Picora",
+      "kbSync": {
+        "title": "Synchronisation KB",
+        "openManager": "Ouvrir les paramètres de sync KB",
+        "empty": "Aucune base de connaissances pour le moment.",
+        "missingTarget": "(cible manquante)",
+        "never": "Jamais synchronisé",
+        "error": "erreur de sync",
+        "unboundLabel": "Non lié à Picora :",
+        "bindAction": "Lier au défaut"
+      },
+      "resources": {
+        "title": "Navigateur de ressources cloud",
+        "tabs": {
+          "image": "Images",
+          "audio": "Audio",
+          "video": "Vidéos"
+        }
+      },
+      "advanced": {
+        "title": "Avancé",
+        "imgDomain": "Domaine d’insertion par défaut",
+        "imgDomainHint": "Utilisé comme préfixe d’URL public lors de l’insertion d’images Picora.",
+        "rewriteBase64": "Réécrire automatiquement les images base64 en CDN Picora lors du téléchargement",
+        "sidebarPin": "Afficher le raccourci Picora dans la barre latérale principale",
+        "debug": "Activer la journalisation de débogage"
+      },
+      "banner": "Nouvel onglet Picora. Tous les paramètres Picora ont été déplacés ici ; l’onglet d’hébergement d’images reste accessible.",
+      "bannerDismiss": "Compris",
+      "welcome": {
+        "title": "Bienvenue sur Picora — un foyer pour vos médias",
+        "body": "Hébergez images, audio, vidéo et documents Markdown sur votre propre compte Picora. Synchronisez les bases de connaissances entre appareils et insérez des ressources cloud depuis l’éditeur en un clic.",
+        "oneClick": "Import en un clic (recommandé)",
+        "manual": "Ajouter manuellement",
+        "or": "ou",
+        "register": "Pas de compte ? Inscrivez-vous sur Picora"
+      },
+      "quota": {
+        "images": "Images",
+        "docs": "Documents",
+        "audio": "Audio",
+        "videos": "Vidéos",
+        "kbs": "KBs"
+      },
+      "plan": {
+        "none": "Inactif",
+        "trial": "Essai",
+        "pro": "Pro",
+        "pro_plus": "Pro+"
+      }
     }
   },
   "titlebar": {
@@ -265,7 +359,8 @@
       "testConnection": "Tester la connexion",
       "testing": "Test en cours...",
       "connected": "Connecté !",
-      "failed": "Échec"
+      "failed": "Échec",
+      "testFailed": "Échec du test de connexion"
     },
     "providers": {
       "claude": "Anthropic Claude",
@@ -337,7 +432,14 @@
       "emptyResponseContinue": "\n\nVotre dernier message était : \"{lastMessage}\"\nVeuillez continuer à partir de là.",
       "truncationContinue": "Votre réponse précédente a été coupée en raison de la limite de longueur de sortie. Le texte ci-dessus a été enregistré. Veuillez maintenant terminer la tâche en effectuant les appels d'outils nécessaires. Ne répétez pas le contenu — utilisez-le directement dans les arguments de l'outil.",
       "continuationPrompt": "Veuillez continuer et effectuer les appels d'outils nécessaires pour terminer la tâche. Ne répétez pas ce qui a déjà été dit — procédez directement aux appels d'outils.",
-      "mcpToolPrompt": "Utilisez l'outil {toolName} (depuis {serverName})"
+      "mcpToolPrompt": "Utilisez l'outil {toolName} (depuis {serverName})",
+      "reviewContext": "---\nThis document has {count} pending review comments:\n{items}\n---",
+      "reviewContextItem": "[Line {line}] @{author}: \"{text}\"",
+      "reviewContextItemUnanchored": "[Position lost] @{author}: \"{text}\"",
+      "aiReviewRequest": "Please review the current document and identify issues across four dimensions: logic, expression, fact, and structure. Use the write_ai_reviews tool to return up to 10 structured review comments. For each, provide markedText (an exact text fragment from the document being reviewed), comment (your review), and dimension (one of: logic, expression, fact, structure). If your model does not support tool calls, return the same data as a JSON code block.",
+      "aiImproveRequest": "The document has {count} pending review comments:\n{items}\n\nPlease apply these reviews and improve the document. Use the update_editor_content tool to write the improved full document. Preserve formatting and original structure where possible.",
+      "aiSummaryRequest": "The document has {count} review comments (including resolved):\n{items}\n\nPlease summarize them across four dimensions (logic / expression / fact / structure), and rate the priority (high / medium / low) for each dimension.",
+      "aiRespondRequest": "The document contains this text:\n\"{markedText}\"\n\nThe reviewer commented:\n\"{commentText}\"\n\nPlease provide specific suggestions for revision. Do NOT modify the document — give suggestions only."
     },
     "detection": {
       "intentPrefixes": "Je vais|Je dois|Je devrais|Laissez-moi|D'abord|Maintenant|Ensuite",
@@ -349,7 +451,9 @@
     "sections": {
       "imageAI": "IA image",
       "imageAIHint": "Configurations du modèle de génération d'images IA."
-    }
+    },
+    "generating": "Génération…",
+    "notConfigured": "Fournisseur IA non configuré"
   },
   "mcp": {
     "title": "Serveurs MCP",
@@ -672,7 +776,48 @@
     "uploadImageSuccess": "Téléversé : {name}",
     "uploadImageFailed": "Échec : {name} — {error}",
     "uploadAllComplete": "Téléversement terminé : {success}/{total} réussis",
-    "uploadNoConfig": "Veuillez d'abord configurer un hébergeur d'images dans les Paramètres"
+    "uploadNoConfig": "Veuillez d'abord configurer un hébergeur d'images dans les Paramètres",
+    "insertCloudImage": "Insérer une image cloud…",
+    "insertCloudAudio": "Insérer un audio cloud…",
+    "insertCloudVideo": "Insérer une vidéo cloud…"
+  },
+  "cloudPicker": {
+    "titleImage": "Insérer une image cloud",
+    "titleAudio": "Insérer un audio cloud",
+    "titleVideo": "Insérer une vidéo cloud",
+    "noTargets": "Aucune cible Picora configurée. Veuillez en ajouter une dans Paramètres → Base de connaissances.",
+    "scopeThisKb": "Cette base de connaissances",
+    "scopeAll": "Tous les fichiers",
+    "scopeNoKb": "Sans base de connaissances",
+    "tabRecent": "Récents",
+    "tabAll": "Tous",
+    "tabFavorites": "Favoris",
+    "searchPlaceholder": "Rechercher…",
+    "gridView": "Vue grille",
+    "listView": "Vue liste",
+    "errorTitle": "Échec du chargement",
+    "lastCache": "Dernier chargement",
+    "emptyTitle": "Aucun fichier trouvé",
+    "emptySub": "Ajustez les filtres ou téléversez des fichiers vers Picora.",
+    "loadingMore": "Chargement…",
+    "selectedCount": "{n} sélectionné(s)",
+    "insertAsHtml": "Insérer en HTML",
+    "insertBtn": "Insérer",
+    "processing": "En cours",
+    "public": "Public",
+    "private": "Privé",
+    "favorite": "Favori",
+    "copyUrl": "Copier l'URL",
+    "privacyTitle": "Fichiers privés sélectionnés",
+    "privacyDesc": "{n} fichier(s) sont privés et peuvent ne pas être visibles publiquement.",
+    "privacyWarn": "Rendre les fichiers publics permettra à quiconque possédant le lien de les consulter.",
+    "suppressPrivacy": "Ne plus avertir",
+    "makePublicInsert": "Rendre public et insérer",
+    "insertAnyway": "Insérer quand même",
+    "copyMarkdown": "Copier Markdown",
+    "emptyKbScopedSub": "Aucun fichier dans la KB actuelle. Les téléversements antérieurs ne sont peut-être pas associés à cette KB.",
+    "switchScopeAll": "Afficher tous les fichiers",
+    "urlMissing": "URL du média manquante — l’élément n’est peut-être pas encore prêt."
   },
   "search": {
     "findPlaceholder": "Rechercher...",
@@ -1612,6 +1757,199 @@
     "forceUnlock": "Forcer le déverrouillage",
     "selectTextFirst": "Veuillez d'abord sélectionner du texte",
     "sourceModeLimitHint": "Les révisions ne sont disponibles qu'en mode visuel",
-    "defaultComment": ""
+    "defaultComment": "",
+    "aiImprove": "AI Improve",
+    "aiSummary": "AI Summary",
+    "aiReview": "AI Review",
+    "aiRespond": "AI Suggest",
+    "aiInProgress": "AI is analyzing the document…",
+    "aiCancel": "Cancel",
+    "aiNoResults": "AI generated no review suggestions",
+    "aiInvalidFiltered": "{count} review(s) had invalid format and were skipped",
+    "aiAuthorBadge": "AI",
+    "aiHintFromTool": "AI returned reviews via tool call",
+    "aiHintFromJson": "AI returned reviews via JSON fallback",
+    "aiHintFailed": "This model does not support AI Review. Switch to Claude / GPT-4 / Gemini.",
+    "aiDisclaimerTitle": "Enable AI Review — Data Use Notice",
+    "aiDisclaimerBody": "AI Review will send the entire current document and all review comments to your selected AI provider:",
+    "aiDisclaimerBodyDetails": "Reviews may include team members' names and internal discussion. Please confirm this knowledge base is suitable for cloud processing.",
+    "aiDisclaimerLocalHint": "Want to keep everything local? Switch to an Ollama provider — all processing happens on this machine.",
+    "aiDisclaimerSwitchLocal": "Switch to local provider",
+    "aiDisclaimerConfirm": "I understand, enable AI Review",
+    "aiDisclaimerDontAsk": "Don't ask again for this provider",
+    "dimensionLogic": "Logic",
+    "dimensionExpression": "Expression",
+    "dimensionFact": "Fact",
+    "dimensionStructure": "Structure",
+    "aiInflightCancelled": "AI Review cancelled because the active file changed",
+    "aiMergeBlocked": "Repository is in the middle of a merge. Resolve conflicts first."
+  },
+  "history": {
+    "tabLabel": "History",
+    "title": "Commit history of {filename}",
+    "exportBtn": "Export",
+    "viewSnapshot": "View Snapshot",
+    "compareWithCurrent": "Compare with Current",
+    "compareWithPrev": "Compare with Previous",
+    "backToList": "← Back to History",
+    "blameToggle": "Show Author Tracking",
+    "blameNotSupportedVisual": "Blame is only available in Source Mode. Press ⌘/ to switch.",
+    "blameUncommitted": "uncommitted",
+    "loading": "Loading…",
+    "showingLast": "Showing the last {count} commits",
+    "renamedFrom": "↪ from {oldPath}",
+    "empty": {
+      "noGit": "This knowledge base is not linked to Git",
+      "noGitHint": "History requires Git sync support",
+      "noGitAction": "Link a Git repository",
+      "noCommits": "This file has no commit history yet",
+      "noCommitsHint": "Save and sync to Git to view history",
+      "noCommitsAction": "Save and commit now",
+      "error": "Failed to load Git history",
+      "errorHint": "Please check repository status",
+      "errorRetry": "Retry"
+    },
+    "snapshot": {
+      "label": "Snapshot @ {hash}",
+      "notice": "This is a historical snapshot (read-only)",
+      "copy": "Copy snapshot",
+      "compare": "Compare with Current",
+      "restore": "Restore this version",
+      "confirmRestore": "Restoring will replace the editor content with this snapshot. After saving, a new commit will be created. Continue?"
+    },
+    "dirtyConfirm": "The current document has unsaved changes. Continue anyway?",
+    "continueAnyway": "Continue",
+    "saveFirst": "Save first",
+    "cancel": "Cancel",
+    "mergeBlocked": "Repository is in the middle of a merge. Resolve conflicts first."
+  },
+  "diff": {
+    "title": "{filename} · {hash1} ↔ {hash2}",
+    "backToEdit": "← Back to Edit",
+    "noChanges": "The two versions are identical — no differences",
+    "binaryFile": "This version contains binary content and cannot be displayed as text diff",
+    "addedLine": "Added line",
+    "deletedLine": "Deleted line",
+    "statsLine": "+{added} added · -{deleted} deleted",
+    "leftLabel": "Old",
+    "rightLabel": "New"
+  },
+  "audit": {
+    "reportTitle": "Document Audit Report: {filename}",
+    "generatedAt": "Generated at",
+    "knowledgeBase": "Knowledge base",
+    "gitRepo": "Git repository",
+    "branch": "branch",
+    "commitHistory": "Commit History",
+    "colTime": "Time",
+    "colAuthor": "Author",
+    "colSummary": "Summary",
+    "reviewSummary": "Review Summary",
+    "summaryStats": "Total {total} review(s); {resolved} resolved, {wontfix} won't fix, {open} open",
+    "resolvedSection": "Resolved ({count})",
+    "wontfixSection": "Won't Fix ({count})",
+    "openSection": "Open ({count})",
+    "resolvedNote": "resolved at {date} by {user}",
+    "wontfixNote": "marked won't fix at {date} by {user}",
+    "noReviews": "No reviews recorded",
+    "showingLastCommits": "(Showing only the last {count} commits)",
+    "notGitBound": "Not linked to a Git repository",
+    "lineN": "Line {n}",
+    "unanchoredLabel": "Position lost",
+    "exportDialogTitle": "Export Audit Report",
+    "exportFilename": "Filename",
+    "exportFormat": "Format",
+    "formatMarkdown": "Markdown (.md)",
+    "includeHistory": "Commit history (last {count} commits)",
+    "includeReviews": "Review summary ({total} reviews, {resolved} resolved)",
+    "anonymizeAuthors": "Anonymize authors (@{name} → @reviewer-1)",
+    "includeFullDiscussion": "Include full review discussion (default: summary only)",
+    "privacyNotice": "The report will be saved locally. No data is sent to any external service.",
+    "cancel": "Cancel",
+    "save": "Save…"
+  },
+  "kbSync": {
+    "card": {
+      "bind": "☁ Picora Sync",
+      "settings": "☁ Bound · Settings"
+    },
+    "bindDialog": {
+      "title": "Bind Picora Sync — {name}",
+      "step": "Step {current} / {total}",
+      "step1Title": "Select Picora account",
+      "step2Title": "Link or create cloud KB",
+      "step3Title": "Sync strategy",
+      "step4Title": "Preview first sync (dry-run)",
+      "noPicora": "No Picora accounts found. Please add one in Settings → Hosting first.",
+      "loadingKbs": "Loading cloud KBs…",
+      "createNew": "Create new cloud KB",
+      "linkExisting": "Link to existing cloud KB",
+      "kbName": "Name",
+      "kbSlug": "Slug (URL-friendly ID)",
+      "selectKb": "Select a cloud KB…",
+      "back": "← Back",
+      "next": "Next →",
+      "startSync": "Start Sync ✓",
+      "binding": "Binding…",
+      "previewing": "Scanning local files…",
+      "willUpload": "↑ Upload to cloud ({n} items)",
+      "willDownload": "↓ Download to local ({n} items)",
+      "willDelete": "⊘ Delete ({n} items)",
+      "skipped": "⚠ Skipped — exceeds size limit ({n} items)",
+      "firstBindHint": "No conflicts detected. All local files will be uploaded.",
+      "confirmLabel": "I understand — my local KB will be the initial authority",
+      "linkExistingInstead": "Lier une KB existante à la place"
+    },
+    "strategy": {
+      "mode": "Trigger",
+      "modeManual": "Manual only",
+      "modeOnSave": "On save (3s delay)",
+      "modeInterval": "Scheduled",
+      "modeStartup": "On startup & close",
+      "interval60": "Every 1 minute",
+      "interval300": "Every 5 minutes",
+      "interval900": "Every 15 minutes",
+      "interval1800": "Every 30 minutes",
+      "scope": "Scope",
+      "scopeMdOnly": "Markdown files only (.md / .markdown)",
+      "scopeMdRules": "Markdown + rule files (MORAYA.md / CLAUDE.md / .mdx)",
+      "scopeAll": "All text files including hidden directories",
+      "conflict": "Conflict policy",
+      "conflictPrompt": "Prompt me (recommended)",
+      "conflictLocal": "Prefer local",
+      "conflictRemote": "Prefer remote"
+    },
+    "settings": {
+      "globalSwitch": "Enable KB auto-sync on this machine",
+      "globalSwitchHint": "When off, all scheduled syncs are paused. Manual \"Sync Now\" still works.",
+      "lastSync": "Last sync",
+      "never": "Never",
+      "unbound": "Not bound to Picora",
+      "syncNow": "Sync Now",
+      "syncing": "Syncing…",
+      "editStrategy": "Edit strategy",
+      "unbind": "Unbind",
+      "unbindTitle": "Unbind Picora Sync",
+      "unbindConfirm": "Remove Picora sync binding for \"{name}\"? Cloud data is preserved.",
+      "viewConflicts": "Conflicts",
+      "bind": "Bind to Picora",
+      "noKbs": "No knowledge bases added yet."
+    },
+    "conflict": {
+      "title": "Conflict Resolution — {name} ({n} items)",
+      "noConflicts": "No conflicts to resolve.",
+      "local": "Local version",
+      "remote": "Cloud version",
+      "noPreview": "(no preview)",
+      "keepLocal": "Keep local (overwrite cloud)",
+      "keepRemote": "Pull cloud (overwrite local)",
+      "keepBoth": "Keep both (cloud copy saved as .conflict.md)",
+      "skip": "Skip",
+      "applyOne": "Apply this",
+      "applyAll": "Apply all selected ({n})"
+    },
+    "statusbar": {
+      "tooltip": "KB Sync status — click for details"
+    }
   }
 }

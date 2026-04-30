@@ -13,8 +13,10 @@
   import VoiceSettings from './VoiceSettings.svelte';
   import PluginsPanel from './PluginsPanel.svelte';
   import KBIndexSettings from './KBIndexSettings.svelte';
+  import KbSyncSettings from './KbSyncSettings.svelte';
+  import PicoraSettingsTab from './picora-tab/PicoraSettingsTab.svelte';
 
-  type Tab = 'general' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'permissions' | 'voice' | 'plugins' | 'knowledge-base';
+  type Tab = 'general' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'permissions' | 'voice' | 'plugins' | 'knowledge-base' | 'kb-sync' | 'picora';
 
   let {
     onClose,
@@ -156,6 +158,13 @@
       groupKey: 'settings.groups.knowledgeBase',
       items: [
         { key: 'knowledge-base', icon: '📚', labelKey: 'settings.tabs.knowledgeBase' },
+        { key: 'kb-sync', icon: '☁', labelKey: 'settings.tabs.kbSync' },
+      ],
+    },
+    {
+      groupKey: 'settings.groups.picora',
+      items: [
+        { key: 'picora', icon: '☁', labelKey: 'settings.tabs.picora' },
       ],
     },
     {
@@ -223,7 +232,7 @@
         <div class="content-body">
           <!-- Tab descriptions for select tabs -->
           {#if activeTab === 'image'}
-            <p class="tab-desc">{$t('settings.tabDesc.image')}</p>
+            <p class="tab-desc">{$t('settings.tabDesc.image')} {$t('settings.imageHost.subtitleSuffix')}</p>
           {:else if activeTab === 'publish'}
             <p class="tab-desc">{$t('settings.tabDesc.publish')}</p>
           {/if}
@@ -233,11 +242,18 @@
           <div class="tab-pane" class:active={activeTab === 'image-ai'}><ImageAISettings /></div>
         <div class="tab-pane" class:active={activeTab === 'mcp'}><MCPPanel /></div>
         <div class="tab-pane" class:active={activeTab === 'image'}>
-          <ImageHostingSettings onImportPicora={openPicoraManualImport} />
+          <ImageHostingSettings
+            onImportPicora={openPicoraManualImport}
+            onJumpToPicora={() => activeTab = 'picora'}
+          />
         </div>
         <div class="tab-pane" class:active={activeTab === 'publish'}><PublishSettings /></div>
         <div class="tab-pane" class:active={activeTab === 'voice'}><VoiceSettings /></div>
         <div class="tab-pane" class:active={activeTab === 'knowledge-base'}><KBIndexSettings onOpenKBManager={() => showKBManager = true} /></div>
+        <div class="tab-pane" class:active={activeTab === 'kb-sync'}><KbSyncSettings /></div>
+        <div class="tab-pane" class:active={activeTab === 'picora'}>
+          <PicoraSettingsTab onJumpToKbSync={() => activeTab = 'kb-sync'} />
+        </div>
         <div class="tab-pane" class:active={activeTab === 'plugins'}><PluginsPanel /></div>
 
         {#if activeTab === 'general'}
@@ -299,6 +315,20 @@
                 />
                 {$t('settings.rememberLastFolder')}
               </label>
+            </div>
+
+            <div class="setting-group">
+              <label class="setting-label">
+                <input
+                  type="checkbox"
+                  checked={$settingsStore.showCloudInsertEntries}
+                  onchange={(e: Event) => {
+                    settingsStore.update({ showCloudInsertEntries: (e.target as HTMLInputElement).checked });
+                  }}
+                />
+                {$t('settings.showCloudInsertEntries')}
+              </label>
+              <div class="setting-desc">{$t('settings.showCloudInsertEntriesDesc')}</div>
             </div>
 
             <div class="setting-group">

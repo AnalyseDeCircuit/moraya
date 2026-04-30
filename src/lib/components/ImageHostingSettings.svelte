@@ -4,8 +4,10 @@
   import { settingsStore } from '$lib/stores/settings-store';
   import type { ImageHostTarget, ImageHostProvider, GitHubCdnMode } from '$lib/services/image-hosting';
   import { createDefaultImageHostTarget, targetToConfig, uploadImage, isObjectStorageProvider } from '$lib/services/image-hosting';
+  import { invoke } from '@tauri-apps/api/core';
+  import { PICORA_DEFAULT_API_BASE } from '$lib/services/image-hosting';
 
-  let { onImportPicora }: { onImportPicora?: () => void } = $props();
+  let { onImportPicora, onJumpToPicora }: { onImportPicora?: () => void; onJumpToPicora?: () => void } = $props();
 
   const tr = $t;
 
@@ -217,21 +219,34 @@
     if (target.token) editingTarget.githubToken = target.token;
   }
 
+  function picoraApiBaseFromTarget(target: ImageHostTarget): string {
+    const url = (target.picoraApiUrl || '').trim();
+    if (!url) return PICORA_DEFAULT_API_BASE;
+    return url.replace(/\/v1\/images\/?$/, '').replace(/\/$/, '') || PICORA_DEFAULT_API_BASE;
+  }
+
   async function handleTestUpload(target: ImageHostTarget) {
     testStatus[target.id] = 'testing';
     testError[target.id] = '';
     testStatus = { ...testStatus };
     try {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1;
-      canvas.height = 1;
-      const ctx = canvas.getContext('2d')!;
-      ctx.fillStyle = '#ff0000';
-      ctx.fillRect(0, 0, 1, 1);
-      const blob = await new Promise<Blob>((resolve) =>
-        canvas.toBlob((b) => resolve(b!), 'image/png')
-      );
-      await uploadImage(blob, targetToConfig(target));
+      if (target.provider === 'picora') {
+        await invoke('test_picora_connection', {
+          apiBase: picoraApiBaseFromTarget(target),
+          apiKey: target.picoraApiKey || '',
+        });
+      } else {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1;
+        canvas.height = 1;
+        const ctx = canvas.getContext('2d')!;
+        ctx.fillStyle = '#ff0000';
+        ctx.fillRect(0, 0, 1, 1);
+        const blob = await new Promise<Blob>((resolve) =>
+          canvas.toBlob((b) => resolve(b!), 'image/png')
+        );
+        await uploadImage(blob, targetToConfig(target));
+      }
       testStatus[target.id] = 'success';
     } catch (e: unknown) {
       testStatus[target.id] = 'failed';
@@ -531,7 +546,12 @@
                       <span class="default-badge">{tr('imageHost.default')}</span>
                     {/if}
                   </span>
-                  <span class="target-type">{providerLabel(target.provider)}</span>
+                  <span class="target-type">
+                    {providerLabel(target.provider)}
+                    {#if target.provider === 'picora' && target.picoraUserEmail}
+                      <span class="picora-summary"> · {target.picoraUserEmail}</span>
+                    {/if}
+                  </span>
                 </div>
               </div>
               <div class="target-actions">
@@ -539,21 +559,34 @@
                   onclick={() => setDefault(target.id)} title={tr('imageHost.setDefault')}>
                   {target.id === defaultId ? '★' : '☆'}
                 </button>
-                <button class="action-btn"
-                  class:testing={testStatus[target.id] === 'testing'}
-                  class:success={testStatus[target.id] === 'success'}
-                  class:failed={testStatus[target.id] === 'failed'}
-                  onclick={() => handleTestUpload(target)}
-                  disabled={testStatus[target.id] === 'testing'}>
-                  {#if testStatus[target.id] === 'testing'}...
-                  {:else if testStatus[target.id] === 'success'}✓
-                  {:else if testStatus[target.id] === 'failed'}✗
-                  {:else}⚡{/if}
-                </button>
-                <button class="action-btn" onclick={() => editTarget(target)}>✎</button>
-                <button class="action-btn danger" onclick={() => deleteTarget(target.id)}>✕</button>
+                {#if target.provider !== 'picora'}
+                  <button class="action-btn"
+                    class:testing={testStatus[target.id] === 'testing'}
+                    class:success={testStatus[target.id] === 'success'}
+                    class:failed={testStatus[target.id] === 'failed'}
+                    onclick={() => handleTestUpload(target)}
+                    disabled={testStatus[target.id] === 'testing'}>
+                    {#if testStatus[target.id] === 'testing'}...
+                    {:else if testStatus[target.id] === 'success'}✓
+                    {:else if testStatus[target.id] === 'failed'}✗
+                    {:else}⚡{/if}
+                  </button>
+                  <button class="action-btn" onclick={() => editTarget(target)}>✎</button>
+                  <button class="action-btn danger" onclick={() => deleteTarget(target.id)}>✕</button>
+                {/if}
               </div>
             </div>
+            {#if target.provider === 'picora'}
+              <div class="picora-moved-hint">
+                <span class="info-icon">ⓘ</span>
+                <span class="hint-text">{tr('settings.imageHost.picora.movedHint')}</span>
+                {#if onJumpToPicora}
+                  <button class="jump-btn" onclick={onJumpToPicora}>
+                    → {tr('settings.imageHost.picora.jumpToTab')}
+                  </button>
+                {/if}
+              </div>
+            {/if}
             {#if testError[target.id] && testStatus[target.id] === 'failed'}
               <p class="test-upload-error">{testError[target.id]}</p>
             {/if}
@@ -1168,4 +1201,28 @@
   .input-required:focus {
     border-color: #dc3545;
   }
+
+  /* v0.37.0: Picora card "moved to Picora tab" hint */
+  .picora-moved-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    padding: 0.35rem 0.5rem;
+    background: color-mix(in srgb, var(--accent-color) 6%, transparent);
+    border-radius: 4px;
+    font-size: var(--font-size-xs);
+  }
+  .info-icon { color: var(--accent-color); }
+  .hint-text { flex: 1; color: var(--text-secondary); }
+  .jump-btn {
+    background: transparent;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    padding: 0;
+    font-size: var(--font-size-xs);
+  }
+  .jump-btn:hover { text-decoration: underline; }
+  .picora-summary { color: var(--text-muted); font-family: var(--font-mono, monospace); }
 </style>

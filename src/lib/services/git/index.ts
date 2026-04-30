@@ -12,6 +12,9 @@ export {
 	gitSyncStatus,
 	gitSync,
 	gitHeadCommit,
+	gitShowFile,
+	gitBlame,
+	gitInMerge,
 	setGitToken,
 	getGitToken,
 	deleteGitToken,
@@ -28,6 +31,7 @@ export type {
 	GitLogEntry,
 	GitSyncStatus,
 	GitUserInfo,
+	GitBlameEntry,
 	GitConfig,
 	GitSyncPhase,
 } from './types';

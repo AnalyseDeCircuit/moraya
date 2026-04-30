@@ -5,6 +5,9 @@
   import { t } from '$lib/i18n';
   import { checkGitInstalled, deleteGitToken } from '$lib/services/git';
   import GitBindDialog from './GitBindDialog.svelte';
+  import KbPicoraBindDialog from './KbPicoraBindDialog.svelte';
+  import { kbSyncStore } from '$lib/services/kb-sync/sync-service';
+  import type { KbSyncState } from '$lib/services/kb-sync/types';
 
   let { onClose }: { onClose: () => void } = $props();
 
@@ -14,6 +17,11 @@
   let editInputEl = $state<HTMLInputElement | null>(null);
   let gitAvailable = $state<boolean | null>(null);
   let bindingKb = $state<KnowledgeBase | null>(null);
+  let picoraBindingKb = $state<KnowledgeBase | null>(null);
+  let syncStates = $state<Map<string, KbSyncState>>(new Map());
+
+  const unsubSync = kbSyncStore.subscribe(map => { syncStates = map; });
+  onDestroy(() => { unsubSync(); });
 
   // Top-level store subscription — do NOT wrap in $effect().
   // Svelte 5 $effect tracks reads in subscribe callbacks, causing infinite loops.
@@ -100,6 +108,26 @@
   function shortenUrl(url: string): string {
     return url.replace(/^https?:\/\//, '').replace(/\.git$/, '');
   }
+
+  function picoraButtonLabel(kb: KnowledgeBase): string {
+    // Unbound: icon only — full label lives in the tooltip (matches sibling icon buttons).
+    if (!kb.picoraBinding) return '☁';
+    const state = syncStates.get(kb.id);
+    if (state?.status === 'conflict') return `☁ ⚠ ${state.conflictCount}`;
+    if (state?.status === 'error') return '☁ ✗';
+    if (state?.status === 'syncing') return '☁ ⟳';
+    return `☁ ${kb.picoraBinding.picoraKbName.slice(0, 12)}`;
+  }
+
+  function picoraButtonClass(kb: KnowledgeBase): string {
+    if (!kb.picoraBinding) return '';
+    const state = syncStates.get(kb.id);
+    if (!state) return 'picora-ok';
+    if (state.status === 'conflict') return 'picora-warn';
+    if (state.status === 'error') return 'picora-err';
+    if (state.status === 'syncing') return 'picora-sync';
+    return 'picora-ok';
+  }
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -148,6 +176,13 @@
                 {/if}
               </div>
               <div class="kb-list-actions">
+                <button
+                  class="kb-action-btn kb-picora-btn {picoraButtonClass(kb)}"
+                  onclick={() => { picoraBindingKb = kb; }}
+                  title={kb.picoraBinding ? $t('kbSync.card.settings') : $t('kbSync.card.bind')}
+                >
+                  {picoraButtonLabel(kb)}
+                </button>
                 {#if kb.git}
                   <button class="kb-action-btn" onclick={() => unbindGit(kb)} title={$t('git.unbind')}>
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M4.28 3.22a.75.75 0 00-1.06 1.06L6.94 8l-3.72 3.72a.75.75 0 101.06 1.06L8 9.06l3.72 3.72a.75.75 0 101.06-1.06L9.06 8l3.72-3.72a.75.75 0 00-1.06-1.06L8 6.94 4.28 3.22z"/></svg>
@@ -180,6 +215,14 @@
 
 {#if bindingKb}
   <GitBindDialog kb={bindingKb} onClose={() => { bindingKb = null; }} />
+{/if}
+
+{#if picoraBindingKb}
+  <KbPicoraBindDialog
+    kb={picoraBindingKb}
+    onClose={() => { picoraBindingKb = null; }}
+    onBound={() => { picoraBindingKb = null; }}
+  />
 {/if}
 
 <style>
@@ -369,4 +412,24 @@
   .kb-git-info svg {
     flex-shrink: 0;
   }
+
+  .kb-picora-btn {
+    font-size: var(--font-size-xs);
+    padding: 0 0.4rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Override the fixed 1.5rem width inherited from .kb-action-btn so the bound-state
+       label (`☁ <kbName>`) is not truncated. Unbound state shows icon-only via JS. */
+    width: auto;
+    min-width: 1.5rem;
+    max-width: 140px;
+  }
+
+  .kb-picora-btn.picora-ok { color: var(--color-success, #38a169); border-color: var(--color-success, #38a169) !important; }
+  .kb-picora-btn.picora-warn { color: var(--warning-color, #e8a838); border-color: var(--warning-color, #e8a838) !important; }
+  .kb-picora-btn.picora-err { color: var(--color-error, #e53e3e); border-color: var(--color-error, #e53e3e) !important; }
+  .kb-picora-btn.picora-sync { color: var(--accent-color); border-color: var(--accent-color) !important; }
 </style>

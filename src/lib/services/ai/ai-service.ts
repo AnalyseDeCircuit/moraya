@@ -30,6 +30,37 @@ import { refreshFileTree } from '$lib/services/file-watcher';
 import { documentDir } from '@tauri-apps/api/path';
 import { invoke } from '@tauri-apps/api/core';
 import { rendererManager } from '$lib/services/plugin/renderer-manager';
+import { reviewStore } from '$lib/services/review/review-store';
+import { locale as i18nLocale } from '$lib/i18n';
+
+/**
+ * v0.32.0: Detect a likely locale for AI-directed prompts based on document text.
+ * Heuristic: count CJK characters; if > 30% non-ASCII CJK, assume zh-CN; else use UI locale.
+ * AI prompts are matched to the user's content language so the AI responds appropriately.
+ */
+function detectLocaleFromText(text: string): SupportedLocale {
+  if (!text) return get(i18nLocale);
+  // Count Chinese (Han), Japanese, and Korean codepoints
+  const sample = text.slice(0, 500);
+  let cjk = 0;
+  for (const ch of sample) {
+    const cp = ch.codePointAt(0) ?? 0;
+    if (
+      (cp >= 0x4e00 && cp <= 0x9fff) ||  // CJK Unified Ideographs
+      (cp >= 0x3400 && cp <= 0x4dbf) ||  // CJK Extension A
+      (cp >= 0x3040 && cp <= 0x309f) ||  // Hiragana
+      (cp >= 0x30a0 && cp <= 0x30ff) ||  // Katakana
+      (cp >= 0xac00 && cp <= 0xd7af)     // Hangul
+    ) cjk++;
+  }
+  if (cjk / Math.max(sample.length, 1) > 0.3) {
+    // CJK content — pick the UI locale if it's already CJK, else default to zh-CN
+    const cur = get(i18nLocale);
+    if (cur === 'zh-CN' || cur === 'zh-Hant' || cur === 'ja' || cur === 'ko') return cur;
+    return 'zh-CN';
+  }
+  return get(i18nLocale);
+}
 
 const AI_STORE_FILE = 'ai-config.json';
 const KEYCHAIN_AI_PREFIX = 'ai-key:';
@@ -711,6 +742,7 @@ function buildSystemPrompt(
   fallbackDir: string | null,
   documentContext?: string,
   rulesResult?: RulesResult | null,
+  openReviews?: ResolvedReviewLite[],
 ): string {
   // Locals preserved for future tooling hooks (profile replay, bench harness).
   const moduleRoot = config.provider;
@@ -905,7 +937,246 @@ function buildSystemPrompt(
     }
   }
 
+  // v0.32.0 §F1: review context injection — only when there are open/relocated reviews
+  if (openReviews && openReviews.length > 0) {
+    const detected = detectLocaleFromText(documentContext ?? '');
+    const items = openReviews
+      .slice(0, 10) // cap at 10 to bound prompt size
+      .map((r) => {
+        const text = (r.commentText || '').replace(/"/g, '\\"').slice(0, 500);
+        const author = r.author || 'reviewer';
+        if (r.unanchored) {
+          return resolveForLocale('ai.prompts.reviewContextItemUnanchored', detected, {
+            author,
+            text,
+          });
+        }
+        const line = String(r.line ?? 0);
+        return resolveForLocale('ai.prompts.reviewContextItem', detected, {
+          line,
+          author,
+          text,
+        });
+      })
+      .join('\n');
+    prompt +=
+      '\n\n' +
+      resolveForLocale('ai.prompts.reviewContext', detected, {
+        count: String(openReviews.length),
+        items,
+      });
+  }
+
   return prompt;
+}
+
+/**
+ * v0.32.0: Lightweight review snapshot passed into buildSystemPrompt.
+ * Caller should derive this from reviewStore.getState().reviews, filtering
+ * to active (open / relocated) entries and stripping personal email.
+ */
+export interface ResolvedReviewLite {
+  author: string;          // display name only — never authorEmail (P3 privacy)
+  line: number;            // 1-based; 0 when unanchored
+  commentText: string;     // first comment text
+  unanchored: boolean;     // true when anchor is lost
+}
+
+/**
+ * v0.32.0 §F2: trigger one of the 4 review AI shortcuts.
+ *
+ * Constructs a localized prompt from reviewStore data and calls sendChatMessage().
+ * Caller is responsible for opening the AI panel UI before invoking this.
+ *
+ * - 'improve'   → "请根据评审意见改进文档" (calls update_editor_content)
+ * - 'respond'   → 单条评审给修改建议（不修改文档）
+ * - 'summary'   → 按 4 维度分类汇总
+ * - 'ai-review' → 调用 write_ai_reviews tool 生成结构化评审
+ *
+ * Returns the AI's textual response (same shape as sendChatMessage).
+ */
+export async function triggerReviewCommand(
+  command: 'improve' | 'respond' | 'summary' | 'ai-review',
+  context?: { reviewId?: string },
+): Promise<string> {
+  const state = get(reviewStore);
+  const detected = detectLocaleFromText(editorStore.getState().content ?? '');
+  const allReviews = state.reviews;
+  const openReviews = allReviews.filter(
+    (r) => r.status === 'open' || r.status === 'unanchored',
+  );
+
+  // v0.32.1 §F7: merge state guard for write-style commands
+  // Read-only summarize / respond don't trigger this guard.
+  if (command === 'improve' || command === 'ai-review') {
+    const filesState = filesStore.getState();
+    const kb = filesState.knowledgeBases.find(
+      (k) => k.id === filesState.activeKnowledgeBaseId,
+    );
+    if (kb?.git) {
+      try {
+        const { gitInMerge } = await import('$lib/services/git/git-service');
+        if (await gitInMerge(kb.path)) {
+          throw new Error(
+            resolveForLocale('review.aiMergeBlocked', detected),
+          );
+        }
+      } catch (e) {
+        // re-throw the merge-blocked error; swallow probe failures
+        if (e instanceof Error && e.message.includes(
+          resolveForLocale('review.aiMergeBlocked', detected).slice(0, 10),
+        )) {
+          throw e;
+        }
+      }
+    }
+  }
+
+  switch (command) {
+    case 'improve': {
+      if (openReviews.length === 0) {
+        throw new Error('No open reviews to apply');
+      }
+      const items = openReviews
+        .slice(0, 20)
+        .map((r) => {
+          const text = (r.comments?.[0]?.text ?? '').replace(/"/g, '\\"').slice(0, 500);
+          const author = r.author || 'reviewer';
+          if (r.anchorState === 'unanchored' || r.status === 'unanchored') {
+            return resolveForLocale('ai.prompts.reviewContextItemUnanchored', detected, {
+              author,
+              text,
+            });
+          }
+          return resolveForLocale('ai.prompts.reviewContextItem', detected, {
+            line: String(r.anchor?.originalLine ?? 0),
+            author,
+            text,
+          });
+        })
+        .join('\n');
+      const prompt = resolveForLocale('ai.prompts.aiImproveRequest', detected, {
+        count: String(openReviews.length),
+        items,
+      });
+      return sendChatMessage(prompt);
+    }
+
+    case 'respond': {
+      if (!context?.reviewId) {
+        throw new Error('reviewId is required for respond command');
+      }
+      const review = allReviews.find((r) => r.id === context.reviewId);
+      if (!review) {
+        throw new Error(`Review not found: ${context.reviewId}`);
+      }
+      reviewStore.setActive(review.id);
+      const prompt = resolveForLocale('ai.prompts.aiRespondRequest', detected, {
+        markedText: (review.anchor?.markedText ?? '').slice(0, 500),
+        commentText: (review.comments?.[0]?.text ?? '').slice(0, 500),
+      });
+      return sendChatMessage(prompt);
+    }
+
+    case 'summary': {
+      const all = allReviews;
+      if (all.length === 0) {
+        throw new Error('No reviews to summarize');
+      }
+      const items = all
+        .slice(0, 30)
+        .map((r) => {
+          const text = (r.comments?.[0]?.text ?? '').slice(0, 500);
+          const author = r.author || 'reviewer';
+          const line = r.anchor?.originalLine ?? 0;
+          const status = r.status;
+          return `[${status}] [Line ${line}] @${author}: "${text}"`;
+        })
+        .join('\n');
+      const prompt = resolveForLocale('ai.prompts.aiSummaryRequest', detected, {
+        count: String(all.length),
+        items,
+      });
+      return sendChatMessage(prompt);
+    }
+
+    case 'ai-review': {
+      const prompt = resolveForLocale('ai.prompts.aiReviewRequest', detected);
+      // v0.32.1 §F3: snapshot the active file at request start so a late
+      // tool-call landing after a file switch can be detected and rejected.
+      const snapFilePath = editorStore.getState().currentFilePath;
+      const docCtx = editorStore.getState().content ?? '';
+      reviewAiInflightFilePath = snapFilePath;
+      let response: string;
+      try {
+        response = await sendChatMessage(prompt, docCtx);
+      } finally {
+        reviewAiInflightFilePath = null;
+      }
+
+      // v0.32.1 §F1: JSON code block fallback for providers without tool_call.
+      // Detect by checking whether the latest assistant message has any toolCalls.
+      const aiState = aiStore.getState();
+      const lastMsg = aiState.chatHistory[aiState.chatHistory.length - 1];
+      const usedTool =
+        lastMsg?.role === 'assistant' &&
+        Array.isArray(lastMsg.toolCalls) &&
+        lastMsg.toolCalls.some((tc) => tc.name === 'write_ai_reviews');
+      if (!usedTool) {
+        const parsed = tryParseAiReviewsJson(response);
+        if (parsed && parsed.reviews && parsed.reviews.length > 0) {
+          // Mid-flight file switch defence — re-check before writing
+          if (
+            snapFilePath !== editorStore.getState().currentFilePath
+          ) {
+            return resolveForLocale('review.aiInflightCancelled', detected);
+          }
+          const { executeInternalTool } = await import('./internal-tools');
+          await executeInternalTool({
+            name: 'write_ai_reviews',
+            arguments: { reviews: parsed.reviews },
+            id: 'jsonfallback',
+          });
+        }
+      }
+      return response;
+    }
+  }
+}
+
+/**
+ * v0.32.1: snapshot of the active file when an AI review command is in flight.
+ * Read by handleWriteAiReviews to detect file-switch-during-flight and bail.
+ */
+export let reviewAiInflightFilePath: string | null = null;
+export function getReviewAiInflightFilePath(): string | null {
+  return reviewAiInflightFilePath;
+}
+
+/**
+ * v0.32.1 §F1: extract a JSON code block from raw AI response text.
+ * Accepts both ` ```json ... ``` ` and bare ` ``` ... ``` ` fenced blocks
+ * whose content parses as `{ reviews: [...] }`.
+ */
+function tryParseAiReviewsJson(text: string): { reviews: unknown[] } | null {
+  if (!text) return null;
+  const fenced =
+    text.match(/```(?:json)?\s*\n([\s\S]*?)\n```/i) ??
+    text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  const candidate = fenced ? fenced[1] : text;
+  try {
+    const obj = JSON.parse(candidate.trim());
+    if (
+      obj &&
+      typeof obj === 'object' &&
+      Array.isArray((obj as { reviews?: unknown[] }).reviews)
+    ) {
+      return obj as { reviews: unknown[] };
+    }
+  } catch {
+    /* not a JSON block */
+  }
+  return null;
 }
 
 /**
@@ -1027,10 +1298,21 @@ export async function sendChatMessage(message: string, documentContext?: string,
     // knowledge-base rules, MCP tool count, current document path, and
     // sidebar/fallback working directories. Changes here ripple to MCP
     // tool-bridge resolution and MORAYA.md rule injection.
+    // v0.32.0 §F1: derive lite review list (open / relocated only; strip emails per P3 privacy)
+    const reviewState = get(reviewStore);
+    const openReviewsLite: ResolvedReviewLite[] = reviewState.reviews
+      .filter((r) => r.status === 'open' || r.status === 'unanchored')
+      .map((r) => ({
+        author: r.author || 'reviewer',
+        line: r.anchor?.originalLine ?? 0,
+        commentText: r.comments?.[0]?.text ?? '',
+        unanchored: r.anchorState === 'unanchored' || r.status === 'unanchored',
+      }));
+
     const messages: ChatMessage[] = [
       {
         role: 'system',
-        content: buildSystemPrompt(activeConfig, toolDefs.length, currentDir, currentFilePath, sidebarDir, fallbackDir, documentContext, rulesResult),
+        content: buildSystemPrompt(activeConfig, toolDefs.length, currentDir, currentFilePath, sidebarDir, fallbackDir, documentContext, rulesResult, openReviewsLite),
         timestamp: Date.now(),
       },
       // Include recent chat history for context (preserve tool call/result pairs)

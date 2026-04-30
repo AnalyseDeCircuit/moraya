@@ -37,6 +37,7 @@ function makeReview(overrides: Partial<Review> = {}): Review {
     status: 'open',
     resolvedAt: null,
     resolvedBy: null,
+    resolvedCommit: null,
     lastVerifiedCommit: 'abc123',
     anchor: makeAnchor(),
     comments: [],

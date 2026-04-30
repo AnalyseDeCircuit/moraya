@@ -50,6 +50,7 @@ export interface Review {
   status: ReviewStatus;
   resolvedAt: string | null;
   resolvedBy: string | null;
+  resolvedCommit: string | null; // v0.32.0: HEAD commit when resolved/wontfix; null for legacy or git-unavailable
   lastVerifiedCommit: string; // HEAD at the time the reviewer last confirmed
   anchor: ReviewAnchor;
   comments: ReviewComment[]; // [0] = root comment (original opinion), [1+] = replies
