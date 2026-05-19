@@ -364,7 +364,7 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 | v0.62.0 | Mobile responsive UX — drawer nav, bottom sheet, settings full-screen sheet, split disable, 44pt touch targets, virtual keyboard handling | ✅ |
 | v0.63.0 | Mobile native integrations — Push notifications (APNs/FCM), Camera/OCR (Vision/ML Kit), Face ID/Touch ID, Voice recording | ✅ |
 | v0.64.0 | Mobile iOS App Store launch — TestFlight, privacy manifest, Apple review, China region compliance | ✅ |
-| v0.65.0 | Mobile Android Play Store + GA release — internal/beta/production tracks, Sentry monitoring | 📋 |
+| v0.65.0 | Mobile Android Play Store + GA release — internal/beta/production tracks, Sentry monitoring | ✅ |
 | v1.0.0 | Moraya Web GA — bug bash, full docs, case studies, launch day coordination | 📋 |
 
 ## ⭐ Star Growth trend (updated in real time)
