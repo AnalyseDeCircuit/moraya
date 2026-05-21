@@ -2885,8 +2885,15 @@
   // which calls stopPropagation(), so this handler only fires for the empty space.
   handleContextMenu(e);
 }} onclick={(e) => {
-  // Click on empty area or empty ProseMirror content → focus editor
+  // Click on empty area or empty ProseMirror content → focus editor.
+  // Skip if the click originated inside the outline panel: handleOutlineSelect
+  // has already scrolled to the target heading, and forcing editor focus here
+  // would call view.focus() → scrollIntoView on the cursor, snapping the
+  // scroll back to the caret position. The symptom on Windows WebView2 is
+  // that outline clicks appear to "bounce back to the top" — WKWebView is
+  // more lenient about re-focusing an already-focused contenteditable.
   const target = e.target as HTMLElement;
+  if (target.closest('.outline-wrapper')) return;
   if (target === e.currentTarget || target.classList.contains('editor-root') || target.classList.contains('editor-content-area')) {
     const pm = editorEl?.querySelector('.ProseMirror') as HTMLElement | null;
     if (pm) pm.focus();

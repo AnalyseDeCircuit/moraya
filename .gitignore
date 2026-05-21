@@ -113,4 +113,5 @@ watermarks.local.json.ots
 
 # Sibling repo symlink (moraya-core lives in its own git repo)
 /moraya-core
-/moraya-app
+/moraya-web
+/moraya-mobile
