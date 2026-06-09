@@ -401,7 +401,7 @@
   }
 </script>
 
-<div class="ai-settings">
+<div class="ai-settings gx-tab">
   <section class="settings-section">
     <div class="section-header">
       <div>
@@ -932,16 +932,14 @@
 </div>
 
 <style>
-  .ai-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
+  /* Outer layout: .gx-tab on root provides flex column + gap.
+     .section-title / .section-subtitle / .section-header inherit from
+     the shared settings.css (large bold heading + secondary subtitle),
+     matching ImageAISettings. */
   .settings-section {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.4rem;
   }
 
   .section-header {
@@ -951,28 +949,19 @@
     gap: 0.5rem;
   }
 
-  .section-title {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
-  .section-subtitle {
-    margin: 0.15rem 0 0;
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-  }
-
   .config-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.6rem;
+    padding: 0.55rem 0.85rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-primary);
     gap: 0.5rem;
+    transition: border-color 0.1s ease, background 0.1s ease;
+  }
+  .config-item + .config-item {
+    margin-top: 0.4rem;
   }
 
   .config-info {

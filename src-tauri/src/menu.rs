@@ -183,22 +183,16 @@ pub fn create_menu(app: &AppHandle) -> Result<Menu<Wry>, tauri::Error> {
     // CheckMenuItem on all platforms with programmatic checkmark sync via update_mode_checks.
     // On Linux (GTK), set_checked() can trigger on_menu_event; the UPDATING_MODE_CHECKS
     // flag in the event handler prevents the resulting feedback loop.
-    #[cfg(target_os = "macos")]
-    let (visual_label, source_label, split_label) = (
-        "Visual Mode          ⌘/",
-        "Source Mode         ⌘/",
-        "Split Mode       ⇧⌘/",
-    );
-    #[cfg(not(target_os = "macos"))]
-    let (visual_label, source_label, split_label) = (
-        "Visual Mode          Ctrl+/",
-        "Source Mode         Ctrl+/",
-        "Split Mode       Ctrl+Shift+/",
-    );
-
-    let mode_visual = CheckMenuItem::with_id(app, "view_mode_visual", visual_label, true, true, None::<&str>)?;
-    let mode_source = CheckMenuItem::with_id(app, "view_mode_source", source_label, true, false, None::<&str>)?;
-    let mode_split = CheckMenuItem::with_id(app, "view_mode_split", split_label, true, false, None::<&str>)?;
+    //
+    // v0.41.5 (idempotent-floating-bumblebee, A5): accelerators are now
+    // real OS-level shortcuts (not Unicode-painted text), so menu-sync
+    // can update them when the user remaps. Pressing the visual-mode accel
+    // toggles between visual ↔ source (logic lives in the frontend
+    // `runShortcutAction('view.toggleMode')`); the source item does not
+    // need its own accel.
+    let mode_visual = CheckMenuItem::with_id(app, "view_mode_visual", "Visual Mode", true, true, Some("CmdOrCtrl+/"))?;
+    let mode_source = CheckMenuItem::with_id(app, "view_mode_source", "Source Mode", true, false, None::<&str>)?;
+    let mode_split = CheckMenuItem::with_id(app, "view_mode_split", "Split Mode", true, false, Some("CmdOrCtrl+Shift+/"))?;
 
     let view_menu = Submenu::with_id_and_items(
         app,

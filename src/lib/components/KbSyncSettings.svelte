@@ -114,23 +114,32 @@
   }
 </script>
 
-<div class="kb-sync-settings">
-  <div class="global-switch">
-    <label class="switch-label">
-      <input
-        type="checkbox"
-        checked={kbSyncEnabled}
-        onchange={(e) => settingsStore.update({ kbSyncEnabled: (e.target as HTMLInputElement).checked })}
-      />
-      <span>{$t('kbSync.settings.globalSwitch')}</span>
-    </label>
-    <p class="hint">{$t('kbSync.settings.globalSwitchHint')}</p>
-    <button class="trash-link" onclick={() => { showTrash = true; }} type="button">
-      🗑 {$t('kbSync.trash.title')}
-    </button>
-  </div>
+<div class="kb-sync-settings gx-tab">
+  <section class="gx-section">
+    <h3 class="gx-section-title">{$t('kbSync.settings.globalSwitch')}</h3>
+    <div class="gx-card">
+      <div class="gx-row gx-row-check">
+        <label class="gx-check">
+          <input
+            type="checkbox"
+            checked={kbSyncEnabled}
+            onchange={(e) => settingsStore.update({ kbSyncEnabled: (e.target as HTMLInputElement).checked })}
+          />
+          <span>{$t('kbSync.settings.globalSwitch')}</span>
+        </label>
+        <p class="gx-hint gx-hint-indent">{$t('kbSync.settings.globalSwitchHint')}</p>
+      </div>
+      <div class="gx-row gx-row-check">
+        <button class="gx-btn gx-btn-sm trash-link" onclick={() => { showTrash = true; }} type="button">
+          🗑 {$t('kbSync.trash.title')}
+        </button>
+      </div>
+    </div>
+  </section>
 
-  <div class="kb-list">
+  <section class="gx-section">
+    <h3 class="gx-section-title">{$t('settings.tabs.kbSync')}</h3>
+    <div class="kb-list">
     {#each knowledgeBases as kb}
       <div class="kb-item">
         <div class="kb-item-header">
@@ -240,7 +249,8 @@
     {#if knowledgeBases.length === 0}
       <p class="empty-hint">{$t('kbSync.settings.noKbs')}</p>
     {/if}
-  </div>
+    </div>
+  </section>
 </div>
 
 {#if bindingKb}
@@ -270,67 +280,31 @@
 {/if}
 
 <style>
-  .kb-sync-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .global-switch {
-    padding: 0.75rem;
-    background: var(--bg-secondary);
-    border-radius: 6px;
-  }
-
-  .switch-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer;
-  }
-
-  .hint {
-    margin: 0.3rem 0 0;
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-  }
-
+  /* Layout — outer .gx-tab + .gx-section provided by settings.css.
+     This file only defines visuals unique to KB sync (knowledge-base
+     item rows, strategy editor). */
   .trash-link {
-    margin-top: 0.5rem;
-    padding: 4px 10px;
-    font-size: var(--font-size-xs);
-    background: transparent;
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    cursor: pointer;
+    align-self: flex-start;
   }
-  .trash-link:hover {
-    color: var(--text-primary);
-    border-color: var(--text-primary);
-  }
-
   .kb-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
   }
-
   .kb-item {
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     overflow: hidden;
   }
-
+  .kb-item + .kb-item {
+    margin-top: 0.4rem;
+  }
   .kb-item-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.75rem;
+    padding: 0.65rem 0.9rem;
   }
 
   .kb-info {
@@ -379,30 +353,49 @@
   }
 
   .action-btn {
-    padding: 0.25rem 0.6rem;
+    padding: 3px 10px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 5px;
     background: transparent;
     color: var(--text-secondary);
     font-size: var(--font-size-xs);
+    font-family: inherit;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background 0.1s ease, color 0.1s ease, border-color 0.1s ease;
     white-space: nowrap;
   }
 
-  .action-btn:hover:not(:disabled) { background: var(--bg-hover); }
+  .action-btn:hover:not(:disabled) {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+  }
   .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .action-btn.primary { border-color: var(--accent-color); color: var(--accent-color); }
+  .action-btn.primary {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+  }
+  .action-btn.primary:hover:not(:disabled) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: white;
+  }
   .action-btn.warn { border-color: var(--warning-color, #e8a838); color: var(--warning-color, #e8a838); }
-  .action-btn.danger { border-color: var(--color-error, #e53e3e); color: var(--color-error, #e53e3e); }
+  .action-btn.danger { border-color: #e57373; color: #c62828; }
+  .action-btn.danger:hover:not(:disabled) {
+    background: color-mix(in srgb, #dc3545 10%, transparent);
+    color: #c62828;
+    border-color: #e57373;
+  }
 
   .strategy-editor {
-    padding: 0.75rem;
+    padding: 0.65rem 0.9rem 0.85rem;
     border-top: 1px solid var(--border-light);
     background: var(--bg-secondary);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.55rem;
   }
 
   .strategy-row {
@@ -413,24 +406,25 @@
 
   .strategy-label {
     font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    width: 80px;
+    color: var(--text-secondary);
+    width: 88px;
     flex-shrink: 0;
   }
 
   .select-input {
-    padding: 0.25rem 0.4rem;
+    padding: 4px 8px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 5px;
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
   }
 
   .empty-hint {
     color: var(--text-muted);
     font-size: var(--font-size-sm);
     text-align: center;
-    padding: 1rem;
+    padding: 1.25rem 1rem;
   }
 </style>

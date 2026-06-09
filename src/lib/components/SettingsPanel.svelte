@@ -16,8 +16,9 @@
   import KbSyncSettings from './KbSyncSettings.svelte';
   import PicoraSettingsTab from './picora-tab/PicoraSettingsTab.svelte';
   import ExportSettings from './ExportSettings.svelte';
+  import ShortcutsPanel from './ShortcutsPanel.svelte';
 
-  type Tab = 'general' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'permissions' | 'voice' | 'plugins' | 'knowledge-base' | 'kb-sync' | 'picora' | 'export';
+  type Tab = 'general' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'shortcuts' | 'voice' | 'plugins' | 'knowledge-base' | 'kb-sync' | 'picora';
 
   let {
     onClose,
@@ -143,8 +144,7 @@
       groupKey: 'settings.groups.general',
       items: [
         { key: 'general', icon: '⚙', labelKey: 'settings.tabs.general' },
-        { key: 'export', icon: '📄', labelKey: 'settings.tabs.export' },
-        { key: 'permissions', icon: '🔒', labelKey: 'settings.tabs.permissions' },
+        { key: 'shortcuts', icon: '⌘', labelKey: 'settings.tabs.shortcuts' },
       ],
     },
     {
@@ -257,293 +257,291 @@
           <PicoraSettingsTab onJumpToKbSync={() => activeTab = 'kb-sync'} />
         </div>
         <div class="tab-pane" class:active={activeTab === 'plugins'}><PluginsPanel /></div>
-        <div class="tab-pane" class:active={activeTab === 'export'}><ExportSettings /></div>
 
         {#if activeTab === 'general'}
-          <!-- General Section -->
-          <div class="setting-section general-section">
-            <div class="section-header">{$t('settings.tabs.general')}</div>
+          <div class="gx-tab">
+            <!-- 1. General — language, autosave, etc. -->
+            <section class="gx-section">
+              <h3 class="gx-section-title">{$t('settings.tabs.general')}</h3>
+              <div class="gx-card">
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-locale">{$t('settings.language.label')}</label>
+                  <div class="gx-control">
+                    <select id="settings-locale" class="gx-select" value={currentLocale} onchange={handleLocaleChange}>
+                      {#each SUPPORTED_LOCALES as loc}
+                        <option value={loc.code}>{loc.code === 'system' ? $t('settings.language.system') : loc.label}</option>
+                      {/each}
+                    </select>
+                  </div>
+                </div>
 
-            <div class="setting-group">
-              <label class="setting-label" for="settings-locale">{$t('settings.language.label')}</label>
-              <select id="settings-locale" class="setting-input" value={currentLocale} onchange={handleLocaleChange}>
-                {#each SUPPORTED_LOCALES as loc}
-                  <option value={loc.code}>{loc.code === 'system' ? $t('settings.language.system') : loc.label}</option>
-                {/each}
-              </select>
-            </div>
+                <div class="gx-row gx-row-check">
+                  <label class="gx-check">
+                    <input type="checkbox" checked={autoSave} onchange={handleAutoSaveChange} />
+                    <span>{$t('settings.autoSave.label')}</span>
+                  </label>
+                </div>
 
-            <div class="setting-group">
-              <label class="setting-label">
-                <input
-                  type="checkbox"
-                  checked={autoSave}
-                  onchange={handleAutoSaveChange}
-                />
-                {$t('settings.autoSave.label')}
-              </label>
-            </div>
+                {#if autoSave}
+                  <div class="gx-row gx-row-indent">
+                    <label class="gx-label" for="settings-autosave-interval">{$t('settings.autoSave.interval')}</label>
+                    <div class="gx-control gx-control-inline">
+                      <input
+                        id="settings-autosave-interval"
+                        type="range"
+                        min="5" max="120" step="5"
+                        value={autoSaveInterval}
+                        oninput={handleIntervalChange}
+                        class="gx-range"
+                      />
+                      <span class="gx-value">{autoSaveInterval}s</span>
+                    </div>
+                  </div>
+                {/if}
 
-            {#if autoSave}
-              <div class="setting-group">
-                <label class="setting-label" for="settings-autosave-interval">{$t('settings.autoSave.interval')}</label>
-                <div class="setting-row">
-                  <input
-                    id="settings-autosave-interval"
-                    type="range"
-                    min="5"
-                    max="120"
-                    step="5"
-                    value={autoSaveInterval}
-                    oninput={handleIntervalChange}
-                    class="setting-range"
-                  />
-                  <span class="setting-value">{autoSaveInterval}s</span>
+                <div class="gx-row gx-row-check">
+                  <label class="gx-check">
+                    <input
+                      type="checkbox"
+                      checked={rememberLastFolder}
+                      onchange={(e: Event) => {
+                        const checked = (e.target as HTMLInputElement).checked;
+                        settingsStore.update({ rememberLastFolder: checked });
+                        if (!checked) settingsStore.update({ lastOpenedFolder: null });
+                      }}
+                    />
+                    <span>{$t('settings.rememberLastFolder')}</span>
+                  </label>
+                </div>
+
+                <div class="gx-row gx-row-check">
+                  <label class="gx-check">
+                    <input
+                      type="checkbox"
+                      checked={$settingsStore.showCloudInsertEntries}
+                      onchange={(e: Event) => settingsStore.update({ showCloudInsertEntries: (e.target as HTMLInputElement).checked })}
+                    />
+                    <span>{$t('settings.showCloudInsertEntries')}</span>
+                  </label>
+                  <p class="gx-hint gx-hint-indent">{$t('settings.showCloudInsertEntriesDesc')}</p>
+                </div>
+
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-rules-history-count">{$t('settings.rulesHistoryCount')}</label>
+                  <div class="gx-control">
+                    <input
+                      id="settings-rules-history-count"
+                      type="number"
+                      min="1" max="100"
+                      value={rulesHistoryCount}
+                      oninput={(e: Event) => {
+                        const val = parseInt((e.target as HTMLInputElement).value, 10);
+                        if (val >= 1 && val <= 100) settingsStore.update({ rulesHistoryCount: val });
+                      }}
+                      class="gx-number"
+                    />
+                    <p class="gx-hint">{$t('settings.rulesHistoryCountHint')}</p>
+                  </div>
                 </div>
               </div>
-            {/if}
+            </section>
 
-            <div class="setting-group">
-              <label class="setting-label">
-                <input
-                  type="checkbox"
-                  checked={rememberLastFolder}
-                  onchange={(e: Event) => {
-                    const checked = (e.target as HTMLInputElement).checked;
-                    settingsStore.update({ rememberLastFolder: checked });
-                    if (!checked) {
-                      settingsStore.update({ lastOpenedFolder: null });
-                    }
-                  }}
-                />
-                {$t('settings.rememberLastFolder')}
-              </label>
-            </div>
-
-            <div class="setting-group">
-              <label class="setting-label">
-                <input
-                  type="checkbox"
-                  checked={$settingsStore.showCloudInsertEntries}
-                  onchange={(e: Event) => {
-                    settingsStore.update({ showCloudInsertEntries: (e.target as HTMLInputElement).checked });
-                  }}
-                />
-                {$t('settings.showCloudInsertEntries')}
-              </label>
-              <div class="setting-desc">{$t('settings.showCloudInsertEntriesDesc')}</div>
-            </div>
-
-            <div class="setting-group">
-              <label class="setting-label" for="settings-rules-history-count">{$t('settings.rulesHistoryCount')}</label>
-              <div class="setting-row">
-                <input
-                  id="settings-rules-history-count"
-                  type="number"
-                  min="1"
-                  max="100"
-                  value={rulesHistoryCount}
-                  oninput={(e: Event) => {
-                    const val = parseInt((e.target as HTMLInputElement).value, 10);
-                    if (val >= 1 && val <= 100) {
-                      settingsStore.update({ rulesHistoryCount: val });
-                    }
-                  }}
-                  class="setting-input setting-input-narrow"
-                />
-              </div>
-              <div class="setting-hint">{$t('settings.rulesHistoryCountHint')}</div>
-            </div>
-          </div>
-
-          <!-- Editing Section -->
-          <div class="setting-section">
-            <div class="section-header">{$t('settings.tabs.editor')}</div>
-
-            <div class="setting-group">
-              <label class="setting-label" for="settings-line-width">{$t('settings.editor.lineWidth')}</label>
-              <div class="setting-row">
-                <input
-                  id="settings-line-width"
-                  type="range"
-                  min="600"
-                  max="1200"
-                  step="50"
-                  value={editorLineWidth}
-                  oninput={handleLineWidthChange}
-                  class="setting-range"
-                />
-                <span class="setting-value">{editorLineWidth}px</span>
-              </div>
-            </div>
-
-            <div class="setting-group">
-              <label class="setting-label" for="settings-tab-size">{$t('settings.editor.tabSize')}</label>
-              <select id="settings-tab-size" class="setting-input" value={editorTabSize} onchange={handleTabSizeChange}>
-                <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={8}>8</option>
-              </select>
-            </div>
-
-            <div class="setting-group">
-              <label class="setting-label">
-                <input
-                  type="checkbox"
-                  checked={showLineNumbers}
-                  onchange={handleLineNumbersChange}
-                />
-                {$t('settings.editor.showLineNumbers')}
-              </label>
-            </div>
-          </div>
-
-          <!-- Display Section -->
-          <div class="setting-section">
-            <div class="section-header">{$t('settings.tabs.appearance')}</div>
-
-            <!-- Theme subsection -->
-            <div class="setting-subsection">
-              <div class="subsection-label">{$t('settings.appearance.themeSection')}</div>
-
-              <div class="setting-group">
-                <label class="setting-label" for="settings-color-theme">{$t('settings.theme.label')}</label>
-                <select id="settings-color-theme" class="setting-input" value={colorTheme} onchange={handleColorThemeChange}>
-                  {#each builtinThemes as ct}
-                    <option value={ct.id}>{ct.name}</option>
-                  {/each}
-                </select>
-              </div>
-
-              <div class="setting-group">
-                <label class="setting-label">
-                  <input
-                    type="checkbox"
-                    checked={useSeparateDarkTheme}
-                    onchange={handleSeparateDarkThemeChange}
-                  />
-                  {$t('settings.appearance.separateDarkTheme')}
-                </label>
-              </div>
-
-              {#if useSeparateDarkTheme}
-                <div class="setting-group">
-                  <label class="setting-label" for="settings-dark-theme">{$t('settings.appearance.darkTheme')}</label>
-                  <select id="settings-dark-theme" class="setting-input" value={darkColorTheme} onchange={handleDarkColorThemeChange}>
-                    {#each darkThemes as ct}
-                      <option value={ct.id}>{ct.name}</option>
-                    {/each}
-                  </select>
+            <!-- 2. Editor — line width, tab size, line numbers -->
+            <section class="gx-section">
+              <h3 class="gx-section-title">{$t('settings.tabs.editor')}</h3>
+              <div class="gx-card">
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-line-width">{$t('settings.editor.lineWidth')}</label>
+                  <div class="gx-control gx-control-inline">
+                    <input
+                      id="settings-line-width"
+                      type="range"
+                      min="600" max="1200" step="50"
+                      value={editorLineWidth}
+                      oninput={handleLineWidthChange}
+                      class="gx-range"
+                    />
+                    <span class="gx-value">{editorLineWidth}px</span>
+                  </div>
                 </div>
-              {/if}
-            </div>
 
-            <!-- Dark mode subsection -->
-            <div class="setting-subsection">
-              <div class="subsection-label">{$t('settings.appearance.darkModeSection')}</div>
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-tab-size">{$t('settings.editor.tabSize')}</label>
+                  <div class="gx-control">
+                    <select id="settings-tab-size" class="gx-select" value={editorTabSize} onchange={handleTabSizeChange}>
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={8}>8</option>
+                    </select>
+                  </div>
+                </div>
 
-              <div class="setting-group">
-                <label class="setting-label" for="settings-dark-mode">{$t('settings.appearance.darkModeLabel')}</label>
-                <select id="settings-dark-mode" class="setting-input" value={theme} onchange={handleThemeChange}>
-                  <option value="system">{$t('settings.theme.system')}</option>
-                  <option value="light">{$t('settings.theme.light')}</option>
-                  <option value="dark">{$t('settings.theme.dark')}</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Font subsection -->
-            <div class="setting-subsection">
-              <div class="subsection-label">{$t('settings.appearance.fontSection')}</div>
-
-              <div class="setting-group">
-                <label class="setting-label" for="settings-font-size">{$t('settings.fontSize.label')}</label>
-                <div class="setting-row">
-                  <input
-                    id="settings-font-size"
-                    type="range"
-                    min="12"
-                    max="24"
-                    value={fontSize}
-                    oninput={handleFontSizeChange}
-                    class="setting-range"
-                  />
-                  <span class="setting-value">{fontSize}px</span>
+                <div class="gx-row gx-row-check">
+                  <label class="gx-check">
+                    <input type="checkbox" checked={showLineNumbers} onchange={handleLineNumbersChange} />
+                    <span>{$t('settings.editor.showLineNumbers')}</span>
+                  </label>
                 </div>
               </div>
-            </div>
+            </section>
+
+            <!-- 3. Appearance — theme / dark mode / font (three sub-cards) -->
+            <section class="gx-section">
+              <h3 class="gx-section-title">{$t('settings.tabs.appearance')}</h3>
+
+              <div class="gx-card">
+                <div class="gx-subhead">{$t('settings.appearance.themeSection')}</div>
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-color-theme">{$t('settings.theme.label')}</label>
+                  <div class="gx-control">
+                    <select id="settings-color-theme" class="gx-select" value={colorTheme} onchange={handleColorThemeChange}>
+                      {#each builtinThemes as ct}
+                        <option value={ct.id}>{ct.name}</option>
+                      {/each}
+                    </select>
+                  </div>
+                </div>
+                <div class="gx-row gx-row-check">
+                  <label class="gx-check">
+                    <input type="checkbox" checked={useSeparateDarkTheme} onchange={handleSeparateDarkThemeChange} />
+                    <span>{$t('settings.appearance.separateDarkTheme')}</span>
+                  </label>
+                </div>
+                {#if useSeparateDarkTheme}
+                  <div class="gx-row gx-row-indent">
+                    <label class="gx-label" for="settings-dark-theme">{$t('settings.appearance.darkTheme')}</label>
+                    <div class="gx-control">
+                      <select id="settings-dark-theme" class="gx-select" value={darkColorTheme} onchange={handleDarkColorThemeChange}>
+                        {#each darkThemes as ct}
+                          <option value={ct.id}>{ct.name}</option>
+                        {/each}
+                      </select>
+                    </div>
+                  </div>
+                {/if}
+              </div>
+
+              <div class="gx-card">
+                <div class="gx-subhead">{$t('settings.appearance.darkModeSection')}</div>
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-dark-mode">{$t('settings.appearance.darkModeLabel')}</label>
+                  <div class="gx-control">
+                    <select id="settings-dark-mode" class="gx-select" value={theme} onchange={handleThemeChange}>
+                      <option value="system">{$t('settings.theme.system')}</option>
+                      <option value="light">{$t('settings.theme.light')}</option>
+                      <option value="dark">{$t('settings.theme.dark')}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="gx-card">
+                <div class="gx-subhead">{$t('settings.appearance.fontSection')}</div>
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-font-size">{$t('settings.fontSize.label')}</label>
+                  <div class="gx-control gx-control-inline">
+                    <input
+                      id="settings-font-size"
+                      type="range"
+                      min="12" max="24"
+                      value={fontSize}
+                      oninput={handleFontSizeChange}
+                      class="gx-range"
+                    />
+                    <span class="gx-value">{fontSize}px</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 4. Export — merged from the standalone Export tab (v0.41.5) -->
+            <section class="gx-section">
+              <h3 class="gx-section-title">{$t('settings.tabs.export')}</h3>
+              <p class="gx-section-desc">{$t('settings.tabDesc.export')}</p>
+              <div class="gx-card gx-card-padded">
+                <ExportSettings />
+              </div>
+            </section>
+
+            <!-- 5. AI Limits -->
+            <section class="gx-section">
+              <h3 class="gx-section-title">{$t('settings.permissions.aiTitle')}</h3>
+              <div class="gx-card">
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-ai-max-tokens">{$t('settings.permissions.aiMaxTokens')}</label>
+                  <div class="gx-control">
+                    <input
+                      id="settings-ai-max-tokens"
+                      type="number"
+                      class="gx-number"
+                      value={$settingsStore.aiMaxTokens}
+                      min={1024} max={128000} step={1024}
+                      onchange={(e) => {
+                        const v = parseInt((e.target as HTMLInputElement).value);
+                        if (v >= 1024 && v <= 128000) settingsStore.update({ aiMaxTokens: v });
+                      }}
+                    />
+                    <p class="gx-hint">{$t('settings.permissions.aiMaxTokensHint')}</p>
+                  </div>
+                </div>
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-ai-tool-result-max-chars">{$t('settings.permissions.aiToolResultMaxChars')}</label>
+                  <div class="gx-control">
+                    <input
+                      id="settings-ai-tool-result-max-chars"
+                      type="number"
+                      class="gx-number"
+                      value={$settingsStore.aiToolResultMaxChars}
+                      min={2000} max={64000} step={2000}
+                      onchange={(e) => {
+                        const v = parseInt((e.target as HTMLInputElement).value);
+                        if (v >= 2000 && v <= 64000) settingsStore.update({ aiToolResultMaxChars: v });
+                      }}
+                    />
+                    <p class="gx-hint">{$t('settings.permissions.aiToolResultMaxCharsHint')}</p>
+                  </div>
+                </div>
+                <div class="gx-row">
+                  <label class="gx-label" for="settings-ai-max-tool-rounds">{$t('settings.permissions.aiMaxToolRounds')}</label>
+                  <div class="gx-control">
+                    <input
+                      id="settings-ai-max-tool-rounds"
+                      type="number"
+                      class="gx-number"
+                      value={$settingsStore.aiMaxToolRounds}
+                      min={1} max={100} step={1}
+                      onchange={(e) => {
+                        const v = parseInt((e.target as HTMLInputElement).value);
+                        if (v >= 1 && v <= 100) settingsStore.update({ aiMaxToolRounds: v });
+                      }}
+                    />
+                    <p class="gx-hint">{$t('settings.permissions.aiMaxToolRoundsHint')}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 6. MCP Permissions -->
+            <section class="gx-section">
+              <h3 class="gx-section-title">{$t('settings.permissions.mcpTitle')}</h3>
+              <div class="gx-card">
+                <div class="gx-row gx-row-check">
+                  <label class="gx-check">
+                    <input
+                      type="checkbox"
+                      checked={$settingsStore.mcpAutoApprove}
+                      onchange={(e) => settingsStore.update({ mcpAutoApprove: (e.target as HTMLInputElement).checked })}
+                    />
+                    <span>{$t('mcp.servers.autoApprove')}</span>
+                  </label>
+                  <p class="gx-hint gx-hint-indent">{$t('mcp.servers.autoApproveHint')}</p>
+                </div>
+              </div>
+            </section>
           </div>
 
-        {:else if activeTab === 'permissions'}
-          <div class="setting-section">
-            <div class="section-header">{$t('settings.permissions.aiTitle')}</div>
-            <div class="setting-group">
-              <label class="setting-label" for="settings-ai-max-tokens">{$t('settings.permissions.aiMaxTokens')}</label>
-              <input
-                id="settings-ai-max-tokens"
-                type="number"
-                class="setting-input"
-                value={$settingsStore.aiMaxTokens}
-                min={1024}
-                max={128000}
-                step={1024}
-                onchange={(e) => {
-                  const v = parseInt((e.target as HTMLInputElement).value);
-                  if (v >= 1024 && v <= 128000) settingsStore.update({ aiMaxTokens: v });
-                }}
-              />
-              <p class="perm-hint">{$t('settings.permissions.aiMaxTokensHint')}</p>
-            </div>
-            <div class="setting-group">
-              <label class="setting-label" for="settings-ai-tool-result-max-chars">{$t('settings.permissions.aiToolResultMaxChars')}</label>
-              <input
-                id="settings-ai-tool-result-max-chars"
-                type="number"
-                class="setting-input"
-                value={$settingsStore.aiToolResultMaxChars}
-                min={2000}
-                max={64000}
-                step={2000}
-                onchange={(e) => {
-                  const v = parseInt((e.target as HTMLInputElement).value);
-                  if (v >= 2000 && v <= 64000) settingsStore.update({ aiToolResultMaxChars: v });
-                }}
-              />
-              <p class="perm-hint">{$t('settings.permissions.aiToolResultMaxCharsHint')}</p>
-            </div>
-            <div class="setting-group">
-              <label class="setting-label" for="settings-ai-max-tool-rounds">{$t('settings.permissions.aiMaxToolRounds')}</label>
-              <input
-                id="settings-ai-max-tool-rounds"
-                type="number"
-                class="setting-input"
-                value={$settingsStore.aiMaxToolRounds}
-                min={1}
-                max={100}
-                step={1}
-                onchange={(e) => {
-                  const v = parseInt((e.target as HTMLInputElement).value);
-                  if (v >= 1 && v <= 100) settingsStore.update({ aiMaxToolRounds: v });
-                }}
-              />
-              <p class="perm-hint">{$t('settings.permissions.aiMaxToolRoundsHint')}</p>
-            </div>
-          </div>
-
-          <div class="setting-section">
-            <div class="section-header">{$t('settings.permissions.mcpTitle')}</div>
-            <div class="setting-group">
-              <label class="setting-toggle">
-                <input
-                  type="checkbox"
-                  checked={$settingsStore.mcpAutoApprove}
-                  onchange={(e) => settingsStore.update({ mcpAutoApprove: (e.target as HTMLInputElement).checked })}
-                />
-                <span class="setting-label">{$t('mcp.servers.autoApprove')}</span>
-              </label>
-              <p class="perm-hint">{$t('mcp.servers.autoApproveHint')}</p>
-            </div>
-          </div>
+        {:else if activeTab === 'shortcuts'}
+          <ShortcutsPanel />
         {/if}
         </div><!-- content-body -->
       </div><!-- settings-content -->
@@ -765,148 +763,6 @@
     display: contents; /* transparent wrapper — children flow directly into flex container */
   }
 
-  .setting-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .setting-label {
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .setting-input {
-    padding: 0.4rem 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
-    max-width: 280px;
-  }
-
-  .setting-input-narrow {
-    max-width: 80px;
-  }
-
-  .setting-hint {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin-top: 0.25rem;
-  }
-
-  .setting-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    max-width: 320px;
-  }
-
-  .setting-range {
-    flex: 1;
-    accent-color: var(--accent-color);
-  }
-
-  .setting-value {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    min-width: 3.5rem;
-    text-align: right;
-  }
-
-  .setting-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .setting-section.general-section {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    border-top: none !important;
-  }
-
-  .setting-section:not(.general-section) {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-light);
-  }
-
-  .section-header {
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-
-  /* Subsection labels for grouped settings within a section */
-  .setting-subsection {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .setting-subsection:not(:first-child) {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border-light);
-  }
-
-  .subsection-label {
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .setting-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-
-  .setting-toggle input[type="checkbox"] {
-    margin: 0;
-    cursor: pointer;
-    accent-color: var(--accent-color);
-  }
-
-  .perm-hint {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .kb-setting-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .kb-count {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-  }
-
-  .kb-manage-btn {
-    padding: 0.3rem 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background: var(--bg-primary);
-    color: var(--text-secondary);
-    font-size: var(--font-size-xs);
-    cursor: pointer;
-  }
-
-  .kb-manage-btn:hover {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-  }
-
+  /* The .gx-* design system lives in src/lib/styles/settings.css (global)
+     so every settings panel can opt in by reusing the same class names. */
 </style>

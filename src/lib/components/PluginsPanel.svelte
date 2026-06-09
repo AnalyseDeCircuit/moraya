@@ -211,7 +211,7 @@
   }
 </script>
 
-<div class="plugins-panel">
+<div class="plugins-panel gx-tab">
   <!-- Tab bar -->
   <div class="tab-bar">
     <button
@@ -589,16 +589,48 @@
 </div>
 
 <style>
-  .plugins-panel { display: flex; flex-direction: column; height: 100%; gap: 0; }
+  .plugins-panel { display: flex; flex-direction: column; height: 100%; gap: 0.75rem; }
 
-  /* Tabs */
-  .tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
-  .tab-btn { padding: 8px 14px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary); cursor: pointer; font-size: var(--font-size-sm); transition: all 0.15s; }
-  .tab-btn:hover { color: var(--text-primary); }
-  .tab-btn.active { color: var(--accent-color); border-bottom-color: var(--accent-color); }
+  /* Segmented control — matches MCPPanel's tab bar style for visual
+     consistency across settings tabs that have internal sub-navigation. */
+  .tab-bar {
+    display: inline-flex;
+    align-self: stretch;
+    padding: 3px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    font-weight: 500;
+    transition: background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+    white-space: nowrap;
+  }
+  .tab-btn:hover:not(.active) {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+  }
+  .tab-btn.active {
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+  }
 
   /* Plugin list */
-  .plugin-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .plugin-list { flex: 1; overflow-y: auto; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 
   .plugin-card {
     border: 1px solid var(--border-color);

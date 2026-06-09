@@ -1,0 +1,407 @@
+/**
+ * Shared settings-panel design system — v0.41.5+
+ * (idempotent-floating-bumblebee follow-up).
+ *
+ * macOS System Settings-style card pattern. Every settings tab (General,
+ * Shortcuts, AI, MCP, Image Hosting, Picora, etc.) opts into the same
+ * visual language by reusing these `.gx-*` classes.
+ *
+ * Class taxonomy:
+ *   .gx-tab          ← root wrapper for a settings tab body
+ *   .gx-section      ← one card-section (title above + card below)
+ *     .gx-section-title    ← 11px uppercase muted heading
+ *     .gx-section-desc     ← optional 12px secondary paragraph below the title
+ *     .gx-card             ← rounded, bordered container for form fields
+ *     .gx-card-padded      ← variant with extra inner padding (embedded
+ *                            sub-components, e.g. ExportSettings inside
+ *                            the General → Export sub-card)
+ *   .gx-subhead      ← small uppercase divider inside a card (used in
+ *                      Appearance for Theme / Dark Mode / Font sub-groups)
+ *   .gx-row          ← single form row with grid label | control layout
+ *     .gx-row-check        ← full-width row for a single checkbox
+ *     .gx-row-indent       ← indented sub-row (e.g. autosave interval
+ *                            when autosave is on)
+ *   .gx-label        ← row label (left column)
+ *   .gx-control      ← row control (right column)
+ *     .gx-control-inline   ← variant with row-flex layout instead of column
+ *   .gx-check        ← inline checkbox + text wrapper
+ *   .gx-select       ← <select> styled to match the system
+ *   .gx-number       ← narrow <input type=number> for ints
+ *   .gx-input        ← full-width <input type=text|password|url>
+ *   .gx-range        ← <input type=range> with accent color
+ *   .gx-value        ← right-aligned numeric value display for ranges
+ *   .gx-hint         ← muted 12px paragraph below a control
+ *     .gx-hint-indent     ← indented hint under a checkbox row
+ *   .gx-btn          ← neutral button (border, rounded, hover)
+ *     .gx-btn-primary     ← accent-filled variant
+ *     .gx-btn-danger      ← red-bordered variant (destructive)
+ *     .gx-btn-sm          ← smaller variant
+ *
+ * Variables reused (see variables.css):
+ *   --font-size-sm (14px), --font-size-xs (12px),
+ *   --bg-primary, --bg-secondary, --bg-hover,
+ *   --text-primary, --text-secondary, --text-muted,
+ *   --border-color, --border-light,
+ *   --accent-color, --accent-hover.
+ *
+ * NEVER use em-relative font sizing inside settings panels — it scales
+ * against an inherited base that may not match the design tokens.
+ */
+
+/* ── Tab root ─────────────────────────────────────────────────── */
+.gx-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Section (title above + card below) ───────────────────────── */
+.gx-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.gx-section-title {
+  margin: 0 0 0 0.1rem;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.gx-section-desc {
+  margin: 0 0 0 0.1rem;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+.gx-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+}
+.gx-card-padded {
+  padding: 0.85rem 0.9rem;
+}
+.gx-card + .gx-card {
+  margin-top: 0.4rem;
+}
+.gx-subhead {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.45rem 0 0.1rem;
+}
+
+/* ── Row ──────────────────────────────────────────────────────── */
+.gx-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 40%) 1fr;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--border-light);
+}
+.gx-card > .gx-row:first-child,
+.gx-card > .gx-subhead + .gx-row {
+  border-top: none;
+}
+/* Stacked variant — control wraps below label (used for fields with
+   long descriptions, multi-line inputs, etc.) */
+.gx-row-stacked {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+.gx-row-check {
+  grid-template-columns: 1fr;
+}
+.gx-row-indent {
+  padding-left: 1.5rem;
+}
+
+.gx-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.gx-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.gx-control-inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+.gx-check {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+.gx-check input[type='checkbox'] {
+  margin: 2px 0 0;
+  flex-shrink: 0;
+}
+
+/* ── Inputs ───────────────────────────────────────────────────── */
+.gx-select,
+.gx-number,
+.gx-input {
+  padding: 4px 8px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  width: 100%;
+  max-width: 260px;
+}
+.gx-input {
+  max-width: 100%;
+}
+.gx-number {
+  max-width: 120px;
+}
+.gx-select:focus,
+.gx-number:focus,
+.gx-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 18%, transparent);
+}
+.gx-range {
+  flex: 1;
+  accent-color: var(--accent-color);
+}
+.gx-value {
+  min-width: 48px;
+  text-align: right;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.gx-hint {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+.gx-hint-indent {
+  margin-left: 1.6rem;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.gx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 4px 12px;
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+  white-space: nowrap;
+}
+.gx-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--text-muted);
+}
+.gx-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.gx-btn-primary {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+.gx-btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.gx-btn-danger {
+  color: #c62828;
+  border-color: #e57373;
+}
+.gx-btn-danger:hover:not(:disabled) {
+  background: color-mix(in srgb, #dc3545 10%, transparent);
+  color: #c62828;
+}
+.gx-btn-sm {
+  padding: 2px 8px;
+  font-size: var(--font-size-xs);
+}
+
+/* ── Empty state ──────────────────────────────────────────────── */
+.gx-empty {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+/* ── Provider list (used in AI / Image Hosting / Voice tabs) ──── */
+.gx-list {
+  display: flex;
+  flex-direction: column;
+}
+.gx-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--border-light);
+}
+.gx-card > .gx-list > .gx-list-row:first-child {
+  border-top: none;
+}
+.gx-list-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.gx-list-name {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.gx-list-sub {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+.gx-list-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* ── Status pill (active / inactive / error) ──────────────────── */
+.gx-pill {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+.gx-pill-success {
+  background: color-mix(in srgb, #2e7d32 14%, transparent);
+  color: #1b5e20;
+}
+.gx-pill-warn {
+  background: color-mix(in srgb, #f9a825 18%, transparent);
+  color: #a16207;
+}
+.gx-pill-danger {
+  background: color-mix(in srgb, #dc3545 14%, transparent);
+  color: #c62828;
+}
+.gx-pill-muted {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+}
+.gx-pill-accent {
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
+}
+
+/* ── Cross-panel typography & form normalization ──────────────────
+   These rules target ANY content rendered inside `.settings-content`
+   (every settings tab) so panels that don't yet use `.gx-*` classes
+   still pick up the consistent visual language.
+   Per-panel scoped styles take precedence over these — they only act
+   as a baseline. */
+
+/* All form controls get consistent typography */
+.settings-content input[type='text'],
+.settings-content input[type='password'],
+.settings-content input[type='number'],
+.settings-content input[type='url'],
+.settings-content input[type='email'],
+.settings-content input[type='search'],
+.settings-content select,
+.settings-content textarea {
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+/* Section heading defaults — panels that use <h3>/<h4> directly for
+   their section titles get a similar look to the .gx-section-title.
+   Per-panel CSS that explicitly sets font-size/color still overrides. */
+.settings-content h3:not([class]),
+.settings-content h4:not([class]) {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Cross-panel `.section-title` / `.section-subtitle` baseline.
+   Panels like AISettings / ImageAISettings / VoiceSettings render a
+   section header with these class names. Give them a consistent
+   "tab body title" look — larger bold primary-color heading with a
+   secondary subtitle, matching the existing ImageAI tab. */
+.settings-content .section-title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+.settings-content .section-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.45;
+  font-weight: 400;
+}
+.settings-content .section-header {
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons — give plain <button> elements a neutral default that
+   reads as interactive without being too loud. Specific button
+   classes (.btn-primary etc.) take over from this baseline. */
+.settings-content button:not([class*='gx-']):not([class*='btn-']):not([class*='close']):not([class*='primary']):not([class*='danger']):not([class*='nav-']):not([class*='tab-']):not([class*='action']):not([class*='icon']):not([class*='ghost']):not([class*='link']):not([class*='_btn']):not([class*='-btn']):not([class*='dropdown']):not([class*='toggle']) {
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+}
+
+/* Disabled controls — uniform muted appearance */
+.settings-content input:disabled,
+.settings-content select:disabled,
+.settings-content textarea:disabled,
+.settings-content button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

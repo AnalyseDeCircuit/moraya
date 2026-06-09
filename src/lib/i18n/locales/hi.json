@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "होस्टिंग",
       "publish": "प्रकाशन",
-      "permissions": "अनुमतियाँ",
       "voice": "वॉयस AI",
       "knowledgeBase": "ज्ञान आधार",
       "plugins": "Plugin",
       "kbSync": "KB सिंक",
       "picora": "Picora",
-      "export": "निर्यात"
+      "export": "निर्यात",
+      "shortcuts": "शॉर्टकट"
     },
     "groups": {
       "general": "सामान्य",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "{date} पर हटाया गया",
       "kbUnknown": "अज्ञात KB"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + Enter से भेजें"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "डिफ़ॉल्ट"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "PDF निर्यात करें",
+        "exportImage": "छवि निर्यात करें",
+        "exportDoc": "Word निर्यात करें"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "कोई भी कुंजी संयोजन दबाएँ… (Esc से रद्द करें)",
+      "needsModifier": "कम से कम एक संशोधक कुंजी आवश्यक (Cmd, Ctrl, Alt या Shift)",
+      "conflict": "पहले से ही दूसरे शॉर्टकट द्वारा उपयोग में",
+      "save": "सहेजें",
+      "cancel": "रद्द करें",
+      "editHint": "नया शॉर्टकट रिकॉर्ड करने के लिए क्लिक करें",
+      "resetToDefault": "डिफ़ॉल्ट पर रीसेट",
+      "customized": "अनुकूलित",
+      "customizedShort": "कस्टम",
+      "resetConflict": "डिफ़ॉल्ट किसी अन्य कस्टम शॉर्टकट से टकराता है — पहले उसे बदलें।",
+      "syncFailed": "सिस्टम मेनू अपडेट नहीं हो सका",
+      "syncFailedShort": "सिंक विफल",
+      "unbound": "अनसेट",
+      "resetAll": "सभी रीसेट करें",
+      "resetAllHint": "सभी शॉर्टकट को डिफ़ॉल्ट पर पुनर्स्थापित करें",
+      "resetAllConfirm": "क्या आप सभी {count} कस्टम शॉर्टकट को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?",
+      "resetShort": "डिफ़ॉल्ट"
+    },
+    "editHint": "सुझाव: डैश्ड बॉर्डर और ✎ आइकन वाली पंक्तियों को कुंजियों पर क्लिक करके फिर से रिकॉर्ड किया जा सकता है। अन्य शॉर्टकट (🔒) सिस्टम मेन्यू द्वारा प्रबंधित हैं और इस संस्करण में अनुकूलित नहीं किए जा सकते।"
   }
 }

@@ -261,7 +261,7 @@
   });
 </script>
 
-<div class="kb-settings">
+<div class="kb-settings gx-tab">
   <!-- Knowledge Base Management -->
   <div class="kb-manage-section">
     <div class="kb-manage-row">
@@ -493,11 +493,7 @@
 </div>
 
 <style>
-  .kb-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+  /* Outer layout: .gx-tab on root. */
 
   .kb-manage-section {
     display: flex;
@@ -511,13 +507,15 @@
   }
 
   .kb-manage-btn {
-    padding: 5px 12px;
+    padding: 4px 12px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-secondary);
+    border-radius: 5px;
+    background: var(--bg-primary);
     color: var(--text-primary);
     font-size: var(--font-size-sm);
+    font-family: inherit;
     cursor: pointer;
+    transition: background 0.1s ease, border-color 0.1s ease;
   }
 
   .kb-manage-btn:hover {

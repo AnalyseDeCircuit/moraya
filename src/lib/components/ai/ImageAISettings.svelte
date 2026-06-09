@@ -143,7 +143,7 @@
   }
 </script>
 
-<div class="image-ai-settings">
+<div class="image-ai-settings gx-tab">
   <div class="section-header">
     <div>
       <h3 class="section-title">{$t('ai.sections.imageAI')}</h3>
@@ -345,21 +345,20 @@
 </div>
 
 <style>
-  .image-ai-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
+  /* Outer layout: .gx-tab on root. */
 
   .config-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.6rem;
+    padding: 0.55rem 0.85rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-primary);
     gap: 0.5rem;
+  }
+  .config-item + .config-item {
+    margin-top: 0.4rem;
   }
 
   .config-info {

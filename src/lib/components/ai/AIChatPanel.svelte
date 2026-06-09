@@ -1135,11 +1135,27 @@
   function handleKeydown(event: KeyboardEvent) {
     if (event.isComposing) return;
     if (inlineRecordingState === 'recording') return;
-    // Ctrl+Enter (Windows/Linux) or Cmd+Enter (macOS) to send.
-    // Plain Enter inserts a newline (default textarea behavior).
-    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-      event.preventDefault();
-      handleSend();
+    // Enter behavior is user-configurable (Settings → Shortcuts).
+    //  - `modEnterSend` (default): Cmd/Ctrl+Enter sends, Enter = newline.
+    //  - `enterSend`:               Enter sends, Shift+Enter = newline.
+    // Either way the user can still press the alternate combo to insert
+    // a newline, so multi-line composition stays possible in both modes.
+    if (event.key === 'Enter') {
+      const behavior = $settingsStore.aiChatEnterBehavior ?? 'modEnterSend';
+      const isMod = event.ctrlKey || event.metaKey;
+      if (behavior === 'enterSend') {
+        // Send on plain Enter; Shift+Enter falls through to default newline.
+        if (!event.shiftKey && !isMod) {
+          event.preventDefault();
+          handleSend();
+        }
+      } else {
+        // modEnterSend: Cmd/Ctrl+Enter sends; Enter falls through to newline.
+        if (isMod) {
+          event.preventDefault();
+          handleSend();
+        }
+      }
     }
     if (event.key === '/' && inputText === '') {
       showCommands = true;

@@ -653,7 +653,7 @@
   }
 </script>
 
-<div class="mcp-panel">
+<div class="mcp-panel gx-tab">
   <div class="mcp-tabs">
     <button class="tab" class:active={activeTab === 'servers'} onclick={() => activeTab = 'servers'}>
       {$t('mcp.tabs.servers')}
@@ -1219,39 +1219,56 @@
 </div>
 
 <style>
+  /* mcp-panel uses .gx-tab on root, which sets gap: 1.25rem + bottom
+     padding. Override gap to 0.75rem so the segmented control sits
+     tighter to the tab content below. */
   .mcp-panel {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.75rem;
   }
 
+  /* Segmented control — macOS-style pill with rounded inner buttons.
+     Replaces the older bottom-border tab bar so it harmonizes with the
+     card-based visual language used in the other settings tabs. */
   .mcp-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border-light);
-    padding: 0 0.5rem;
+    display: inline-flex;
+    align-self: stretch;
+    padding: 3px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    gap: 2px;
   }
 
   .tab {
     flex: 1;
-    padding: 0.5rem;
-    border: none;
+    padding: 5px 12px;
+    border: 1px solid transparent;
     background: transparent;
-    color: var(--text-muted);
-    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
     font-weight: 500;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast);
+    border-radius: 5px;
+    transition: background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+    white-space: nowrap;
   }
 
-  .tab:hover { color: var(--text-secondary); }
+  .tab:hover:not(.active) {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+  }
   .tab.active {
-    color: var(--accent-color);
-    border-bottom-color: var(--accent-color);
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    font-weight: 600;
   }
 
   .tab-content {
-    padding: 0.75rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

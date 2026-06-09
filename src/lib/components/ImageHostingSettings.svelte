@@ -273,7 +273,7 @@
   }
 </script>
 
-<div class="imghost-settings">
+<div class="imghost-settings gx-tab">
   {#if editingTarget}
     <!-- Edit form -->
     <div class="edit-form">
@@ -670,11 +670,7 @@
 </div>
 
 <style>
-  .imghost-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  /* Layout overridden by .gx-tab on the root for consistent outer spacing. */
 
   .empty-state {
     display: flex;
@@ -703,12 +699,13 @@
     gap: 0.5rem;
   }
 
+  .target-list { gap: 0.4rem; }
   .target-card {
     display: flex;
     flex-direction: column;
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.9rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-primary);
   }
 

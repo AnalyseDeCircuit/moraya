@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "ホスティング",
       "publish": "公開",
-      "permissions": "権限",
       "voice": "音声AI",
       "knowledgeBase": "ナレッジベース",
       "plugins": "プラグイン",
       "kbSync": "KB 同期",
       "picora": "Picora",
-      "export": "エクスポート"
+      "export": "エクスポート",
+      "shortcuts": "ショートカット"
     },
     "groups": {
       "general": "一般",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "{date} に削除",
       "kbUnknown": "不明な KB"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + Enter で送信"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "デフォルト"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "PDF にエクスポート",
+        "exportImage": "画像にエクスポート",
+        "exportDoc": "Word にエクスポート"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "任意のキー組み合わせを押してください…（Esc でキャンセル）",
+      "needsModifier": "修飾キー（Cmd、Ctrl、Alt、Shift）を 1 つ以上含めてください",
+      "conflict": "他のショートカットで使用されています",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "editHint": "クリックして新しいショートカットを記録",
+      "resetToDefault": "既定に戻す",
+      "customized": "カスタム済み",
+      "customizedShort": "カスタム",
+      "resetConflict": "デフォルトが他のカスタムショートカットと衝突します。先にそちらを変更してください。",
+      "syncFailed": "システムメニューを更新できませんでした",
+      "syncFailedShort": "メニュー同期失敗",
+      "unbound": "未設定",
+      "resetAll": "すべてリセット",
+      "resetAllHint": "すべてのショートカットを既定に戻す",
+      "resetAllConfirm": "カスタマイズした {count} 件のショートカットをすべて既定に戻しますか？",
+      "resetShort": "既定に戻す"
+    },
+    "editHint": "ヒント：破線の枠と ✎ アイコンが付いた行はキーをクリックして再記録できます。🔒 のショートカットはシステムメニュー管理で、現バージョンではカスタマイズできません。"
   }
 }

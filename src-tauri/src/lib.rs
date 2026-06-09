@@ -813,6 +813,33 @@ pub fn run() {
     #[cfg(not(target_os = "ios"))]
     let _ = fix_path_env::fix();
 
+    // WebKit2GTK 4.1 + Wayland mitigations (Linux only).
+    //
+    // Symptom (issue #59): SIGABRT inside libjavascriptcoregtk-4.1.so.0
+    // when any menu item is clicked on NixOS unstable + Wayland + KDE
+    // Plasma 6. Affects WebKit2GTK 4.1 across multiple recent distros —
+    // not specific to Moraya.
+    //
+    // Root cause: WebKit2GTK's DMABUF renderer fails to share GPU buffers
+    // with certain Wayland compositors (KDE Plasma 6, newer Mutter,
+    // recent Mesa with NVIDIA/Intel mixed setups). When rendering aborts
+    // mid-frame, JavaScriptCore — which runs on the same thread — sees
+    // a corrupted GL/EGL state on its next dispatch and abort()s.
+    //
+    // Mitigation: force shared-memory (SHM) rendering. Measurably slower
+    // than DMABUF but stable everywhere. Standard recommendation from
+    // both the Tauri Linux guide and WebKit2GTK upstream
+    // (https://blogs.gnome.org/mcatanzaro/2023/09/11/webkitgtk-on-wayland/).
+    //
+    // Only set when unset so power users can still opt back into DMABUF
+    // (or use WEBKIT_DISABLE_COMPOSITING_MODE=1 if they hit a different bug).
+    #[cfg(target_os = "linux")]
+    {
+        if std::env::var_os("WEBKIT_DISABLE_DMABUF_RENDERER").is_none() {
+            std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+        }
+    }
+
     // Collect file paths from CLI args (Windows file association)
     let initial_files = file_paths_from_args();
 
@@ -992,6 +1019,8 @@ pub fn run() {
             update_menu_labels,
             set_menu_check,
             update_mcp_menu,
+            commands::menu_accel::set_menu_accelerator,
+            commands::menu_accel::set_menu_accelerators_batch,
             get_opened_file,
             open_file_in_new_window,
             create_new_window,

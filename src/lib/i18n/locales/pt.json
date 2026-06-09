@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "Hospedagem",
       "publish": "Publicar",
-      "permissions": "Permissões",
       "voice": "Voz IA",
       "knowledgeBase": "Base de conhecimento",
       "plugins": "Plugins",
       "kbSync": "Sync KB",
       "picora": "Picora",
-      "export": "Exportar"
+      "export": "Exportar",
+      "shortcuts": "Atalhos"
     },
     "groups": {
       "general": "Geral",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "Excluído em {date}",
       "kbUnknown": "BC desconhecida"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + Enter envia"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "Padrão"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "Exportar PDF",
+        "exportImage": "Exportar imagem",
+        "exportDoc": "Exportar Word"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "Pressione qualquer combinação de teclas… (Esc para cancelar)",
+      "needsModifier": "Requer ao menos um modificador (Cmd, Ctrl, Alt ou Shift)",
+      "conflict": "Já usado por outro atalho",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "editHint": "Clique para gravar um novo atalho",
+      "resetToDefault": "Restaurar padrão",
+      "customized": "Personalizado",
+      "customizedShort": "Personal.",
+      "resetConflict": "O padrão entra em conflito com outro atalho personalizado — altere-o primeiro.",
+      "syncFailed": "Não foi possível atualizar o menu do sistema",
+      "syncFailedShort": "Falha na sincronia",
+      "unbound": "Não definido",
+      "resetAll": "Restaurar tudo",
+      "resetAllHint": "Restaurar todos os atalhos para os padrões",
+      "resetAllConfirm": "Restaurar os {count} atalho(s) personalizado(s) para os padrões?",
+      "resetShort": "Padrão"
+    },
+    "editHint": "Dica: as linhas com contorno tracejado e ícone ✎ podem ser regravadas clicando nas teclas. Outros atalhos (🔒) vêm do menu do sistema e ainda não são personalizáveis."
   }
 }

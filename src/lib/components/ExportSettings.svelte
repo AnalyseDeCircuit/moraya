@@ -63,9 +63,9 @@
 </script>
 
 <div class="export-settings">
-  <h3 class="section-header">{$t('settings.tabs.export')}</h3>
-  <p class="tab-desc">{$t('settings.tabDesc.export')}</p>
-
+  <!-- Header/intro removed: this component is now embedded inside the
+       General settings card layout (v0.41.5), which provides the section
+       title above the card. -->
   <div class="row">
     <label class="field">
       <span class="label">{$t('settings.export.paperSize')}</span>
@@ -253,20 +253,13 @@
 </div>
 
 <style>
+  /* Restyled to match the General-tab `.gx-*` system in SettingsPanel.svelte.
+     Uses absolute pixel sizes (matching --font-size-sm = 14px, --font-size-xs
+     = 12px) so the inherited body font size (~15px) can't scale them up. */
   .export-settings {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 0.5rem 0;
-  }
-  .section-header {
-    font-size: 1.1em;
-    margin: 0;
-  }
-  .tab-desc {
-    color: var(--text-secondary);
-    font-size: 0.9em;
-    margin: 0;
+    gap: 0.65rem;
   }
   .row {
     display: flex;
@@ -281,74 +274,94 @@
     min-width: 180px;
   }
   .field .label {
-    font-size: 0.9em;
-    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.3;
   }
   .field-inline {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.9em;
+    font-size: var(--font-size-sm);
     color: var(--text-primary);
   }
   .field-inline input[type='number'] {
-    width: 60px;
+    width: 64px;
   }
   .unit {
     color: var(--text-secondary);
-    font-size: 0.85em;
+    font-size: var(--font-size-xs);
   }
+  /* The fieldset/legend defaults to body font (~15px) and renders a heavy
+     border + bordered legend. Strip both and use a small uppercase subhead
+     identical to .gx-subhead in SettingsPanel for visual consistency. */
   .group {
-    border: 1px solid var(--border-light);
-    border-radius: 4px;
-    padding: 0.8rem 1rem;
+    all: unset;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    margin: 0;
+    gap: 0.5rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--border-light);
   }
   .group legend {
-    color: var(--text-primary);
-    font-weight: 500;
-    padding: 0 0.3rem;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.1rem 0 0.15rem;
+    margin: 0;
+    float: none;
+    width: auto;
   }
   .margins-row {
     display: flex;
-    gap: 1rem;
+    gap: 0.85rem;
     flex-wrap: wrap;
   }
   .radio-group {
     display: flex;
     gap: 1rem;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+  }
+  .radio-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
   }
   .check {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
   }
   .check input {
     margin: 0;
   }
   .template-input {
-    margin-left: 1.4rem;
-    width: calc(100% - 1.4rem);
+    margin-left: 1.45rem;
+    width: calc(100% - 1.45rem);
+    max-width: 320px;
   }
   .template-input:disabled {
     opacity: 0.5;
   }
   .hint {
-    color: var(--text-secondary);
-    font-size: 0.82em;
+    color: var(--text-muted);
+    font-size: var(--font-size-xs);
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.45;
   }
   select, input[type='text'], input[type='number'] {
-    padding: 0.3rem 0.4rem;
+    padding: 4px 8px;
     background: var(--bg-primary);
-    border: 1px solid var(--border-light);
-    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
     color: var(--text-primary);
-    font-size: 0.9em;
+    font-size: var(--font-size-sm);
   }
 </style>

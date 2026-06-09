@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "圖床",
       "publish": "發佈",
-      "permissions": "權限",
       "voice": "語音模型",
       "knowledgeBase": "知識庫",
       "plugins": "外掛",
       "kbSync": "KB 同步",
       "picora": "Picora",
-      "export": "匯出"
+      "export": "匯出",
+      "shortcuts": "快捷鍵"
     },
     "groups": {
       "general": "通用",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "刪除於 {date}",
       "kbUnknown": "未知知識庫"
     }
+  },
+  "shortcuts": {
+    "title": "鍵盤快捷鍵",
+    "intro": "Moraya 的全部鍵盤快捷鍵。標有 🔒 的由系統選單管理，將在後續版本支援自訂。",
+    "aiChatBehavior": {
+      "title": "AI 對話 — 換行鍵行為",
+      "intro": "選擇 AI 對話輸入框中換行鍵的傳送/換行方式。",
+      "sendsAction": "傳送訊息",
+      "newlineAction": "換行",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + 回車 傳送"
+      },
+      "enterSend": {
+        "label": "Enter 直接傳送"
+      },
+      "defaultBadge": "預設"
+    },
+    "categories": {
+      "file": "檔案",
+      "edit": "編輯",
+      "paragraph": "段落",
+      "format": "格式",
+      "view": "檢視",
+      "aiChat": "AI 對話",
+      "workflow": "工作流程"
+    },
+    "actions": {
+      "file": {
+        "new": "新增文件",
+        "newWindow": "新增視窗",
+        "open": "開啟檔案",
+        "save": "儲存",
+        "saveAs": "另存新檔",
+        "exportHtml": "匯出 HTML",
+        "exportPdf": "匯出 PDF",
+        "exportImage": "匯出圖片",
+        "exportDoc": "匯出 Word"
+      },
+      "edit": {
+        "undo": "復原",
+        "redo": "重做",
+        "find": "尋找",
+        "replace": "取代"
+      },
+      "paragraph": {
+        "h1": "標題 1",
+        "h2": "標題 2",
+        "h3": "標題 3",
+        "h4": "標題 4",
+        "h5": "標題 5",
+        "h6": "標題 6",
+        "codeBlock": "程式碼區塊",
+        "quote": "引文"
+      },
+      "format": {
+        "bold": "粗體",
+        "italic": "斜體",
+        "strike": "刪除線",
+        "code": "行內程式碼",
+        "link": "連結",
+        "insertImage": "插入圖片"
+      },
+      "view": {
+        "toggleMode": "切換視覺化/原始碼模式",
+        "toggleSplit": "切換分割模式",
+        "toggleSidebar": "切換側邊欄",
+        "toggleAIPanel": "切換 AI 面板",
+        "toggleOutline": "切換大綱",
+        "openSettings": "開啟設定",
+        "zoomIn": "放大",
+        "zoomOut": "縮小",
+        "zoomReset": "重設縮放"
+      },
+      "workflow": {
+        "quickOpen": "快速開啟",
+        "commandPalette": "命令面板"
+      },
+      "aiChat": {
+        "send": "傳送 AI 訊息",
+        "newline": "插入換行"
+      }
+    },
+    "lockedHint": "由系統選單管理，暫不支援於此處自訂",
+    "lockedFootnote": "🔒 表示該快捷鍵由系統原生選單提供，本版本暫不支援於此處修改。",
+    "editor": {
+      "prompt": "按下任意鍵盤組合…（Esc 取消）",
+      "needsModifier": "至少需要包含一個修飾鍵（Cmd、Ctrl、Alt 或 Shift）",
+      "conflict": "已被其他快捷鍵占用",
+      "save": "儲存",
+      "cancel": "取消",
+      "editHint": "點擊以錄入新的快捷鍵",
+      "resetToDefault": "恢復預設",
+      "customized": "已自訂",
+      "customizedShort": "已自訂",
+      "resetConflict": "預設快捷鍵與另一個已自訂的快捷鍵衝突，請先調整後再重置。",
+      "syncFailed": "無法更新系統選單",
+      "syncFailedShort": "選單同步失敗",
+      "unbound": "未設定",
+      "resetAll": "全部恢復預設",
+      "resetAllHint": "將所有快捷鍵恢復為預設值",
+      "resetAllConfirm": "確定要將所有 {count} 個已自訂的快捷鍵恢復為預設值？",
+      "resetShort": "恢復預設"
+    },
+    "editHint": "提示：帶虛線框和 ✎ 圖示的列可點擊按鍵重新錄入；其餘帶 🔒 的快捷鍵由系統選單管理，本版本暫不支援自訂。"
   }
 }

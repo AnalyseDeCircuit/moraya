@@ -316,7 +316,7 @@
   }
 </script>
 
-<div class="voice-settings">
+<div class="voice-settings gx-tab">
   <!-- ── Speech Provider Section ─────────────────────────────────────────── -->
   <section class="settings-section">
     <div class="section-header">
@@ -644,17 +644,14 @@
 </div>
 
 <style>
-  .voice-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 0.5rem 0;
-  }
-
+  /* Outer layout: .gx-tab on root.
+     .section-title / .section-subtitle / .section-header inherit from
+     the shared settings.css (large bold heading + secondary subtitle),
+     matching ImageAISettings. */
   .settings-section {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.4rem;
   }
 
   .section-header {
@@ -663,27 +660,15 @@
     justify-content: space-between;
   }
 
-  .section-title {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .section-subtitle {
-    font-size: var(--font-size-xs);
-    color: var(--text-muted);
-    margin: 0.15rem 0 0;
-  }
-
   /* Provider card */
   .config-card {
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.9rem;
     background: var(--bg-primary);
+  }
+  .config-card + .config-card {
+    margin-top: 0.4rem;
   }
 
   .config-card.active {

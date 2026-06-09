@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "Bildhosting",
       "publish": "Veröffentlichen",
-      "permissions": "Berechtigungen",
       "voice": "Sprachmodell",
       "knowledgeBase": "Wissensdatenbank",
       "plugins": "Plugins",
       "kbSync": "KB-Sync",
       "picora": "Picora",
-      "export": "Exportieren"
+      "export": "Exportieren",
+      "shortcuts": "Tastenkürzel"
     },
     "groups": {
       "general": "Allgemein",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "Gelöscht am {date}",
       "kbUnknown": "Unbekannte KB"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + Eingabe sendet"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "Standard"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "Als PDF exportieren",
+        "exportImage": "Als Bild exportieren",
+        "exportDoc": "Als Word exportieren"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "Beliebige Tastenkombination drücken… (Esc zum Abbrechen)",
+      "needsModifier": "Mindestens ein Modifizierer erforderlich (Cmd, Ctrl, Alt oder Shift)",
+      "conflict": "Bereits von einem anderen Shortcut verwendet",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "editHint": "Klicken, um neuen Shortcut aufzuzeichnen",
+      "resetToDefault": "Auf Standard zurücksetzen",
+      "customized": "Angepasst",
+      "customizedShort": "Eigen",
+      "resetConflict": "Standard kollidiert mit einem anderen angepassten Shortcut — bitte diesen zuerst ändern.",
+      "syncFailed": "Systemmenü konnte nicht aktualisiert werden",
+      "syncFailedShort": "Sync fehlgeschlagen",
+      "unbound": "Nicht festgelegt",
+      "resetAll": "Alle zurücksetzen",
+      "resetAllHint": "Alle Shortcuts auf Standardwerte zurücksetzen",
+      "resetAllConfirm": "Alle {count} angepassten Shortcut(s) auf Standardwerte zurücksetzen?",
+      "resetShort": "Standard"
+    },
+    "editHint": "Tipp: Zeilen mit gestricheltem Rahmen und ✎-Symbol können durch Klicken auf die Tasten neu aufgezeichnet werden. Andere Shortcuts (🔒) stammen aus dem Systemmenü und sind noch nicht anpassbar."
   }
 }

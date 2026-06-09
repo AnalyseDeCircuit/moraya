@@ -56,6 +56,7 @@
   import { ask } from '@tauri-apps/plugin-dialog';
   import { t } from '$lib/i18n';
   import { getPlatformClass, isIPadOS, isMacOS, isTauri, isVirtualKeyboardVisible } from '$lib/utils/platform';
+  import { SHORTCUT_CATALOG, effectiveBinding, eventMatchesBinding } from '$lib/shortcuts/catalog';
   import TabBar from '$lib/components/TabBar.svelte';
   import TouchToolbar from '$lib/editor/TouchToolbar.svelte';
   import { tabsStore } from '$lib/stores/tabs-store';
@@ -63,6 +64,7 @@
 
   import '$lib/styles/global.css';
   import '$lib/styles/editor.css';
+  import '$lib/styles/settings.css';
   // KaTeX renders math via katex.render() in @moraya/core's schema with default
   // output='htmlAndMathml'. Without katex.css, the MathML accessibility layer
   // shows visually as duplicated raw text below the rendered formula. This CSS
@@ -953,9 +955,10 @@ ${tr('welcome.tip')}
       fmt_link: tr('menu.link'),
       fmt_image: tr('menu.image'),
       // View menu — append platform-appropriate shortcut hints
-      view_mode_visual: tr('menu.visualMode') + (isMacOS ? '          ⌘/' : '          Ctrl+/'),
-      view_mode_source: tr('menu.sourceMode') + (isMacOS ? '         ⌘/' : '         Ctrl+/'),
-      view_mode_split: tr('menu.splitMode') + (isMacOS ? '       ⇧⌘/' : '       Ctrl+Shift+/'),
+      // v0.41.5 (A5): accelerators are now native — no Unicode hints in labels.
+      view_mode_visual: tr('menu.visualMode'),
+      view_mode_source: tr('menu.sourceMode'),
+      view_mode_split: tr('menu.splitMode'),
       view_sidebar: tr('menu.toggleSidebar'),
       view_ai_panel: tr('menu.toggleAIPanel'),
       view_outline: tr('menu.toggleOutline'),
@@ -1003,10 +1006,140 @@ ${tr('welcome.tip')}
   }
 
   // Minimalist-style keyboard shortcuts
+  /**
+   * Perform the action for a catalog-defined shortcut id. Used by the
+   * user-customizable shortcut override dispatcher below — when a user has
+   * remapped e.g. `file.save` to a non-default combo, this function does
+   * what `Cmd+S` would normally do.
+   *
+   * Returns `true` if the id was handled, `false` for unknown ids (so the
+   * caller can fall through to the existing hardcoded handlers).
+   */
+  function runShortcutAction(id: string): boolean {
+    switch (id) {
+      case 'file.new': handleNewFile(); return true;
+      case 'file.newWindow':
+        if (isIPadOS) handleNewFile();
+        else invoke('create_new_window').catch(() => {});
+        return true;
+      case 'file.open': handleOpenFile(); return true;
+      case 'file.save': handleSave(); return true;
+      case 'file.saveAs': handleSave(true); return true;
+      case 'file.exportHtml': exportDocument(getCurrentContent, 'html'); return true;
+      case 'file.exportPdf': exportDocument(getCurrentContent, 'pdf'); return true;
+      case 'file.exportImage': exportDocument(getCurrentContent, 'image'); return true;
+      case 'file.exportDoc': exportDocument(getCurrentContent, 'doc'); return true;
+
+      case 'edit.undo':
+        if (editorMode === 'source' || (editorMode === 'split' && isSourcePaneFocused())) {
+          document.execCommand('undo');
+        } else {
+          morayaEditor?.view.focus();
+          runCmd(undo);
+        }
+        return true;
+      case 'edit.redo':
+        if (editorMode === 'source' || (editorMode === 'split' && isSourcePaneFocused())) {
+          document.execCommand('redo');
+        } else {
+          morayaEditor?.view.focus();
+          runCmd(redo);
+        }
+        return true;
+      case 'edit.find': showSearch = true; return true;
+      case 'edit.replace': showSearch = true; showReplace = true; return true;
+
+      case 'paragraph.h1': runCmd(setHeading(1)); return true;
+      case 'paragraph.h2': runCmd(setHeading(2)); return true;
+      case 'paragraph.h3': runCmd(setHeading(3)); return true;
+      case 'paragraph.h4': runCmd(setHeading(4)); return true;
+      case 'paragraph.h5': runCmd(setHeading(5)); return true;
+      case 'paragraph.h6': runCmd(setHeading(6)); return true;
+      case 'paragraph.codeBlock': runCmd(insertCodeBlock); return true;
+      case 'paragraph.quote': runCmd(wrapInBlockquote); return true;
+
+      case 'format.bold': runCmd(toggleBold); return true;
+      case 'format.italic': runCmd(toggleItalic); return true;
+      case 'format.strike': runCmd(toggleStrikethrough); return true;
+      case 'format.code': runCmd(toggleCode); return true;
+      case 'format.link': runCmd(toggleLink({ href: '' })); return true;
+      case 'format.insertImage': showImageDialog = true; return true;
+
+      case 'view.toggleMode': {
+        const next = editorMode === 'visual' ? 'source' : 'visual';
+        editorMode = next;
+        editorStore.setEditorMode(next);
+        return true;
+      }
+      case 'view.toggleSplit': {
+        const next = editorMode === 'split' ? 'visual' : 'split';
+        editorMode = next;
+        editorStore.setEditorMode(next);
+        return true;
+      }
+      case 'view.toggleSidebar': settingsStore.toggleSidebar(); return true;
+      case 'view.toggleAIPanel': showAIPanel = !showAIPanel; return true;
+      case 'view.toggleOutline':
+        settingsStore.update({ showOutline: !showOutline });
+        return true;
+      case 'view.openSettings': showSettings = !showSettings; return true;
+      case 'view.zoomIn': {
+        const s = settingsStore.getState();
+        const sz = Math.min(s.fontSize + 1, 24);
+        settingsStore.update({ fontSize: sz });
+        document.documentElement.style.setProperty('--font-size-base', `${sz}px`);
+        return true;
+      }
+      case 'view.zoomOut': {
+        const s = settingsStore.getState();
+        const sz = Math.max(s.fontSize - 1, 12);
+        settingsStore.update({ fontSize: sz });
+        document.documentElement.style.setProperty('--font-size-base', `${sz}px`);
+        return true;
+      }
+      case 'view.zoomReset':
+        settingsStore.update({ fontSize: 16 });
+        document.documentElement.style.setProperty('--font-size-base', '16px');
+        return true;
+
+      // Quick Open and the full Command Palette share the same modal in
+      // this build — `showCommandPalette` is the trigger for both.
+      case 'workflow.quickOpen':
+      case 'workflow.commandPalette':
+        showCommandPalette = true;
+        return true;
+
+      // AI chat shortcuts are managed by the input box keydown — not by
+      // the global handler. Returning false lets the caller skip them.
+      case 'aiChat.send':
+      case 'aiChat.newline':
+        return false;
+
+      default:
+        return false;
+    }
+  }
+
   function handleKeydown(event: KeyboardEvent) {
     // When Command Palette is open, only allow Escape (handled by palette itself)
     // Skip all global shortcuts to prevent Cmd+O etc. from firing while typing
     if (showCommandPalette) return;
+
+    // User-customized shortcut overrides take precedence over hardcoded
+    // bindings. Only entries the user has explicitly remapped enter this
+    // loop — the empty case is O(1).
+    const overrides = $settingsStore.shortcutOverrides;
+    if (overrides) {
+      for (const id in overrides) {
+        const ovr = overrides[id];
+        if (!ovr) continue;
+        if (!eventMatchesBinding(event, ovr, isMacOS)) continue;
+        if (runShortcutAction(id)) {
+          event.preventDefault();
+          return;
+        }
+      }
+    }
 
     const mod = event.metaKey || event.ctrlKey;
 
@@ -1038,54 +1171,51 @@ ${tr('welcome.tip')}
       return;
     }
 
-    // File shortcuts
-    if (mod && event.key === 's') {
+    // File shortcuts — on Tauri the native menu accelerator handles
+    // the default bindings; the override loop above handles user-customized
+    // bindings. The hardcoded fallbacks below kick in only for non-Tauri
+    // contexts (web preview, dev mode without a native menu).
+    if (!isTauri && mod && event.key === 's') {
       event.preventDefault();
       handleSave(event.shiftKey);
       return;
     }
 
-    if (mod && !event.altKey && event.key === 'o' && !event.shiftKey) {
+    if (!isTauri && mod && !event.altKey && event.key === 'o' && !event.shiftKey) {
       event.preventDefault();
       handleOpenFile();
       return;
     }
 
-    if (mod && !event.shiftKey && (event.key === 'n' || event.key === 'N')) {
+    if (!isTauri && mod && !event.shiftKey && (event.key === 'n' || event.key === 'N')) {
       event.preventDefault();
       handleNewFile();
       return;
     }
 
-    // View shortcuts — on Tauri, CheckMenuItem accelerators handle these natively.
-    // JS keydown would cause double-toggle (JS toggle + native menu event).
     if (!isTauri && mod && event.key === '\\') {
       event.preventDefault();
       settingsStore.toggleSidebar();
       return;
     }
 
-    if (mod && event.key === ',') {
+    if (!isTauri && mod && event.key === ',') {
       event.preventDefault();
       showSettings = !showSettings;
       return;
     }
 
-    // Toggle source/visual mode: Cmd+/ (macOS) or Ctrl+/ (Windows/Linux)
-    // On macOS, only metaKey triggers — ctrlKey would also insert '/' into the editor
-    // Check event.code for Windows keyboard layout compatibility
+    // Toggle source/visual mode and Split mode — same Tauri reasoning.
     const slashMod = isMacOS ? event.metaKey : event.ctrlKey;
-    if (slashMod && !event.shiftKey && (event.key === '/' || event.code === 'Slash')) {
+    if (!isTauri && slashMod && !event.shiftKey && (event.key === '/' || event.code === 'Slash')) {
       event.preventDefault();
       const newMode: EditorMode = editorMode === 'visual' ? 'source' : 'visual';
-      console.log('[ModeSwitch]', editorMode, '->', newMode, 'content length:', content.length, 'preview:', JSON.stringify(content.slice(0, 100)));
       editorMode = newMode;
       editorStore.setEditorMode(newMode);
       return;
     }
 
-    // Split mode: Cmd+Shift+/ (Shift+/ produces '?' on most keyboards)
-    if (slashMod && event.shiftKey && (event.key === '/' || event.key === '?' || event.code === 'Slash')) {
+    if (!isTauri && slashMod && event.shiftKey && (event.key === '/' || event.key === '?' || event.code === 'Slash')) {
       event.preventDefault();
       const newMode: EditorMode = editorMode === 'split' ? 'visual' : 'split';
       editorMode = newMode;
@@ -1148,8 +1278,8 @@ ${tr('welcome.tip')}
       return;
     }
 
-    // Export shortcut
-    if (mod && event.shiftKey && event.key === 'E') {
+    // Export HTML — native menu accel on Tauri, fallback below for non-Tauri.
+    if (!isTauri && mod && event.shiftKey && event.key === 'E') {
       event.preventDefault();
       exportDocument(getCurrentContent, 'html');
       return;
@@ -1171,19 +1301,26 @@ ${tr('welcome.tip')}
       return;
     }
 
-    // Cmd+F → open search
-    if (mod && event.key === 'f' && !event.shiftKey) {
-      event.preventDefault();
-      showSearch = true;
-      return;
-    }
-
-    // Cmd+H → open search + replace
-    if (mod && event.key === 'h') {
-      event.preventDefault();
-      showSearch = true;
-      showReplace = true;
-      return;
+    // Find / Replace — bindings honor user overrides set in
+    // Settings → Shortcuts (see `shortcutOverrides`). Defaults are
+    // Cmd+F / Cmd+H on macOS, Ctrl+F / Ctrl+H elsewhere.
+    {
+      const overrides = $settingsStore.shortcutOverrides;
+      const findEntry = SHORTCUT_CATALOG.find(e => e.id === 'edit.find')!;
+      const replaceEntry = SHORTCUT_CATALOG.find(e => e.id === 'edit.replace')!;
+      const findBinding = effectiveBinding(findEntry, isMacOS, overrides);
+      const replaceBinding = effectiveBinding(replaceEntry, isMacOS, overrides);
+      if (eventMatchesBinding(event, replaceBinding, isMacOS)) {
+        event.preventDefault();
+        showSearch = true;
+        showReplace = true;
+        return;
+      }
+      if (eventMatchesBinding(event, findBinding, isMacOS)) {
+        event.preventDefault();
+        showSearch = true;
+        return;
+      }
     }
 
     // Escape → close search
@@ -1193,36 +1330,34 @@ ${tr('welcome.tip')}
       return;
     }
 
-    // Insert image: Cmd+Shift+G
-    if (mod && event.shiftKey && event.key === 'G') {
+    // The following blocks are non-Tauri fallbacks for keystrokes the
+    // native menu otherwise handles. On Tauri the native menu (now
+    // override-aware via menu-sync) drives these.
+    if (!isTauri && mod && event.shiftKey && event.key === 'G') {
       event.preventDefault();
       showImageDialog = true;
       return;
     }
 
-    // Heading 1-6: Cmd+1 through Cmd+6 (fallback for menu accelerator)
-    if (mod && !event.shiftKey && event.key >= '1' && event.key <= '6') {
+    if (!isTauri && mod && !event.shiftKey && event.key >= '1' && event.key <= '6') {
       event.preventDefault();
       runCmd(setHeading(parseInt(event.key)));
       return;
     }
 
-    // Code block: Cmd+Shift+K (fallback for menu accelerator)
-    if (mod && event.shiftKey && event.key === 'K') {
+    if (!isTauri && mod && event.shiftKey && event.key === 'K') {
       event.preventDefault();
       runCmd(insertCodeBlock);
       return;
     }
 
-    // Quote: Cmd+Shift+Q (fallback for menu accelerator)
-    if (mod && event.shiftKey && event.key === 'Q') {
+    if (!isTauri && mod && event.shiftKey && event.key === 'Q') {
       event.preventDefault();
       runCmd(wrapInBlockquote);
       return;
     }
 
-    // Zoom
-    if (mod && event.key === '=') {
+    if (!isTauri && mod && event.key === '=') {
       event.preventDefault();
       const settings = settingsStore.getState();
       const newSize = Math.min(settings.fontSize + 1, 24);
@@ -1231,7 +1366,7 @@ ${tr('welcome.tip')}
       return;
     }
 
-    if (mod && event.key === '-' && !event.shiftKey) {
+    if (!isTauri && mod && event.key === '-' && !event.shiftKey) {
       event.preventDefault();
       const settings = settingsStore.getState();
       const newSize = Math.max(settings.fontSize - 1, 12);
@@ -1240,7 +1375,7 @@ ${tr('welcome.tip')}
       return;
     }
 
-    if (mod && event.key === '0' && !event.shiftKey) {
+    if (!isTauri && mod && event.key === '0' && !event.shiftKey) {
       event.preventDefault();
       settingsStore.update({ fontSize: 16 });
       document.documentElement.style.setProperty('--font-size-base', '16px');
@@ -2696,6 +2831,23 @@ ${tr('welcome.tip')}
       };
       setTimeout(() => { void purgeTrashOnce(); }, 5000);
       trashPurgeTimer = setInterval(purgeTrashOnce, 24 * 60 * 60 * 1000);
+
+      // v0.41.5 (idempotent-floating-bumblebee): push the current shortcut
+      // overrides + defaults to the native menu so the menu hints AND
+      // accelerators match the user's settings. Defer so it doesn't compete
+      // with first-paint and i18n menu label sync.
+      setTimeout(async () => {
+        try {
+          const { pushOverridesToMenu } = await import('$lib/services/menu-sync');
+          const overrides = settingsStore.getState().shortcutOverrides ?? {};
+          const result = await pushOverridesToMenu(overrides);
+          if (result.failed.length > 0) {
+            console.warn('[menu-sync] some accelerators failed to apply:', result.failed);
+          }
+        } catch (e) {
+          console.error('[menu-sync] startup sync failed:', e);
+        }
+      }, 200);
 
       // v0.69.0: one-shot migration of any plaintext Picora API keys into
       // the OS keychain. Idempotent — targets already flagged are skipped.

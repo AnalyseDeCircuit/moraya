@@ -274,9 +274,9 @@
   }
 </script>
 
-<section class="picora-account-section">
+<section class="picora-account-section gx-tab">
   <header class="section-header">
-    <h3>{tr('settings.picora.account.title')}</h3>
+    <h3 class="gx-section-title">{tr('settings.picora.account.title')}</h3>
     <button class="btn-add" onclick={onOpenImport}>+ {tr('settings.picora.account.add')}</button>
   </header>
 
@@ -477,42 +477,55 @@
 {/if}
 
 <style>
-  .picora-account-section { display: flex; flex-direction: column; gap: 0.75rem; }
-  .section-header { display: flex; align-items: center; justify-content: space-between; }
-  .section-header h3 { margin: 0; font-size: var(--font-size-base); font-weight: 600; color: var(--text-primary); }
+  .picora-account-section { display: flex; flex-direction: column; gap: 0.4rem; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 0 0.1rem; }
 
   .btn-add {
-    padding: 0.3rem 0.7rem;
-    font-size: var(--font-size-sm);
+    padding: 3px 10px;
+    font-size: var(--font-size-xs);
     background: transparent;
     border: 1px solid var(--accent-color);
     color: var(--accent-color);
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    font-family: inherit;
+    transition: background 0.1s ease, color 0.1s ease;
   }
   .btn-add:hover { background: var(--accent-color); color: #fff; }
 
-  .empty-state { padding: 1.5rem; text-align: center; color: var(--text-muted); }
-  .empty-state p { margin: 0 0 0.75rem 0; font-size: var(--font-size-sm); }
+  .empty-state {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+  }
+  .empty-state p { margin: 0 0 0.85rem 0; font-size: var(--font-size-sm); }
 
   .btn-primary {
-    padding: 0.4rem 0.9rem;
+    padding: 5px 14px;
     background: var(--accent-color);
     color: #fff;
-    border: none;
-    border-radius: 4px;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
     cursor: pointer;
     font-size: var(--font-size-sm);
+    font-family: inherit;
+    transition: background 0.1s ease;
   }
+  .btn-primary:hover { background: var(--accent-hover); }
   .btn-cancel {
-    padding: 0.3rem 0.8rem;
+    padding: 4px 12px;
     background: transparent;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     color: var(--text-secondary);
     font-size: var(--font-size-sm);
+    font-family: inherit;
   }
+  .btn-cancel:hover { background: var(--bg-hover); color: var(--text-primary); }
   .btn-danger {
     padding: 0.3rem 0.8rem;
     background: #dc3545;
@@ -523,13 +536,13 @@
     font-size: var(--font-size-sm);
   }
 
-  .account-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .account-list { display: flex; flex-direction: column; gap: 0.4rem; }
 
   .account-card {
-    border: 1px solid var(--border-light);
+    border: 1px solid var(--border-color);
     border-left: 3px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
     background: var(--bg-primary);
     display: flex;
     flex-direction: column;

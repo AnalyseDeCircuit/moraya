@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "图床",
       "publish": "发布",
-      "permissions": "权限",
       "voice": "语音模型",
       "knowledgeBase": "知识库",
       "plugins": "插件",
       "kbSync": "KB 同步",
       "picora": "Picora",
-      "export": "导出"
+      "export": "导出",
+      "shortcuts": "快捷键"
     },
     "groups": {
       "general": "通用",
@@ -2121,5 +2121,109 @@
       "entryDeletedAt": "删除于 {date}",
       "kbUnknown": "未知知识库"
     }
+  },
+  "shortcuts": {
+    "title": "键盘快捷键",
+    "intro": "Moraya 的全部键盘快捷键。带 🔒 的由系统菜单管理，将在后续版本支持自定义。",
+    "aiChatBehavior": {
+      "title": "AI 对话 — 回车键行为",
+      "intro": "选择 AI 对话输入框中回车键的发送/换行方式。",
+      "sendsAction": "发送消息",
+      "newlineAction": "换行",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + 回车 发送"
+      },
+      "enterSend": {
+        "label": "回车直接发送"
+      },
+      "defaultBadge": "默认"
+    },
+    "categories": {
+      "file": "文件",
+      "edit": "编辑",
+      "paragraph": "段落",
+      "format": "格式",
+      "view": "视图",
+      "aiChat": "AI 对话",
+      "workflow": "工作流"
+    },
+    "actions": {
+      "file": {
+        "new": "新建文档",
+        "newWindow": "新建窗口",
+        "open": "打开文件",
+        "save": "保存",
+        "saveAs": "另存为",
+        "exportHtml": "导出 HTML",
+        "exportPdf": "导出 PDF",
+        "exportImage": "导出图片",
+        "exportDoc": "导出 Word"
+      },
+      "edit": {
+        "undo": "撤销",
+        "redo": "重做",
+        "find": "查找",
+        "replace": "替换"
+      },
+      "paragraph": {
+        "h1": "一级标题",
+        "h2": "二级标题",
+        "h3": "三级标题",
+        "h4": "四级标题",
+        "h5": "五级标题",
+        "h6": "六级标题",
+        "codeBlock": "代码块",
+        "quote": "引用"
+      },
+      "format": {
+        "bold": "加粗",
+        "italic": "斜体",
+        "strike": "删除线",
+        "code": "行内代码",
+        "link": "链接",
+        "insertImage": "插入图片"
+      },
+      "view": {
+        "toggleMode": "切换可视/源码模式",
+        "toggleSplit": "切换分屏模式",
+        "toggleSidebar": "切换侧边栏",
+        "toggleAIPanel": "切换 AI 面板",
+        "toggleOutline": "切换大纲",
+        "openSettings": "打开设置",
+        "zoomIn": "放大",
+        "zoomOut": "缩小",
+        "zoomReset": "重置缩放"
+      },
+      "workflow": {
+        "quickOpen": "快速打开",
+        "commandPalette": "命令面板"
+      },
+      "aiChat": {
+        "send": "发送 AI 消息",
+        "newline": "插入换行"
+      }
+    },
+    "lockedHint": "由系统菜单管理，暂不支持在此自定义",
+    "lockedFootnote": "🔒 表示该快捷键由系统原生菜单提供，本版本暂不支持在此修改。",
+    "editor": {
+      "prompt": "按下任意键盘组合…（Esc 取消）",
+      "needsModifier": "至少需要包含一个修饰键（Cmd、Ctrl、Alt 或 Shift）",
+      "conflict": "已被其他快捷键占用",
+      "save": "保存",
+      "cancel": "取消",
+      "editHint": "点击以录入新的快捷键",
+      "resetToDefault": "恢复默认",
+      "customized": "已自定义",
+      "customizedShort": "已自定义",
+      "resetConflict": "默认快捷键与另一个已自定义的快捷键冲突，请先调整后再重置。",
+      "syncFailed": "无法更新系统菜单",
+      "syncFailedShort": "菜单同步失败",
+      "unbound": "未设置",
+      "resetAll": "全部恢复默认",
+      "resetAllHint": "将所有快捷键恢复为默认值",
+      "resetAllConfirm": "确定要将所有 {count} 个已自定义的快捷键恢复为默认值？",
+      "resetShort": "恢复默认"
+    },
+    "editHint": "提示：带虚线框和 ✎ 图标的行可以点击按键重新录入；其余带 🔒 的快捷键由系统菜单管理，本版本暂不支持自定义。"
   }
 }

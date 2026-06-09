@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "호스팅",
       "publish": "게시",
-      "permissions": "권한",
       "voice": "음성 AI",
       "knowledgeBase": "지식 베이스",
       "plugins": "플러그인",
       "kbSync": "KB 동기화",
       "picora": "Picora",
-      "export": "내보내기"
+      "export": "내보내기",
+      "shortcuts": "단축키"
     },
     "groups": {
       "general": "일반",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "{date}에 삭제됨",
       "kbUnknown": "알 수 없는 KB"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + Enter로 전송"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "기본"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "PDF로 내보내기",
+        "exportImage": "이미지로 내보내기",
+        "exportDoc": "Word로 내보내기"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "임의의 키 조합을 누르세요… (Esc로 취소)",
+      "needsModifier": "수정자(Cmd, Ctrl, Alt, Shift) 중 하나 이상이 필요합니다",
+      "conflict": "다른 단축키에서 이미 사용 중",
+      "save": "저장",
+      "cancel": "취소",
+      "editHint": "클릭하여 새 단축키 녹음",
+      "resetToDefault": "기본값으로 재설정",
+      "customized": "사용자 정의됨",
+      "customizedShort": "사용자 정의",
+      "resetConflict": "기본값이 다른 사용자 정의 단축키와 충돌합니다. 먼저 그것을 변경해 주세요.",
+      "syncFailed": "시스템 메뉴를 업데이트할 수 없음",
+      "syncFailedShort": "메뉴 동기화 실패",
+      "unbound": "설정되지 않음",
+      "resetAll": "모두 초기화",
+      "resetAllHint": "모든 단축키를 기본값으로 되돌리기",
+      "resetAllConfirm": "사용자 정의된 {count}개의 단축키를 모두 기본값으로 되돌릴까요?",
+      "resetShort": "기본값"
+    },
+    "editHint": "팁: 점선 테두리와 ✎ 아이콘이 있는 행은 키를 클릭해 다시 녹음할 수 있습니다. 🔒 표시의 단축키는 시스템 메뉴 관리이며 현재 버전에서는 사용자 정의할 수 없습니다."
   }
 }

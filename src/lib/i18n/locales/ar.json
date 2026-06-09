@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "استضافة الصور",
       "publish": "النشر",
-      "permissions": "الصلاحيات",
       "voice": "نموذج الصوت",
       "knowledgeBase": "قاعدة المعرفة",
       "plugins": "الإضافات",
       "kbSync": "KB Sync",
       "picora": "Picora",
-      "export": "تصدير"
+      "export": "تصدير",
+      "shortcuts": "اختصارات"
     },
     "groups": {
       "general": "عام",
@@ -2042,5 +2042,109 @@
       "entryDeletedAt": "حُذف في {date}",
       "kbUnknown": "قاعدة معرفة غير معروفة"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "إرسال بـ Cmd/Ctrl + Enter"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "افتراضي"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "تصدير PDF",
+        "exportImage": "تصدير صورة",
+        "exportDoc": "تصدير Word"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "اضغط أي تركيبة مفاتيح… (Esc للإلغاء)",
+      "needsModifier": "يلزم مفتاح تعديل واحد على الأقل (Cmd أو Ctrl أو Alt أو Shift)",
+      "conflict": "مستخدم بالفعل بواسطة اختصار آخر",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "editHint": "انقر لتسجيل اختصار جديد",
+      "resetToDefault": "إعادة التعيين إلى الافتراضي",
+      "customized": "مخصص",
+      "customizedShort": "مخصص",
+      "resetConflict": "الإعداد الافتراضي يتعارض مع اختصار مخصص آخر — يرجى تغييره أولاً.",
+      "syncFailed": "تعذر تحديث قائمة النظام",
+      "syncFailedShort": "فشلت المزامنة",
+      "unbound": "غير محدد",
+      "resetAll": "إعادة تعيين الكل",
+      "resetAllHint": "استعادة جميع الاختصارات إلى الإعدادات الافتراضية",
+      "resetAllConfirm": "إعادة تعيين جميع الاختصارات المخصصة البالغ عددها {count} إلى الإعدادات الافتراضية؟",
+      "resetShort": "افتراضي"
+    },
+    "editHint": "نصيحة: الصفوف ذات الإطار المتقطع ورمز ✎ يمكن إعادة تسجيلها بالنقر على المفاتيح. الاختصارات الأخرى (🔒) تأتي من قائمة النظام ولا يمكن تخصيصها بعد."
   }
 }

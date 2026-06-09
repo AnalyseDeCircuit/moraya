@@ -144,7 +144,7 @@
   });
 </script>
 
-<div class="publish-settings">
+<div class="publish-settings gx-tab">
   {#if editingTarget}
     <!-- Edit form -->
     <div class="edit-form">
@@ -516,11 +516,7 @@
 </div>
 
 <style>
-  .publish-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  /* Outer layout: .gx-tab on root. */
 
   .empty-state {
     display: flex;
@@ -546,16 +542,16 @@
   .target-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .target-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.9rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-primary);
   }
 

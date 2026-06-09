@@ -33,13 +33,13 @@
       "mcp": "MCP",
       "image": "Alojamiento",
       "publish": "Publicar",
-      "permissions": "Permisos",
       "voice": "Voz IA",
       "knowledgeBase": "Base de conocimiento",
       "plugins": "Plugins",
       "kbSync": "Sincronización KB",
       "picora": "Picora",
-      "export": "Exportar"
+      "export": "Exportar",
+      "shortcuts": "Atajos"
     },
     "groups": {
       "general": "General",
@@ -2040,5 +2040,109 @@
       "entryDeletedAt": "Eliminado el {date}",
       "kbUnknown": "BC desconocida"
     }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "intro": "All keyboard shortcuts in Moraya. Entries marked 🔒 are managed by the native menu and will become user-configurable in a later version.",
+    "aiChatBehavior": {
+      "title": "AI Chat — Enter Key Behavior",
+      "intro": "Choose how the Enter key behaves in the AI chat input.",
+      "sendsAction": "sends message",
+      "newlineAction": "newline",
+      "modEnterSend": {
+        "label": "Cmd/Ctrl + Intro envía"
+      },
+      "enterSend": {
+        "label": "Enter sends"
+      },
+      "defaultBadge": "Predeterminado"
+    },
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "paragraph": "Paragraph",
+      "format": "Format",
+      "view": "View",
+      "aiChat": "AI Chat",
+      "workflow": "Workflow"
+    },
+    "actions": {
+      "file": {
+        "new": "New Document",
+        "newWindow": "New Window",
+        "open": "Open File",
+        "save": "Save",
+        "saveAs": "Save As",
+        "exportHtml": "Export HTML",
+        "exportPdf": "Exportar PDF",
+        "exportImage": "Exportar imagen",
+        "exportDoc": "Exportar Word"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "find": "Find",
+        "replace": "Replace"
+      },
+      "paragraph": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6",
+        "codeBlock": "Code Block",
+        "quote": "Block Quote"
+      },
+      "format": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "code": "Inline Code",
+        "link": "Link",
+        "insertImage": "Insert Image"
+      },
+      "view": {
+        "toggleMode": "Toggle Visual / Source",
+        "toggleSplit": "Toggle Split Mode",
+        "toggleSidebar": "Toggle Sidebar",
+        "toggleAIPanel": "Toggle AI Panel",
+        "toggleOutline": "Toggle Outline",
+        "openSettings": "Open Settings",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "zoomReset": "Reset Zoom"
+      },
+      "workflow": {
+        "quickOpen": "Quick Open",
+        "commandPalette": "Command Palette"
+      },
+      "aiChat": {
+        "send": "Send AI Message",
+        "newline": "Insert Newline"
+      }
+    },
+    "lockedHint": "Managed by the native menu — not customizable here yet",
+    "lockedFootnote": "🔒 indicates the shortcut is provided by the OS-native menu and is not customizable in this version.",
+    "editor": {
+      "prompt": "Pulsa cualquier combinación de teclas… (Esc para cancelar)",
+      "needsModifier": "Requiere al menos un modificador (Cmd, Ctrl, Alt o Shift)",
+      "conflict": "Ya en uso por otro atajo",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "editHint": "Clic para grabar un nuevo atajo",
+      "resetToDefault": "Restablecer al predeterminado",
+      "customized": "Personalizado",
+      "customizedShort": "Personal",
+      "resetConflict": "El predeterminado entra en conflicto con otro atajo personalizado — cámbielo primero.",
+      "syncFailed": "No se pudo actualizar el menú del sistema",
+      "syncFailedShort": "Error de sincronización",
+      "unbound": "No establecido",
+      "resetAll": "Restablecer todo",
+      "resetAllHint": "Restaurar todos los atajos a sus valores predeterminados",
+      "resetAllConfirm": "¿Restablecer los {count} atajo(s) personalizado(s) a los valores predeterminados?",
+      "resetShort": "Restablecer"
+    },
+    "editHint": "Consejo: las filas con borde discontinuo e icono ✎ pueden re-grabarse haciendo clic en las teclas. Los demás atajos (🔒) provienen del menú del sistema y aún no se pueden personalizar."
   }
 }

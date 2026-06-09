@@ -118,6 +118,21 @@ interface Settings {
   picoraRewriteBase64: boolean;
   // v0.60.0: Native PDF export configuration.
   exportSettings: ExportSettings;
+  // v0.41.4: AI chat input — controls whether plain Enter sends the message
+  // or inserts a newline. `'modEnterSend'` keeps the original behavior
+  // (Cmd/Ctrl+Enter sends, Enter = newline); `'enterSend'` matches chat-app
+  // convention (Enter sends, Shift+Enter = newline).
+  aiChatEnterBehavior: 'modEnterSend' | 'enterSend';
+  /**
+   * User-customized keyboard shortcut bindings, keyed by
+   * `ShortcutEntry.id` (see `$lib/shortcuts/catalog`). Only entries with
+   * `customizable: true` honor overrides at runtime; everything else is
+   * bound in the native menu and ignores this map.
+   *
+   * Empty / missing values fall back to the catalog default for the
+   * current platform.
+   */
+  shortcutOverrides: Record<string, string>;
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -174,6 +189,8 @@ const DEFAULT_SETTINGS: Settings = {
   picoraTabSeen: false,
   picoraRewriteBase64: false,
   exportSettings: { ...DEFAULT_EXPORT_SETTINGS, margins: { ...DEFAULT_EXPORT_SETTINGS.margins } },
+  aiChatEnterBehavior: 'modEnterSend',
+  shortcutOverrides: {},
 };
 
 function resolveLocale(selection: LocaleSelection): SupportedLocale {
