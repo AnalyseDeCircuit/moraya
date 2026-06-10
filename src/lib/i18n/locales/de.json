@@ -2066,7 +2066,8 @@
       "format": "Format",
       "view": "View",
       "aiChat": "AI Chat",
-      "workflow": "Workflow"
+      "workflow": "Workflow",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2145,6 +2146,44 @@
       "resetAllConfirm": "Alle {count} angepassten Shortcut(s) auf Standardwerte zurücksetzen?",
       "resetShort": "Standard"
     },
-    "editHint": "Tipp: Zeilen mit gestricheltem Rahmen und ✎-Symbol können durch Klicken auf die Tasten neu aufgezeichnet werden. Andere Shortcuts (🔒) stammen aus dem Systemmenü und sind noch nicht anpassbar."
+    "editHint": "Tipp: Zeilen mit gestricheltem Rahmen und ✎-Symbol können durch Klicken auf die Tasten neu aufgezeichnet werden. Andere Shortcuts (🔒) stammen aus dem Systemmenü und sind noch nicht anpassbar.",
+    "mcp": {
+      "intro": "Tastenkürzel für installierte MCP-Server und deren Tools binden.",
+      "empty": "Installiere zuerst einen MCP-Server unter \"Einstellungen → MCP\", um Kürzel zu binden.",
+      "addTool": "MCP-Tool-Kürzel hinzufügen",
+      "removeTool": "Dieses MCP-Tool-Kürzel entfernen",
+      "removeToolShort": "Entfernen",
+      "removeStale": "Veraltete Bindung entfernen",
+      "removeStaleShort": "Entfernen",
+      "serverKindShort": "Server",
+      "serverKindHint": "Schaltet die MCP-Server-Verbindung um",
+      "toolKindShort": "Tool",
+      "toolKindHint": "Öffnet das KI-Panel und bittet den Assistenten, dieses Tool zu verwenden",
+      "staleShort": "Nicht verfügbar",
+      "staleHint": "Der MCP-Server oder das Tool dieser Bindung ist nicht mehr installiert",
+      "serverGone": "MCP-Server ist nicht mehr installiert",
+      "unavailable": "MCP-Tool nicht verfügbar",
+      "toggled": {
+        "on": "{name} aktiviert",
+        "off": "{name} deaktiviert"
+      },
+      "dialog": {
+        "title": "MCP-Tool-Kürzel hinzufügen",
+        "serverLabel": "MCP-Server",
+        "toolLabel": "Tool",
+        "toolPlaceholder": "Tool auswählen…",
+        "noToolsForServer": "Dieser Server hat noch keine Tools — verbinde ihn zuerst in den MCP-Einstellungen.",
+        "duplicateError": "Für dieses Tool existiert bereits ein Kürzel.",
+        "add": "Hinzufügen",
+        "cancel": "Abbrechen"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "Alte Disk-Images bereinigen",
+    "body": "Es wurden ältere Moraya-Disk-Images gefunden, die noch eingehängt sind. Wenn sie eingehängt bleiben, erscheinen mehrere Versionen im \"Öffnen mit\"-Menü. Jetzt auswerfen?",
+    "ejectAll": "Alle auswerfen",
+    "skip": "Später",
+    "partialFailure": "Einige Disk-Images konnten nicht ausgeworfen werden:"
   }
 }

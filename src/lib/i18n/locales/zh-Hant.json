@@ -2066,7 +2066,8 @@
       "format": "格式",
       "view": "檢視",
       "aiChat": "AI 對話",
-      "workflow": "工作流程"
+      "workflow": "工作流程",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2145,6 +2146,44 @@
       "resetAllConfirm": "確定要將所有 {count} 個已自訂的快捷鍵恢復為預設值？",
       "resetShort": "恢復預設"
     },
-    "editHint": "提示：帶虛線框和 ✎ 圖示的列可點擊按鍵重新錄入；其餘帶 🔒 的快捷鍵由系統選單管理，本版本暫不支援自訂。"
+    "editHint": "提示：帶虛線框和 ✎ 圖示的列可點擊按鍵重新錄入；其餘帶 🔒 的快捷鍵由系統選單管理，本版本暫不支援自訂。",
+    "mcp": {
+      "intro": "為已安裝的 MCP 伺服器及其工具綁定鍵盤快捷鍵。",
+      "empty": "請先到「設定 → MCP」安裝 MCP 伺服器，再綁定快捷鍵。",
+      "addTool": "新增 MCP 工具快捷鍵",
+      "removeTool": "移除此 MCP 工具快捷鍵",
+      "removeToolShort": "移除",
+      "removeStale": "清除失效綁定",
+      "removeStaleShort": "清除",
+      "serverKindShort": "伺服器",
+      "serverKindHint": "按下後切換 MCP 伺服器的連線狀態",
+      "toolKindShort": "工具",
+      "toolKindHint": "按下後開啟 AI 面板並請助理使用此工具",
+      "staleShort": "已失效",
+      "staleHint": "此綁定指向的 MCP 伺服器或工具已不存在",
+      "serverGone": "MCP 伺服器已被解除安裝",
+      "unavailable": "對應的 MCP 工具無法使用",
+      "toggled": {
+        "on": "已啟用 {name}",
+        "off": "已停用 {name}"
+      },
+      "dialog": {
+        "title": "新增 MCP 工具快捷鍵",
+        "serverLabel": "MCP 伺服器",
+        "toolLabel": "工具",
+        "toolPlaceholder": "選擇工具…",
+        "noToolsForServer": "該伺服器還沒有可用工具，請先到 MCP 設定中連線。",
+        "duplicateError": "已經為此工具建立了快捷鍵。",
+        "add": "新增",
+        "cancel": "取消"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "清理舊版磁碟映像",
+    "body": "偵測到舊版 Moraya 磁碟映像仍處於掛載狀態。如果不退出，「打開方式」選單裡會看到多個不同版本的 Moraya 入口。現在退出它們嗎？",
+    "ejectAll": "全部退出",
+    "skip": "稍後再說",
+    "partialFailure": "部分磁碟映像退出失敗："
   }
 }

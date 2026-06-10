@@ -25,13 +25,15 @@ export type ShortcutCategory =
   | 'format'
   | 'view'
   | 'aiChat'
-  | 'workflow';
+  | 'workflow'
+  | 'mcp';
 
 export interface ShortcutEntry {
   /** Stable id used as both the i18n key and the customization key in settings. */
   id: string;
   category: ShortcutCategory;
-  /** i18n key (under `shortcuts.actions.<id>`) for the human-readable label. */
+  /** i18n key (under `shortcuts.actions.<id>`) for the human-readable label.
+   *  Dynamic entries (mcp.*) leave this empty and use `label` instead. */
   labelKey: string;
   /** Default key combo on macOS — e.g. `Cmd+S`, `Cmd+Shift+I`. */
   mac: string;
@@ -41,13 +43,49 @@ export interface ShortcutEntry {
   customizable: boolean;
   /**
    * Native menu item id (from `src-tauri/src/menu.rs`) this shortcut maps to,
-   * or `undefined` for frontend-only shortcuts (Quick Open, AI chat send).
+   * or `undefined` for frontend-only shortcuts (Quick Open, AI chat send,
+   * any mcp.* dynamic entry).
    * Used by `menu-sync.ts` to push accelerator overrides to the native menu.
    */
   menuItemId?: string;
+
+  // ── Dynamic-entry fields (v0.41.6) ───────────────────────────────
+  // These only apply to entries produced by `getRuntimeCatalog()` (MCP
+  // servers / tools). Static entries leave them undefined.
+
+  /** Pre-resolved display label — overrides `labelKey` lookup when present. */
+  label?: string;
+  /** True if generated at runtime from MCP state (not in the static catalog). */
+  dynamic?: boolean;
+  /** Subtype for runtime branching in the panel + action dispatcher. */
+  dynamicKind?: 'mcp.server' | 'mcp.tool';
+  /** True if the referenced server / tool is no longer installed.
+   *  Stale entries are rendered with a "remove" affordance instead of "edit". */
+  stale?: boolean;
+  /** For mcp.* entries: the MCP server id this binding references. */
+  serverId?: string;
+  /** For mcp.tool entries: the MCP tool name this binding references. */
+  toolName?: string;
 }
 
-export const SHORTCUT_CATALOG: ShortcutEntry[] = [
+/**
+ * User-added MCP tool shortcut reference. Lives in `settings.mcpToolShortcuts`
+ * and tells `getRuntimeCatalog()` which tools to add to the dynamic catalog.
+ * Bindings themselves live in `settings.shortcutOverrides` keyed by
+ * `catalogId` (same key used as `ShortcutEntry.id`).
+ */
+export interface MCPToolShortcutRef {
+  catalogId: string;
+  serverId: string;
+  toolName: string;
+}
+
+/** Minimal shape `getRuntimeCatalog` needs — keeps this module decoupled
+ *  from the full MCP types. */
+export interface MCPServerStub { id: string; name: string; enabled: boolean; }
+export interface MCPToolStub { name: string; serverId: string; description?: string; }
+
+export const SHORTCUT_CATALOG_STATIC: ShortcutEntry[] = [
   // ── File (native menu) ─────────────────────────────────────────
   { id: 'file.new',         category: 'file', labelKey: 'shortcuts.actions.file.new',         mac: 'Cmd+N',       win: 'Ctrl+N',       customizable: true, menuItemId: 'file_new'},
   { id: 'file.newWindow',   category: 'file', labelKey: 'shortcuts.actions.file.newWindow',   mac: 'Cmd+Shift+N', win: 'Ctrl+Shift+N', customizable: true, menuItemId: 'file_new_window'},
@@ -115,7 +153,81 @@ export const CATEGORY_LABEL_KEYS: Record<ShortcutCategory, string> = {
   view: 'shortcuts.categories.view',
   aiChat: 'shortcuts.categories.aiChat',
   workflow: 'shortcuts.categories.workflow',
+  mcp: 'shortcuts.categories.mcp',
 };
+
+/**
+ * Build the runtime shortcut catalog: static entries + dynamic MCP entries.
+ *
+ *   - For every installed MCP server, append a "toggle" entry so the user
+ *     can bind a combo that enables / disables the server.
+ *   - For every user-added MCP tool shortcut (recorded in
+ *     `settings.mcpToolShortcuts`), append a "prompt" entry that fires
+ *     `showAIPanel = true` + sendChatMessage with the canonical
+ *     `ai.prompts.mcpToolPrompt` template (same as the native menu).
+ *
+ * `stale: true` is set when a user-added tool shortcut references a
+ * server or tool that's no longer installed / exposed. The panel renders
+ * stale entries with a "remove" affordance; the runtime dispatcher
+ * no-ops them with a localized toast.
+ *
+ * Pure function — safe to call inside Svelte `$derived`.
+ */
+export function getRuntimeCatalog(
+  servers: MCPServerStub[],
+  tools: MCPToolStub[],
+  userToolShortcuts: MCPToolShortcutRef[],
+): ShortcutEntry[] {
+  const dynamic: ShortcutEntry[] = [];
+
+  for (const s of servers) {
+    dynamic.push({
+      id: `mcp.server.${s.id}.toggle`,
+      category: 'mcp',
+      labelKey: '',
+      label: s.name,
+      mac: '',
+      win: '',
+      customizable: true,
+      menuItemId: undefined,
+      dynamic: true,
+      dynamicKind: 'mcp.server',
+      stale: false,
+      serverId: s.id,
+    });
+  }
+
+  for (const ref of userToolShortcuts) {
+    const server = servers.find(s => s.id === ref.serverId);
+    const tool = tools.find(t => t.serverId === ref.serverId && t.name === ref.toolName);
+    const stale = !server || !tool;
+    dynamic.push({
+      id: ref.catalogId,
+      category: 'mcp',
+      labelKey: '',
+      label: stale ? ref.toolName : `${ref.toolName} · ${server.name}`,
+      mac: '',
+      win: '',
+      customizable: true,
+      menuItemId: undefined,
+      dynamic: true,
+      dynamicKind: 'mcp.tool',
+      stale,
+      serverId: ref.serverId,
+      toolName: ref.toolName,
+    });
+  }
+
+  return [...SHORTCUT_CATALOG_STATIC, ...dynamic];
+}
+
+/**
+ * @deprecated Prefer `getRuntimeCatalog()` so MCP dynamic entries are
+ * included. This export remains for the small subset of callers that
+ * only need the static set (e.g. native menu sync via menu-sync.ts —
+ * dynamic entries have no menuItemId, so they're never relevant there).
+ */
+export const SHORTCUT_CATALOG = SHORTCUT_CATALOG_STATIC;
 
 /** Render the platform-appropriate display string for an entry (default only). */
 export function displayShortcut(entry: ShortcutEntry, isMacOS: boolean): string {
@@ -290,18 +402,25 @@ function mainKeyToTauri(token: string): string | null {
  * Find the first customizable catalog entry whose effective binding would
  * conflict with `candidate` (excluding `excludeId`). Returns null if no
  * conflict.
+ *
+ * Callers can pass a `catalog` (e.g. `getRuntimeCatalog(...)`) to include
+ * dynamic MCP entries in the conflict check. Omitting `catalog` falls back
+ * to the static set — sufficient for the legacy non-MCP code paths.
  */
 export function findBindingConflict(
   candidate: string,
   excludeId: string,
   isMacOS: boolean,
   overrides?: ShortcutOverrides,
+  catalog: ShortcutEntry[] = SHORTCUT_CATALOG_STATIC,
 ): ShortcutEntry | null {
   const canon = canonicalizeBinding(candidate);
-  for (const entry of SHORTCUT_CATALOG) {
+  for (const entry of catalog) {
     if (entry.id === excludeId) continue;
     if (!entry.customizable) continue;
+    if (entry.stale) continue;
     const other = effectiveBinding(entry, isMacOS, overrides);
+    if (!other) continue; // dynamic entries with no default + no override
     if (canonicalizeBinding(other) === canon) return entry;
   }
   return null;

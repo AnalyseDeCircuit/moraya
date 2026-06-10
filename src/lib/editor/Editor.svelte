@@ -1096,11 +1096,28 @@
     //    HTML). Excel additionally puts a screenshot on the clipboard — the
     //    old code preferred the image, which masked the actual table. We
     //    intercept here so the table wins.
+    //
+    //    But ONLY when the clipboard is table-dominant. If the user copied a
+    //    Word/Notion/web section that has paragraphs/lists around the table,
+    //    extracting just the table and discarding the rest is a destructive
+    //    paste. Heuristic: remove all <table> elements from the parsed body
+    //    and check residual text — if substantial non-whitespace content
+    //    remains, fall through to ProseMirror's default handler which can
+    //    walk the full mixed-content tree.
     if (!insideCell && html && /<table[\s>]/i.test(html)) {
       try {
         const doc = new DOMParser().parseFromString(html, 'text/html');
-        const table = doc.querySelector('table');
-        if (table && insertTableFromElement(table as HTMLTableElement)) {
+        const tables = doc.querySelectorAll('table');
+        const table = tables[0];
+        const residual = doc.body.cloneNode(true) as HTMLElement;
+        residual.querySelectorAll('table').forEach((t) => t.remove());
+        // 30 chars of non-whitespace is a low bar — short captions / headings
+        // typical of "table + label" copies still fall through, while the
+        // bare table case (Excel selection, single table copied alone)
+        // leaves only stray whitespace and gets intercepted as before.
+        const residualLen = (residual.textContent ?? '').replace(/\s+/g, '').length;
+        const isTableDominant = tables.length === 1 && residualLen < 30;
+        if (table && isTableDominant && insertTableFromElement(table as HTMLTableElement)) {
           event.preventDefault();
           event.stopImmediatePropagation();
           return;

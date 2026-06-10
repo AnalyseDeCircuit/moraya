@@ -570,53 +570,57 @@ fn is_duplicate_open(app: &tauri::AppHandle, path: &str) -> bool {
     false
 }
 
-/// Route a URL handed to us by the deep-link plugin (macOS apple-events,
-/// Windows scheme handler, Linux argv-via-single-instance). `file://` URLs
-/// flow through the file-open pipeline (same as `RunEvent::Opened`); custom
-/// schemes flow through the Picora deep-link handler. Without this split,
-/// the deep-link plugin's `on_open_url` callback silently consumes the
-/// `file://` URL from a Finder double-click and the document never opens.
+/// Route a URL handed to us by the deep-link plugin. Custom-scheme URLs go
+/// to the Picora deep-link handler; `file://` URLs are intentionally a
+/// no-op at runtime — see the comment inside.
 fn dispatch_open_url(app: &tauri::AppHandle, url: &url::Url) {
     if url.scheme() == "file" {
+        // On macOS, a Finder double-click delivers ONE apple-event but TWO
+        // callbacks fire from it: the deep-link plugin's `on_open_url`
+        // (this path) AND Tauri's `RunEvent::Opened` (the runtime branch
+        // further below). Both originally tried to call
+        // `create_editor_window` and we deduped via `is_duplicate_open`.
+        //
+        // That hangs the app on the SECOND double-click (warm start):
+        //   1. `on_open_url` fires first, calls `WebviewWindowBuilder::build()`
+        //   2. `build()` re-enters NSApp's run loop to drive window init
+        //   3. The still-queued `RunEvent::Opened` dispatches mid-build and
+        //      tries to call `build()` again on the same main thread
+        //   4. The mutex inside `is_duplicate_open` is read after the
+        //      re-entry, so the dedup can't fire in time — the second
+        //      build is launched nested inside the first, and the main
+        //      thread deadlocks waiting on itself.
+        //
+        // Fix: warm-start window creation goes exclusively through
+        // `RunEvent::Opened` (the runtime callback runs on the main thread
+        // without the re-entrancy hazard — v0.39.0 behavior). Cold-start
+        // buffering stays here because it does no UI work (just a Mutex
+        // push that `get_opened_file` drains later), so it's safe from
+        // any thread the deep-link plugin invokes us on.
+        //
+        // On Windows/Linux the deep-link plugin only fires `on_open_url`
+        // for custom schemes (`moraya://`); file-association argv is
+        // handled by tauri-plugin-single-instance, so this branch is
+        // unreachable for `file://` there.
         if let Ok(path_buf) = url.to_file_path() {
             let path = path_buf.to_string_lossy().into_owned();
-            if is_duplicate_open(app, &path) {
-                return;
-            }
             let main_ready = app
                 .try_state::<MainWindowReady>()
                 .map(|s| s.0.load(Ordering::SeqCst))
                 .unwrap_or(false);
-
             if !main_ready {
-                // Cold start: buffer for the main window's get_opened_file().
-                // Also fire the open-file event in case the frontend listener
-                // is already registered by the time we get here.
+                if is_duplicate_open(app, &path) {
+                    return;
+                }
                 if let Some(opened) = app.try_state::<OpenedFiles>() {
                     if let Ok(mut files) = opened.0.lock() {
                         files.push(path.clone());
                     }
                 }
                 let _ = app.emit("open-file", &path);
-            } else {
-                // Runtime: open the file in a new editor window. Fall back to
-                // the open-file event if window creation fails so an existing
-                // window can pick it up.
-                #[cfg(target_os = "macos")]
-                {
-                    if let Some(pending) = app.try_state::<PendingFiles>() {
-                        if create_editor_window(app, &pending, Some(path.clone())).is_err() {
-                            let _ = app.emit("open-file", &path);
-                        }
-                    } else {
-                        let _ = app.emit("open-file", &path);
-                    }
-                }
-                #[cfg(not(target_os = "macos"))]
-                {
-                    let _ = app.emit("open-file", &path);
-                }
             }
+            // Warm-start: intentionally do nothing — `RunEvent::Opened`
+            // will handle window creation on the main thread.
         }
         return;
     }
@@ -937,6 +941,8 @@ pub fn run() {
             commands::ai_proxy::ai_proxy_fetch,
             commands::ai_proxy::ai_proxy_stream,
             commands::ai_proxy::ai_proxy_abort,
+            commands::dmg_cleanup::find_stale_moraya_mounts,
+            commands::dmg_cleanup::eject_dmg_mount,
             commands::kb::kb_index_files,
             commands::kb::kb_index_single_file,
             commands::kb::kb_search,

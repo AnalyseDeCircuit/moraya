@@ -2066,7 +2066,8 @@
       "format": "Format",
       "view": "View",
       "aiChat": "AI Chat",
-      "workflow": "Workflow"
+      "workflow": "Workflow",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2145,6 +2146,44 @@
       "resetAllConfirm": "カスタマイズした {count} 件のショートカットをすべて既定に戻しますか？",
       "resetShort": "既定に戻す"
     },
-    "editHint": "ヒント：破線の枠と ✎ アイコンが付いた行はキーをクリックして再記録できます。🔒 のショートカットはシステムメニュー管理で、現バージョンではカスタマイズできません。"
+    "editHint": "ヒント：破線の枠と ✎ アイコンが付いた行はキーをクリックして再記録できます。🔒 のショートカットはシステムメニュー管理で、現バージョンではカスタマイズできません。",
+    "mcp": {
+      "intro": "インストール済みの MCP サーバーとそのツールにキーボードショートカットを割り当てます。",
+      "empty": "まず「設定 → MCP」で MCP サーバーをインストールしてください。",
+      "addTool": "MCP ツールのショートカットを追加",
+      "removeTool": "この MCP ツールのショートカットを削除",
+      "removeToolShort": "削除",
+      "removeStale": "無効な割り当てを削除",
+      "removeStaleShort": "削除",
+      "serverKindShort": "サーバー",
+      "serverKindHint": "MCP サーバーの接続状態を切り替えます",
+      "toolKindShort": "ツール",
+      "toolKindHint": "AI パネルを開き、このツールを使うようアシスタントに依頼します",
+      "staleShort": "無効",
+      "staleHint": "この割り当てが指す MCP サーバーまたはツールは存在しません",
+      "serverGone": "MCP サーバーはインストールされていません",
+      "unavailable": "対応する MCP ツールは利用できません",
+      "toggled": {
+        "on": "{name} を有効にしました",
+        "off": "{name} を無効にしました"
+      },
+      "dialog": {
+        "title": "MCP ツールのショートカットを追加",
+        "serverLabel": "MCP サーバー",
+        "toolLabel": "ツール",
+        "toolPlaceholder": "ツールを選択…",
+        "noToolsForServer": "このサーバーにはまだツールがありません。先に MCP 設定で接続してください。",
+        "duplicateError": "このツールのショートカットは既に存在します。",
+        "add": "追加",
+        "cancel": "キャンセル"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "古いディスクイメージのクリーンアップ",
+    "body": "古い Moraya ディスクイメージがまだマウントされたままです。マウントされたままにすると、「このアプリケーションで開く」メニューに複数のバージョンが表示されます。今すぐ取り出しますか？",
+    "ejectAll": "すべて取り出す",
+    "skip": "後で",
+    "partialFailure": "一部のディスクイメージを取り出せませんでした:"
   }
 }

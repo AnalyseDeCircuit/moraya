@@ -2145,7 +2145,8 @@
       "format": "Format",
       "view": "View",
       "aiChat": "AI Chat",
-      "workflow": "Workflow"
+      "workflow": "Workflow",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2224,6 +2225,44 @@
       "resetAllConfirm": "Reset all {count} customized shortcut(s) back to defaults?",
       "resetShort": "Reset"
     },
-    "editHint": "Tip: rows with a dashed outline and ✎ icon can be re-recorded by clicking the keys. Other shortcuts come from the system menu (🔒) and aren't customizable yet."
+    "editHint": "Tip: rows with a dashed outline and ✎ icon can be re-recorded by clicking the keys. Other shortcuts come from the system menu (🔒) and aren't customizable yet.",
+    "mcp": {
+      "intro": "Bind keyboard shortcuts to installed MCP servers and the tools they expose.",
+      "empty": "Install an MCP server first (Settings → MCP) to bind shortcuts.",
+      "addTool": "Add MCP tool shortcut",
+      "removeTool": "Remove this MCP tool shortcut",
+      "removeToolShort": "Remove",
+      "removeStale": "Remove this stale binding",
+      "removeStaleShort": "Remove",
+      "serverKindShort": "Server",
+      "serverKindHint": "Toggles the MCP server connection on / off",
+      "toolKindShort": "Tool",
+      "toolKindHint": "Opens AI panel and asks the assistant to use this tool",
+      "staleShort": "Unavailable",
+      "staleHint": "The MCP server or tool this binding references is no longer installed",
+      "serverGone": "MCP server is no longer installed",
+      "unavailable": "MCP tool unavailable",
+      "toggled": {
+        "on": "Enabled {name}",
+        "off": "Disabled {name}"
+      },
+      "dialog": {
+        "title": "Add MCP tool shortcut",
+        "serverLabel": "MCP server",
+        "toolLabel": "Tool",
+        "toolPlaceholder": "Select a tool…",
+        "noToolsForServer": "This server has no tools yet — connect to it from the MCP settings first.",
+        "duplicateError": "A shortcut for this tool already exists.",
+        "add": "Add",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "Clean up old disk images",
+    "body": "Found older Moraya disk images still mounted. Leaving them mounted makes several versions appear in the \"Open With\" menu. Eject them now?",
+    "ejectAll": "Eject all",
+    "skip": "Not now",
+    "partialFailure": "Some disk images could not be ejected:"
   }
 }

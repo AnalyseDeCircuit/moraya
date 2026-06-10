@@ -246,3 +246,124 @@ describe('catalog menuItemId integrity', () => {
     expect(dupes).toEqual([]);
   });
 });
+
+describe('getRuntimeCatalog (v0.41.6 MCP dynamic entries)', () => {
+  it('returns the static catalog when no MCP state is provided', async () => {
+    const { getRuntimeCatalog, SHORTCUT_CATALOG_STATIC } = await import('./catalog');
+    const result = getRuntimeCatalog([], [], []);
+    expect(result).toEqual(SHORTCUT_CATALOG_STATIC);
+  });
+
+  it('appends one mcp.server.<id>.toggle entry per installed server', async () => {
+    const { getRuntimeCatalog } = await import('./catalog');
+    const result = getRuntimeCatalog(
+      [
+        { id: 'mcp-1', name: 'Filesystem', enabled: true },
+        { id: 'preset-git', name: 'Git', enabled: false },
+      ],
+      [],
+      [],
+    );
+    const dyn = result.filter(e => e.category === 'mcp');
+    expect(dyn).toHaveLength(2);
+    expect(dyn[0]!.id).toBe('mcp.server.mcp-1.toggle');
+    expect(dyn[0]!.dynamicKind).toBe('mcp.server');
+    expect(dyn[0]!.label).toBe('Filesystem');
+    expect(dyn[0]!.stale).toBe(false);
+    expect(dyn[0]!.menuItemId).toBeUndefined();
+    expect(dyn[1]!.id).toBe('mcp.server.preset-git.toggle');
+    expect(dyn[1]!.label).toBe('Git');
+  });
+
+  it('appends one mcp.tool entry per user-added tool shortcut', async () => {
+    const { getRuntimeCatalog } = await import('./catalog');
+    const result = getRuntimeCatalog(
+      [{ id: 'mcp-1', name: 'Filesystem', enabled: true }],
+      [{ name: 'read_file', serverId: 'mcp-1' }],
+      [{
+        catalogId: 'mcp.tool.mcp-1.read_file.prompt',
+        serverId: 'mcp-1',
+        toolName: 'read_file',
+      }],
+    );
+    const tool = result.find(e => e.id === 'mcp.tool.mcp-1.read_file.prompt');
+    expect(tool).toBeTruthy();
+    expect(tool!.dynamicKind).toBe('mcp.tool');
+    expect(tool!.label).toBe('read_file · Filesystem');
+    expect(tool!.stale).toBe(false);
+    expect(tool!.serverId).toBe('mcp-1');
+    expect(tool!.toolName).toBe('read_file');
+  });
+
+  it('marks tool entries stale when server is gone', async () => {
+    const { getRuntimeCatalog } = await import('./catalog');
+    const result = getRuntimeCatalog(
+      [], // no servers
+      [],
+      [{
+        catalogId: 'mcp.tool.mcp-1.read_file.prompt',
+        serverId: 'mcp-1',
+        toolName: 'read_file',
+      }],
+    );
+    const tool = result.find(e => e.id === 'mcp.tool.mcp-1.read_file.prompt');
+    expect(tool).toBeTruthy();
+    expect(tool!.stale).toBe(true);
+    expect(tool!.label).toBe('read_file');
+  });
+
+  it('marks tool entries stale when tool is gone from server', async () => {
+    const { getRuntimeCatalog } = await import('./catalog');
+    const result = getRuntimeCatalog(
+      [{ id: 'mcp-1', name: 'Filesystem', enabled: true }],
+      [], // server present but tool removed
+      [{
+        catalogId: 'mcp.tool.mcp-1.read_file.prompt',
+        serverId: 'mcp-1',
+        toolName: 'read_file',
+      }],
+    );
+    const tool = result.find(e => e.id === 'mcp.tool.mcp-1.read_file.prompt');
+    expect(tool!.stale).toBe(true);
+  });
+
+  it('does NOT include MCP entries in the static fallback catalog', async () => {
+    const { SHORTCUT_CATALOG, SHORTCUT_CATALOG_STATIC } = await import('./catalog');
+    // The deprecated alias matches the static set 1:1 — never includes dynamic mcp.*
+    expect(SHORTCUT_CATALOG).toBe(SHORTCUT_CATALOG_STATIC);
+    expect(SHORTCUT_CATALOG.some(e => e.category === 'mcp')).toBe(false);
+  });
+});
+
+describe('findBindingConflict + runtime catalog', () => {
+  it('detects conflicts when one side is a dynamic MCP entry', async () => {
+    const { getRuntimeCatalog, findBindingConflict } = await import('./catalog');
+    const catalog = getRuntimeCatalog(
+      [{ id: 'mcp-1', name: 'Filesystem', enabled: true }],
+      [],
+      [],
+    );
+    // User wants to bind Cmd+Alt+1 to file.save — what if they already
+    // bound it to the Filesystem toggle?
+    const overrides = { 'mcp.server.mcp-1.toggle': 'Cmd+Alt+1' };
+    const conflict = findBindingConflict('Cmd+Alt+1', 'file.save', true, overrides, catalog);
+    expect(conflict?.id).toBe('mcp.server.mcp-1.toggle');
+  });
+
+  it('does NOT conflict with stale entries', async () => {
+    const { getRuntimeCatalog, findBindingConflict } = await import('./catalog');
+    const catalog = getRuntimeCatalog(
+      [], // server gone → tool entry is stale
+      [],
+      [{
+        catalogId: 'mcp.tool.gone.read_file.prompt',
+        serverId: 'gone',
+        toolName: 'read_file',
+      }],
+    );
+    const overrides = { 'mcp.tool.gone.read_file.prompt': 'Cmd+Alt+R' };
+    // Recording Cmd+Alt+R for a different entry should NOT collide with a stale binding
+    const conflict = findBindingConflict('Cmd+Alt+R', 'file.save', true, overrides, catalog);
+    expect(conflict).toBeNull();
+  });
+});

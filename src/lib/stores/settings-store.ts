@@ -78,6 +78,14 @@ interface Settings {
   publishTargets: PublishTarget[];
   lastUpdateCheckDate: string | null;  // "YYYY-MM-DD" format
   rememberLastFolder: boolean;
+  /**
+   * v0.41.6 — stale-DMG self-check (macOS only).
+   * Fingerprint = sorted, comma-joined list of stale mount paths the user
+   * dismissed last. If the next scan returns a SUPERSET (i.e. a new stale
+   * DMG appeared), we re-prompt; if it's a subset or equal, we stay quiet.
+   * `null` means the user has never dismissed the prompt.
+   */
+  staleDmgDismissedFingerprint: string | null;
   lastOpenedFolder: string | null;
   mcpAutoApprove: boolean;
   aiMaxTokens: number;
@@ -133,6 +141,14 @@ interface Settings {
    * current platform.
    */
   shortcutOverrides: Record<string, string>;
+  /**
+   * v0.41.6 — user-added MCP tool shortcut entries. Each ref produces a
+   * row in the Shortcuts panel's MCP section; the actual key binding lives
+   * in `shortcutOverrides` keyed by `catalogId`. Server-toggle entries are
+   * NOT stored here — they're auto-derived from the installed MCP server
+   * list at render time.
+   */
+  mcpToolShortcuts: { catalogId: string; serverId: string; toolName: string }[];
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -159,6 +175,7 @@ const DEFAULT_SETTINGS: Settings = {
   publishTargets: [],
   lastUpdateCheckDate: null,
   rememberLastFolder: true,
+  staleDmgDismissedFingerprint: null,
   lastOpenedFolder: null,
   mcpAutoApprove: false,
   aiMaxTokens: 16384,
@@ -191,6 +208,7 @@ const DEFAULT_SETTINGS: Settings = {
   exportSettings: { ...DEFAULT_EXPORT_SETTINGS, margins: { ...DEFAULT_EXPORT_SETTINGS.margins } },
   aiChatEnterBehavior: 'modEnterSend',
   shortcutOverrides: {},
+  mcpToolShortcuts: [],
 };
 
 function resolveLocale(selection: LocaleSelection): SupportedLocale {

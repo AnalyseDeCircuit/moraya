@@ -2064,7 +2064,8 @@
       "format": "Format",
       "view": "View",
       "aiChat": "AI Chat",
-      "workflow": "Workflow"
+      "workflow": "Workflow",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2143,6 +2144,44 @@
       "resetAllConfirm": "Réinitialiser les {count} raccourci(s) personnalisé(s) aux valeurs par défaut ?",
       "resetShort": "Par défaut"
     },
-    "editHint": "Astuce : les lignes avec un contour pointillé et l'icône ✎ peuvent être re-enregistrées en cliquant sur les touches. Les autres raccourcis (🔒) proviennent du menu système et ne sont pas encore personnalisables."
+    "editHint": "Astuce : les lignes avec un contour pointillé et l'icône ✎ peuvent être re-enregistrées en cliquant sur les touches. Les autres raccourcis (🔒) proviennent du menu système et ne sont pas encore personnalisables.",
+    "mcp": {
+      "intro": "Associez des raccourcis clavier aux serveurs MCP installés et aux outils qu'ils exposent.",
+      "empty": "Installez d'abord un serveur MCP via « Paramètres → MCP » pour créer des raccourcis.",
+      "addTool": "Ajouter un raccourci d'outil MCP",
+      "removeTool": "Supprimer ce raccourci d'outil MCP",
+      "removeToolShort": "Supprimer",
+      "removeStale": "Supprimer le raccourci obsolète",
+      "removeStaleShort": "Supprimer",
+      "serverKindShort": "Serveur",
+      "serverKindHint": "Active ou désactive la connexion au serveur MCP",
+      "toolKindShort": "Outil",
+      "toolKindHint": "Ouvre le panneau d'IA et demande à l'assistant d'utiliser cet outil",
+      "staleShort": "Indisponible",
+      "staleHint": "Le serveur ou l'outil MCP de cette assignation n'est plus installé",
+      "serverGone": "Le serveur MCP n'est plus installé",
+      "unavailable": "L'outil MCP n'est pas disponible",
+      "toggled": {
+        "on": "{name} activé",
+        "off": "{name} désactivé"
+      },
+      "dialog": {
+        "title": "Ajouter un raccourci d'outil MCP",
+        "serverLabel": "Serveur MCP",
+        "toolLabel": "Outil",
+        "toolPlaceholder": "Sélectionner un outil…",
+        "noToolsForServer": "Ce serveur n'a pas encore d'outils — connectez-le d'abord depuis les paramètres MCP.",
+        "duplicateError": "Un raccourci pour cet outil existe déjà.",
+        "add": "Ajouter",
+        "cancel": "Annuler"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "Nettoyer les anciennes images disque",
+    "body": "D'anciennes images disque Moraya sont encore montées. Les laisser montées fait apparaître plusieurs versions dans le menu « Ouvrir avec ». Les éjecter maintenant ?",
+    "ejectAll": "Tout éjecter",
+    "skip": "Plus tard",
+    "partialFailure": "Certaines images disque n'ont pas pu être éjectées :"
   }
 }

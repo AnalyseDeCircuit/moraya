@@ -2064,7 +2064,8 @@
       "format": "Format",
       "view": "View",
       "aiChat": "AI Chat",
-      "workflow": "Workflow"
+      "workflow": "Workflow",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2143,6 +2144,44 @@
       "resetAllConfirm": "¿Restablecer los {count} atajo(s) personalizado(s) a los valores predeterminados?",
       "resetShort": "Restablecer"
     },
-    "editHint": "Consejo: las filas con borde discontinuo e icono ✎ pueden re-grabarse haciendo clic en las teclas. Los demás atajos (🔒) provienen del menú del sistema y aún no se pueden personalizar."
+    "editHint": "Consejo: las filas con borde discontinuo e icono ✎ pueden re-grabarse haciendo clic en las teclas. Los demás atajos (🔒) provienen del menú del sistema y aún no se pueden personalizar.",
+    "mcp": {
+      "intro": "Asigna atajos de teclado a los servidores MCP instalados y a las herramientas que exponen.",
+      "empty": "Instala primero un servidor MCP en «Ajustes → MCP» para asignar atajos.",
+      "addTool": "Añadir atajo de herramienta MCP",
+      "removeTool": "Eliminar este atajo de herramienta MCP",
+      "removeToolShort": "Eliminar",
+      "removeStale": "Eliminar asignación obsoleta",
+      "removeStaleShort": "Eliminar",
+      "serverKindShort": "Servidor",
+      "serverKindHint": "Activa o desactiva la conexión del servidor MCP",
+      "toolKindShort": "Herramienta",
+      "toolKindHint": "Abre el panel de IA y pide al asistente que use esta herramienta",
+      "staleShort": "No disponible",
+      "staleHint": "El servidor o la herramienta MCP de esta asignación ya no está instalado",
+      "serverGone": "El servidor MCP ya no está instalado",
+      "unavailable": "La herramienta MCP no está disponible",
+      "toggled": {
+        "on": "Activado {name}",
+        "off": "Desactivado {name}"
+      },
+      "dialog": {
+        "title": "Añadir atajo de herramienta MCP",
+        "serverLabel": "Servidor MCP",
+        "toolLabel": "Herramienta",
+        "toolPlaceholder": "Selecciona una herramienta…",
+        "noToolsForServer": "Este servidor aún no tiene herramientas — conéctalo desde Ajustes MCP primero.",
+        "duplicateError": "Ya existe un atajo para esta herramienta.",
+        "add": "Añadir",
+        "cancel": "Cancelar"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "Limpiar imágenes de disco antiguas",
+    "body": "Se han encontrado imágenes de disco de Moraya antiguas todavía montadas. Si las dejas montadas, aparecerán varias versiones en el menú \"Abrir con\". ¿Las expulso ahora?",
+    "ejectAll": "Expulsar todas",
+    "skip": "Ahora no",
+    "partialFailure": "No se pudieron expulsar algunas imágenes de disco:"
   }
 }

@@ -2066,7 +2066,8 @@
       "format": "Format",
       "view": "View",
       "aiChat": "AI Chat",
-      "workflow": "Workflow"
+      "workflow": "Workflow",
+      "mcp": "MCP"
     },
     "actions": {
       "file": {
@@ -2145,6 +2146,44 @@
       "resetAllConfirm": "Restaurar os {count} atalho(s) personalizado(s) para os padrões?",
       "resetShort": "Padrão"
     },
-    "editHint": "Dica: as linhas com contorno tracejado e ícone ✎ podem ser regravadas clicando nas teclas. Outros atalhos (🔒) vêm do menu do sistema e ainda não são personalizáveis."
+    "editHint": "Dica: as linhas com contorno tracejado e ícone ✎ podem ser regravadas clicando nas teclas. Outros atalhos (🔒) vêm do menu do sistema e ainda não são personalizáveis.",
+    "mcp": {
+      "intro": "Associe atalhos de teclado a servidores MCP instalados e às ferramentas que eles expõem.",
+      "empty": "Instale primeiro um servidor MCP em «Configurações → MCP» para criar atalhos.",
+      "addTool": "Adicionar atalho de ferramenta MCP",
+      "removeTool": "Remover este atalho de ferramenta MCP",
+      "removeToolShort": "Remover",
+      "removeStale": "Remover associação inválida",
+      "removeStaleShort": "Remover",
+      "serverKindShort": "Servidor",
+      "serverKindHint": "Alterna a conexão do servidor MCP",
+      "toolKindShort": "Ferramenta",
+      "toolKindHint": "Abre o painel de IA e pede ao assistente para usar esta ferramenta",
+      "staleShort": "Indisponível",
+      "staleHint": "O servidor ou ferramenta MCP desta associação não está mais instalado",
+      "serverGone": "O servidor MCP não está mais instalado",
+      "unavailable": "Ferramenta MCP indisponível",
+      "toggled": {
+        "on": "{name} ativado",
+        "off": "{name} desativado"
+      },
+      "dialog": {
+        "title": "Adicionar atalho de ferramenta MCP",
+        "serverLabel": "Servidor MCP",
+        "toolLabel": "Ferramenta",
+        "toolPlaceholder": "Selecione uma ferramenta…",
+        "noToolsForServer": "Este servidor ainda não tem ferramentas — conecte-o nas configurações MCP primeiro.",
+        "duplicateError": "Já existe um atalho para esta ferramenta.",
+        "add": "Adicionar",
+        "cancel": "Cancelar"
+      }
+    }
+  },
+  "staleDmg": {
+    "title": "Limpar imagens de disco antigas",
+    "body": "Foram encontradas imagens de disco antigas do Moraya ainda montadas. Mantê-las montadas faz com que várias versões apareçam no menu \"Abrir com\". Ejetar agora?",
+    "ejectAll": "Ejetar tudo",
+    "skip": "Agora não",
+    "partialFailure": "Não foi possível ejetar algumas imagens de disco:"
   }
 }

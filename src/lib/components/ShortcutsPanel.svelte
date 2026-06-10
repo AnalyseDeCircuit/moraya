@@ -3,30 +3,40 @@
   import { settingsStore } from '$lib/stores/settings-store';
   import { isMacOS } from '$lib/utils/platform';
   import {
-    SHORTCUT_CATALOG,
     CATEGORY_LABEL_KEYS,
     displayShortcut,
     effectiveBinding,
     eventToBinding,
     findBindingConflict,
+    getRuntimeCatalog,
     resolveAIChatBindings,
     type ShortcutCategory,
     type ShortcutEntry,
   } from '$lib/shortcuts/catalog';
+  import { mcpStore } from '$lib/services/mcp/mcp-manager';
+  import AddMCPShortcutDialog from './AddMCPShortcutDialog.svelte';
 
-  // Group catalog entries by category in declared order, preserving the
-  // order entries appear in the array (so the panel matches the menu order).
-  const grouped: { category: ShortcutCategory; entries: ShortcutEntry[] }[] = (() => {
-    const order: ShortcutCategory[] = ['file', 'edit', 'paragraph', 'format', 'view', 'workflow', 'aiChat'];
+  // ── Runtime catalog: static entries + dynamic MCP entries ──────────
+  let mcpState = $derived($mcpStore);
+  let userToolShortcuts = $derived($settingsStore.mcpToolShortcuts ?? []);
+  let catalog = $derived(getRuntimeCatalog(
+    mcpState.servers,
+    mcpState.tools,
+    userToolShortcuts,
+  ));
+
+  // Group by category in declared order so the panel matches the menu order.
+  let grouped = $derived.by(() => {
+    const order: ShortcutCategory[] = ['file', 'edit', 'paragraph', 'format', 'view', 'workflow', 'aiChat', 'mcp'];
     const map = new Map<ShortcutCategory, ShortcutEntry[]>();
     for (const c of order) map.set(c, []);
-    for (const entry of SHORTCUT_CATALOG) {
+    for (const entry of catalog) {
       map.get(entry.category)?.push(entry);
     }
     return order
       .map(c => ({ category: c, entries: map.get(c) ?? [] }))
-      .filter(g => g.entries.length > 0);
-  })();
+      .filter(g => g.entries.length > 0 || g.category === 'mcp');
+  });
 
   let behavior = $derived($settingsStore.aiChatEnterBehavior);
   let aiBindings = $derived(resolveAIChatBindings(behavior, isMacOS));
@@ -40,12 +50,20 @@
   function isEditable(entry: ShortcutEntry): boolean {
     // AI chat bindings are driven by the radio above — don't double-expose.
     if (entry.id === 'aiChat.send' || entry.id === 'aiChat.newline') return false;
+    // Stale MCP entries get a "remove" affordance instead of recording.
+    if (entry.stale) return false;
     return entry.customizable;
   }
 
   /** Whether this entry has been overridden by the user. */
   function isOverridden(entry: ShortcutEntry): boolean {
     return entry.customizable && !!overrides[entry.id];
+  }
+
+  /** Resolved label for a row — dynamic entries use `entry.label`, static use i18n. */
+  function rowLabel(entry: ShortcutEntry): string {
+    if (entry.label) return entry.label;
+    return $t(entry.labelKey);
   }
 
   function rowBinding(entry: ShortcutEntry): string {
@@ -90,7 +108,7 @@
       recordError = 'shortcuts.editor.needsModifier';
       return;
     }
-    const conflict = findBindingConflict(binding, recordingId, isMacOS, overrides);
+    const conflict = findBindingConflict(binding, recordingId, isMacOS, overrides, catalog);
     if (conflict && conflict.id !== recordingId) {
       recordedBinding = binding;
       recordError = 'shortcuts.editor.conflict';
@@ -136,7 +154,7 @@
     if (defaultBinding) {
       const remaining = { ...overrides };
       delete remaining[entry.id];
-      const conflict = findBindingConflict(defaultBinding, entry.id, isMacOS, remaining);
+      const conflict = findBindingConflict(defaultBinding, entry.id, isMacOS, remaining, catalog);
       if (conflict) {
         recordError = 'shortcuts.editor.resetConflict';
         recordedBinding = defaultBinding;
@@ -162,6 +180,42 @@
 
   /** Number of entries currently overridden — drives the "Reset all" button. */
   let overrideCount = $derived(Object.keys(overrides).length);
+
+  // ── MCP shortcut management ───────────────────────────────────────
+  let showAddMCPDialog = $state(false);
+
+  function removeMCPToolShortcut(catalogId: string) {
+    const next = (userToolShortcuts ?? []).filter(r => r.catalogId !== catalogId);
+    const nextOverrides = { ...overrides };
+    delete nextOverrides[catalogId];
+    settingsStore.update({
+      mcpToolShortcuts: next,
+      shortcutOverrides: nextOverrides,
+    });
+  }
+
+  function handleAddMCPTool(payload: { serverId: string; toolName: string }) {
+    const catalogId = `mcp.tool.${payload.serverId}.${payload.toolName}.prompt`;
+    if ((userToolShortcuts ?? []).some(r => r.catalogId === catalogId)) {
+      showAddMCPDialog = false;
+      return;
+    }
+    settingsStore.update({
+      mcpToolShortcuts: [...(userToolShortcuts ?? []), {
+        catalogId,
+        serverId: payload.serverId,
+        toolName: payload.toolName,
+      }],
+    });
+    showAddMCPDialog = false;
+    // Open the recorder immediately so the user can bind a combo without
+    // a second click — the runtime catalog will include the new entry by
+    // the time Svelte re-renders.
+    queueMicrotask(() => {
+      const entry = catalog.find(e => e.id === catalogId);
+      if (entry) startRecording(entry);
+    });
+  }
 
   /** Reset every customized shortcut back to its catalog default. */
   async function resetAllToDefaults() {
@@ -230,7 +284,6 @@
         </button>
       {/if}
     </div>
-    <p class="page-subtitle">{$t('shortcuts.intro')}</p>
   </header>
 
   <!-- AI chat behavior — selectable option cards -->
@@ -316,22 +369,39 @@
     </div>
   </section>
 
-  <!-- Full shortcut catalog, read-only -->
+  <!-- Full shortcut catalog -->
   {#each grouped as group (group.category)}
     {@const tokens = (entry: ShortcutEntry) => splitBinding(rowBinding(entry))}
+    {@const isMCP = group.category === 'mcp'}
     <section class="settings-section">
       <div class="section-head">
         <h3 class="section-title">{$t(CATEGORY_LABEL_KEYS[group.category])}</h3>
+        {#if isMCP}
+          <p class="section-desc">{$t('shortcuts.mcp.intro')}</p>
+        {/if}
       </div>
       <div class="shortcut-card">
+        {#if isMCP && group.entries.length === 0}
+          <div class="shortcut-row mcp-empty">
+            <span class="mcp-empty-text">{$t('shortcuts.mcp.empty')}</span>
+          </div>
+        {/if}
         {#each group.entries as entry, i (entry.id)}
           {@const recording = recordingId === entry.id}
           {@const editable = isEditable(entry)}
           {@const overridden = isOverridden(entry)}
-          <div class="shortcut-row" class:first={i === 0} class:last={i === group.entries.length - 1} class:recording>
+          <div class="shortcut-row" class:first={i === 0} class:last={i === group.entries.length - 1 && !isMCP} class:recording>
             <span class="shortcut-label">
-              {$t(entry.labelKey)}
-              {#if overridden && !recording}
+              <span class="label-text">{rowLabel(entry)}</span>
+              {#if entry.dynamicKind === 'mcp.server'}
+                <span class="mcp-kind-pill mcp-kind-server" title={$t('shortcuts.mcp.serverKindHint')}>{$t('shortcuts.mcp.serverKindShort')}</span>
+              {:else if entry.dynamicKind === 'mcp.tool'}
+                <span class="mcp-kind-pill mcp-kind-tool" title={$t('shortcuts.mcp.toolKindHint')}>{$t('shortcuts.mcp.toolKindShort')}</span>
+              {/if}
+              {#if entry.stale}
+                <span class="mcp-stale-pill" title={$t('shortcuts.mcp.staleHint')}>{$t('shortcuts.mcp.staleShort')}</span>
+              {/if}
+              {#if overridden && !recording && !entry.stale}
                 <span class="overridden-pill" title={$t('shortcuts.editor.customized')}>{$t('shortcuts.editor.customizedShort')}</span>
               {/if}
               {#if syncErrorId === entry.id}
@@ -370,6 +440,14 @@
                     aria-label={$t('shortcuts.editor.cancel')}
                   >✕</button>
                 </span>
+              {:else if entry.stale}
+                <button
+                  type="button"
+                  class="reset-btn danger"
+                  onclick={() => removeMCPToolShortcut(entry.id)}
+                  title={$t('shortcuts.mcp.removeStale')}
+                  aria-label={$t('shortcuts.mcp.removeStale')}
+                >✕ <span class="reset-btn-text">{$t('shortcuts.mcp.removeStaleShort')}</span></button>
               {:else}
                 {#if editable}
                   <button
@@ -392,7 +470,15 @@
                     {/if}
                     <span class="edit-icon" aria-hidden="true">✎</span>
                   </button>
-                  {#if overridden}
+                  {#if overridden && entry.dynamicKind === 'mcp.tool'}
+                    <button
+                      type="button"
+                      class="reset-btn"
+                      onclick={() => removeMCPToolShortcut(entry.id)}
+                      title={$t('shortcuts.mcp.removeTool')}
+                      aria-label={$t('shortcuts.mcp.removeTool')}
+                    >✕ <span class="reset-btn-text">{$t('shortcuts.mcp.removeToolShort')}</span></button>
+                  {:else if overridden}
                     <button
                       type="button"
                       class="reset-btn"
@@ -413,11 +499,34 @@
             </span>
           </div>
         {/each}
+        {#if isMCP}
+          <div class="shortcut-row mcp-add-row">
+            <button
+              type="button"
+              class="mcp-add-btn"
+              onclick={() => { showAddMCPDialog = true; }}
+              disabled={mcpState.servers.length === 0}
+              title={mcpState.servers.length === 0 ? $t('shortcuts.mcp.empty') : $t('shortcuts.mcp.addTool')}
+            >
+              + {$t('shortcuts.mcp.addTool')}
+            </button>
+          </div>
+        {/if}
       </div>
     </section>
   {/each}
 
 </div>
+
+{#if showAddMCPDialog}
+  <AddMCPShortcutDialog
+    servers={mcpState.servers}
+    tools={mcpState.tools}
+    existing={userToolShortcuts}
+    onClose={() => { showAddMCPDialog = false; }}
+    onAdd={handleAddMCPTool}
+  />
+{/if}
 
 <svelte:window onkeydown={captureKeydown} />
 
@@ -478,12 +587,6 @@
     color: white;
     background: var(--accent-color);
     border-radius: 999px;
-  }
-  .page-subtitle {
-    margin: 0;
-    font-size: var(--font-size-xs);
-    color: var(--text-secondary);
-    line-height: 1.5;
   }
 
   /* ── Section (label above + card) ─────────────────────────────── */
@@ -764,6 +867,73 @@
     border-radius: 999px;
     letter-spacing: 0.02em;
     vertical-align: 1px;
+  }
+
+  /* ── MCP section ──────────────────────────────────────────────── */
+  .mcp-kind-pill {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    vertical-align: 1px;
+  }
+  .mcp-kind-server {
+    background: color-mix(in srgb, #2e7d32 12%, transparent);
+    color: #1b5e20;
+  }
+  .mcp-kind-tool {
+    background: color-mix(in srgb, #6a1b9a 12%, transparent);
+    color: #6a1b9a;
+  }
+  .mcp-stale-pill {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 1px 6px;
+    background: color-mix(in srgb, #dc3545 14%, transparent);
+    color: #c62828;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    vertical-align: 1px;
+  }
+  .mcp-empty,
+  .mcp-add-row {
+    justify-content: center;
+  }
+  .mcp-empty-text {
+    color: var(--text-muted);
+    font-size: var(--font-size-xs);
+    font-style: italic;
+  }
+  .mcp-add-btn {
+    padding: 4px 12px;
+    font-size: var(--font-size-xs);
+    color: var(--accent-color);
+    background: transparent;
+    border: 1px dashed color-mix(in srgb, var(--accent-color) 50%, var(--border-color));
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.1s ease, border-color 0.1s ease;
+  }
+  .mcp-add-btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--accent-color) 8%, transparent);
+    border-color: var(--accent-color);
+  }
+  .mcp-add-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .reset-btn.danger {
+    border-color: #e57373;
+    color: #c62828;
+  }
+  .reset-btn.danger:hover {
+    background: color-mix(in srgb, #dc3545 8%, transparent);
   }
 
   /* ── Recording mode (per-row) ─────────────────────────────────── */

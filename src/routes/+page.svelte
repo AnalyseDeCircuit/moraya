@@ -365,6 +365,36 @@ ${tr('welcome.tip')}
     // Focus is handled by Editor.svelte's onMount (cursor restore + focus).
     // Do not duplicate focus here — racing RAFs can cause focus to be lost
     // in new windows where the WebView is still initializing.
+    editorReadyForSplash = true;
+    tryDispatchAppReady();
+  }
+
+  /**
+   * Splash dismissal (see app.html). We want the splash to stay up until
+   * the user has something MEANINGFUL to look at, not just an empty
+   * editor shell. The two gates:
+   *   - `editorReadyForSplash`: createEditor finished.
+   *   - `coldStartHydrated`: the OS-handed cold-start file (if any) has
+   *     been applied to the editor; for a no-file launch this flips
+   *     true as soon as the init Promise.all settles.
+   * Whichever flips last fires the dispatch.
+   */
+  let appReadyDispatched = false;
+  let editorReadyForSplash = false;
+  let coldStartHydrated = false;
+  function tryDispatchAppReady() {
+    if (appReadyDispatched) return;
+    if (!editorReadyForSplash || !coldStartHydrated) return;
+    appReadyDispatched = true;
+    window.dispatchEvent(new CustomEvent('moraya:app-ready'));
+  }
+  /** Force the splash off, even if our gates haven't flipped — used by the
+   *  non-Tauri / init-failure / 8 s safety paths so the user is never
+   *  trapped behind the spinner. */
+  function forceDispatchAppReady() {
+    if (appReadyDispatched) return;
+    appReadyDispatched = true;
+    window.dispatchEvent(new CustomEvent('moraya:app-ready'));
   }
 
   /** Get the current document content on-demand.
@@ -1005,6 +1035,36 @@ ${tr('welcome.tip')}
     }
   }
 
+  // ── MCP shortcut action handlers (v0.41.6) ─────────────────────────
+  async function runMCPServerToggle(serverId: string): Promise<void> {
+    const { toggleMCPServer } = await import('$lib/services/mcp/shortcut-actions');
+    const result = await toggleMCPServer(serverId);
+    if (result.kind === 'connected') {
+      showToast($t('shortcuts.mcp.toggled.on', { name: result.server.name }), 'success');
+    } else if (result.kind === 'disconnected') {
+      showToast($t('shortcuts.mcp.toggled.off', { name: result.server.name }), 'success');
+    } else if (result.kind === 'not-found') {
+      showToast($t('shortcuts.mcp.serverGone'), 'error');
+    } else {
+      showToast(result.reason, 'error');
+    }
+  }
+
+  async function runMCPToolPrompt(serverId: string, toolName: string): Promise<void> {
+    const { resolveMCPToolPrompt } = await import('$lib/services/mcp/shortcut-actions');
+    const r = resolveMCPToolPrompt(serverId, toolName);
+    if (r.kind === 'not-found') {
+      showToast($t('shortcuts.mcp.unavailable'), 'error');
+      return;
+    }
+    showAIPanel = true;
+    try {
+      await sendChatMessage(r.message, getCurrentContent());
+    } catch (e) {
+      console.warn('[MCP shortcut] sendChatMessage failed:', e);
+    }
+  }
+
   // Minimalist-style keyboard shortcuts
   /**
    * Perform the action for a catalog-defined shortcut id. Used by the
@@ -1016,6 +1076,21 @@ ${tr('welcome.tip')}
    * caller can fall through to the existing hardcoded handlers).
    */
   function runShortcutAction(id: string): boolean {
+    // ── MCP dynamic-id branches (v0.41.6) ────────────────────────
+    // Format: `mcp.server.<serverId>.toggle` / `mcp.tool.<serverId>.<toolName>.prompt`
+    // (serverId is the persisted ID from mcp-config.json; toolName is
+    // stable for as long as the MCP server keeps exposing it.)
+    if (id.startsWith('mcp.server.') && id.endsWith('.toggle')) {
+      const serverId = id.slice('mcp.server.'.length, -'.toggle'.length);
+      void runMCPServerToggle(serverId);
+      return true;
+    }
+    if (id.startsWith('mcp.tool.') && id.endsWith('.prompt')) {
+      const ref = $settingsStore.mcpToolShortcuts?.find(r => r.catalogId === id);
+      if (ref) void runMCPToolPrompt(ref.serverId, ref.toolName);
+      return true;
+    }
+
     switch (id) {
       case 'file.new': handleNewFile(); return true;
       case 'file.newWindow':
@@ -2692,6 +2767,18 @@ ${tr('welcome.tip')}
     // Preload enhancement plugins in background (warms cache for editor creation)
     preloadEnhancementPlugins();
 
+    // macOS only: detect stale `/Volumes/Moraya*` DMG mounts left by older
+    // downloads and offer to eject. Fire-and-forget — runs after a short
+    // delay so the editor mount path stays uncontested. Skipped on
+    // non-macOS by the service itself.
+    if (isTauri) {
+      setTimeout(() => {
+        import('$lib/services/dmg-cleanup')
+          .then(m => m.maybePromptStaleDmgCleanup())
+          .catch(() => { /* best-effort */ });
+      }, 1500);
+    }
+
     // Restore persisted settings, AI config, and MCP servers (Tauri-only: uses plugin-store)
     if (isTauri) {
       // Start loading the opened file in PARALLEL with store initialization.
@@ -2783,6 +2870,25 @@ ${tr('welcome.tip')}
             adjustSidebarForFile(filePath);
           }
 
+          // Cold-start hydration gate: the OS-handed file (if any) has now
+          // been applied. If no file was handed in, this just flips on
+          // store-load completion, which is the natural splash dismiss
+          // point for a "new empty doc" launch. The companion gate
+          // (`editorReadyForSplash`) is flipped by `handleEditorReady`;
+          // whichever lands last fires the actual dispatch.
+          requestAnimationFrame(() => {
+            coldStartHydrated = true;
+            tryDispatchAppReady();
+            // Source-mode / image-preview cold-starts don't mount <Editor>
+            // and therefore never fire handleEditorReady. Give the visual
+            // path 1.2 s to report in; after that we uncover the app
+            // ourselves rather than letting the user wait for the 8 s
+            // splash safety net.
+            setTimeout(() => {
+              if (!appReadyDispatched) forceDispatchAppReady();
+            }, 1200);
+          });
+
           // Register KB sync intervals (mode=interval) for all bound KBs
           if (settings.kbSyncEnabled !== false) {
             for (const kb of filesState.knowledgeBases) {
@@ -2814,7 +2920,12 @@ ${tr('welcome.tip')}
               .catch(() => {}); // Silently fail on background check
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          // Init pipeline blew up. We still want the user to see whatever
+          // chrome rendered behind the splash — better a half-broken UI
+          // they can see than a spinner that hides the breakage.
+          forceDispatchAppReady();
+        });
 
       setupAutoSave();
 
@@ -2877,6 +2988,13 @@ ${tr('welcome.tip')}
           console.warn('[v0.69] Picora key migration skipped:', e);
         }
       })();
+    } else {
+      // Non-Tauri (browser dev preview): no Promise.all init runs, so the
+      // splash would sit on its 8 s safety timer. Force-dispatch so a
+      // `pnpm dev` page boots clean — we don't have an opened file to
+      // wait for here and the editor's ready signal is the same as the
+      // Tauri path.
+      requestAnimationFrame(() => forceDispatchAppReady());
     }
 
     // Initialize word count
