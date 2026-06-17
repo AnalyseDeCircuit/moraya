@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::sync::Mutex;
 use tauri::{Emitter, Manager};
@@ -32,7 +32,7 @@ pub struct TabTransferData {
 /// Maps window labels to pending tab data for newly created windows (tab detach).
 pub struct PendingTabData(pub Mutex<HashMap<String, TabTransferData>>);
 
-/// Tracks whether the main window has called get_opened_file (i.e. frontend is ready).
+/// Tracks whether the main window has called get_opened_files (i.e. frontend is ready).
 /// Used to distinguish cold-start file association from runtime file opens.
 pub struct MainWindowReady(pub AtomicBool);
 
@@ -128,36 +128,45 @@ fn update_mcp_menu(_app: tauri::AppHandle, _servers: Vec<menu::MCPMenuServer>, _
     menu::update_mcp_submenu(&_app, &_servers, &_no_tools_label);
 }
 
-/// Called by the frontend once it's ready; returns the file path to open (if any).
-/// For new windows created via drag-drop, looks up PendingFiles by window label.
-/// For the main window, falls back to OpenedFiles (startup CLI args / file association).
+/// Called by the frontend once it's ready; returns ALL queued file paths to open.
+/// For new windows created via drag-drop, looks up PendingFiles by window label
+/// (always exactly one path).
+/// For the main window, drains OpenedFiles (startup CLI args / file association).
+/// Multi-select on macOS Finder "Open With" and `open -a Moraya.app *.md` queue
+/// every path; returning just the first dropped the rest silently (issue #65).
 #[tauri::command]
-fn get_opened_file(
+fn get_opened_files(
     window: tauri::Window,
     state: tauri::State<'_, OpenedFiles>,
     pending: tauri::State<'_, PendingFiles>,
     ready: tauri::State<'_, MainWindowReady>,
-) -> Option<String> {
+) -> Vec<String> {
     let label = window.label();
 
     // Check PendingFiles first (for dynamically created windows)
     {
         let mut pending_map = pending.0.lock().unwrap();
         if let Some(path) = pending_map.remove(label) {
-            return Some(path);
+            return vec![path];
         }
     }
 
-    // Main window: fall back to startup OpenedFiles
+    // Main window: drain startup OpenedFiles, dedupe preserving order.
+    // Drain (not clone) so subsequent calls return empty and a stuck cold-start
+    // queue can't bleed into later warm-start re-opens.
     if label == "main" {
         // Mark main window as ready so future RunEvent::Opened events
         // create new windows instead of routing to main
         ready.0.store(true, Ordering::SeqCst);
-        let files = state.0.lock().unwrap();
-        return files.first().cloned();
+        let mut files = state.0.lock().unwrap();
+        let mut seen = HashSet::new();
+        return files
+            .drain(..)
+            .filter(|path| seen.insert(path.clone()))
+            .collect();
     }
 
-    None
+    Vec::new()
 }
 
 /// Create a new editor window, optionally for a specific file path.
@@ -383,7 +392,7 @@ fn detach_tab_to_window(
     }
 }
 
-/// Retrieve pending tab data for a newly created window (called on mount, mirrors get_opened_file).
+/// Retrieve pending tab data for a newly created window (called on mount, mirrors get_opened_files).
 #[tauri::command]
 fn get_pending_tab(
     window: tauri::Window,
@@ -595,7 +604,7 @@ fn dispatch_open_url(app: &tauri::AppHandle, url: &url::Url) {
         // `RunEvent::Opened` (the runtime callback runs on the main thread
         // without the re-entrancy hazard — v0.39.0 behavior). Cold-start
         // buffering stays here because it does no UI work (just a Mutex
-        // push that `get_opened_file` drains later), so it's safe from
+        // push that `get_opened_files` drains later), so it's safe from
         // any thread the deep-link plugin invokes us on.
         //
         // On Windows/Linux the deep-link plugin only fires `on_open_url`
@@ -1027,7 +1036,7 @@ pub fn run() {
             update_mcp_menu,
             commands::menu_accel::set_menu_accelerator,
             commands::menu_accel::set_menu_accelerators_batch,
-            get_opened_file,
+            get_opened_files,
             open_file_in_new_window,
             create_new_window,
             get_all_window_bounds,
@@ -1258,8 +1267,8 @@ pub fn run() {
 
                                     if !main_ready {
                                         // Cold start: store file for the main window to pick up
-                                        // via get_opened_file(). Also emit open-file in case the
-                                        // frontend has already called get_opened_file.
+                                        // via get_opened_files(). Also emit open-file in case the
+                                        // frontend has already called get_opened_files.
                                         if let Some(opened) = _app.try_state::<OpenedFiles>() {
                                             opened.0.lock().unwrap().push(path.clone());
                                         }

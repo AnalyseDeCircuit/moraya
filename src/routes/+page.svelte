@@ -2781,16 +2781,36 @@ ${tr('welcome.tip')}
 
     // Restore persisted settings, AI config, and MCP servers (Tauri-only: uses plugin-store)
     if (isTauri) {
-      // Start loading the opened file in PARALLEL with store initialization.
+      // Start loading the opened file(s) in PARALLEL with store initialization.
       // File read (IPC) is fast; store init (Tauri plugin-store load × 4) is slow.
       // By the time Promise.all resolves, the file content is already available.
-      let openedFileData: { filePath: string; fileContent: string; fileName: string; mtime: number | null } | null = null;
-      const openedFilePromise = invoke<string | null>('get_opened_file').then(async (filePath) => {
-        if (!filePath) return;
-        const [fileContent, mtimeResult] = await Promise.all([
-          loadFile(filePath),
-          invoke('get_files_mtime', { paths: [filePath] }).catch(() => []) as Promise<[string, number][]>,
+      //
+      // The Rust side now returns ALL queued startup paths, not just the first —
+      // macOS Finder "Open With" / `open -a Moraya.app *.md` selects multiple
+      // files at once, and v0.41.7 silently dropped everything after [0]
+      // (issue #65). Order is preserved; we make the LAST one the active tab
+      // so the file the user clicked last wins, matching system-app behavior
+      // (TextEdit / Preview).
+      let openedFilesData: { filePath: string; fileContent: string; fileName: string; mtime: number | null }[] = [];
+      const openedFilePromise = invoke<string[]>('get_opened_files').then(async (filePaths) => {
+        const paths = [...new Set((filePaths ?? []).filter(Boolean))];
+        if (paths.length === 0) return;
+
+        const [loadedFiles, mtimeResult] = await Promise.all([
+          Promise.all(paths.map(async (filePath) => ({
+            filePath,
+            fileContent: await loadFile(filePath),
+            fileName: getFileNameFromPath(filePath),
+          }))),
+          invoke('get_files_mtime', { paths }).catch(() => []) as Promise<[string, number][]>,
         ]);
+
+        const mtimeByPath = new Map((mtimeResult as [string, number][]).map(([p, m]) => [p, m]));
+        openedFilesData = loadedFiles.map(file => ({
+          ...file,
+          mtime: mtimeByPath.get(file.filePath) ?? null,
+        }));
+
         // Auto-open of a large file (double-click an .md → launches Moraya
         // with that path). The editor's parse blocks the JS thread for
         // tens of seconds on multi-MB files. `editorLoadingStore` would
@@ -2798,11 +2818,10 @@ ${tr('welcome.tip')}
         // start the editor is still initializing while we sit here, so
         // the user sees a blank window for the early part of the freeze.
         // Surface the indicator as soon as we know there's a big file
-        // queued, before the editor has even finished mounting.
-        editorLoadingStore.startIfLarge(fileContent.length);
-        const fileName = getFileNameFromPath(filePath);
-        const mtime = (mtimeResult as [string, number][]).length > 0 ? (mtimeResult as [string, number][])[0][1] : null;
-        openedFileData = { filePath, fileContent, fileName, mtime };
+        // queued; size is taken from the active (last) file since that's
+        // what becomes visible.
+        const active = openedFilesData[openedFilesData.length - 1];
+        editorLoadingStore.startIfLarge(active.fileContent.length);
       }).catch(() => {});
 
       Promise.all([initSettingsStore(), initAIStore(), initMCPStore(), filesStore.loadPersistedPrefs(), openedFilePromise])
@@ -2849,17 +2868,29 @@ ${tr('welcome.tip')}
               });
           }
 
-          // Check if a file was passed via OS file association on startup.
-          // File content is loaded in parallel (see openedFilePromise below),
-          // but sidebar adjustment needs knowledgeBases to be loaded (which happens in this .then),
-          // so we finalize here.
-          if (openedFileData) {
-            const { filePath, fileContent, fileName, mtime } = openedFileData;
-            tabsStore.initWithContent(fileContent, filePath, fileName);
-            if (mtime !== null) {
+          // Check if file(s) were passed via OS file association on startup.
+          // Content is loaded in parallel (see openedFilePromise above);
+          // sidebar adjustment needs knowledgeBases to be loaded (which happens
+          // in this .then), so we finalize here. The first path replaces the
+          // initial empty tab; any additional paths open as new tabs. The
+          // LAST file becomes active (matches macOS multi-select expectation).
+          if (openedFilesData.length > 0) {
+            const [firstFile, ...additionalFiles] = openedFilesData;
+            tabsStore.initWithContent(firstFile.fileContent, firstFile.filePath, firstFile.fileName);
+            if (firstFile.mtime !== null) {
               const state = tabsStore.getState();
-              tabsStore.updateTabMtime(state.activeTabId, mtime);
+              tabsStore.updateTabMtime(state.activeTabId, firstFile.mtime);
             }
+
+            let activeFile = firstFile;
+            for (const file of additionalFiles) {
+              tabsStore.openFileTab(
+                file.filePath, file.fileName, file.fileContent, file.mtime, true,
+              );
+              activeFile = file;
+            }
+
+            const { filePath, fileContent, fileName } = activeFile;
             content = fileContent;
             currentFileName = fileName;
             editorStore.batchRestore({
