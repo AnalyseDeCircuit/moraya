@@ -130,7 +130,7 @@
     const downloadUrl = plugin.downloadUrls[platform];
     const sha256 = plugin.sha256[platform];
     if (!downloadUrl || !sha256) {
-      alert($t('plugins.error.platformNotSupported'));
+      alert($t('plugins.error.platform_not_supported'));
       return;
     }
     installing = { ...installing, [plugin.id]: true };
@@ -156,7 +156,7 @@
 
     urlImporting = true;
     try {
-      urlStatus = $t('plugins.install.fetchingRelease');
+      urlStatus = $t('plugins.install.fetching_release');
       let result = await pluginStore.validateManifest(rawUrl);
       // Fallback: try master branch if main branch 404s
       if (!result.valid && isGithubRepo && result.errors.some(e => e.includes('404'))) {
@@ -170,7 +170,7 @@
       }
       if (!result.manifest) return;
 
-      const confirmMsg = `${$t('plugins.install.confirmUrl')}\n\n${result.manifest.name} v${result.manifest.version}\n${$t('plugins.install.author')}: ${result.manifest.author}\n${$t('plugins.install.permissions')}: ${result.manifest.permissions.join(', ') || $t('plugins.install.noPermissions')}`;
+      const confirmMsg = `${$t('plugins.install.confirm_url')}\n\n${result.manifest.name} v${result.manifest.version}\n${$t('plugins.install.author')}: ${result.manifest.author}\n${$t('plugins.install.permissions')}: ${result.manifest.permissions.join(', ') || $t('plugins.install.no_permissions')}`;
       if (!confirm(confirmMsg)) return;
 
       const ownerRepo = validatingUrl.trim().replace(/\/$/, '').replace('https://github.com/', '');
@@ -251,7 +251,7 @@
               <span class="plugin-name">{plugin.name}</span>
               <span class="preset-size" class:large={isLarge}>
                 ~{plugin.sizeKb >= 1000 ? (plugin.sizeKb / 1000).toFixed(1) + ' MB' : plugin.sizeKb + ' KB'}
-                {#if isLarge}<span class="large-warning" data-tooltip={$t('plugins.preset.largeBundle')}>⚠</span>{/if}
+                {#if isLarge}<span class="large-warning" data-tooltip={$t('plugins.preset.large_bundle')}>⚠</span>{/if}
               </span>
               <div class="plugin-actions">
                 {#if ps.status === 'downloading' || ps.status === 'loading'}
@@ -368,14 +368,14 @@
                   <span class="perm-tag">{perm}</span>
                 {/each}
               {:else}
-                · <span class="perm-tag no-perm">{$t('plugins.install.noPermissions')}</span>
+                · <span class="perm-tag no-perm">{$t('plugins.install.no_permissions')}</span>
               {/if}
             </div>
             {#if plugin.processState === 'error'}
-              <div class="process-error">{$t('plugins.processError')}</div>
+              <div class="process-error">{$t('plugins.process_error')}</div>
             {/if}
             {#if isBlacklisted}
-              <div class="blacklist-warning">{$t('plugins.blacklistWarning')}</div>
+              <div class="blacklist-warning">{$t('plugins.blacklist_warning')}</div>
             {/if}
           </div>
         {/each}
@@ -384,13 +384,13 @@
       <!-- Local install -->
       <div class="local-install-row">
         <button class="btn-secondary" onclick={handleInstallFile}>
-          {$t('plugins.install.fromFile')}
+          {$t('plugins.install.from_file')}
         </button>
         <div class="url-import">
           <input
             class="url-input"
             type="text"
-            placeholder={$t('plugins.install.urlPlaceholder')}
+            placeholder={$t('plugins.install.url_placeholder')}
             bind:value={validatingUrl}
             disabled={urlImporting}
             onkeydown={(e) => e.key === 'Enter' && handleUrlImport()}
@@ -432,7 +432,7 @@
           class:active={selectedCategory === cat}
           onclick={() => selectedCategory = cat}
         >
-          {cat === 'all' ? $t('plugins.market.catAll') : cat}
+          {cat === 'all' ? $t('plugins.market.cat_all') : cat}
         </button>
       {/each}
     </div>
@@ -566,7 +566,7 @@
                   rel="noopener noreferrer"
                   class="btn-secondary"
                 >
-                  {$t('plugins.viewSource')} ↗
+                  {$t('plugins.view_source')} ↗
                 </a>
               {/if}
               {#if isInstalled(dp.id)}

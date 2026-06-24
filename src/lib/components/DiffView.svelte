@@ -47,9 +47,9 @@
 	let errorMessage = $state('');
 	let renderLines = $state<RenderLine[]>([]);
 	let stats = $state({ added: 0, deleted: 0 });
-	let leftLabel = $derived(leftHash ? leftHash.slice(0, 8) : $t('diff.leftLabel'));
+	let leftLabel = $derived(leftHash ? leftHash.slice(0, 8) : $t('diff.left_label'));
 	let rightLabel = $derived(
-		rightHash ? rightHash.slice(0, 8) : $t('diff.rightLabel'),
+		rightHash ? rightHash.slice(0, 8) : $t('diff.right_label'),
 	);
 
 	function parseUnifiedDiff(diff: string): RenderLine[] {
@@ -130,11 +130,11 @@
 
 			// Detect binary content (gitShowFile returns empty for binary)
 			if (leftHash && left.length === 0) {
-				errorMessage = $t('diff.binaryFile');
+				errorMessage = $t('diff.binary_file');
 				return;
 			}
 			if (rightHash && right.length === 0) {
-				errorMessage = $t('diff.binaryFile');
+				errorMessage = $t('diff.binary_file');
 				return;
 			}
 
@@ -174,12 +174,12 @@
 <div class="diff-view-overlay" role="dialog" aria-label="Diff View">
 	<div class="diff-toolbar">
 		<button class="back-btn" onclick={onClose}>
-			{$t('diff.backToEdit')}
+			{$t('diff.back_to_edit')}
 		</button>
 		<span class="title">{relPath} · {leftLabel} ↔ {rightLabel}</span>
 		{#if !loading && !errorMessage && renderLines.length > 0}
 			<span class="stats">
-				+{stats.added} {$t('diff.addedLine')} · -{stats.deleted} {$t('diff.deletedLine')}
+				+{stats.added} {$t('diff.added_line')} · -{stats.deleted} {$t('diff.deleted_line')}
 			</span>
 		{/if}
 	</div>
@@ -189,7 +189,7 @@
 	{:else if errorMessage}
 		<div class="diff-state error" role="alert">⚠ {errorMessage}</div>
 	{:else if renderLines.length === 0}
-		<div class="diff-state" role="status">{$t('diff.noChanges')}</div>
+		<div class="diff-state" role="status">{$t('diff.no_changes')}</div>
 	{:else}
 		<div class="diff-grid" role="grid" aria-label={$t('diff.title', { filename: relPath, hash1: leftLabel, hash2: rightLabel })}>
 			{#each renderLines as line, i (i)}
@@ -201,7 +201,7 @@
 						role="gridcell"
 					>
 						{#if line.kind === 'deleted'}
-							<span class="sr-only">{$t('diff.deletedLine')}</span>
+							<span class="sr-only">{$t('diff.deleted_line')}</span>
 						{/if}
 						<span class="ln" aria-hidden="true">{line.leftLine ?? ''}</span>
 						<span class="content">{line.text}</span>
@@ -211,7 +211,7 @@
 						role="gridcell"
 					>
 						{#if line.kind === 'added'}
-							<span class="sr-only">{$t('diff.addedLine')}</span>
+							<span class="sr-only">{$t('diff.added_line')}</span>
 						{/if}
 						<span class="ln" aria-hidden="true">{line.rightLine ?? ''}</span>
 						<span class="content">{line.text}</span>

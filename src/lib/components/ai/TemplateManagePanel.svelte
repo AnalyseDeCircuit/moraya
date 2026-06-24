@@ -62,7 +62,7 @@
 
   <div class="manage-content">
     {#if templates.length === 0}
-      <div class="empty-state">{$t('templates.manage.noCustomTemplates')}</div>
+      <div class="empty-state">{$t('templates.manage.no_custom_templates')}</div>
     {:else}
       {#each templates as tpl (tpl.id)}
         <div class="manage-item">
@@ -71,7 +71,7 @@
             <span class="item-name">{getTemplateName(tpl, $t)}</span>
             <span class="item-desc">{getTemplateDesc(tpl, $t)}</span>
             <div class="item-meta">
-              <span class="source-badge {tpl.source}">{tpl.source === 'kb' ? $t('templates.manage.sourceKb') : $t('templates.manage.sourceGlobal')}</span>
+              <span class="source-badge {tpl.source}">{tpl.source === 'kb' ? $t('templates.manage.source_kb') : $t('templates.manage.source_global')}</span>
               <span class="item-category">{tpl.category}</span>
             </div>
           </div>
@@ -83,10 +83,10 @@
               class="action-btn delete"
               class:confirming={confirmDeleteId === tpl.id}
               onclick={() => handleDelete(tpl)}
-              title={confirmDeleteId === tpl.id ? $t('templates.manage.deleteConfirm') : $t('templates.manage.delete')}
+              title={confirmDeleteId === tpl.id ? $t('templates.manage.delete_confirm') : $t('templates.manage.delete')}
             >
               {#if confirmDeleteId === tpl.id}
-                <span class="confirm-text">{$t('templates.manage.deleteConfirm')}</span>
+                <span class="confirm-text">{$t('templates.manage.delete_confirm')}</span>
               {:else}
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 1V0h6v1h3v1.5H0V1h3zm.5 3h1v6h-1V4zm4 0h1v6h-1V4zM1 2.5h10l-.75 9.5H1.75L1 2.5z" fill="currentColor"/></svg>
               {/if}

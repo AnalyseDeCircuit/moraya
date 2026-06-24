@@ -21,7 +21,7 @@
   {#if loading}
     <div class="search-loading">{$t('kb.indexing')}</div>
   {:else if results.length === 0}
-    <div class="search-empty">{$t('commandPalette.noResults')}</div>
+    <div class="search-empty">{$t('command_palette.no_results')}</div>
   {:else}
     {#each results as result}
       <button class="search-result-item" onclick={() => onSelect(result)}>

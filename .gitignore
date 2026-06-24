@@ -115,3 +115,8 @@ watermarks.local.json.ots
 /moraya-core
 /moraya-web
 /moraya-mobile
+
+# v0.96.0 pre-publication tarball bridge — local-iteration only (per CLAUDE.md
+# external shared markdown core rule). Don't commit; publish @moraya/core to
+# npm and bump the dep instead when ready.
+/vendor/

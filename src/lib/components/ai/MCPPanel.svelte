@@ -121,15 +121,15 @@
       if (server.transport.type === 'stdio' && !settingsStore.getState().mcpAutoApprove) {
         const args = server.transport.args?.join(' ') || '';
         const confirmed = await ask(
-          $t('mcp.servers.launchConfirmMsg', {
+          $t('mcp.servers.launch_confirm_msg', {
             command: server.transport.command,
             args: args || '(none)',
           }),
           {
-            title: $t('mcp.servers.launchConfirmTitle'),
+            title: $t('mcp.servers.launch_confirm_title'),
             kind: 'warning',
-            okLabel: $t('mcp.servers.launchConfirmOk'),
-            cancelLabel: $t('mcp.servers.launchConfirmCancel'),
+            okLabel: $t('mcp.servers.launch_confirm_ok'),
+            cancelLabel: $t('mcp.servers.launch_confirm_cancel'),
           },
         );
         if (!confirmed) return;
@@ -168,14 +168,14 @@
   function handleAddServer() {
     addFormError = null;
     if (!newServerName.trim()) {
-      addFormError = $t('mcp.servers.errorNameRequired');
+      addFormError = $t('mcp.servers.error_name_required');
       return;
     }
 
     let transport: MCPServerConfig['transport'];
     if (newServerTransport === 'stdio') {
       if (!newServerCommand.trim()) {
-        addFormError = $t('mcp.servers.errorCommandRequired');
+        addFormError = $t('mcp.servers.error_command_required');
         return;
       }
       const args = newServerArgs.trim() ? newServerArgs.trim().split(/\s+/) : [];
@@ -185,7 +185,7 @@
       transport = { type: 'stdio', command: newServerCommand.trim(), args, env: parseEnvString(envText) };
     } else {
       if (!newServerUrl.trim()) {
-        addFormError = $t('mcp.servers.errorUrlRequired');
+        addFormError = $t('mcp.servers.error_url_required');
         return;
       }
       transport = { type: newServerTransport, url: newServerUrl.trim() };
@@ -275,7 +275,7 @@
       const parsed = JSON.parse(trimmed);
       const configs = parseMCPJSON(parsed);
       if (configs.length === 0) {
-        jsonError = $t('mcp.servers.jsonNoConfig');
+        jsonError = $t('mcp.servers.json_no_config');
         return;
       }
       for (const config of configs) {
@@ -286,7 +286,7 @@
       showAddServer = false;
       addMode = 'form';
     } catch (e: any) {
-      jsonError = `JSON ${$t('mcp.servers.jsonParseError')}: ${e.message}`;
+      jsonError = `JSON ${$t('mcp.servers.json_parse_error')}: ${e.message}`;
     }
   }
 
@@ -323,14 +323,14 @@
     editFormError = null;
     if (!editingServerId) return;
     if (!editName.trim()) {
-      editFormError = $t('mcp.servers.errorNameRequired');
+      editFormError = $t('mcp.servers.error_name_required');
       return;
     }
 
     let transport: MCPServerConfig['transport'];
     if (editTransport === 'stdio') {
       if (!editCommand.trim()) {
-        editFormError = $t('mcp.servers.errorCommandRequired');
+        editFormError = $t('mcp.servers.error_command_required');
         return;
       }
       const args = editArgs.trim() ? editArgs.trim().split(/\s+/) : [];
@@ -340,7 +340,7 @@
       transport = { type: 'stdio', command: editCommand.trim(), args, env: parseEnvString(envText) };
     } else {
       if (!editUrl.trim()) {
-        editFormError = $t('mcp.servers.errorUrlRequired');
+        editFormError = $t('mcp.servers.error_url_required');
         return;
       }
       transport = { type: editTransport, url: editUrl.trim() };
@@ -704,7 +704,7 @@
 
           {#if presetInstalling.envVars && presetInstalling.envVars.length > 0}
             <div class="mp-env-section">
-              <div class="section-label">{$t('mcp.servers.presetEnvTitle')}</div>
+              <div class="section-label">{$t('mcp.servers.preset_env_title')}</div>
               {#each presetInstalling.envVars as ev}
                 <div class="mp-env-row">
                   <label class="mp-env-label">
@@ -726,7 +726,7 @@
           <div class="form-actions">
             <button class="btn-sm" onclick={cancelPresetInstall}>{$t('mcp.marketplace.cancel')}</button>
             <button class="btn-sm primary" onclick={confirmPresetInstall}>
-              {$t('mcp.servers.presetAdd')}
+              {$t('mcp.servers.preset_add')}
             </button>
           </div>
         </div>
@@ -736,7 +736,7 @@
         <div class="empty-state">
           <p>{$t('mcp.servers.empty')}</p>
           <button class="add-btn" onclick={() => showAddServer = true}>
-            {$t('mcp.servers.addServer')}
+            {$t('mcp.servers.add_server')}
           </button>
         </div>
       {:else}
@@ -747,7 +747,7 @@
                 type="text"
                 class="form-input"
                 bind:value={editName}
-                placeholder={$t('mcp.servers.serverName')}
+                placeholder={$t('mcp.servers.server_name')}
               />
               <select class="form-input" bind:value={editTransport}>
                 {#if !isIPadOS}<option value="stdio">{$t('mcp.servers.stdio')}</option>{/if}
@@ -759,20 +759,20 @@
                   type="text"
                   class="form-input"
                   bind:value={editCommand}
-                  placeholder={$t('mcp.servers.commandPlaceholder')}
+                  placeholder={$t('mcp.servers.command_placeholder')}
                 />
                 <input
                   type="text"
                   class="form-input"
                   bind:value={editArgs}
-                  placeholder={$t('mcp.servers.argsPlaceholder')}
+                  placeholder={$t('mcp.servers.args_placeholder')}
                 />
                 <textarea
                   class="form-input env-input"
                   bind:this={editEnvEl}
                   bind:value={editEnv}
                   oninput={(e) => { _editEnvRaw = (e.currentTarget as HTMLTextAreaElement).value; }}
-                  placeholder={$t('mcp.servers.envPlaceholder')}
+                  placeholder={$t('mcp.servers.env_placeholder')}
                   rows="4"
                   spellcheck="false"
                 ></textarea>
@@ -781,7 +781,7 @@
                   type="text"
                   class="form-input"
                   bind:value={editUrl}
-                  placeholder={$t('mcp.servers.serverUrl')}
+                  placeholder={$t('mcp.servers.server_url')}
                 />
               {/if}
               {#if editFormError}
@@ -818,7 +818,7 @@
 
         {#if !showAddServer}
           <button class="add-btn" onclick={() => showAddServer = true}>
-            {$t('mcp.servers.addServerPlus')}
+            {$t('mcp.servers.add_server_plus')}
           </button>
         {/if}
       {/if}
@@ -827,10 +827,10 @@
         <div class="add-form">
           <div class="add-mode-tabs">
             <button class="mode-tab" class:active={addMode === 'form'} onclick={() => addMode = 'form'}>
-              {$t('mcp.servers.formMode')}
+              {$t('mcp.servers.form_mode')}
             </button>
             <button class="mode-tab" class:active={addMode === 'json'} onclick={() => addMode = 'json'}>
-              {$t('mcp.servers.jsonMode')}
+              {$t('mcp.servers.json_mode')}
             </button>
           </div>
 
@@ -838,7 +838,7 @@
             <textarea
               class="form-input json-input"
               bind:value={jsonInput}
-              placeholder={$t('mcp.servers.jsonPlaceholder')}
+              placeholder={$t('mcp.servers.json_placeholder')}
               rows="8"
             ></textarea>
             {#if jsonError}
@@ -853,7 +853,7 @@
               type="text"
               class="form-input"
               bind:value={newServerName}
-              placeholder={$t('mcp.servers.serverName')}
+              placeholder={$t('mcp.servers.server_name')}
             />
             <select class="form-input" bind:value={newServerTransport}>
               {#if !isIPadOS}<option value="stdio">{$t('mcp.servers.stdio')}</option>{/if}
@@ -865,20 +865,20 @@
                 type="text"
                 class="form-input"
                 bind:value={newServerCommand}
-                placeholder={$t('mcp.servers.commandPlaceholder')}
+                placeholder={$t('mcp.servers.command_placeholder')}
               />
               <input
                 type="text"
                 class="form-input"
                 bind:value={newServerArgs}
-                placeholder={$t('mcp.servers.argsPlaceholder')}
+                placeholder={$t('mcp.servers.args_placeholder')}
               />
               <textarea
                 class="form-input env-input"
                 bind:this={newServerEnvEl}
                 bind:value={newServerEnv}
                 oninput={(e) => { _newServerEnvRaw = (e.currentTarget as HTMLTextAreaElement).value; }}
-                placeholder={$t('mcp.servers.envPlaceholder')}
+                placeholder={$t('mcp.servers.env_placeholder')}
                 rows="4"
                 spellcheck="false"
               ></textarea>
@@ -887,7 +887,7 @@
                 type="text"
                 class="form-input"
                 bind:value={newServerUrl}
-                placeholder={$t('mcp.servers.serverUrl')}
+                placeholder={$t('mcp.servers.server_url')}
               />
             {/if}
             {#if addFormError}
@@ -903,22 +903,22 @@
 
       <!-- Local MCP (AI-created dynamic services) -->
       <div class="local-mcp-section">
-        <div class="section-label">{$t('mcp.servers.localMcp')}</div>
+        <div class="section-label">{$t('mcp.servers.local_mcp')}</div>
         <div class="node-status">
           <span class="node-dot" class:available={nodeAvailable === true} class:unavailable={nodeAvailable === false}></span>
           {#if nodeAvailable === true}
             <span class="node-label">Node.js {nodeVersion}</span>
           {:else if nodeAvailable === false}
-            <span class="node-label node-missing">{$t('mcp.aiServices.nodeRequired')}</span>
+            <span class="node-label node-missing">{$t('mcp.ai_services.node_required')}</span>
           {:else}
-            <span class="node-label">{$t('mcp.aiServices.checkingNode')}</span>
+            <span class="node-label">{$t('mcp.ai_services.checking_node')}</span>
           {/if}
         </div>
 
         {#if dynamicServices.length === 0}
           <div class="empty-state local-mcp-empty">
-            <p>{$t('mcp.aiServices.empty')}</p>
-            <p class="hint">{$t('mcp.aiServices.hint')}</p>
+            <p>{$t('mcp.ai_services.empty')}</p>
+            <p class="hint">{$t('mcp.ai_services.hint')}</p>
           </div>
         {:else}
           {#each dynamicServices as service}
@@ -927,7 +927,7 @@
                 <div class="dyn-service-header">
                   <span class="server-name">{service.name}</span>
                   <span class="lifecycle-badge" class:temp={service.lifecycle === 'temp'} class:saved={service.lifecycle === 'saved'}>
-                    {service.lifecycle === 'temp' ? $t('mcp.aiServices.temp') : $t('mcp.aiServices.saved')}
+                    {service.lifecycle === 'temp' ? $t('mcp.ai_services.temp') : $t('mcp.ai_services.saved')}
                   </span>
                 </div>
                 <span class="dyn-service-desc">{service.description}</span>
@@ -943,7 +943,7 @@
               </div>
               <div class="server-actions">
                 <button class="btn-sm" onclick={() => toggleServiceCode(service.id)}>
-                  {$t('mcp.aiServices.viewCode')}
+                  {$t('mcp.ai_services.view_code')}
                 </button>
                 {#if service.lifecycle === 'temp'}
                   <button class="btn-sm primary" onclick={() => handleSaveService(service.id)}>
@@ -1006,7 +1006,7 @@
           <p class="hint">{$t('mcp.sync.hint')}</p>
           {#if [...connectedServers].length > 0}
             <button class="add-btn" onclick={() => showAddSync = true}>
-              {$t('mcp.sync.addSync')}
+              {$t('mcp.sync.add_sync')}
             </button>
           {/if}
         </div>
@@ -1034,7 +1034,7 @@
             </div>
             <div class="server-actions">
               <button class="btn-sm primary" onclick={() => handleSync(config.id)} disabled={status?.status === 'syncing'}>
-                {$t('mcp.sync.syncNow')}
+                {$t('mcp.sync.sync_now')}
               </button>
               <button class="btn-sm danger" onclick={() => handleRemoveSync(config.id)}>
                 {$t('common.remove')}
@@ -1045,7 +1045,7 @@
 
         {#if !showAddSync}
           <button class="add-btn" onclick={() => showAddSync = true}>
-            {$t('mcp.sync.addSync')}
+            {$t('mcp.sync.add_sync')}
           </button>
         {/if}
       {/if}
@@ -1059,8 +1059,8 @@
               <option value={server.id}>{server.name}</option>
             {/each}
           </select>
-          <input type="text" class="form-input" bind:value={newSyncRemotePath} placeholder={$t('mcp.sync.remotePath')} />
-          <input type="text" class="form-input" bind:value={newSyncLocalPath} placeholder={$t('mcp.sync.localPath')} />
+          <input type="text" class="form-input" bind:value={newSyncRemotePath} placeholder={$t('mcp.sync.remote_path')} />
+          <input type="text" class="form-input" bind:value={newSyncLocalPath} placeholder={$t('mcp.sync.local_path')} />
           <select class="form-input" bind:value={newSyncDirection}>
             <option value="push">{$t('mcp.sync.push')}</option>
             <option value="pull">{$t('mcp.sync.pull')}</option>
@@ -1106,7 +1106,7 @@
 
           {#if mpInstalling.install?.envVars && mpInstalling.install.envVars.length > 0}
             <div class="mp-env-section">
-              <div class="section-label">{$t('mcp.marketplace.envVars')}</div>
+              <div class="section-label">{$t('mcp.marketplace.env_vars')}</div>
               {#each mpInstalling.install.envVars as ev}
                 <div class="mp-env-row">
                   <label class="mp-env-label">
@@ -1128,7 +1128,7 @@
           <div class="form-actions">
             <button class="btn-sm" onclick={mpCancelInstall}>{$t('mcp.marketplace.cancel')}</button>
             <button class="btn-sm primary" onclick={mpConfirmInstall}>
-              {$t('mcp.marketplace.installAndConnect')}
+              {$t('mcp.marketplace.install_and_connect')}
             </button>
           </div>
         </div>
@@ -1137,14 +1137,14 @@
       <!-- Results -->
       {#if mpError}
         <div class="mp-error">
-          <span>{$t('mcp.marketplace.networkError')}: {mpError}</span>
+          <span>{$t('mcp.marketplace.network_error')}: {mpError}</span>
           <button class="btn-sm" onclick={() => mpSearch(mpPage)}>{$t('mcp.marketplace.retry')}</button>
         </div>
       {/if}
 
       {#if mpResults.length === 0 && !mpLoading && !mpError}
         <div class="empty-state">
-          <p>{$t('mcp.marketplace.noResults')}</p>
+          <p>{$t('mcp.marketplace.no_results')}</p>
         </div>
       {/if}
 
@@ -1185,7 +1185,7 @@
                 {#if server.homepage}
                   <!-- svelte-ignore a11y_missing_attribute -->
                   <!-- svelte-ignore a11y_no_static_element_interactions -->
-                  <span class="mp-link" onclick={() => server.homepage && openUrl(server.homepage)} onkeydown={() => {}}>{$t('mcp.marketplace.viewDetails')}</span>
+                  <span class="mp-link" onclick={() => server.homepage && openUrl(server.homepage)} onkeydown={() => {}}>{$t('mcp.marketplace.view_details')}</span>
                 {/if}
                 {#if mpIsInstalled(server.name)}
                   <span class="mp-installed-badge">{$t('mcp.marketplace.installed')}</span>
@@ -1206,7 +1206,7 @@
 
       {#if mpHasMore && !mpLoading}
         <button class="add-btn" onclick={() => mpSearch(mpPage + 1)}>
-          {$t('mcp.marketplace.loadMore')}
+          {$t('mcp.marketplace.load_more')}
         </button>
       {/if}
     </div>

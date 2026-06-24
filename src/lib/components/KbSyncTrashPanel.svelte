@@ -52,7 +52,7 @@
   }
 
   function kbNameOf(kbId: string): string {
-    return knowledgeBases.find(k => k.id === kbId)?.name ?? $t('kbSync.trash.kbUnknown');
+    return knowledgeBases.find(k => k.id === kbId)?.name ?? $t('kb_sync.trash.kb_unknown');
   }
 
   function formatDeletedAt(ms: number): string {
@@ -86,7 +86,7 @@
   async function handleRestore(entry: TrashEntry, overwrite = false) {
     const kbRoot = kbRootOf(entry.kbId);
     if (!kbRoot) {
-      error = $t('kbSync.trash.restoreFailed');
+      error = $t('kb_sync.trash.restore_failed');
       return;
     }
     busyPath = entry.absoluteTrashPath;
@@ -119,7 +119,7 @@
   }
 
   async function handleDeleteForever(entry: TrashEntry) {
-    const msg = $t('kbSync.trash.deleteForeverConfirm', { path: entry.relativePath });
+    const msg = $t('kb_sync.trash.delete_forever_confirm', { path: entry.relativePath });
     if (!confirm(msg)) return;
     busyPath = entry.absoluteTrashPath;
     try {
@@ -134,10 +134,10 @@
 
   async function handlePurgeAll() {
     const days = 7;
-    if (!confirm($t('kbSync.trash.purgeAllConfirm', { days: String(days) }))) return;
+    if (!confirm($t('kb_sync.trash.purge_all_confirm', { days: String(days) }))) return;
     try {
       const report = await purgeTrash({ olderThanDays: days });
-      purgeReportToast = $t('kbSync.trash.purgeResult', {
+      purgeReportToast = $t('kb_sync.trash.purge_result', {
         files: String(report.purgedFiles),
         size: formatBytes(report.freedBytes),
       });
@@ -152,14 +152,14 @@
 <div class="modal-overlay" onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()} role="presentation">
   <div class="modal-panel" role="dialog" aria-labelledby="trash-title" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
     <header>
-      <h2 id="trash-title">{$t('kbSync.trash.title')}</h2>
+      <h2 id="trash-title">{$t('kb_sync.trash.title')}</h2>
       <button class="close-btn" onclick={onClose} aria-label="Close" type="button">×</button>
     </header>
 
     <div class="filters">
       <label>
         <select bind:value={kbFilter}>
-          <option value="__all__">{$t('kbSync.trash.filterKbAll')}</option>
+          <option value="__all__">{$t('kb_sync.trash.filter_kb_all')}</option>
           {#each availableKbIds as kbId (kbId)}
             <option value={kbId}>{kbNameOf(kbId)}</option>
           {/each}
@@ -167,17 +167,17 @@
       </label>
       <label>
         <select bind:value={timeFilter}>
-          <option value="7d">{$t('kbSync.trash.filterTime7d')}</option>
-          <option value="30d">{$t('kbSync.trash.filterTime30d')}</option>
-          <option value="all">{$t('kbSync.trash.filterTimeAll')}</option>
+          <option value="7d">{$t('kb_sync.trash.filter_time7d')}</option>
+          <option value="30d">{$t('kb_sync.trash.filter_time30d')}</option>
+          <option value="all">{$t('kb_sync.trash.filter_time_all')}</option>
         </select>
       </label>
       <button class="purge-btn" onclick={handlePurgeAll} type="button">
-        {$t('kbSync.trash.purgeAll')}
+        {$t('kb_sync.trash.purge_all')}
       </button>
     </div>
 
-    <p class="auto-purge-hint">{$t('kbSync.trash.autoPurgeHint')}</p>
+    <p class="auto-purge-hint">{$t('kb_sync.trash.auto_purge_hint')}</p>
 
     {#if error}
       <p class="error" role="alert">{error}</p>
@@ -188,9 +188,9 @@
 
     <div class="body">
       {#if loading}
-        <p class="muted">{$t('kbSync.trash.loading')}</p>
+        <p class="muted">{$t('kb_sync.trash.loading')}</p>
       {:else if filtered.length === 0}
-        <p class="muted">{$t('kbSync.trash.emptyState')}</p>
+        <p class="muted">{$t('kb_sync.trash.empty_state')}</p>
       {:else}
         {#each groupedByKb as [kbId, group] (kbId)}
           <section class="kb-group">
@@ -201,7 +201,7 @@
                   <div class="entry-meta">
                     <span class="path">📄 {entry.relativePath}</span>
                     <span class="sub">
-                      {$t('kbSync.trash.entryDeletedAt', { date: formatDeletedAt(entry.deletedAtMs) })}
+                      {$t('kb_sync.trash.entry_deleted_at', { date: formatDeletedAt(entry.deletedAtMs) })}
                       · {formatBytes(entry.sizeBytes)}
                     </span>
                   </div>
@@ -211,7 +211,7 @@
                       disabled={busyPath === entry.absoluteTrashPath}
                       type="button"
                     >
-                      {$t('kbSync.trash.restore')}
+                      {$t('kb_sync.trash.restore')}
                     </button>
                     <button
                       class="danger"
@@ -219,7 +219,7 @@
                       disabled={busyPath === entry.absoluteTrashPath}
                       type="button"
                     >
-                      {$t('kbSync.trash.deleteForever')}
+                      {$t('kb_sync.trash.delete_forever')}
                     </button>
                   </div>
                 </li>
@@ -235,12 +235,12 @@
 {#if conflict}
   <div class="conflict-overlay" role="presentation">
     <div class="conflict-panel" role="dialog">
-      <h3>{$t('kbSync.trash.restoreConflictTitle')}</h3>
-      <p>{$t('kbSync.trash.restoreConflictBody', { path: conflict.entry.relativePath })}</p>
-      <p class="sub">{$t('kbSync.trash.entryDeletedAt', { date: formatDeletedAt(conflict.entry.deletedAtMs) })} · {formatBytes(conflict.entry.sizeBytes)}</p>
+      <h3>{$t('kb_sync.trash.restore_conflict_title')}</h3>
+      <p>{$t('kb_sync.trash.restore_conflict_body', { path: conflict.entry.relativePath })}</p>
+      <p class="sub">{$t('kb_sync.trash.entry_deleted_at', { date: formatDeletedAt(conflict.entry.deletedAtMs) })} · {formatBytes(conflict.entry.sizeBytes)}</p>
       <div class="conflict-actions">
-        <button onclick={() => { conflict = null; }} type="button">{$t('kbSync.trash.cancel')}</button>
-        <button class="primary" onclick={handleConfirmOverwrite} type="button">{$t('kbSync.trash.overwrite')}</button>
+        <button onclick={() => { conflict = null; }} type="button">{$t('kb_sync.trash.cancel')}</button>
+        <button class="primary" onclick={handleConfirmOverwrite} type="button">{$t('kb_sync.trash.overwrite')}</button>
       </div>
     </div>
   </div>

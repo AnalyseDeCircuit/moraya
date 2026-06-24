@@ -120,8 +120,8 @@
   }
 
   function getChatModelPlaceholder(): string {
-    if (formProvider === 'doubao') return $t('ai.config.endpointIdPlaceholder');
-    return $t('ai.config.modelPlaceholder');
+    if (formProvider === 'doubao') return $t('ai.config.endpoint_id_placeholder');
+    return $t('ai.config.model_placeholder');
   }
 
   function startEditChat(config: AIProviderConfig) {
@@ -219,7 +219,7 @@
     }
 
     formTestStatus = result.success ? 'success' : 'failed';
-    formTestError = result.success ? '' : (result.error || $t('ai.config.testFailed'));
+    formTestError = result.success ? '' : (result.error || $t('ai.config.test_failed'));
 
     if (chatTestTimer) clearTimeout(chatTestTimer);
     chatTestTimer = setTimeout(() => {
@@ -235,7 +235,7 @@
   }
 
   function getRealtimeModelPlaceholder(): string {
-    return $t('ai.config.modelPlaceholder');
+    return $t('ai.config.model_placeholder');
   }
 
   function providerNeedsAwsCredential(provider: RealtimeVoiceProvider): boolean {
@@ -360,7 +360,7 @@
     const cfg = buildRealtimeConfig(editingRealtimeId || 'realtime-test');
     if (!hasRealtimeCredential(cfg)) {
       realtimeTestStatus = 'failed';
-      realtimeTestError = $t('ai.realtime.config.missingCredential');
+      realtimeTestError = $t('ai.realtime.config.missing_credential');
       return;
     }
 
@@ -391,7 +391,7 @@
     }
 
     realtimeTestStatus = result.success ? 'success' : 'failed';
-    realtimeTestError = result.success ? '' : (result.error || $t('ai.config.testFailed'));
+    realtimeTestError = result.success ? '' : (result.error || $t('ai.config.test_failed'));
 
     if (realtimeTestTimer) clearTimeout(realtimeTestTimer);
     realtimeTestTimer = setTimeout(() => {
@@ -405,15 +405,15 @@
   <section class="settings-section">
     <div class="section-header">
       <div>
-        <h3 class="section-title">{$t('ai.sections.sessionAI')}</h3>
-        <p class="section-subtitle">{$t('ai.sections.sessionAIHint')}</p>
+        <h3 class="section-title">{$t('ai.sections.session_ai')}</h3>
+        <p class="section-subtitle">{$t('ai.sections.session_aihint')}</p>
       </div>
     </div>
 
     {#if chatConfigs.length === 0 && !addingChat}
       <div class="empty-state">
-        <p>{$t('ai.multiModel.noModels')}</p>
-        <p class="empty-hint">{$t('ai.multiModel.noModelsHint')}</p>
+        <p>{$t('ai.multi_model.no_models')}</p>
+        <p class="empty-hint">{$t('ai.multi_model.no_models_hint')}</p>
       </div>
     {/if}
 
@@ -430,17 +430,17 @@
           </div>
 
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.config.apiKey')}</label>
+            <label class="setting-label">{$t('ai.config.api_key')}</label>
             <input
               type="password"
               class="setting-input"
               bind:value={formApiKey}
-              placeholder={formProvider === 'ollama' ? $t('ai.config.apiKeyNotRequired') : $t('ai.config.apiKeyPlaceholder', { provider: formProvider })}
+              placeholder={formProvider === 'ollama' ? $t('ai.config.api_key_not_required') : $t('ai.config.api_key_placeholder', { provider: formProvider })}
             />
           </div>
 
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.config.baseUrl')}</label>
+            <label class="setting-label">{$t('ai.config.base_url')}</label>
             <input
               type="text"
               class="setting-input"
@@ -483,7 +483,7 @@
               </div>
             </div>
             <div class="setting-group" style="width:5.5rem;flex-shrink:0">
-              <label class="setting-label">{$t('ai.config.maxTokens')}</label>
+              <label class="setting-label">{$t('ai.config.max_tokens')}</label>
               <input type="number" class="setting-input" bind:value={formMaxTokens} min={256} max={128000} step={256} />
             </div>
           </div>
@@ -508,7 +508,7 @@
               {#if formTestStatus === 'testing'}{$t('ai.config.testing')}
               {:else if formTestStatus === 'success'}{$t('ai.config.connected')}
               {:else if formTestStatus === 'failed'}{$t('ai.config.failed')}
-              {:else}{$t('ai.config.testConnection')}{/if}
+              {:else}{$t('ai.config.test_connection')}{/if}
             </button>
             {#if formTestError && formTestStatus === 'failed'}
               <p class="test-error">{formTestError}</p>
@@ -526,12 +526,12 @@
             <span class="config-model">{config.model}</span>
             <span class="config-tokens">{config.maxTokens || 41920}</span>
             {#if config.id === activeChatConfigId}
-              <span class="default-badge">{$t('ai.multiModel.default')}</span>
+              <span class="default-badge">{$t('ai.multi_model.default')}</span>
             {/if}
           </div>
           <div class="config-actions">
             {#if config.id !== activeChatConfigId}
-              <button class="btn-sm" onclick={() => setDefaultChat(config.id)}>{$t('ai.multiModel.setDefault')}</button>
+              <button class="btn-sm" onclick={() => setDefaultChat(config.id)}>{$t('ai.multi_model.set_default')}</button>
             {/if}
             <button class="btn-sm" onclick={() => startEditChat(config)}>{$t('common.edit')}</button>
             {#if chatConfigs.length > 1}
@@ -554,17 +554,17 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.config.apiKey')}</label>
+          <label class="setting-label">{$t('ai.config.api_key')}</label>
           <input
             type="password"
             class="setting-input"
             bind:value={formApiKey}
-            placeholder={formProvider === 'ollama' ? $t('ai.config.apiKeyNotRequired') : $t('ai.config.apiKeyPlaceholder', { provider: formProvider })}
+            placeholder={formProvider === 'ollama' ? $t('ai.config.api_key_not_required') : $t('ai.config.api_key_placeholder', { provider: formProvider })}
           />
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.config.baseUrl')}</label>
+          <label class="setting-label">{$t('ai.config.base_url')}</label>
           <input
             type="text"
             class="setting-input"
@@ -607,7 +607,7 @@
             </div>
           </div>
           <div class="setting-group" style="width:5.5rem;flex-shrink:0">
-            <label class="setting-label">{$t('ai.config.maxTokens')}</label>
+            <label class="setting-label">{$t('ai.config.max_tokens')}</label>
             <input type="number" class="setting-input" bind:value={formMaxTokens} min={256} max={128000} step={256} />
           </div>
         </div>
@@ -632,7 +632,7 @@
             {#if formTestStatus === 'testing'}{$t('ai.config.testing')}
             {:else if formTestStatus === 'success'}{$t('ai.config.connected')}
             {:else if formTestStatus === 'failed'}{$t('ai.config.failed')}
-            {:else}{$t('ai.config.testConnection')}{/if}
+            {:else}{$t('ai.config.test_connection')}{/if}
           </button>
           {#if formTestError && formTestStatus === 'failed'}
             <p class="test-error">{formTestError}</p>
@@ -646,22 +646,22 @@
     {/if}
 
     {#if !addingChat && editingChatId === null}
-      <button class="add-model-btn" onclick={startAddChat}>{$t('ai.multiModel.addModel')}</button>
+      <button class="add-model-btn" onclick={startAddChat}>{$t('ai.multi_model.add_model')}</button>
     {/if}
   </section>
 
   <section class="settings-section">
     <div class="section-header">
       <div>
-        <h3 class="section-title">{$t('ai.sections.realtimeVoiceAI')}</h3>
-        <p class="section-subtitle">{$t('ai.sections.realtimeVoiceAIHint')}</p>
+        <h3 class="section-title">{$t('ai.sections.realtime_voice_ai')}</h3>
+        <p class="section-subtitle">{$t('ai.sections.realtime_voice_aihint')}</p>
       </div>
     </div>
 
     {#if realtimeConfigs.length === 0 && !addingRealtime}
       <div class="empty-state">
-        <p>{$t('ai.realtime.noModels')}</p>
-        <p class="empty-hint">{$t('ai.realtime.noModelsHint')}</p>
+        <p>{$t('ai.realtime.no_models')}</p>
+        <p class="empty-hint">{$t('ai.realtime.no_models_hint')}</p>
       </div>
     {/if}
 
@@ -679,35 +679,35 @@
 
           {#if providerNeedsAwsCredential(realtimeProvider)}
             <div class="setting-group">
-              <label class="setting-label">{$t('ai.realtime.config.accessKeyId')}</label>
+              <label class="setting-label">{$t('ai.realtime.config.access_key_id')}</label>
               <input type="password" class="setting-input" bind:value={realtimeAccessKeyId} placeholder="AKIA..." />
             </div>
             <div class="setting-group">
-              <label class="setting-label">{$t('ai.realtime.config.secretAccessKey')}</label>
-              <input type="password" class="setting-input" bind:value={realtimeSecretAccessKey} placeholder={$t('ai.realtime.config.secretPlaceholder')} />
+              <label class="setting-label">{$t('ai.realtime.config.secret_access_key')}</label>
+              <input type="password" class="setting-input" bind:value={realtimeSecretAccessKey} placeholder={$t('ai.realtime.config.secret_placeholder')} />
             </div>
             <div class="setting-group">
-              <label class="setting-label">{$t('ai.realtime.config.sessionToken')}</label>
+              <label class="setting-label">{$t('ai.realtime.config.session_token')}</label>
               <input type="password" class="setting-input" bind:value={realtimeSessionToken} placeholder={$t('ai.realtime.config.optional')} />
             </div>
           {:else if providerNeedsDoubaoCredential(realtimeProvider)}
             <div class="setting-group">
-              <label class="setting-label">{$t('ai.realtime.config.doubaoAppId')}</label>
+              <label class="setting-label">{$t('ai.realtime.config.doubao_app_id')}</label>
               <input type="text" class="setting-input" bind:value={realtimeAppId} placeholder="123456789" />
             </div>
             <div class="setting-group">
-              <label class="setting-label">{$t('ai.realtime.config.doubaoAccessKey')}</label>
+              <label class="setting-label">{$t('ai.realtime.config.doubao_access_key')}</label>
               <input type="password" class="setting-input" bind:value={realtimeApiKey} placeholder="your-access-token" />
             </div>
           {:else}
             <div class="setting-group">
-              <label class="setting-label">{$t('ai.config.apiKey')}</label>
-              <input type="password" class="setting-input" bind:value={realtimeApiKey} placeholder={$t('ai.config.apiKeyPlaceholder', { provider: realtimeProvider })} />
+              <label class="setting-label">{$t('ai.config.api_key')}</label>
+              <input type="password" class="setting-input" bind:value={realtimeApiKey} placeholder={$t('ai.config.api_key_placeholder', { provider: realtimeProvider })} />
             </div>
           {/if}
 
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.config.baseUrl')}</label>
+            <label class="setting-label">{$t('ai.config.base_url')}</label>
             <input
               type="text"
               class="setting-input"
@@ -772,7 +772,7 @@
               {#if realtimeTestStatus === 'testing'}{$t('ai.config.testing')}
               {:else if realtimeTestStatus === 'success'}{$t('ai.config.connected')}
               {:else if realtimeTestStatus === 'failed'}{$t('ai.config.failed')}
-              {:else}{$t('ai.config.testConnection')}{/if}
+              {:else}{$t('ai.config.test_connection')}{/if}
             </button>
             {#if realtimeTestError && realtimeTestStatus === 'failed'}
               <p class="test-error">{realtimeTestError}</p>
@@ -792,12 +792,12 @@
               <span class="config-endpoint">{config.baseUrl}</span>
             {/if}
             {#if config.id === activeRealtimeConfigId}
-              <span class="default-badge">{$t('ai.multiModel.default')}</span>
+              <span class="default-badge">{$t('ai.multi_model.default')}</span>
             {/if}
           </div>
           <div class="config-actions">
             {#if config.id !== activeRealtimeConfigId}
-              <button class="btn-sm" onclick={() => setDefaultRealtime(config.id)}>{$t('ai.multiModel.setDefault')}</button>
+              <button class="btn-sm" onclick={() => setDefaultRealtime(config.id)}>{$t('ai.multi_model.set_default')}</button>
             {/if}
             <button class="btn-sm" onclick={() => startEditRealtime(config)}>{$t('common.edit')}</button>
             <button class="btn-sm danger" onclick={() => removeRealtimeConfig(config.id)}>{$t('common.remove')}</button>
@@ -819,35 +819,35 @@
 
         {#if providerNeedsAwsCredential(realtimeProvider)}
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.realtime.config.accessKeyId')}</label>
+            <label class="setting-label">{$t('ai.realtime.config.access_key_id')}</label>
             <input type="password" class="setting-input" bind:value={realtimeAccessKeyId} placeholder="AKIA..." />
           </div>
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.realtime.config.secretAccessKey')}</label>
-            <input type="password" class="setting-input" bind:value={realtimeSecretAccessKey} placeholder={$t('ai.realtime.config.secretPlaceholder')} />
+            <label class="setting-label">{$t('ai.realtime.config.secret_access_key')}</label>
+            <input type="password" class="setting-input" bind:value={realtimeSecretAccessKey} placeholder={$t('ai.realtime.config.secret_placeholder')} />
           </div>
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.realtime.config.sessionToken')}</label>
+            <label class="setting-label">{$t('ai.realtime.config.session_token')}</label>
             <input type="password" class="setting-input" bind:value={realtimeSessionToken} placeholder={$t('ai.realtime.config.optional')} />
           </div>
         {:else if providerNeedsDoubaoCredential(realtimeProvider)}
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.realtime.config.doubaoAppId')}</label>
+            <label class="setting-label">{$t('ai.realtime.config.doubao_app_id')}</label>
             <input type="text" class="setting-input" bind:value={realtimeAppId} placeholder="123456789" />
           </div>
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.realtime.config.doubaoAccessKey')}</label>
+            <label class="setting-label">{$t('ai.realtime.config.doubao_access_key')}</label>
             <input type="password" class="setting-input" bind:value={realtimeApiKey} placeholder="your-access-token" />
           </div>
         {:else}
           <div class="setting-group">
-            <label class="setting-label">{$t('ai.config.apiKey')}</label>
-            <input type="password" class="setting-input" bind:value={realtimeApiKey} placeholder={$t('ai.config.apiKeyPlaceholder', { provider: realtimeProvider })} />
+            <label class="setting-label">{$t('ai.config.api_key')}</label>
+            <input type="password" class="setting-input" bind:value={realtimeApiKey} placeholder={$t('ai.config.api_key_placeholder', { provider: realtimeProvider })} />
           </div>
         {/if}
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.config.baseUrl')}</label>
+          <label class="setting-label">{$t('ai.config.base_url')}</label>
           <input
             type="text"
             class="setting-input"
@@ -912,7 +912,7 @@
             {#if realtimeTestStatus === 'testing'}{$t('ai.config.testing')}
             {:else if realtimeTestStatus === 'success'}{$t('ai.config.connected')}
             {:else if realtimeTestStatus === 'failed'}{$t('ai.config.failed')}
-            {:else}{$t('ai.config.testConnection')}{/if}
+            {:else}{$t('ai.config.test_connection')}{/if}
           </button>
           {#if realtimeTestError && realtimeTestStatus === 'failed'}
             <p class="test-error">{realtimeTestError}</p>
@@ -926,7 +926,7 @@
     {/if}
 
     {#if !addingRealtime && editingRealtimeId === null}
-      <button class="add-model-btn" onclick={startAddRealtime}>{$t('ai.realtime.addModel')}</button>
+      <button class="add-model-btn" onclick={startAddRealtime}>{$t('ai.realtime.add_model')}</button>
     {/if}
   </section>
 </div>

@@ -77,8 +77,8 @@
 
   async function unbind(kb: KnowledgeBase) {
     const confirmed = await ask(
-      $t('kbSync.settings.unbindConfirm').replace('{name}', kb.name),
-      { title: $t('kbSync.settings.unbindTitle'), kind: 'warning' }
+      $t('kb_sync.settings.unbind_confirm').replace('{name}', kb.name),
+      { title: $t('kb_sync.settings.unbind_title'), kind: 'warning' }
     );
     if (confirmed) {
       filesStore.clearKbBinding(kb.id);
@@ -91,7 +91,7 @@
   }
 
   function formatDate(iso: string | null): string {
-    if (!iso) return $t('kbSync.settings.never');
+    if (!iso) return $t('kb_sync.settings.never');
     const d = new Date(iso);
     return `${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   }
@@ -116,7 +116,7 @@
 
 <div class="kb-sync-settings gx-tab">
   <section class="gx-section">
-    <h3 class="gx-section-title">{$t('kbSync.settings.globalSwitch')}</h3>
+    <h3 class="gx-section-title">{$t('kb_sync.settings.global_switch')}</h3>
     <div class="gx-card">
       <div class="gx-row gx-row-check">
         <label class="gx-check">
@@ -125,20 +125,20 @@
             checked={kbSyncEnabled}
             onchange={(e) => settingsStore.update({ kbSyncEnabled: (e.target as HTMLInputElement).checked })}
           />
-          <span>{$t('kbSync.settings.globalSwitch')}</span>
+          <span>{$t('kb_sync.settings.global_switch')}</span>
         </label>
-        <p class="gx-hint gx-hint-indent">{$t('kbSync.settings.globalSwitchHint')}</p>
+        <p class="gx-hint gx-hint-indent">{$t('kb_sync.settings.global_switch_hint')}</p>
       </div>
       <div class="gx-row gx-row-check">
         <button class="gx-btn gx-btn-sm trash-link" onclick={() => { showTrash = true; }} type="button">
-          🗑 {$t('kbSync.trash.title')}
+          🗑 {$t('kb_sync.trash.title')}
         </button>
       </div>
     </div>
   </section>
 
   <section class="gx-section">
-    <h3 class="gx-section-title">{$t('settings.tabs.kbSync')}</h3>
+    <h3 class="gx-section-title">{$t('settings.tabs.kb_sync')}</h3>
     <div class="kb-list">
     {#each knowledgeBases as kb}
       <div class="kb-item">
@@ -150,7 +150,7 @@
                 ☁ {kb.picoraBinding.picoraKbName} {statusIcon(kb)}
               </span>
               <span class="kb-last-sync">
-                {$t('kbSync.settings.lastSync')}: {formatDate(kb.picoraBinding.lastSyncAt)}
+                {$t('kb_sync.settings.last_sync')}: {formatDate(kb.picoraBinding.lastSyncAt)}
                 {#if kb.picoraBinding.lastSyncReport}
                   · ↑{kb.picoraBinding.lastSyncReport.uploaded} ↓{kb.picoraBinding.lastSyncReport.downloaded}
                 {/if}
@@ -161,14 +161,14 @@
                 {/if}
               </span>
             {:else}
-              <span class="kb-unbound">{$t('kbSync.settings.unbound')}</span>
+              <span class="kb-unbound">{$t('kb_sync.settings.unbound')}</span>
             {/if}
           </div>
           <div class="kb-actions">
             {#if kb.picoraBinding}
               {#if getSyncState(kb.id).conflictCount > 0}
                 <button class="action-btn warn" onclick={() => { conflictKbId = kb.id; }}>
-                  {$t('kbSync.settings.viewConflicts')} ({getSyncState(kb.id).conflictCount})
+                  {$t('kb_sync.settings.view_conflicts')} ({getSyncState(kb.id).conflictCount})
                 </button>
               {/if}
               <button
@@ -176,15 +176,15 @@
                 onclick={() => syncNow(kb)}
                 disabled={getSyncState(kb.id).status === 'syncing' || !kbSyncEnabled}
               >
-                {getSyncState(kb.id).status === 'syncing' ? $t('kbSync.settings.syncing') : $t('kbSync.settings.syncNow')}
+                {getSyncState(kb.id).status === 'syncing' ? $t('kb_sync.settings.syncing') : $t('kb_sync.settings.sync_now')}
               </button>
               <button class="action-btn" onclick={() => { expandedKbId = expandedKbId === kb.id ? null : kb.id; }}>
-                {$t('kbSync.settings.editStrategy')} {expandedKbId === kb.id ? '▲' : '▼'}
+                {$t('kb_sync.settings.edit_strategy')} {expandedKbId === kb.id ? '▲' : '▼'}
               </button>
-              <button class="action-btn danger" onclick={() => unbind(kb)}>{$t('kbSync.settings.unbind')}</button>
+              <button class="action-btn danger" onclick={() => unbind(kb)}>{$t('kb_sync.settings.unbind')}</button>
             {:else}
               <button class="action-btn primary" onclick={() => { bindingKb = kb; }}>
-                + {$t('kbSync.settings.bind')}
+                + {$t('kb_sync.settings.bind')}
               </button>
             {/if}
           </div>
@@ -194,16 +194,16 @@
           {@const binding = kb.picoraBinding}
           <div class="strategy-editor">
             <div class="strategy-row">
-              <label class="strategy-label">{$t('kbSync.strategy.mode')}</label>
+              <label class="strategy-label">{$t('kb_sync.strategy.mode')}</label>
               <select
                 class="select-input"
                 value={binding.strategy.mode}
                 onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, mode: (e.target as HTMLSelectElement).value as SyncStrategy['mode'] })}
               >
-                <option value="manual">{$t('kbSync.strategy.modeManual')}</option>
-                <option value="on-save">{$t('kbSync.strategy.modeOnSave')}</option>
-                <option value="interval">{$t('kbSync.strategy.modeInterval')}</option>
-                <option value="on-startup-and-close">{$t('kbSync.strategy.modeStartup')}</option>
+                <option value="manual">{$t('kb_sync.strategy.mode_manual')}</option>
+                <option value="on-save">{$t('kb_sync.strategy.mode_on_save')}</option>
+                <option value="interval">{$t('kb_sync.strategy.mode_interval')}</option>
+                <option value="on-startup-and-close">{$t('kb_sync.strategy.mode_startup')}</option>
               </select>
               {#if binding.strategy.mode === 'interval'}
                 <select
@@ -211,35 +211,35 @@
                   value={binding.strategy.intervalSecs}
                   onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, intervalSecs: Number((e.target as HTMLSelectElement).value) as SyncStrategy['intervalSecs'] })}
                 >
-                  <option value={60}>{$t('kbSync.strategy.interval60')}</option>
-                  <option value={300}>{$t('kbSync.strategy.interval300')}</option>
-                  <option value={900}>{$t('kbSync.strategy.interval900')}</option>
-                  <option value={1800}>{$t('kbSync.strategy.interval1800')}</option>
+                  <option value={60}>{$t('kb_sync.strategy.interval60')}</option>
+                  <option value={300}>{$t('kb_sync.strategy.interval300')}</option>
+                  <option value={900}>{$t('kb_sync.strategy.interval900')}</option>
+                  <option value={1800}>{$t('kb_sync.strategy.interval1800')}</option>
                 </select>
               {/if}
             </div>
             <div class="strategy-row">
-              <label class="strategy-label">{$t('kbSync.strategy.scope')}</label>
+              <label class="strategy-label">{$t('kb_sync.strategy.scope')}</label>
               <select
                 class="select-input"
                 value={binding.strategy.scope}
                 onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, scope: (e.target as HTMLSelectElement).value as SyncStrategy['scope'] })}
               >
-                <option value="markdown-only">{$t('kbSync.strategy.scopeMdOnly')}</option>
-                <option value="markdown-plus-rules">{$t('kbSync.strategy.scopeMdRules')}</option>
-                <option value="all-including-hidden">{$t('kbSync.strategy.scopeAll')}</option>
+                <option value="markdown-only">{$t('kb_sync.strategy.scope_md_only')}</option>
+                <option value="markdown-plus-rules">{$t('kb_sync.strategy.scope_md_rules')}</option>
+                <option value="all-including-hidden">{$t('kb_sync.strategy.scope_all')}</option>
               </select>
             </div>
             <div class="strategy-row">
-              <label class="strategy-label">{$t('kbSync.strategy.conflict')}</label>
+              <label class="strategy-label">{$t('kb_sync.strategy.conflict')}</label>
               <select
                 class="select-input"
                 value={binding.strategy.conflictPolicy}
                 onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, conflictPolicy: (e.target as HTMLSelectElement).value as SyncStrategy['conflictPolicy'] })}
               >
-                <option value="prompt">{$t('kbSync.strategy.conflictPrompt')}</option>
-                <option value="prefer-local">{$t('kbSync.strategy.conflictLocal')}</option>
-                <option value="prefer-remote">{$t('kbSync.strategy.conflictRemote')}</option>
+                <option value="prompt">{$t('kb_sync.strategy.conflict_prompt')}</option>
+                <option value="prefer-local">{$t('kb_sync.strategy.conflict_local')}</option>
+                <option value="prefer-remote">{$t('kb_sync.strategy.conflict_remote')}</option>
               </select>
             </div>
           </div>
@@ -247,7 +247,7 @@
       </div>
     {/each}
     {#if knowledgeBases.length === 0}
-      <p class="empty-hint">{$t('kbSync.settings.noKbs')}</p>
+      <p class="empty-hint">{$t('kb_sync.settings.no_kbs')}</p>
     {/if}
     </div>
   </section>

@@ -266,9 +266,9 @@
   <div class="kb-manage-section">
     <div class="kb-manage-row">
       <button class="kb-manage-btn" onclick={() => onOpenKBManager?.()}>
-        {$t('knowledgeBase.manage')}
+        {$t('knowledge_base.manage')}
       </button>
-      <span class="kb-count">{knowledgeBases.length} {$t('knowledgeBase.title').toLowerCase()}</span>
+      <span class="kb-count">{knowledgeBases.length} {$t('knowledge_base.title').toLowerCase()}</span>
     </div>
   </div>
 
@@ -294,7 +294,7 @@
         class="setting-input model-input"
         type="text"
         value={embeddingSource === 'local' ? (localModels.find(m => m.id === localEmbeddingModelId)?.name || '') : embeddingModel}
-        placeholder={embeddingSource === 'local' ? $t('kb.selectLocalModel') : (availableModels[0]?.model || 'text-embedding-3-small')}
+        placeholder={embeddingSource === 'local' ? $t('kb.select_local_model') : (availableModels[0]?.model || 'text-embedding-3-small')}
         onfocus={() => showModelDropdown = true}
         onblur={() => { setTimeout(() => { if (!document.activeElement?.closest('.model-combo')) showModelDropdown = false; }, 200); }}
         oninput={(e) => {
@@ -335,7 +335,7 @@
                     <span class="model-dim">{downloadProgress}%</span>
                   {:else}
                     <button class="btn-inline-dl" onmousedown={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadModel(m.id); }}>
-                      {$t('kb.downloadModel')} ({formatSize(m.size)})
+                      {$t('kb.download_model')} ({formatSize(m.size)})
                     </button>
                   {/if}
                 </div>
@@ -385,7 +385,7 @@
     />
     {#if showDimWarning}
       <div class="dim-warning">
-        {$t('kb.dimensionWarning').replace('{max}', String(maxDim)).replace('{actual}', String(effectiveDim))}
+        {$t('kb.dimension_warning').replace('{max}', String(maxDim)).replace('{actual}', String(effectiveDim))}
       </div>
     {/if}
   </div>
@@ -394,7 +394,7 @@
   <div class="setting-group">
     <label class="setting-label setting-checkbox">
       <input type="checkbox" checked={autoIndexOnSave} onchange={handleAutoIndexChange} />
-      {$t('kb.autoIndex')}
+      {$t('kb.auto_index')}
     </label>
   </div>
 
@@ -417,7 +417,7 @@
           </div>
         {/if}
       {:else}
-        <div class="status-text">{$t('kb.status.notIndexed')}</div>
+        <div class="status-text">{$t('kb.status.not_indexed')}</div>
       {/if}
 
       {#if isIndexing}
@@ -445,11 +445,11 @@
 
       <div class="action-buttons">
         <button class="btn btn-primary" onclick={handleReindex} disabled={isIndexing}>
-          {$t('kb.reindexAll')}
+          {$t('kb.reindex_all')}
         </button>
         {#if indexStatus?.indexed}
           <button class="btn btn-danger" onclick={handleDeleteIndex} disabled={isIndexing}>
-            {$t('kb.deleteIndex')}
+            {$t('kb.delete_index')}
           </button>
         {/if}
       </div>
@@ -459,7 +459,7 @@
   {#if localModels.length > 0}
     <div class="section-divider"></div>
     <div class="local-models-section">
-      <div class="section-title">{$t('kb.localModels')}</div>
+      <div class="section-title">{$t('kb.local_models')}</div>
       {#each localModels as model}
         <div class="model-row">
           <div class="model-info">
@@ -474,7 +474,7 @@
           <div class="model-actions">
             {#if model.downloaded}
               <span class="model-installed">✓</span>
-              <button class="btn-icon btn-delete-model" onclick={() => handleDeleteModel(model.id)} title={$t('kb.deleteModel')}>✕</button>
+              <button class="btn-icon btn-delete-model" onclick={() => handleDeleteModel(model.id)} title={$t('kb.delete_model')}>✕</button>
             {:else if downloadingModelId === model.id}
               <div class="model-dl-progress">
                 <div class="model-dl-bar">
@@ -483,7 +483,7 @@
                 <span class="model-dl-pct">{downloadProgress}%</span>
               </div>
             {:else}
-              <button class="btn btn-sm" onclick={() => handleDownloadModel(model.id)}>{$t('kb.downloadModel')}</button>
+              <button class="btn btn-sm" onclick={() => handleDownloadModel(model.id)}>{$t('kb.download_model')}</button>
             {/if}
           </div>
         </div>

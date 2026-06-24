@@ -183,7 +183,7 @@
   <div class="bind-dialog" onclick={(e) => e.stopPropagation()}>
     <div class="dialog-header">
       <span class="dialog-icon">☁</span>
-      <h3>{$t('kbSync.bindDialog.title').replace('{name}', kb.name)}</h3>
+      <h3>{$t('kb_sync.bind_dialog.title').replace('{name}', kb.name)}</h3>
       <button class="close-btn" onclick={onClose}>&times;</button>
     </div>
 
@@ -191,14 +191,14 @@
       {#each [1,2,3,4] as s}
         <span class="step-dot" class:active={step >= s}></span>
       {/each}
-      <span class="step-label">{$t('kbSync.bindDialog.step').replace('{current}', String(step)).replace('{total}', '4')}</span>
+      <span class="step-label">{$t('kb_sync.bind_dialog.step').replace('{current}', String(step)).replace('{total}', '4')}</span>
     </div>
 
     <div class="dialog-body">
       {#if step === 1}
-        <h4>{$t('kbSync.bindDialog.step1Title')}</h4>
+        <h4>{$t('kb_sync.bind_dialog.step1_title')}</h4>
         {#if picoraTargets.length === 0}
-          <p class="hint-text">{$t('kbSync.bindDialog.noPicora')}</p>
+          <p class="hint-text">{$t('kb_sync.bind_dialog.no_picora')}</p>
         {:else}
           <div class="target-list">
             {#each picoraTargets as target}
@@ -214,16 +214,16 @@
             {/each}
           </div>
           {#if loadingKbs}
-            <p class="hint-text">{$t('kbSync.bindDialog.loadingKbs')}</p>
+            <p class="hint-text">{$t('kb_sync.bind_dialog.loading_kbs')}</p>
           {:else if kbsError}
             <p class="error-text">{kbsError}</p>
           {/if}
         {/if}
 
       {:else if step === 2}
-        <h4>{$t('kbSync.bindDialog.step2Title')}</h4>
+        <h4>{$t('kb_sync.bind_dialog.step2_title')}</h4>
         {#if loadingKbs}
-          <p class="hint-text">{$t('kbSync.bindDialog.loadingKbs')}</p>
+          <p class="hint-text">{$t('kb_sync.bind_dialog.loading_kbs')}</p>
         {:else if kbsError}
           <p class="error-text">{kbsError}</p>
         {:else}
@@ -231,14 +231,14 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <label class="radio-item">
               <input type="radio" bind:group={createMode} value={true} />
-              <span>{$t('kbSync.bindDialog.createNew')}</span>
+              <span>{$t('kb_sync.bind_dialog.create_new')}</span>
             </label>
             {#if createMode}
               <div class="radio-sub">
-                <label class="field-label">{$t('kbSync.bindDialog.kbName')}
+                <label class="field-label">{$t('kb_sync.bind_dialog.kb_name')}
                   <input class="text-input" bind:value={newKbName} oninput={() => { newKbSlug = slugify(newKbName); }} />
                 </label>
-                <label class="field-label">{$t('kbSync.bindDialog.kbSlug')}
+                <label class="field-label">{$t('kb_sync.bind_dialog.kb_slug')}
                   <input class="text-input" bind:value={newKbSlug} />
                 </label>
               </div>
@@ -248,12 +248,12 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <label class="radio-item">
               <input type="radio" bind:group={createMode} value={false} />
-              <span>{$t('kbSync.bindDialog.linkExisting')}</span>
+              <span>{$t('kb_sync.bind_dialog.link_existing')}</span>
             </label>
             {#if !createMode}
               <div class="radio-sub">
                 <select class="select-input" bind:value={selectedRemoteKbId}>
-                  <option value="">{$t('kbSync.bindDialog.selectKb')}</option>
+                  <option value="">{$t('kb_sync.bind_dialog.select_kb')}</option>
                   {#each remoteKbs as rKb}
                     <option value={rKb.id}>{rKb.name} · {rKb.docCount} docs</option>
                   {/each}
@@ -264,77 +264,77 @@
         {/if}
 
       {:else if step === 3}
-        <h4>{$t('kbSync.bindDialog.step3Title')}</h4>
+        <h4>{$t('kb_sync.bind_dialog.step3_title')}</h4>
         <div class="form-section">
-          <label class="form-label">{$t('kbSync.strategy.mode')}</label>
+          <label class="form-label">{$t('kb_sync.strategy.mode')}</label>
           <select class="select-input" bind:value={strategy.mode}>
-            <option value="manual">{$t('kbSync.strategy.modeManual')}</option>
-            <option value="on-save">{$t('kbSync.strategy.modeOnSave')}</option>
-            <option value="interval">{$t('kbSync.strategy.modeInterval')}</option>
-            <option value="on-startup-and-close">{$t('kbSync.strategy.modeStartup')}</option>
+            <option value="manual">{$t('kb_sync.strategy.mode_manual')}</option>
+            <option value="on-save">{$t('kb_sync.strategy.mode_on_save')}</option>
+            <option value="interval">{$t('kb_sync.strategy.mode_interval')}</option>
+            <option value="on-startup-and-close">{$t('kb_sync.strategy.mode_startup')}</option>
           </select>
           {#if strategy.mode === 'interval'}
             <select class="select-input" bind:value={strategy.intervalSecs}>
-              <option value={60}>{$t('kbSync.strategy.interval60')}</option>
-              <option value={300}>{$t('kbSync.strategy.interval300')}</option>
-              <option value={900}>{$t('kbSync.strategy.interval900')}</option>
-              <option value={1800}>{$t('kbSync.strategy.interval1800')}</option>
+              <option value={60}>{$t('kb_sync.strategy.interval60')}</option>
+              <option value={300}>{$t('kb_sync.strategy.interval300')}</option>
+              <option value={900}>{$t('kb_sync.strategy.interval900')}</option>
+              <option value={1800}>{$t('kb_sync.strategy.interval1800')}</option>
             </select>
           {/if}
         </div>
         <div class="form-section">
-          <label class="form-label">{$t('kbSync.strategy.scope')}</label>
+          <label class="form-label">{$t('kb_sync.strategy.scope')}</label>
           <select class="select-input" bind:value={strategy.scope}>
-            <option value="markdown-only">{$t('kbSync.strategy.scopeMdOnly')}</option>
-            <option value="markdown-plus-rules">{$t('kbSync.strategy.scopeMdRules')}</option>
-            <option value="all-including-hidden">{$t('kbSync.strategy.scopeAll')}</option>
+            <option value="markdown-only">{$t('kb_sync.strategy.scope_md_only')}</option>
+            <option value="markdown-plus-rules">{$t('kb_sync.strategy.scope_md_rules')}</option>
+            <option value="all-including-hidden">{$t('kb_sync.strategy.scope_all')}</option>
           </select>
         </div>
         <div class="form-section">
-          <label class="form-label">{$t('kbSync.strategy.conflict')}</label>
+          <label class="form-label">{$t('kb_sync.strategy.conflict')}</label>
           <select class="select-input" bind:value={strategy.conflictPolicy}>
-            <option value="prompt">{$t('kbSync.strategy.conflictPrompt')}</option>
-            <option value="prefer-local">{$t('kbSync.strategy.conflictLocal')}</option>
-            <option value="prefer-remote">{$t('kbSync.strategy.conflictRemote')}</option>
+            <option value="prompt">{$t('kb_sync.strategy.conflict_prompt')}</option>
+            <option value="prefer-local">{$t('kb_sync.strategy.conflict_local')}</option>
+            <option value="prefer-remote">{$t('kb_sync.strategy.conflict_remote')}</option>
           </select>
         </div>
 
       {:else if step === 4}
-        <h4>{$t('kbSync.bindDialog.step4Title')}</h4>
+        <h4>{$t('kb_sync.bind_dialog.step4_title')}</h4>
         {#if dryRunLoading}
-          <p class="hint-text">{$t('kbSync.bindDialog.previewing')}</p>
+          <p class="hint-text">{$t('kb_sync.bind_dialog.previewing')}</p>
         {:else if dryRunError}
           <p class="error-text">{dryRunError}</p>
           {#if conflictRecoverable}
             <button class="btn btn-ghost recovery-btn" onclick={switchToLinkExisting}>
-              {$t('kbSync.bindDialog.linkExistingInstead')}
+              {$t('kb_sync.bind_dialog.link_existing_instead')}
             </button>
           {/if}
         {:else if dryRunResult}
           <div class="dry-run-list">
-            <div class="dry-run-item upload">↑ {$t('kbSync.bindDialog.willUpload').replace('{n}', String(dryRunResult.uploadPaths.length))}</div>
-            <div class="dry-run-item download">↓ {$t('kbSync.bindDialog.willDownload').replace('{n}', String(dryRunResult.downloadPaths.length))}</div>
-            <div class="dry-run-item delete">⊘ {$t('kbSync.bindDialog.willDelete').replace('{n}', String(dryRunResult.deleteLocalPaths.length + dryRunResult.deleteRemotePaths.length))}</div>
+            <div class="dry-run-item upload">↑ {$t('kb_sync.bind_dialog.will_upload').replace('{n}', String(dryRunResult.uploadPaths.length))}</div>
+            <div class="dry-run-item download">↓ {$t('kb_sync.bind_dialog.will_download').replace('{n}', String(dryRunResult.downloadPaths.length))}</div>
+            <div class="dry-run-item delete">⊘ {$t('kb_sync.bind_dialog.will_delete').replace('{n}', String(dryRunResult.deleteLocalPaths.length + dryRunResult.deleteRemotePaths.length))}</div>
             {#if dryRunResult.skippedLarge.length > 0}
-              <div class="dry-run-item skip">⚠ {$t('kbSync.bindDialog.skipped').replace('{n}', String(dryRunResult.skippedLarge.length))}</div>
+              <div class="dry-run-item skip">⚠ {$t('kb_sync.bind_dialog.skipped').replace('{n}', String(dryRunResult.skippedLarge.length))}</div>
               {#each dryRunResult.skippedLarge.slice(0, 3) as s}
                 <div class="dry-run-sub">{s.relativePath} ({formatBytes(s.sizeBytes)})</div>
               {/each}
             {/if}
           </div>
         {:else}
-          <p class="hint-text">{$t('kbSync.bindDialog.firstBindHint')}</p>
+          <p class="hint-text">{$t('kb_sync.bind_dialog.first_bind_hint')}</p>
         {/if}
         <label class="confirm-check">
           <input type="checkbox" bind:checked={userConfirmed} />
-          {$t('kbSync.bindDialog.confirmLabel')}
+          {$t('kb_sync.bind_dialog.confirm_label')}
         </label>
       {/if}
     </div>
 
     <div class="dialog-footer">
       {#if step > 1}
-        <button class="btn btn-ghost" onclick={() => { step -= 1; }}>{$t('kbSync.bindDialog.back')}</button>
+        <button class="btn btn-ghost" onclick={() => { step -= 1; }}>{$t('kb_sync.bind_dialog.back')}</button>
       {:else}
         <button class="btn btn-ghost" onclick={onClose}>{$t('common.cancel')}</button>
       {/if}
@@ -350,12 +350,12 @@
           onclick={step === 1 ? goToStep2 : () => { step = 3; }}
         >
           {step === 1 && loadingKbs
-            ? $t('kbSync.bindDialog.loadingKbs')
-            : $t('kbSync.bindDialog.next')}
+            ? $t('kb_sync.bind_dialog.loading_kbs')
+            : $t('kb_sync.bind_dialog.next')}
         </button>
       {:else if step === 3}
         <button class="btn btn-primary" onclick={goToStep4} disabled={dryRunLoading}>
-          {$t('kbSync.bindDialog.next')}
+          {$t('kb_sync.bind_dialog.next')}
         </button>
       {:else}
         <button
@@ -363,7 +363,7 @@
           disabled={!userConfirmed || submitting}
           onclick={confirmBind}
         >
-          {submitting ? $t('kbSync.bindDialog.binding') : $t('kbSync.bindDialog.startSync')}
+          {submitting ? $t('kb_sync.bind_dialog.binding') : $t('kb_sync.bind_dialog.start_sync')}
         </button>
       {/if}
     </div>

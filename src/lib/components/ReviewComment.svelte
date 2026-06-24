@@ -133,7 +133,7 @@
 		{#if review.status === 'resolved'}
 			<span class="status-badge resolved">{$t('review.resolved')}</span>
 		{:else if review.status === 'wontfix'}
-			<span class="status-badge wontfix">{$t('review.wontfixLabel')}</span>
+			<span class="status-badge wontfix">{$t('review.wontfix_label')}</span>
 		{:else if review.status === 'unanchored'}
 			<span class="status-badge unanchored">{$t('review.unanchored')}</span>
 		{/if}
@@ -159,8 +159,8 @@
 	<!-- Verified prompt -->
 	{#if showVerifiedPrompt}
 		<div class="verified-prompt">
-			{$t('review.verifiedPrompt')}
-			<button class="link-btn" onclick={handleMarkVerified}>{$t('review.markVerified')}</button>
+			{$t('review.verified_prompt')}
+			<button class="link-btn" onclick={handleMarkVerified}>{$t('review.mark_verified')}</button>
 		</div>
 	{/if}
 
@@ -173,7 +173,7 @@
 				</button>
 				{#if onAiRespond && !isAiAuthored}
 					<button class="action-btn ai-btn-inline" onclick={(e) => { e.stopPropagation(); onAiRespond?.(review.id); }}>
-						✨ {$t('review.aiRespond')}
+						✨ {$t('review.ai_respond')}
 					</button>
 				{/if}
 				<button class="action-btn" onclick={(e) => { e.stopPropagation(); handleResolve(); }}>
@@ -188,7 +188,7 @@
 					{$t('review.reanchor')}
 				</button>
 				<button class="action-btn" onclick={(e) => { e.stopPropagation(); handleResolve(); }}>
-					{$t('review.markResolved')}
+					{$t('review.mark_resolved')}
 				</button>
 			{/if}
 		</div>

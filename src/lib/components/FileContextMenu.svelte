@@ -46,10 +46,10 @@
   } = $props();
 
   const revealLabel = isMacOS
-    ? $t('sidebar.contextMenu.revealInFinder')
+    ? $t('sidebar.context_menu.reveal_in_finder')
     : isWindows
-      ? $t('sidebar.contextMenu.revealInExplorer')
-      : $t('sidebar.contextMenu.revealInFinder'); // Linux fallback
+      ? $t('sidebar.context_menu.reveal_in_explorer')
+      : $t('sidebar.context_menu.reveal_in_finder'); // Linux fallback
 
   const tr = $t;
 

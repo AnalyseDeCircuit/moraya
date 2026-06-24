@@ -34,7 +34,7 @@
   onclick={(e) => e.stopPropagation()}
 >
   <div class="toolbar-group">
-    <button class="toolbar-btn" onclick={onAddRowBefore} title={$t('table.insertRowAbove')}>
+    <button class="toolbar-btn" onclick={onAddRowBefore} title={$t('table.insert_row_above')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -42,7 +42,7 @@
         <line x1="9" y1="7" x2="15" y2="7"/>
       </svg>
     </button>
-    <button class="toolbar-btn" onclick={onAddRowAfter} title={$t('table.insertRowBelow')}>
+    <button class="toolbar-btn" onclick={onAddRowAfter} title={$t('table.insert_row_below')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -50,7 +50,7 @@
         <line x1="9" y1="17" x2="15" y2="17"/>
       </svg>
     </button>
-    <button class="toolbar-btn danger" onclick={onDeleteRow} title={$t('table.deleteRow')}>
+    <button class="toolbar-btn danger" onclick={onDeleteRow} title={$t('table.delete_row')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -63,7 +63,7 @@
   <div class="toolbar-divider"></div>
 
   <div class="toolbar-group">
-    <button class="toolbar-btn" onclick={onAddColBefore} title={$t('table.insertColLeft')}>
+    <button class="toolbar-btn" onclick={onAddColBefore} title={$t('table.insert_col_left')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <line x1="12" y1="3" x2="12" y2="21"/>
@@ -71,7 +71,7 @@
         <line x1="7" y1="9" x2="7" y2="15"/>
       </svg>
     </button>
-    <button class="toolbar-btn" onclick={onAddColAfter} title={$t('table.insertColRight')}>
+    <button class="toolbar-btn" onclick={onAddColAfter} title={$t('table.insert_col_right')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <line x1="12" y1="3" x2="12" y2="21"/>
@@ -79,7 +79,7 @@
         <line x1="17" y1="9" x2="17" y2="15"/>
       </svg>
     </button>
-    <button class="toolbar-btn danger" onclick={onDeleteCol} title={$t('table.deleteCol')}>
+    <button class="toolbar-btn danger" onclick={onDeleteCol} title={$t('table.delete_col')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <line x1="12" y1="3" x2="12" y2="21"/>
@@ -92,17 +92,17 @@
   <div class="toolbar-divider"></div>
 
   <div class="toolbar-group">
-    <button class="toolbar-btn" onclick={onAlignLeft} title={$t('table.alignLeft')}>
+    <button class="toolbar-btn" onclick={onAlignLeft} title={$t('table.align_left')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/>
       </svg>
     </button>
-    <button class="toolbar-btn" onclick={onAlignCenter} title={$t('table.alignCenter')}>
+    <button class="toolbar-btn" onclick={onAlignCenter} title={$t('table.align_center')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
       </svg>
     </button>
-    <button class="toolbar-btn" onclick={onAlignRight} title={$t('table.alignRight')}>
+    <button class="toolbar-btn" onclick={onAlignRight} title={$t('table.align_right')}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/>
       </svg>

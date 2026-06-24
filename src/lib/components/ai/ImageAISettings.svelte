@@ -137,7 +137,7 @@
       imgFormBaseUrl = result.resolvedBaseUrl;
     }
     imgFormTestStatus = result.success ? 'success' : 'failed';
-    imgFormTestError = result.success ? '' : (result.error || $t('ai.config.testFailed'));
+    imgFormTestError = result.success ? '' : (result.error || $t('ai.config.test_failed'));
     if (imgTestTimer) clearTimeout(imgTestTimer);
     imgTestTimer = setTimeout(() => { imgFormTestStatus = 'idle'; imgFormTestError = ''; }, 3000);
   }
@@ -146,15 +146,15 @@
 <div class="image-ai-settings gx-tab">
   <div class="section-header">
     <div>
-      <h3 class="section-title">{$t('ai.sections.imageAI')}</h3>
-      <p class="section-subtitle">{$t('ai.sections.imageAIHint')}</p>
+      <h3 class="section-title">{$t('ai.sections.image_ai')}</h3>
+      <p class="section-subtitle">{$t('ai.sections.image_aihint')}</p>
     </div>
   </div>
 
   {#if imageConfigs.length === 0 && !addingImage}
     <div class="empty-state">
-      <p>{$t('ai.multiModel.noImageModels')}</p>
-      <p class="empty-hint">{$t('ai.multiModel.noImageModelsHint')}</p>
+      <p>{$t('ai.multi_model.no_image_models')}</p>
+      <p class="empty-hint">{$t('ai.multi_model.no_image_models_hint')}</p>
     </div>
   {/if}
 
@@ -162,34 +162,34 @@
     {#if editingImageId === config.id}
       <div class="config-form">
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.imageConfig.provider')}</label>
+          <label class="setting-label">{$t('ai.image_config.provider')}</label>
           <select class="setting-input" value={imgFormProvider} onchange={handleImgProviderChange}>
-            <option value="openai">{$t('ai.imageConfig.providerOpenai')}</option>
-            <option value="grok">{$t('ai.imageConfig.providerGrok')}</option>
-            <option value="gemini">{$t('ai.imageConfig.providerGemini')}</option>
-            <option value="qwen">{$t('ai.imageConfig.providerQwen')}</option>
-            <option value="doubao">{$t('ai.imageConfig.providerDoubao')}</option>
-            <option value="custom">{$t('ai.imageConfig.providerCustom')}</option>
+            <option value="openai">{$t('ai.image_config.provider_openai')}</option>
+            <option value="grok">{$t('ai.image_config.provider_grok')}</option>
+            <option value="gemini">{$t('ai.image_config.provider_gemini')}</option>
+            <option value="qwen">{$t('ai.image_config.provider_qwen')}</option>
+            <option value="doubao">{$t('ai.image_config.provider_doubao')}</option>
+            <option value="custom">{$t('ai.image_config.provider_custom')}</option>
           </select>
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.imageConfig.apiKey')}</label>
-          <input type="password" class="setting-input" bind:value={imgFormApiKey} placeholder={$t('ai.imageConfig.apiKeyPlaceholder')} />
+          <label class="setting-label">{$t('ai.image_config.api_key')}</label>
+          <input type="password" class="setting-input" bind:value={imgFormApiKey} placeholder={$t('ai.image_config.api_key_placeholder')} />
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.imageConfig.baseUrl')}</label>
+          <label class="setting-label">{$t('ai.image_config.base_url')}</label>
           <input type="text" class="setting-input" bind:value={imgFormBaseUrl} placeholder="https://api.openai.com/v1" />
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.imageConfig.model')}</label>
+          <label class="setting-label">{$t('ai.image_config.model')}</label>
           <div class="combo-wrapper">
             <input type="text" class="setting-input" bind:value={imgFormModel}
               onfocus={() => { if (getImageModels().length > 0) showImageModelDropdown = true; }}
               onblur={() => { setTimeout(() => { showImageModelDropdown = false; }, 150); }}
-              placeholder={$t('ai.imageConfig.modelPlaceholder')} />
+              placeholder={$t('ai.image_config.model_placeholder')} />
             {#if showImageModelDropdown && getImageModels().length > 0}
               <div class="model-dropdown">
                 {#each getImageModels() as m}
@@ -203,7 +203,7 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.imageConfig.ratio')}</label>
+          <label class="setting-label">{$t('ai.image_config.ratio')}</label>
           <select class="setting-input" bind:value={imgFormRatio}>
             {#each RATIO_OPTIONS as r}
               <option value={r}>{r}</option>
@@ -212,7 +212,7 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">{$t('ai.imageConfig.sizeLevel')}</label>
+          <label class="setting-label">{$t('ai.image_config.size_level')}</label>
           <div class="setting-row">
             <select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel}>
               {#each SIZE_LEVEL_OPTIONS as s}
@@ -233,7 +233,7 @@
             {#if imgFormTestStatus === 'testing'}{$t('ai.config.testing')}
             {:else if imgFormTestStatus === 'success'}{$t('ai.config.connected')}
             {:else if imgFormTestStatus === 'failed'}{$t('ai.config.failed')}
-            {:else}{$t('ai.config.testConnection')}{/if}
+            {:else}{$t('ai.config.test_connection')}{/if}
           </button>
           {#if imgFormTestError && imgFormTestStatus === 'failed'}
             <p class="test-error">{imgFormTestError}</p>
@@ -250,12 +250,12 @@
           <span class="config-provider">{config.provider}</span>
           <span class="config-model">{config.model}</span>
           {#if config.id === activeImageConfigId}
-            <span class="default-badge">{$t('ai.multiModel.default')}</span>
+            <span class="default-badge">{$t('ai.multi_model.default')}</span>
           {/if}
         </div>
         <div class="config-actions">
           {#if config.id !== activeImageConfigId}
-            <button class="btn-sm" onclick={() => setDefaultImage(config.id)}>{$t('ai.multiModel.setDefault')}</button>
+            <button class="btn-sm" onclick={() => setDefaultImage(config.id)}>{$t('ai.multi_model.set_default')}</button>
           {/if}
           <button class="btn-sm" onclick={() => startEditImage(config)}>{$t('common.edit')}</button>
           {#if imageConfigs.length > 1}
@@ -269,34 +269,34 @@
   {#if addingImage}
     <div class="config-form">
       <div class="setting-group">
-        <label class="setting-label">{$t('ai.imageConfig.provider')}</label>
+        <label class="setting-label">{$t('ai.image_config.provider')}</label>
         <select class="setting-input" value={imgFormProvider} onchange={handleImgProviderChange}>
-          <option value="openai">{$t('ai.imageConfig.providerOpenai')}</option>
-          <option value="grok">{$t('ai.imageConfig.providerGrok')}</option>
-          <option value="gemini">{$t('ai.imageConfig.providerGemini')}</option>
-          <option value="qwen">{$t('ai.imageConfig.providerQwen')}</option>
-          <option value="doubao">{$t('ai.imageConfig.providerDoubao')}</option>
-          <option value="custom">{$t('ai.imageConfig.providerCustom')}</option>
+          <option value="openai">{$t('ai.image_config.provider_openai')}</option>
+          <option value="grok">{$t('ai.image_config.provider_grok')}</option>
+          <option value="gemini">{$t('ai.image_config.provider_gemini')}</option>
+          <option value="qwen">{$t('ai.image_config.provider_qwen')}</option>
+          <option value="doubao">{$t('ai.image_config.provider_doubao')}</option>
+          <option value="custom">{$t('ai.image_config.provider_custom')}</option>
         </select>
       </div>
 
       <div class="setting-group">
-        <label class="setting-label">{$t('ai.imageConfig.apiKey')}</label>
-        <input type="password" class="setting-input" bind:value={imgFormApiKey} placeholder={$t('ai.imageConfig.apiKeyPlaceholder')} />
+        <label class="setting-label">{$t('ai.image_config.api_key')}</label>
+        <input type="password" class="setting-input" bind:value={imgFormApiKey} placeholder={$t('ai.image_config.api_key_placeholder')} />
       </div>
 
       <div class="setting-group">
-        <label class="setting-label">{$t('ai.imageConfig.baseUrl')}</label>
+        <label class="setting-label">{$t('ai.image_config.base_url')}</label>
         <input type="text" class="setting-input" bind:value={imgFormBaseUrl} placeholder="https://api.openai.com/v1" />
       </div>
 
       <div class="setting-group">
-        <label class="setting-label">{$t('ai.imageConfig.model')}</label>
-        <input type="text" class="setting-input" bind:value={imgFormModel} placeholder={$t('ai.imageConfig.modelPlaceholder')} />
+        <label class="setting-label">{$t('ai.image_config.model')}</label>
+        <input type="text" class="setting-input" bind:value={imgFormModel} placeholder={$t('ai.image_config.model_placeholder')} />
       </div>
 
       <div class="setting-group">
-        <label class="setting-label">{$t('ai.imageConfig.ratio')}</label>
+        <label class="setting-label">{$t('ai.image_config.ratio')}</label>
         <select class="setting-input" bind:value={imgFormRatio}>
           {#each RATIO_OPTIONS as r}
             <option value={r}>{r}</option>
@@ -305,7 +305,7 @@
       </div>
 
       <div class="setting-group">
-        <label class="setting-label">{$t('ai.imageConfig.sizeLevel')}</label>
+        <label class="setting-label">{$t('ai.image_config.size_level')}</label>
         <div class="setting-row">
           <select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel}>
             {#each SIZE_LEVEL_OPTIONS as s}
@@ -326,7 +326,7 @@
           {#if imgFormTestStatus === 'testing'}{$t('ai.config.testing')}
           {:else if imgFormTestStatus === 'success'}{$t('ai.config.connected')}
           {:else if imgFormTestStatus === 'failed'}{$t('ai.config.failed')}
-          {:else}{$t('ai.config.testConnection')}{/if}
+          {:else}{$t('ai.config.test_connection')}{/if}
         </button>
         {#if imgFormTestError && imgFormTestStatus === 'failed'}
           <p class="test-error">{imgFormTestError}</p>
@@ -340,7 +340,7 @@
   {/if}
 
   {#if !addingImage && editingImageId === null}
-    <button class="add-model-btn" onclick={startAddImage}>{$t('ai.multiModel.addModel')}</button>
+    <button class="add-model-btn" onclick={startAddImage}>{$t('ai.multi_model.add_model')}</button>
   {/if}
 </div>
 

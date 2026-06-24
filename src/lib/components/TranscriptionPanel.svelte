@@ -118,8 +118,8 @@
   let showInformationalHints = $derived(recordingState === 'idle');
   let interviewModeHint = $derived.by(() => (
     usesNativeMacSystemSource(sourceMode)
-      ? $t('transcription.interviewNativeSystemHint')
-      : $t('transcription.interviewSystemShareHint')
+      ? $t('transcription.interview_native_system_hint')
+      : $t('transcription.interview_system_share_hint')
   ));
   let shouldShowSourceStatusHint = $derived(
     !!sourceStatusMessage
@@ -303,7 +303,7 @@
 
     if (requiresUserGestureSource(mode) && /user gesture|user activation|must be called from/i.test(rawMsg)) {
       error = null;
-      setSourceStatus($t('transcription.systemSourceClickStartHint'), 'warning');
+      setSourceStatus($t('transcription.system_source_click_start_hint'), 'warning');
       return true;
     }
 
@@ -315,7 +315,7 @@
         sourceMode = 'mic';
         setSourceStatus(null);
       } else {
-        setSourceStatus($t('transcription.systemSourceNoAudioTrackHint'), 'warning');
+        setSourceStatus($t('transcription.system_source_no_audio_track_hint'), 'warning');
       }
       error = null;
       return true;
@@ -337,7 +337,7 @@
       usesNativeMacSystemSource(mode)
       && /objective-c exception|unrecognized selector|!obj|bad object|native system audio capture is only available|unsupported process tap|runtime/i.test(normalized)
     ) {
-      error = $t('transcription.systemSourceRuntimeIncompatible');
+      error = $t('transcription.system_source_runtime_incompatible');
       setSourceStatus(null);
       return true;
     }
@@ -358,7 +358,7 @@
 
   async function startRecording(opts?: { preserveSegments?: boolean; preserveElapsed?: boolean }) {
     if (!speechConfig) {
-      error = $t('transcription.noSpeechConfig');
+      error = $t('transcription.no_speech_config');
       return;
     }
     error = null;
@@ -508,7 +508,7 @@
     if (wasActive && sessionId) {
       if (requiresUserGestureSource(sourceMode)) {
         await stopRecording();
-        error = $t('transcription.systemSourceRestartHint');
+        error = $t('transcription.system_source_restart_hint');
       } else {
         await restartRecordingForCurrentMode();
       }
@@ -532,7 +532,7 @@
     if (wasActive && sessionId) {
       if (requiresUserGestureSource(next)) {
         await stopRecording();
-        error = $t('transcription.systemSourceRestartHint');
+        error = $t('transcription.system_source_restart_hint');
       } else {
         await restartRecordingForCurrentMode();
       }
@@ -660,7 +660,7 @@
   async function requestInterviewAnswer(questionFocus: string, supportContext: string): Promise<string> {
     const active = aiStore.getActiveConfig();
     if (!active || !active.apiKey) {
-      throw new Error($t('transcription.interviewNoAIConfig'));
+      throw new Error($t('transcription.interview_no_aiconfig'));
     }
 
     const maxTokens = Math.min($settingsStore.aiMaxTokens || active.maxTokens || 1024, 768);
@@ -683,7 +683,7 @@
     });
 
     const text = response.content?.trim();
-    if (!text) throw new Error($t('transcription.interviewEmptyAnswer'));
+    if (!text) throw new Error($t('transcription.interview_empty_answer'));
     return text;
   }
 
@@ -734,7 +734,7 @@
       {
         id: rowId,
         side: 'right',
-        text: $t('transcription.interviewAnswerPending'),
+        text: $t('transcription.interview_answer_pending'),
         timestamp: Date.now(),
         status: 'pending',
       },
@@ -749,7 +749,7 @@
           : row
       ));
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : $t('transcription.interviewAnswerFailed');
+      const msg = e instanceof Error ? e.message : $t('transcription.interview_answer_failed');
       // Restore pending context once on failure so next silence-trigger can retry with new additions.
       interviewPendingContext = pendingSnapshot.length > INTERVIEW_MAX_BUFFER_CHARS
         ? pendingSnapshot.slice(-INTERVIEW_MAX_BUFFER_CHARS)
@@ -850,28 +850,28 @@
     </div>
     <div class="top-controls">
       <label class="top-field">
-        <span class="top-label">{$t('transcription.sourceLabel')}</span>
+        <span class="top-label">{$t('transcription.source_label')}</span>
         <select
           class="top-select"
           value={sourceMode}
           onchange={handleSourceModeChange}
           disabled={recordingState === 'connecting'}
         >
-          <option value="mic">{$t('transcription.sourceMic')}</option>
-          <option value="system" disabled={systemSourceUnsupported}>{$t('transcription.sourceSystem')}</option>
-          <option value="mixed" disabled={systemSourceUnsupported}>{$t('transcription.sourceMixed')}</option>
+          <option value="mic">{$t('transcription.source_mic')}</option>
+          <option value="system" disabled={systemSourceUnsupported}>{$t('transcription.source_system')}</option>
+          <option value="mixed" disabled={systemSourceUnsupported}>{$t('transcription.source_mixed')}</option>
         </select>
       </label>
       <label class="top-field">
-        <span class="top-label">{$t('transcription.modeLabel')}</span>
+        <span class="top-label">{$t('transcription.mode_label')}</span>
         <select
           class="top-select"
           value={sessionMode}
           onchange={handleModeChange}
           disabled={recordingState === 'connecting'}
         >
-          <option value="transcription">{$t('transcription.modeTranscription')}</option>
-          <option value="interview">{$t('transcription.modeInterview')}</option>
+          <option value="transcription">{$t('transcription.mode_transcription')}</option>
+          <option value="interview">{$t('transcription.mode_interview')}</option>
         </select>
       </label>
       <button class="ctrl-btn icon" onclick={onBack} title={$t('transcription.back')}>
@@ -885,7 +885,7 @@
     <div class="mode-hint">{interviewModeHint}</div>
   {/if}
   {#if systemSourceUnsupported}
-    <div class="mode-hint warning">{$t('transcription.systemSourceUnsupportedHint')}</div>
+    <div class="mode-hint warning">{$t('transcription.system_source_unsupported_hint')}</div>
   {/if}
   {#if shouldShowSourceStatusHint}
     <div class="mode-hint" class:warning={sourceStatusLevel === 'warning'} class:info={sourceStatusLevel === 'info'}>
@@ -907,18 +907,18 @@
       <!-- No config: full-area guidance card -->
       <div class="no-config-card">
         <div class="no-config-icon">🎤</div>
-        <p class="no-config-title">{$t('transcription.noSpeechConfig')}</p>
-        <p class="no-config-hint">{$t('transcription.noSpeechConfigHint')}</p>
+        <p class="no-config-title">{$t('transcription.no_speech_config')}</p>
+        <p class="no-config-hint">{$t('transcription.no_speech_config_hint')}</p>
         {#if onOpenSettings}
           <button class="no-config-btn" onclick={onOpenSettings}>
-            {$t('transcription.goToVoiceSettings')}
+            {$t('transcription.go_to_voice_settings')}
           </button>
         {/if}
       </div>
     {:else if sessionMode === 'interview'}
       {#if interviewRows.length === 0}
         <div class="transcript-empty">
-          {recordingState === 'idle' ? $t('transcription.emptyIdle') : $t('transcription.emptyWaiting')}
+          {recordingState === 'idle' ? $t('transcription.empty_idle') : $t('transcription.empty_waiting')}
         </div>
       {/if}
       {#each interviewRows as row (row.id)}
@@ -940,7 +940,7 @@
     {:else}
       {#if segments.length === 0}
         <div class="transcript-empty">
-          {recordingState === 'idle' ? $t('transcription.emptyIdle') : $t('transcription.emptyWaiting')}
+          {recordingState === 'idle' ? $t('transcription.empty_idle') : $t('transcription.empty_waiting')}
         </div>
       {/if}
       {#each segments as seg, i (i)}
@@ -986,8 +986,8 @@
             recordingState === 'idle'
               ? $t('transcription.start')
               : micMuted
-                ? $t('transcription.unmuteMic')
-                : $t('transcription.muteMic')
+                ? $t('transcription.unmute_mic')
+                : $t('transcription.mute_mic')
           }
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1019,14 +1019,14 @@
         onclick={handleSendToAI}
         disabled={!fullTranscript.trim()}
       >
-        {sessionMode === 'interview' ? $t('transcription.summarizeInterview') : $t('transcription.summarizeWithAI')} →
+        {sessionMode === 'interview' ? $t('transcription.summarize_interview') : $t('transcription.summarize_with_ai')} →
       </button>
       <button
         class="footer-btn"
         onclick={handleSaveAsDoc}
         disabled={!fullTranscript.trim()}
       >
-        {$t('transcription.toDocumentAppend')}
+        {$t('transcription.to_document_append')}
       </button>
     </div>
   {/if}

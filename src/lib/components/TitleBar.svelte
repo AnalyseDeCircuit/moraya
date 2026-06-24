@@ -615,10 +615,10 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="titlebar-context-menu" style="left: {contextMenuX}px; top: {contextMenuY}px">
     <button class="context-menu-item" onclick={() => { showContextMenu = false; onNewFile(); }}>
-      {$t('titlebar.newFile')}
+      {$t('titlebar.new_file')}
     </button>
     <button class="context-menu-item" onclick={() => { showContextMenu = false; onOpenFile(); }}>
-      {$t('titlebar.openFile')}
+      {$t('titlebar.open_file')}
     </button>
   </div>
 {/if}

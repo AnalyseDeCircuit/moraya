@@ -123,13 +123,13 @@
   <div class="conflict-dialog" onclick={(e) => e.stopPropagation()}>
     <div class="dialog-header">
       <span class="dialog-icon">⚠</span>
-      <h3>{$t('kbSync.conflict.title').replace('{name}', kb.name).replace('{n}', String(conflicts.length))}</h3>
+      <h3>{$t('kb_sync.conflict.title').replace('{name}', kb.name).replace('{n}', String(conflicts.length))}</h3>
       <button class="close-btn" onclick={onClose}>&times;</button>
     </div>
 
     {#if conflicts.length === 0}
       <div class="dialog-body">
-        <p class="empty-hint">{$t('kbSync.conflict.noConflicts')}</p>
+        <p class="empty-hint">{$t('kb_sync.conflict.no_conflicts')}</p>
       </div>
     {:else if current}
       <div class="nav-bar">
@@ -141,25 +141,25 @@
       <div class="diff-row">
         <div class="diff-side">
           <div class="diff-header">
-            {$t('kbSync.conflict.local')}
+            {$t('kb_sync.conflict.local')}
             <span class="diff-meta">{formatDate(current.localUpdatedAt)} · {formatBytes(current.localSizeBytes)}</span>
           </div>
-          <div class="diff-preview">{current.localPreview || $t('kbSync.conflict.noPreview')}</div>
+          <div class="diff-preview">{current.localPreview || $t('kb_sync.conflict.no_preview')}</div>
         </div>
         <div class="diff-side">
           <div class="diff-header">
-            {$t('kbSync.conflict.remote')}
+            {$t('kb_sync.conflict.remote')}
             <span class="diff-meta">{formatDate(current.remoteUpdatedAt)} · {formatBytes(current.remoteSizeBytes)}</span>
           </div>
-          <div class="diff-preview">{current.remotePreview || $t('kbSync.conflict.noPreview')}</div>
+          <div class="diff-preview">{current.remotePreview || $t('kb_sync.conflict.no_preview')}</div>
         </div>
       </div>
 
       <div class="resolution-area">
         {#each [
-          { value: 'prefer-local', label: $t('kbSync.conflict.keepLocal') },
-          { value: 'prefer-remote', label: $t('kbSync.conflict.keepRemote') },
-          { value: 'keep-both', label: $t('kbSync.conflict.keepBoth') },
+          { value: 'prefer-local', label: $t('kb_sync.conflict.keep_local') },
+          { value: 'prefer-remote', label: $t('kb_sync.conflict.keep_remote') },
+          { value: 'keep-both', label: $t('kb_sync.conflict.keep_both') },
         ] as opt}
           <!-- svelte-ignore a11y_click_events_have_key_events -->
           <label class="resolution-option" class:selected={getResolution() === opt.value}>
@@ -188,21 +188,21 @@
           disabled={!getResolution() || applying}
           onclick={() => { if (currentIndex < conflicts.length - 1) currentIndex++; }}
         >
-          {$t('kbSync.conflict.skip')}
+          {$t('kb_sync.conflict.skip')}
         </button>
         <button
           class="btn btn-primary"
           disabled={!getResolution() || applying}
           onclick={applyOne}
         >
-          {$t('kbSync.conflict.applyOne')}
+          {$t('kb_sync.conflict.apply_one')}
         </button>
         <button
           class="btn btn-primary"
           disabled={resolutions.size === 0 || applying}
           onclick={applyAll}
         >
-          {$t('kbSync.conflict.applyAll').replace('{n}', String(resolutions.size))}
+          {$t('kb_sync.conflict.apply_all').replace('{n}', String(resolutions.size))}
         </button>
       {/if}
     </div>

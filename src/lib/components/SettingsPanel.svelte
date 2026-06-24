@@ -234,9 +234,9 @@
         <div class="content-body">
           <!-- Tab descriptions for select tabs -->
           {#if activeTab === 'image'}
-            <p class="tab-desc">{$t('settings.tabDesc.image')} {$t('settings.imageHost.subtitleSuffix')}</p>
+            <p class="tab-desc">{$t('settings.tab_desc.image')} {$t('settings.image_host.subtitle_suffix')}</p>
           {:else if activeTab === 'publish'}
-            <p class="tab-desc">{$t('settings.tabDesc.publish')}</p>
+            <p class="tab-desc">{$t('settings.tab_desc.publish')}</p>
           {/if}
 
           <!-- Heavy components: always mounted, shown/hidden via CSS to avoid remount lag -->
@@ -278,13 +278,13 @@
                 <div class="gx-row gx-row-check">
                   <label class="gx-check">
                     <input type="checkbox" checked={autoSave} onchange={handleAutoSaveChange} />
-                    <span>{$t('settings.autoSave.label')}</span>
+                    <span>{$t('settings.auto_save.label')}</span>
                   </label>
                 </div>
 
                 {#if autoSave}
                   <div class="gx-row gx-row-indent">
-                    <label class="gx-label" for="settings-autosave-interval">{$t('settings.autoSave.interval')}</label>
+                    <label class="gx-label" for="settings-autosave-interval">{$t('settings.auto_save.interval')}</label>
                     <div class="gx-control gx-control-inline">
                       <input
                         id="settings-autosave-interval"
@@ -310,7 +310,7 @@
                         if (!checked) settingsStore.update({ lastOpenedFolder: null });
                       }}
                     />
-                    <span>{$t('settings.rememberLastFolder')}</span>
+                    <span>{$t('settings.remember_last_folder')}</span>
                   </label>
                 </div>
 
@@ -321,13 +321,13 @@
                       checked={$settingsStore.showCloudInsertEntries}
                       onchange={(e: Event) => settingsStore.update({ showCloudInsertEntries: (e.target as HTMLInputElement).checked })}
                     />
-                    <span>{$t('settings.showCloudInsertEntries')}</span>
+                    <span>{$t('settings.show_cloud_insert_entries')}</span>
                   </label>
-                  <p class="gx-hint gx-hint-indent">{$t('settings.showCloudInsertEntriesDesc')}</p>
+                  <p class="gx-hint gx-hint-indent">{$t('settings.show_cloud_insert_entries_desc')}</p>
                 </div>
 
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-rules-history-count">{$t('settings.rulesHistoryCount')}</label>
+                  <label class="gx-label" for="settings-rules-history-count">{$t('settings.rules_history_count')}</label>
                   <div class="gx-control">
                     <input
                       id="settings-rules-history-count"
@@ -340,7 +340,7 @@
                       }}
                       class="gx-number"
                     />
-                    <p class="gx-hint">{$t('settings.rulesHistoryCountHint')}</p>
+                    <p class="gx-hint">{$t('settings.rules_history_count_hint')}</p>
                   </div>
                 </div>
               </div>
@@ -351,7 +351,7 @@
               <h3 class="gx-section-title">{$t('settings.tabs.editor')}</h3>
               <div class="gx-card">
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-line-width">{$t('settings.editor.lineWidth')}</label>
+                  <label class="gx-label" for="settings-line-width">{$t('settings.editor.line_width')}</label>
                   <div class="gx-control gx-control-inline">
                     <input
                       id="settings-line-width"
@@ -366,7 +366,7 @@
                 </div>
 
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-tab-size">{$t('settings.editor.tabSize')}</label>
+                  <label class="gx-label" for="settings-tab-size">{$t('settings.editor.tab_size')}</label>
                   <div class="gx-control">
                     <select id="settings-tab-size" class="gx-select" value={editorTabSize} onchange={handleTabSizeChange}>
                       <option value={2}>2</option>
@@ -379,7 +379,7 @@
                 <div class="gx-row gx-row-check">
                   <label class="gx-check">
                     <input type="checkbox" checked={showLineNumbers} onchange={handleLineNumbersChange} />
-                    <span>{$t('settings.editor.showLineNumbers')}</span>
+                    <span>{$t('settings.editor.show_line_numbers')}</span>
                   </label>
                 </div>
               </div>
@@ -390,7 +390,7 @@
               <h3 class="gx-section-title">{$t('settings.tabs.appearance')}</h3>
 
               <div class="gx-card">
-                <div class="gx-subhead">{$t('settings.appearance.themeSection')}</div>
+                <div class="gx-subhead">{$t('settings.appearance.theme_section')}</div>
                 <div class="gx-row">
                   <label class="gx-label" for="settings-color-theme">{$t('settings.theme.label')}</label>
                   <div class="gx-control">
@@ -404,12 +404,12 @@
                 <div class="gx-row gx-row-check">
                   <label class="gx-check">
                     <input type="checkbox" checked={useSeparateDarkTheme} onchange={handleSeparateDarkThemeChange} />
-                    <span>{$t('settings.appearance.separateDarkTheme')}</span>
+                    <span>{$t('settings.appearance.separate_dark_theme')}</span>
                   </label>
                 </div>
                 {#if useSeparateDarkTheme}
                   <div class="gx-row gx-row-indent">
-                    <label class="gx-label" for="settings-dark-theme">{$t('settings.appearance.darkTheme')}</label>
+                    <label class="gx-label" for="settings-dark-theme">{$t('settings.appearance.dark_theme')}</label>
                     <div class="gx-control">
                       <select id="settings-dark-theme" class="gx-select" value={darkColorTheme} onchange={handleDarkColorThemeChange}>
                         {#each darkThemes as ct}
@@ -422,9 +422,9 @@
               </div>
 
               <div class="gx-card">
-                <div class="gx-subhead">{$t('settings.appearance.darkModeSection')}</div>
+                <div class="gx-subhead">{$t('settings.appearance.dark_mode_section')}</div>
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-dark-mode">{$t('settings.appearance.darkModeLabel')}</label>
+                  <label class="gx-label" for="settings-dark-mode">{$t('settings.appearance.dark_mode_label')}</label>
                   <div class="gx-control">
                     <select id="settings-dark-mode" class="gx-select" value={theme} onchange={handleThemeChange}>
                       <option value="system">{$t('settings.theme.system')}</option>
@@ -436,9 +436,9 @@
               </div>
 
               <div class="gx-card">
-                <div class="gx-subhead">{$t('settings.appearance.fontSection')}</div>
+                <div class="gx-subhead">{$t('settings.appearance.font_section')}</div>
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-font-size">{$t('settings.fontSize.label')}</label>
+                  <label class="gx-label" for="settings-font-size">{$t('settings.font_size.label')}</label>
                   <div class="gx-control gx-control-inline">
                     <input
                       id="settings-font-size"
@@ -457,7 +457,7 @@
             <!-- 4. Export — merged from the standalone Export tab (v0.41.5) -->
             <section class="gx-section">
               <h3 class="gx-section-title">{$t('settings.tabs.export')}</h3>
-              <p class="gx-section-desc">{$t('settings.tabDesc.export')}</p>
+              <p class="gx-section-desc">{$t('settings.tab_desc.export')}</p>
               <div class="gx-card gx-card-padded">
                 <ExportSettings />
               </div>
@@ -465,10 +465,10 @@
 
             <!-- 5. AI Limits -->
             <section class="gx-section">
-              <h3 class="gx-section-title">{$t('settings.permissions.aiTitle')}</h3>
+              <h3 class="gx-section-title">{$t('settings.permissions.ai_title')}</h3>
               <div class="gx-card">
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-ai-max-tokens">{$t('settings.permissions.aiMaxTokens')}</label>
+                  <label class="gx-label" for="settings-ai-max-tokens">{$t('settings.permissions.ai_max_tokens')}</label>
                   <div class="gx-control">
                     <input
                       id="settings-ai-max-tokens"
@@ -481,11 +481,11 @@
                         if (v >= 1024 && v <= 128000) settingsStore.update({ aiMaxTokens: v });
                       }}
                     />
-                    <p class="gx-hint">{$t('settings.permissions.aiMaxTokensHint')}</p>
+                    <p class="gx-hint">{$t('settings.permissions.ai_max_tokens_hint')}</p>
                   </div>
                 </div>
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-ai-tool-result-max-chars">{$t('settings.permissions.aiToolResultMaxChars')}</label>
+                  <label class="gx-label" for="settings-ai-tool-result-max-chars">{$t('settings.permissions.ai_tool_result_max_chars')}</label>
                   <div class="gx-control">
                     <input
                       id="settings-ai-tool-result-max-chars"
@@ -498,11 +498,11 @@
                         if (v >= 2000 && v <= 64000) settingsStore.update({ aiToolResultMaxChars: v });
                       }}
                     />
-                    <p class="gx-hint">{$t('settings.permissions.aiToolResultMaxCharsHint')}</p>
+                    <p class="gx-hint">{$t('settings.permissions.ai_tool_result_max_chars_hint')}</p>
                   </div>
                 </div>
                 <div class="gx-row">
-                  <label class="gx-label" for="settings-ai-max-tool-rounds">{$t('settings.permissions.aiMaxToolRounds')}</label>
+                  <label class="gx-label" for="settings-ai-max-tool-rounds">{$t('settings.permissions.ai_max_tool_rounds')}</label>
                   <div class="gx-control">
                     <input
                       id="settings-ai-max-tool-rounds"
@@ -515,7 +515,7 @@
                         if (v >= 1 && v <= 100) settingsStore.update({ aiMaxToolRounds: v });
                       }}
                     />
-                    <p class="gx-hint">{$t('settings.permissions.aiMaxToolRoundsHint')}</p>
+                    <p class="gx-hint">{$t('settings.permissions.ai_max_tool_rounds_hint')}</p>
                   </div>
                 </div>
               </div>
@@ -523,7 +523,7 @@
 
             <!-- 6. MCP Permissions -->
             <section class="gx-section">
-              <h3 class="gx-section-title">{$t('settings.permissions.mcpTitle')}</h3>
+              <h3 class="gx-section-title">{$t('settings.permissions.mcp_title')}</h3>
               <div class="gx-card">
                 <div class="gx-row gx-row-check">
                   <label class="gx-check">
@@ -532,9 +532,9 @@
                       checked={$settingsStore.mcpAutoApprove}
                       onchange={(e) => settingsStore.update({ mcpAutoApprove: (e.target as HTMLInputElement).checked })}
                     />
-                    <span>{$t('mcp.servers.autoApprove')}</span>
+                    <span>{$t('mcp.servers.auto_approve')}</span>
                   </label>
-                  <p class="gx-hint gx-hint-indent">{$t('mcp.servers.autoApproveHint')}</p>
+                  <p class="gx-hint gx-hint-indent">{$t('mcp.servers.auto_approve_hint')}</p>
                 </div>
               </div>
             </section>

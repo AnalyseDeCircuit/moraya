@@ -388,9 +388,9 @@
     <!-- Header -->
     <div class="picker-header">
       <span class="picker-title">
-        {type === 'image' ? $t('cloudPicker.titleImage') :
-         type === 'audio' ? $t('cloudPicker.titleAudio') :
-         $t('cloudPicker.titleVideo')}
+        {type === 'image' ? $t('cloud_picker.title_image') :
+         type === 'audio' ? $t('cloud_picker.title_audio') :
+         $t('cloud_picker.title_video')}
       </span>
       {#if !embedded}
         <button class="picker-close" onclick={onClose} aria-label={$t('common.close')}>✕</button>
@@ -401,7 +401,7 @@
     <div class="picker-controls">
       <!-- Target selector -->
       {#if picoraTargets.length === 0}
-        <span class="no-targets">{$t('cloudPicker.noTargets')}</span>
+        <span class="no-targets">{$t('cloud_picker.no_targets')}</span>
       {:else}
         <select class="target-select" bind:value={selectedTargetId}>
           {#each picoraTargets as tgt}
@@ -413,9 +413,9 @@
       <!-- KB scope (only shown when hasKbBinding) -->
       {#if hasKbBinding}
         <select class="scope-select" bind:value={kbScope}>
-          <option value="this-kb">{$t('cloudPicker.scopeThisKb')}</option>
-          <option value="all">{$t('cloudPicker.scopeAll')}</option>
-          <option value="no-kb">{$t('cloudPicker.scopeNoKb')}</option>
+          <option value="this-kb">{$t('cloud_picker.scope_this_kb')}</option>
+          <option value="all">{$t('cloud_picker.scope_all')}</option>
+          <option value="no-kb">{$t('cloud_picker.scope_no_kb')}</option>
         </select>
       {/if}
 
@@ -431,9 +431,9 @@
             class:active={activeTab === tab}
             onclick={() => { activeTab = tab; }}
           >
-            {tab === 'recent' ? $t('cloudPicker.tabRecent') :
-             tab === 'all' ? $t('cloudPicker.tabAll') :
-             $t('cloudPicker.tabFavorites')}
+            {tab === 'recent' ? $t('cloud_picker.tab_recent') :
+             tab === 'all' ? $t('cloud_picker.tab_all') :
+             $t('cloud_picker.tab_favorites')}
           </button>
         {/each}
       </div>
@@ -442,20 +442,20 @@
           bind:this={searchInputEl}
           class="search-input"
           type="search"
-          placeholder={$t('cloudPicker.searchPlaceholder')}
+          placeholder={$t('cloud_picker.search_placeholder')}
           bind:value={q}
         />
         <button
           class="view-btn"
           class:active={viewMode === 'grid'}
           onclick={() => { viewMode = 'grid'; }}
-          title={$t('cloudPicker.gridView')}
+          title={$t('cloud_picker.grid_view')}
         >⊞</button>
         <button
           class="view-btn"
           class:active={viewMode === 'list'}
           onclick={() => { viewMode = 'list'; }}
-          title={$t('cloudPicker.listView')}
+          title={$t('cloud_picker.list_view')}
         >☰</button>
       </div>
     </div>
@@ -473,10 +473,10 @@
         <!-- Error state -->
         <div class="picker-empty">
           <div class="empty-icon">⚠</div>
-          <div class="empty-text">{$t('cloudPicker.errorTitle')}</div>
+          <div class="empty-text">{$t('cloud_picker.error_title')}</div>
           <div class="empty-sub">{loadError}</div>
           {#if lastFetchAt}
-            <div class="stale-hint">{$t('cloudPicker.lastCache')}: {formatDate(new Date(lastFetchAt).toISOString())}</div>
+            <div class="stale-hint">{$t('cloud_picker.last_cache')}: {formatDate(new Date(lastFetchAt).toISOString())}</div>
           {/if}
           <button class="retry-btn" onclick={() => { fetchKey++; }}>{$t('common.retry')}</button>
         </div>
@@ -484,16 +484,16 @@
         <!-- Empty state -->
         <div class="picker-empty">
           <div class="empty-icon">☁</div>
-          <div class="empty-text">{$t('cloudPicker.emptyTitle')}</div>
+          <div class="empty-text">{$t('cloud_picker.empty_title')}</div>
           {#if hasKbBinding && kbScope === 'this-kb'}
             <!-- Most common cause: legacy uploads aren't tagged with the
                  newly-bound KB. Offer a one-click escape to scope='all'. -->
-            <div class="empty-sub">{$t('cloudPicker.emptyKbScopedSub')}</div>
+            <div class="empty-sub">{$t('cloud_picker.empty_kb_scoped_sub')}</div>
             <button class="retry-btn" onclick={() => { kbScope = 'all'; }}>
-              {$t('cloudPicker.switchScopeAll')}
+              {$t('cloud_picker.switch_scope_all')}
             </button>
           {:else}
-            <div class="empty-sub">{$t('cloudPicker.emptySub')}</div>
+            <div class="empty-sub">{$t('cloud_picker.empty_sub')}</div>
           {/if}
         </div>
       {:else}
@@ -545,19 +545,19 @@
                   <span class="duration-badge">{formatDuration(item.durationSeconds)}</span>
                 {/if}
                 {#if item.type === 'video' && item.status === 'processing'}
-                  <span class="status-badge processing">⏳ {$t('cloudPicker.processing')}</span>
+                  <span class="status-badge processing">⏳ {$t('cloud_picker.processing')}</span>
                 {/if}
               </div>
 
               <!-- Privacy + favorite + options row -->
               <div class="card-meta-row">
-                <button class="fav-btn" onclick={(e) => handleToggleFav(item.id, e)} title={$t('cloudPicker.favorite')}>
+                <button class="fav-btn" onclick={(e) => handleToggleFav(item.id, e)} title={$t('cloud_picker.favorite')}>
                   {favoriteIds.has(item.id) ? '★' : '☆'}
                 </button>
-                <span class="visibility-icon" title={item.isPublic ? $t('cloudPicker.public') : $t('cloudPicker.private')}>
+                <span class="visibility-icon" title={item.isPublic ? $t('cloud_picker.public') : $t('cloud_picker.private')}>
                   {item.isPublic ? '🌐' : '🔒'}
                 </span>
-                <button class="options-btn" onclick={(e) => { e.stopPropagation(); copyUrl(item, e); }} title={$t('cloudPicker.copyUrl')}>
+                <button class="options-btn" onclick={(e) => { e.stopPropagation(); copyUrl(item, e); }} title={$t('cloud_picker.copy_url')}>
                   ⋯
                 </button>
               </div>
@@ -577,7 +577,7 @@
         <!-- Infinite scroll sentinel -->
         <div bind:this={sentinelEl} class="sentinel"></div>
         {#if loading && allItems.length > 0}
-          <div class="loading-more">{$t('cloudPicker.loadingMore')}</div>
+          <div class="loading-more">{$t('cloud_picker.loading_more')}</div>
         {/if}
       {/if}
     </div>
@@ -587,12 +587,12 @@
       <div class="picker-footer">
         <div class="footer-left">
           {#if selectedIds.size > 0}
-            <span class="selected-count">{$t('cloudPicker.selectedCount', { n: String(selectedIds.size) })}</span>
+            <span class="selected-count">{$t('cloud_picker.selected_count', { n: String(selectedIds.size) })}</span>
           {/if}
           {#if type === 'image'}
             <label class="html-toggle">
               <input type="checkbox" bind:checked={insertAsHtml} />
-              {$t('cloudPicker.insertAsHtml')}
+              {$t('cloud_picker.insert_as_html')}
             </label>
           {/if}
         </div>
@@ -603,7 +603,7 @@
             disabled={selectedIds.size === 0}
             onclick={handleInsertClick}
           >
-            {$t('cloudPicker.insertBtn')}
+            {$t('cloud_picker.insert_btn')}
           </button>
         </div>
       </div>
@@ -613,7 +613,7 @@
           {#if selectedItems.length === 1}
             <span class="selected-count">{selectedItems[0].title ?? selectedItems[0].filename}</span>
           {:else if selectedIds.size > 0}
-            <span class="selected-count">{$t('cloudPicker.selectedCount', { n: String(selectedIds.size) })}</span>
+            <span class="selected-count">{$t('cloud_picker.selected_count', { n: String(selectedIds.size) })}</span>
           {/if}
         </div>
         <div class="footer-right">
@@ -621,12 +621,12 @@
             class="btn-cancel"
             disabled={selectedItems.length !== 1}
             onclick={() => { if (selectedItems.length === 1) navigator.clipboard.writeText(selectedItems[0].playbackUrl ?? selectedItems[0].url ?? '').catch(() => {}); }}
-          >{$t('cloudPicker.copyUrl')}</button>
+          >{$t('cloud_picker.copy_url')}</button>
           <button
             class="btn-cancel"
             disabled={selectedItems.length !== 1}
             onclick={() => { if (selectedItems.length === 1) { const it = selectedItems[0]; const url = it.playbackUrl ?? it.url ?? ''; const md = it.type === 'image' ? `![${it.title ?? it.filename}](${url})` : url; navigator.clipboard.writeText(md).catch(() => {}); } }}
-          >{$t('cloudPicker.copyMarkdown')}</button>
+          >{$t('cloud_picker.copy_markdown')}</button>
         </div>
       </div>
     {/if}
@@ -638,23 +638,23 @@
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <div class="privacy-overlay" role="dialog" aria-modal="true">
     <div class="privacy-dialog">
-      <div class="privacy-title">🔒 {$t('cloudPicker.privacyTitle')}</div>
+      <div class="privacy-title">🔒 {$t('cloud_picker.privacy_title')}</div>
       <div class="privacy-body">
-        <p>{$t('cloudPicker.privacyDesc', { n: String(privateItems.length) })}</p>
+        <p>{$t('cloud_picker.privacy_desc', { n: String(privateItems.length) })}</p>
         <ul>
           {#each privateItems as item}
             <li>🔒 {item.title ?? item.filename}</li>
           {/each}
         </ul>
-        <p class="privacy-warn">{$t('cloudPicker.privacyWarn')}</p>
+        <p class="privacy-warn">{$t('cloud_picker.privacy_warn')}</p>
       </div>
       <label class="suppress-check">
         <input type="checkbox" bind:checked={suppressPrivacyNext} />
-        {$t('cloudPicker.suppressPrivacy')}
+        {$t('cloud_picker.suppress_privacy')}
       </label>
       <div class="privacy-actions">
-        <button class="btn-make-public" onclick={makePublicThenInsert}>{$t('cloudPicker.makePublicInsert')}</button>
-        <button class="btn-insert-anyway" onclick={confirmInsertPrivate}>{$t('cloudPicker.insertAnyway')}</button>
+        <button class="btn-make-public" onclick={makePublicThenInsert}>{$t('cloud_picker.make_public_insert')}</button>
+        <button class="btn-insert-anyway" onclick={confirmInsertPrivate}>{$t('cloud_picker.insert_anyway')}</button>
         <button class="btn-cancel" onclick={() => { showPrivacyConfirm = false; }}>{$t('common.cancel')}</button>
       </div>
     </div>

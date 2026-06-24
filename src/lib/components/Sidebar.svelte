@@ -142,7 +142,7 @@
     const target = settings.imageHostTargets.find(t => t.id === kb.picoraBinding!.picoraTargetId);
     if (!target) {
       // Picora account was deleted after binding — surface the error.
-      const errMsg = $t('kbSync.error.targetMissing');
+      const errMsg = $t('kb_sync.error.target_missing');
       filesStore.updateKbSyncReport(kb.id, {
         lastSyncAt: new Date().toISOString(),
         lastSyncReport: null,
@@ -170,7 +170,7 @@
       });
       if (report.deletedLocal > 0 && onNotify) {
         onNotify(
-          get(t)('kbSync.trash.toastDeleted', { count: String(report.deletedLocal) }),
+          get(t)('kb_sync.trash.toast_deleted', { count: String(report.deletedLocal) }),
           'success',
         );
       }
@@ -232,7 +232,7 @@
     const selected = await open({
       directory: true,
       multiple: false,
-      title: $t('sidebar.openFolder'),
+      title: $t('sidebar.open_folder'),
     });
 
     if (selected && typeof selected === 'string') {
@@ -721,7 +721,7 @@
     } else if (inputDialog.mode === 'new-folder') {
       // Reject reserved directory name "images"
       if (value.toLowerCase() === 'images') {
-        await message($t('sidebar.reservedDirName'), { title: $t('sidebar.reservedDirTitle'), kind: 'warning' });
+        await message($t('sidebar.reserved_dir_name'), { title: $t('sidebar.reserved_dir_title'), kind: 'warning' });
         inputDialog = null;
         return;
       }
@@ -742,7 +742,7 @@
       // Reject renaming a directory to the reserved name "images"
       const isDir = !oldPath.endsWith('.md') && !oldPath.endsWith('.markdown');
       if (isDir && finalValue.toLowerCase() === 'images') {
-        await message($t('sidebar.reservedDirName'), { title: $t('sidebar.reservedDirTitle'), kind: 'warning' });
+        await message($t('sidebar.reserved_dir_name'), { title: $t('sidebar.reserved_dir_title'), kind: 'warning' });
         inputDialog = null;
         return;
       }
@@ -793,8 +793,8 @@
   async function handleDelete() {
     const name = contextMenu.targetName;
     const confirmed = await ask(
-      $t('sidebar.deleteConfirm').replace('{name}', name),
-      { title: $t('sidebar.contextMenu.delete'), kind: 'warning' }
+      $t('sidebar.delete_confirm').replace('{name}', name),
+      { title: $t('sidebar.context_menu.delete'), kind: 'warning' }
     );
     if (!confirmed) return;
 
@@ -991,7 +991,7 @@
     // Capture the MORAYA.md path synchronously before any await
     const morayaPath = contextMenu.targetPath;
     const confirmed = await ask(
-      $t('sidebar.history.restoreConfirm'),
+      $t('sidebar.history.restore_confirm'),
       { title: $t('sidebar.history.restore'), kind: 'warning' }
     );
     if (!confirmed) return;
@@ -1010,7 +1010,7 @@
   oncontextmenu={(e) => handleContextMenu(e, 'blank', folderPath || '', '')}
 >
   <div class="sidebar-header">
-    <button class="kb-switcher" onclick={toggleKBDropdown} title={$t('knowledgeBase.switchTo')}>
+    <button class="kb-switcher" onclick={toggleKBDropdown} title={$t('knowledge_base.switch_to')}>
       <span class="kb-switcher-name">{getActiveKBName()}</span>
       <svg class="kb-chevron" class:open={showKBDropdown} width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
         <path d="M4.427 6.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 6H4.604a.25.25 0 00-.177.427z"/>
@@ -1025,7 +1025,7 @@
         class:conflict={status === 'conflict'}
         onclick={triggerSyncActiveKb}
         disabled={status === 'syncing'}
-        title={$t('kbSync.syncNow')}
+        title={$t('kb_sync.sync_now')}
       >
         <!-- Wrap icon in inner span so rotation only spins the glyph,
              not the button border (which would tilt the rounded rectangle). -->
@@ -1055,14 +1055,14 @@
                 class:syncing={status === 'syncing'}
                 class:error={status === 'error'}
                 class:conflict={status === 'conflict'}
-                title={$t('kbSync.statusbar.tooltip')}
+                title={$t('kb_sync.statusbar.tooltip')}
               ><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path fill-rule="evenodd" d="M8 8m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0zM8 8m-4.5 0a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0zM8 8m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0z"/></svg>{status === 'error' ? ' ✗' : status === 'conflict' ? ' ⚠' : ''}</span>
             {/if}
           </button>
         {/each}
         <div class="kb-dropdown-divider"></div>
         <button class="kb-dropdown-item kb-manage" onclick={() => { showKBDropdown = false; onOpenKBManager?.(); }}>
-          {$t('knowledgeBase.manage')}
+          {$t('knowledge_base.manage')}
         </button>
       </div>
     {/if}
@@ -1080,7 +1080,7 @@
         <button
           class="sidebar-btn"
           onclick={toggleViewMode}
-          title={viewMode === 'tree' ? $t('sidebar.listView') : $t('sidebar.treeView')}
+          title={viewMode === 'tree' ? $t('sidebar.list_view') : $t('sidebar.tree_view')}
         >
           {#if viewMode === 'tree'}
             <!-- List/card view icon -->
@@ -1095,7 +1095,7 @@
           {/if}
         </button>
       {/if}
-      <button class="sidebar-btn" onclick={() => onOpenKBManager?.()} title={$t('sidebar.kbSettings')}>
+      <button class="sidebar-btn" onclick={() => onOpenKBManager?.()} title={$t('sidebar.kb_settings')}>
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 0a1 1 0 011 1v1.07a5.97 5.97 0 011.828.75l.757-.756a1 1 0 011.414 1.414l-.756.757c.357.567.62 1.187.75 1.828H14a1 1 0 110 2h-1.07a5.97 5.97 0 01-.75 1.828l.756.757a1 1 0 01-1.414 1.414l-.757-.756a5.97 5.97 0 01-1.828.75V14a1 1 0 11-2 0v-1.07a5.97 5.97 0 01-1.828-.75l-.757.756a1 1 0 01-1.414-1.414l.756-.757a5.97 5.97 0 01-.75-1.828H2a1 1 0 110-2h1.07a5.97 5.97 0 01.75-1.828l-.756-.757A1 1 0 014.478 2.93l.757.756A5.97 5.97 0 017 2.936V1a1 1 0 011-1zm0 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/>
         </svg>
@@ -1118,7 +1118,7 @@
 
   {#if showSearch && contentSearchResults.length > 0}
     <div class="content-search-results">
-      <div class="content-search-label">{$t('commandPalette.semanticSearch')}</div>
+      <div class="content-search-label">{$t('command_palette.semantic_search')}</div>
       {#each contentSearchResults as result}
         <button class="content-search-item" onclick={() => onFileSelect(result.filePath, result.offset, searchQuery)}>
           <div class="csr-file">{result.filePath.split('/').pop()}</div>
@@ -1130,9 +1130,9 @@
 
   {#if showSaveAsKBHint && folderPath}
     <div class="kb-save-hint">
-      <span>{$t('knowledgeBase.saveHint')}</span>
+      <span>{$t('knowledge_base.save_hint')}</span>
       <div class="kb-save-hint-actions">
-        <button class="kb-save-hint-btn" onclick={saveCurrentAsKB}>{$t('knowledgeBase.saveAsKB')}</button>
+        <button class="kb-save-hint-btn" onclick={saveCurrentAsKB}>{$t('knowledge_base.save_as_kb')}</button>
         <button class="kb-save-hint-close" onclick={() => showSaveAsKBHint = false}>&times;</button>
       </div>
     </div>
@@ -1149,13 +1149,13 @@
     {#if knowledgeBases.length === 0}
       <!-- No knowledge bases created yet — prompt user to add one -->
       <div class="sidebar-empty">
-        <p>{$t('sidebar.createKB')}</p>
-        <button class="open-btn" onclick={() => onOpenKBManager?.()}>{$t('knowledgeBase.add')}</button>
+        <p>{$t('sidebar.create_kb')}</p>
+        <button class="open-btn" onclick={() => onOpenKBManager?.()}>{$t('knowledge_base.add')}</button>
       </div>
     {:else if fileTree.length === 0}
       <!-- KB bound but directory is empty -->
       <div class="sidebar-empty">
-        <p>{$t('sidebar.emptyDir')}</p>
+        <p>{$t('sidebar.empty_dir')}</p>
       </div>
     {:else if viewMode === 'list'}
       <!-- List View: hierarchical tree with folders and file previews -->
@@ -1172,7 +1172,7 @@
               bind:this={inputDialogEl}
               type="text"
               class="inline-rename-input"
-              placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.newFilePrompt') : $t('sidebar.newFolderPrompt')}
+              placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.new_file_prompt') : $t('sidebar.new_folder_prompt')}
               bind:value={inputDialog.value}
               onkeydown={handleInputDialogKeydown}
               onblur={() => { inputDialog = null; }}
@@ -1194,7 +1194,7 @@
             bind:this={inputDialogEl}
             type="text"
             class="inline-rename-input"
-            placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.newFilePrompt') : $t('sidebar.newFolderPrompt')}
+            placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.new_file_prompt') : $t('sidebar.new_folder_prompt')}
             bind:value={inputDialog.value}
             onkeydown={handleInputDialogKeydown}
             onblur={() => { inputDialog = null; }}
@@ -1289,7 +1289,7 @@
           bind:this={inputDialogEl}
           type="text"
           class="inline-rename-input"
-          placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.newFilePrompt') : $t('sidebar.newFolderPrompt')}
+          placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.new_file_prompt') : $t('sidebar.new_folder_prompt')}
           bind:value={inputDialog.value}
           onkeydown={handleInputDialogKeydown}
           onblur={() => { inputDialog = null; }}
@@ -1346,7 +1346,7 @@
             bind:this={inputDialogEl}
             type="text"
             class="inline-rename-input"
-            placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.newFilePrompt') : $t('sidebar.newFolderPrompt')}
+            placeholder={inputDialog.mode === 'new-file' ? $t('sidebar.new_file_prompt') : $t('sidebar.new_folder_prompt')}
             bind:value={inputDialog.value}
             onkeydown={handleInputDialogKeydown}
             onblur={() => { inputDialog = null; }}

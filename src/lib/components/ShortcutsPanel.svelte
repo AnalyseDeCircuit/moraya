@@ -220,7 +220,7 @@
   /** Reset every customized shortcut back to its catalog default. */
   async function resetAllToDefaults() {
     if (overrideCount === 0) return;
-    const msg = $t('shortcuts.editor.resetAllConfirm', { count: String(overrideCount) });
+    const msg = $t('shortcuts.editor.reset_all_confirm', { count: String(overrideCount) });
     if (!confirm(msg)) return;
     const before = overrides;
     settingsStore.update({ shortcutOverrides: {} });
@@ -277,9 +277,9 @@
           type="button"
           class="reset-all-btn"
           onclick={resetAllToDefaults}
-          title={$t('shortcuts.editor.resetAllHint')}
+          title={$t('shortcuts.editor.reset_all_hint')}
         >
-          ↺ {$t('shortcuts.editor.resetAll')}
+          ↺ {$t('shortcuts.editor.reset_all')}
           <span class="reset-all-count">{overrideCount}</span>
         </button>
       {/if}
@@ -289,11 +289,11 @@
   <!-- AI chat behavior — selectable option cards -->
   <section class="settings-section">
     <div class="section-head">
-      <h3 class="section-title">{$t('shortcuts.aiChatBehavior.title')}</h3>
-      <p class="section-desc">{$t('shortcuts.aiChatBehavior.intro')}</p>
+      <h3 class="section-title">{$t('shortcuts.ai_chat_behavior.title')}</h3>
+      <p class="section-desc">{$t('shortcuts.ai_chat_behavior.intro')}</p>
     </div>
 
-    <div class="option-cards" role="radiogroup" aria-label={$t('shortcuts.aiChatBehavior.title')}>
+    <div class="option-cards" role="radiogroup" aria-label={$t('shortcuts.ai_chat_behavior.title')}>
       <label class="option-card" class:selected={behavior === 'modEnterSend'}>
         <input
           type="radio"
@@ -307,8 +307,8 @@
         </div>
         <div class="option-body">
           <div class="option-label">
-            <span class="option-label-text">{$t('shortcuts.aiChatBehavior.modEnterSend.label')}</span>
-            <span class="default-badge" aria-label={$t('shortcuts.aiChatBehavior.defaultBadge')}>{$t('shortcuts.aiChatBehavior.defaultBadge')}</span>
+            <span class="option-label-text">{$t('shortcuts.ai_chat_behavior.mod_enter_send.label')}</span>
+            <span class="default-badge" aria-label={$t('shortcuts.ai_chat_behavior.default_badge')}>{$t('shortcuts.ai_chat_behavior.default_badge')}</span>
           </div>
           <div class="option-mappings">
             <div class="mapping">
@@ -319,14 +319,14 @@
                 {/each}
               </span>
               <span class="mapping-arrow">→</span>
-              <span class="mapping-action">{$t('shortcuts.aiChatBehavior.sendsAction')}</span>
+              <span class="mapping-action">{$t('shortcuts.ai_chat_behavior.sends_action')}</span>
             </div>
             <div class="mapping">
               <span class="mapping-keys">
                 <kbd class="word">{keyDisplay('Enter')}</kbd>
               </span>
               <span class="mapping-arrow">→</span>
-              <span class="mapping-action">{$t('shortcuts.aiChatBehavior.newlineAction')}</span>
+              <span class="mapping-action">{$t('shortcuts.ai_chat_behavior.newline_action')}</span>
             </div>
           </div>
         </div>
@@ -344,14 +344,14 @@
           <span class="radio-dot"></span>
         </div>
         <div class="option-body">
-          <div class="option-label">{$t('shortcuts.aiChatBehavior.enterSend.label')}</div>
+          <div class="option-label">{$t('shortcuts.ai_chat_behavior.enter_send.label')}</div>
           <div class="option-mappings">
             <div class="mapping">
               <span class="mapping-keys">
                 <kbd class="word">{keyDisplay('Enter')}</kbd>
               </span>
               <span class="mapping-arrow">→</span>
-              <span class="mapping-action">{$t('shortcuts.aiChatBehavior.sendsAction')}</span>
+              <span class="mapping-action">{$t('shortcuts.ai_chat_behavior.sends_action')}</span>
             </div>
             <div class="mapping">
               <span class="mapping-keys">
@@ -361,7 +361,7 @@
                 {/each}
               </span>
               <span class="mapping-arrow">→</span>
-              <span class="mapping-action">{$t('shortcuts.aiChatBehavior.newlineAction')}</span>
+              <span class="mapping-action">{$t('shortcuts.ai_chat_behavior.newline_action')}</span>
             </div>
           </div>
         </div>
@@ -394,18 +394,18 @@
             <span class="shortcut-label">
               <span class="label-text">{rowLabel(entry)}</span>
               {#if entry.dynamicKind === 'mcp.server'}
-                <span class="mcp-kind-pill mcp-kind-server" title={$t('shortcuts.mcp.serverKindHint')}>{$t('shortcuts.mcp.serverKindShort')}</span>
+                <span class="mcp-kind-pill mcp-kind-server" title={$t('shortcuts.mcp.server_kind_hint')}>{$t('shortcuts.mcp.server_kind_short')}</span>
               {:else if entry.dynamicKind === 'mcp.tool'}
-                <span class="mcp-kind-pill mcp-kind-tool" title={$t('shortcuts.mcp.toolKindHint')}>{$t('shortcuts.mcp.toolKindShort')}</span>
+                <span class="mcp-kind-pill mcp-kind-tool" title={$t('shortcuts.mcp.tool_kind_hint')}>{$t('shortcuts.mcp.tool_kind_short')}</span>
               {/if}
               {#if entry.stale}
-                <span class="mcp-stale-pill" title={$t('shortcuts.mcp.staleHint')}>{$t('shortcuts.mcp.staleShort')}</span>
+                <span class="mcp-stale-pill" title={$t('shortcuts.mcp.stale_hint')}>{$t('shortcuts.mcp.stale_short')}</span>
               {/if}
               {#if overridden && !recording && !entry.stale}
-                <span class="overridden-pill" title={$t('shortcuts.editor.customized')}>{$t('shortcuts.editor.customizedShort')}</span>
+                <span class="overridden-pill" title={$t('shortcuts.editor.customized')}>{$t('shortcuts.editor.customized_short')}</span>
               {/if}
               {#if syncErrorId === entry.id}
-                <span class="sync-error-pill" title={$t('shortcuts.editor.syncFailed')}>{$t('shortcuts.editor.syncFailedShort')}</span>
+                <span class="sync-error-pill" title={$t('shortcuts.editor.sync_failed')}>{$t('shortcuts.editor.sync_failed_short')}</span>
               {/if}
             </span>
             <span class="shortcut-binding">
@@ -445,9 +445,9 @@
                   type="button"
                   class="reset-btn danger"
                   onclick={() => removeMCPToolShortcut(entry.id)}
-                  title={$t('shortcuts.mcp.removeStale')}
-                  aria-label={$t('shortcuts.mcp.removeStale')}
-                >✕ <span class="reset-btn-text">{$t('shortcuts.mcp.removeStaleShort')}</span></button>
+                  title={$t('shortcuts.mcp.remove_stale')}
+                  aria-label={$t('shortcuts.mcp.remove_stale')}
+                >✕ <span class="reset-btn-text">{$t('shortcuts.mcp.remove_stale_short')}</span></button>
               {:else}
                 {#if editable}
                   <button
@@ -455,8 +455,8 @@
                     class="key-trigger"
                     class:unbound={tokens(entry).length === 0}
                     onclick={() => startRecording(entry)}
-                    title={$t('shortcuts.editor.editHint')}
-                    aria-label={$t('shortcuts.editor.editHint')}
+                    title={$t('shortcuts.editor.edit_hint')}
+                    aria-label={$t('shortcuts.editor.edit_hint')}
                   >
                     {#if tokens(entry).length === 0}
                       <span class="unbound-placeholder">{$t('shortcuts.editor.unbound')}</span>
@@ -475,17 +475,17 @@
                       type="button"
                       class="reset-btn"
                       onclick={() => removeMCPToolShortcut(entry.id)}
-                      title={$t('shortcuts.mcp.removeTool')}
-                      aria-label={$t('shortcuts.mcp.removeTool')}
-                    >✕ <span class="reset-btn-text">{$t('shortcuts.mcp.removeToolShort')}</span></button>
+                      title={$t('shortcuts.mcp.remove_tool')}
+                      aria-label={$t('shortcuts.mcp.remove_tool')}
+                    >✕ <span class="reset-btn-text">{$t('shortcuts.mcp.remove_tool_short')}</span></button>
                   {:else if overridden}
                     <button
                       type="button"
                       class="reset-btn"
                       onclick={() => resetRecording(entry)}
-                      title={$t('shortcuts.editor.resetToDefault')}
-                      aria-label={$t('shortcuts.editor.resetToDefault')}
-                    >↺ <span class="reset-btn-text">{$t('shortcuts.editor.resetShort')}</span></button>
+                      title={$t('shortcuts.editor.reset_to_default')}
+                      aria-label={$t('shortcuts.editor.reset_to_default')}
+                    >↺ <span class="reset-btn-text">{$t('shortcuts.editor.reset_short')}</span></button>
                   {/if}
                 {:else}
                   <span class="key-group">
@@ -506,9 +506,9 @@
               class="mcp-add-btn"
               onclick={() => { showAddMCPDialog = true; }}
               disabled={mcpState.servers.length === 0}
-              title={mcpState.servers.length === 0 ? $t('shortcuts.mcp.empty') : $t('shortcuts.mcp.addTool')}
+              title={mcpState.servers.length === 0 ? $t('shortcuts.mcp.empty') : $t('shortcuts.mcp.add_tool')}
             >
-              + {$t('shortcuts.mcp.addTool')}
+              + {$t('shortcuts.mcp.add_tool')}
             </button>
           </div>
         {/if}

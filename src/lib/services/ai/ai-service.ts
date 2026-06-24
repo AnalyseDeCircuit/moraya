@@ -73,11 +73,11 @@ const KEYCHAIN_AI_RT_ST_PREFIX = 'ai-rt-st:';
 // ── Locale-driven detection patterns for incomplete AI responses ──
 // Built once from all locale files so detection works regardless of AI language.
 function buildDetectionPatterns() {
-  const allPrefixes = resolveAllLocales('ai.detection.intentPrefixes').filter(Boolean).join('|');
-  const allVerbs = resolveAllLocales('ai.detection.actionVerbs').filter(Boolean).join('|');
-  const allContinuation = resolveAllLocales('ai.detection.continuationPhrases').filter(Boolean).join('|');
-  const allRemaining = resolveAllLocales('ai.detection.remainingPhrases').filter(Boolean).join('|');
-  const allUnfinished = resolveAllLocales('ai.detection.unfinishedPhrases').filter(Boolean).join('|');
+  const allPrefixes = resolveAllLocales('ai.detection.intent_prefixes').filter(Boolean).join('|');
+  const allVerbs = resolveAllLocales('ai.detection.action_verbs').filter(Boolean).join('|');
+  const allContinuation = resolveAllLocales('ai.detection.continuation_phrases').filter(Boolean).join('|');
+  const allRemaining = resolveAllLocales('ai.detection.remaining_phrases').filter(Boolean).join('|');
+  const allUnfinished = resolveAllLocales('ai.detection.unfinished_phrases').filter(Boolean).join('|');
 
   return {
     intentPattern: new RegExp(`(${allPrefixes})(.*?)(${allVerbs})`, 'ui'),
@@ -721,7 +721,7 @@ export async function executeAICommand(
       return '';
     }
     if (!isStale) {
-      const errMsg = error?.message || get(t)('errors.aiRequestFailed');
+      const errMsg = error?.message || get(t)('errors.ai_request_failed');
       aiStore.setError(errMsg);
     }
     throw error;
@@ -946,13 +946,13 @@ function buildSystemPrompt(
         const text = (r.commentText || '').replace(/"/g, '\\"').slice(0, 500);
         const author = r.author || 'reviewer';
         if (r.unanchored) {
-          return resolveForLocale('ai.prompts.reviewContextItemUnanchored', detected, {
+          return resolveForLocale('ai.prompts.review_context_item_unanchored', detected, {
             author,
             text,
           });
         }
         const line = String(r.line ?? 0);
-        return resolveForLocale('ai.prompts.reviewContextItem', detected, {
+        return resolveForLocale('ai.prompts.review_context_item', detected, {
           line,
           author,
           text,
@@ -961,7 +961,7 @@ function buildSystemPrompt(
       .join('\n');
     prompt +=
       '\n\n' +
-      resolveForLocale('ai.prompts.reviewContext', detected, {
+      resolveForLocale('ai.prompts.review_context', detected, {
         count: String(openReviews.length),
         items,
       });
@@ -1018,13 +1018,13 @@ export async function triggerReviewCommand(
         const { gitInMerge } = await import('$lib/services/git/git-service');
         if (await gitInMerge(kb.path)) {
           throw new Error(
-            resolveForLocale('review.aiMergeBlocked', detected),
+            resolveForLocale('review.ai_merge_blocked', detected),
           );
         }
       } catch (e) {
         // re-throw the merge-blocked error; swallow probe failures
         if (e instanceof Error && e.message.includes(
-          resolveForLocale('review.aiMergeBlocked', detected).slice(0, 10),
+          resolveForLocale('review.ai_merge_blocked', detected).slice(0, 10),
         )) {
           throw e;
         }
@@ -1043,19 +1043,19 @@ export async function triggerReviewCommand(
           const text = (r.comments?.[0]?.text ?? '').replace(/"/g, '\\"').slice(0, 500);
           const author = r.author || 'reviewer';
           if (r.anchorState === 'unanchored' || r.status === 'unanchored') {
-            return resolveForLocale('ai.prompts.reviewContextItemUnanchored', detected, {
+            return resolveForLocale('ai.prompts.review_context_item_unanchored', detected, {
               author,
               text,
             });
           }
-          return resolveForLocale('ai.prompts.reviewContextItem', detected, {
+          return resolveForLocale('ai.prompts.review_context_item', detected, {
             line: String(r.anchor?.originalLine ?? 0),
             author,
             text,
           });
         })
         .join('\n');
-      const prompt = resolveForLocale('ai.prompts.aiImproveRequest', detected, {
+      const prompt = resolveForLocale('ai.prompts.ai_improve_request', detected, {
         count: String(openReviews.length),
         items,
       });
@@ -1071,7 +1071,7 @@ export async function triggerReviewCommand(
         throw new Error(`Review not found: ${context.reviewId}`);
       }
       reviewStore.setActive(review.id);
-      const prompt = resolveForLocale('ai.prompts.aiRespondRequest', detected, {
+      const prompt = resolveForLocale('ai.prompts.ai_respond_request', detected, {
         markedText: (review.anchor?.markedText ?? '').slice(0, 500),
         commentText: (review.comments?.[0]?.text ?? '').slice(0, 500),
       });
@@ -1093,7 +1093,7 @@ export async function triggerReviewCommand(
           return `[${status}] [Line ${line}] @${author}: "${text}"`;
         })
         .join('\n');
-      const prompt = resolveForLocale('ai.prompts.aiSummaryRequest', detected, {
+      const prompt = resolveForLocale('ai.prompts.ai_summary_request', detected, {
         count: String(all.length),
         items,
       });
@@ -1101,7 +1101,7 @@ export async function triggerReviewCommand(
     }
 
     case 'ai-review': {
-      const prompt = resolveForLocale('ai.prompts.aiReviewRequest', detected);
+      const prompt = resolveForLocale('ai.prompts.ai_review_request', detected);
       // v0.32.1 §F3: snapshot the active file at request start so a late
       // tool-call landing after a file switch can be detected and rejected.
       const snapFilePath = editorStore.getState().currentFilePath;
@@ -1129,7 +1129,7 @@ export async function triggerReviewCommand(
           if (
             snapFilePath !== editorStore.getState().currentFilePath
           ) {
-            return resolveForLocale('review.aiInflightCancelled', detected);
+            return resolveForLocale('review.ai_inflight_cancelled', detected);
           }
           const { executeInternalTool } = await import('./internal-tools');
           await executeInternalTool({
@@ -1188,7 +1188,7 @@ export async function sendChatMessage(message: string, documentContext?: string,
   const state = aiStore.getState();
   const rawConfig = aiStore.getActiveConfig();
   if (!rawConfig || !state.isConfigured) {
-    throw new Error(get(t)('errors.aiNotConfigured'));
+    throw new Error(get(t)('errors.ai_not_configured'));
   }
 
   // Apply global aiMaxTokens setting from Permissions
@@ -1385,9 +1385,9 @@ export async function sendChatMessage(message: string, documentContext?: string,
 
           const recoveryMsg: ChatMessage = {
             role: 'user',
-            content: resolveForLocale('ai.prompts.emptyResponse', promptLocale)
+            content: resolveForLocale('ai.prompts.empty_response', promptLocale)
               + (lastAssistantContent
-                ? resolveForLocale('ai.prompts.emptyResponseContinue', promptLocale, { lastMessage: lastAssistantContent })
+                ? resolveForLocale('ai.prompts.empty_response_continue', promptLocale, { lastMessage: lastAssistantContent })
                 : ''),
             timestamp: Date.now(),
           };
@@ -1431,7 +1431,7 @@ export async function sendChatMessage(message: string, documentContext?: string,
         const truncLocale = detectResponseLocale(response.content || '');
         const continueMsg: ChatMessage = {
           role: 'user',
-          content: resolveForLocale('ai.prompts.truncationContinue', truncLocale),
+          content: resolveForLocale('ai.prompts.truncation_continue', truncLocale),
           timestamp: Date.now(),
         };
         messages.push(continueMsg);
@@ -1501,7 +1501,7 @@ export async function sendChatMessage(message: string, documentContext?: string,
             const contLocale = detectResponseLocale(response.content);
             const continueMsg: ChatMessage = {
               role: 'user',
-              content: resolveForLocale('ai.prompts.continuationPrompt', contLocale),
+              content: resolveForLocale('ai.prompts.continuation_prompt', contLocale),
               timestamp: Date.now(),
             };
             messages.push(continueMsg);
@@ -1764,7 +1764,7 @@ export async function sendChatMessage(message: string, documentContext?: string,
         aiStore.addMessage({ role: 'assistant', content: partial, timestamp: Date.now() });
       }
       // Tauri invoke rejects with a plain string; JS errors have .message
-      const errMsg = (typeof error === 'string' ? error : error?.message) || get(t)('errors.chatRequestFailed');
+      const errMsg = (typeof error === 'string' ? error : error?.message) || get(t)('errors.chat_request_failed');
       aiStore.setError(errMsg);
     }
     throw error;

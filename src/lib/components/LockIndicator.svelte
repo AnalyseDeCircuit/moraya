@@ -28,19 +28,19 @@
 	<div class="lock-indicator" class:own={isOwnLock} class:other={!isOwnLock}>
 		<span class="lock-icon">🔒</span>
 		{#if isOwnLock}
-			<span class="lock-text">{$t('review.lockSelf')}</span>
+			<span class="lock-text">{$t('review.lock_self')}</span>
 		{:else}
 			<span class="lock-text">
 				{lock.lockedBy}
-				{$t('review.lockOther')}
-				({minutesLeft(lock)} {$t('review.lockExpiry')})
+				{$t('review.lock_other')}
+				({minutesLeft(lock)} {$t('review.lock_expiry')})
 			</span>
 			<div class="lock-actions">
 				{#if onViewReadonly}
-					<button class="lock-btn" onclick={onViewReadonly}>{$t('review.viewReadonly')}</button>
+					<button class="lock-btn" onclick={onViewReadonly}>{$t('review.view_readonly')}</button>
 				{/if}
 				{#if onForceUnlock}
-					<button class="lock-btn danger" onclick={onForceUnlock}>{$t('review.forceUnlock')}</button>
+					<button class="lock-btn danger" onclick={onForceUnlock}>{$t('review.force_unlock')}</button>
 				{/if}
 			</div>
 		{/if}

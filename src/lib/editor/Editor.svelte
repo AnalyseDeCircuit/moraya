@@ -491,7 +491,7 @@
     if (!md) return;
     const formatted = formatMarkdownTable(md);
     navigator.clipboard.writeText(formatted).then(() => {
-      onNotify?.(get(t)('table.formattedCopied'), 'success');
+      onNotify?.(get(t)('table.formatted_copied'), 'success');
     });
   }
 
@@ -529,9 +529,9 @@
       // Gap 2: write modified content back to editor
       if (result && typeof result.markdown === 'string' && result.markdown !== markdown) {
         syncContent(result.markdown);
-        onNotify?.(get(t)('pluginAction.success'), 'success');
+        onNotify?.(get(t)('plugin_action.success'), 'success');
       } else {
-        onNotify?.(get(t)('pluginAction.noChanges'), 'success');
+        onNotify?.(get(t)('plugin_action.no_changes'), 'success');
       }
     } catch (e) {
       onNotify?.(e instanceof Error ? e.message : String(e), 'error');
@@ -692,7 +692,7 @@
           onForceShowAIPanel?.();
           aiStore.addMessage({
             role: 'assistant',
-            content: get(t)('contextMenu.uploadImageSuccess').replace('{name}', shortName),
+            content: get(t)('context_menu.upload_image_success').replace('{name}', shortName),
             timestamp: Date.now(),
             isSuccess: true,
           });
@@ -713,7 +713,7 @@
         onForceShowAIPanel?.();
         aiStore.addMessage({
           role: 'assistant',
-          content: get(t)('contextMenu.uploadImageSuccess').replace('{name}', shortName),
+          content: get(t)('context_menu.upload_image_success').replace('{name}', shortName),
           timestamp: Date.now(),
           isSuccess: true,
         });
@@ -725,7 +725,7 @@
       onForceShowAIPanel?.();
       aiStore.addMessage({
         role: 'assistant',
-        content: get(t)('contextMenu.uploadImageFailed').replace('{name}', shortName).replace('{error}', errMsg),
+        content: get(t)('context_menu.upload_image_failed').replace('{name}', shortName).replace('{error}', errMsg),
         timestamp: Date.now(),
         isError: true,
       });
@@ -1345,7 +1345,7 @@
       onForceShowAIPanel?.();
       aiStore.addMessage({
         role: 'assistant',
-        content: get(t)('contextMenu.uploadNoConfig'),
+        content: get(t)('context_menu.upload_no_config'),
         timestamp: Date.now(),
         isError: true,
       });
@@ -1408,7 +1408,7 @@
     const startTs = Date.now();
     aiStore.addMessage({
       role: 'assistant',
-      content: get(t)('contextMenu.uploadStarting'),
+      content: get(t)('context_menu.upload_starting'),
       timestamp: startTs,
     });
 
@@ -1431,7 +1431,7 @@
         }
         aiStore.addMessage({
           role: 'assistant',
-          content: get(t)('contextMenu.uploadImageSuccess').replace('{name}', img.name),
+          content: get(t)('context_menu.upload_image_success').replace('{name}', img.name),
           timestamp: Date.now(),
           isSuccess: true,
         });
@@ -1443,7 +1443,7 @@
         const errMsg = e instanceof Error ? e.message : String(e);
         aiStore.addMessage({
           role: 'assistant',
-          content: get(t)('contextMenu.uploadImageFailed').replace('{name}', img.name).replace('{error}', errMsg),
+          content: get(t)('context_menu.upload_image_failed').replace('{name}', img.name).replace('{error}', errMsg),
           timestamp: Date.now(),
           isError: true,
         });
@@ -1518,7 +1518,7 @@
     // 5. Summary message
     aiStore.addMessage({
       role: 'assistant',
-      content: get(t)('contextMenu.uploadAllComplete')
+      content: get(t)('context_menu.upload_all_complete')
         .replace('{success}', String(successCount))
         .replace('{total}', String(imageList.length)),
       timestamp: Date.now(),

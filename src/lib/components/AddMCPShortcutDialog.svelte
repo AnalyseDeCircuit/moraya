@@ -62,7 +62,7 @@
 
     <div class="dialog-body">
       <div class="field">
-        <label class="field-label" for="mcp-shortcut-server">{$t('shortcuts.mcp.dialog.serverLabel')}</label>
+        <label class="field-label" for="mcp-shortcut-server">{$t('shortcuts.mcp.dialog.server_label')}</label>
         <select id="mcp-shortcut-server" class="gx-select" bind:value={serverId}>
           {#each servers as s (s.id)}
             <option value={s.id}>{s.name}</option>
@@ -71,12 +71,12 @@
       </div>
 
       <div class="field">
-        <label class="field-label" for="mcp-shortcut-tool">{$t('shortcuts.mcp.dialog.toolLabel')}</label>
+        <label class="field-label" for="mcp-shortcut-tool">{$t('shortcuts.mcp.dialog.tool_label')}</label>
         {#if serverTools.length === 0}
-          <p class="hint">{$t('shortcuts.mcp.dialog.noToolsForServer')}</p>
+          <p class="hint">{$t('shortcuts.mcp.dialog.no_tools_for_server')}</p>
         {:else}
           <select id="mcp-shortcut-tool" class="gx-select" bind:value={toolName}>
-            <option value="" disabled>{$t('shortcuts.mcp.dialog.toolPlaceholder')}</option>
+            <option value="" disabled>{$t('shortcuts.mcp.dialog.tool_placeholder')}</option>
             {#each serverTools as tool (tool.name)}
               <option value={tool.name}>{tool.name}</option>
             {/each}
@@ -91,7 +91,7 @@
       </div>
 
       {#if duplicate}
-        <p class="error">{$t('shortcuts.mcp.dialog.duplicateError')}</p>
+        <p class="error">{$t('shortcuts.mcp.dialog.duplicate_error')}</p>
       {/if}
     </div>
 

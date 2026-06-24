@@ -76,17 +76,17 @@
     onclick={(e) => e.stopPropagation()}
   >
     <button class="menu-item" onclick={() => handleAction(onCut)}>
-      <span>{$t('contextMenu.cut')}</span>
+      <span>{$t('context_menu.cut')}</span>
       <span class="shortcut">{modKey}X</span>
     </button>
 
     <button class="menu-item" onclick={() => handleAction(onCopy)}>
-      <span>{$t('contextMenu.copy')}</span>
+      <span>{$t('context_menu.copy')}</span>
       <span class="shortcut">{modKey}C</span>
     </button>
 
     <button class="menu-item" onclick={() => handleAction(onPaste)}>
-      <span>{$t('contextMenu.paste')}</span>
+      <span>{$t('context_menu.paste')}</span>
       <span class="shortcut">{modKey}V</span>
     </button>
 
@@ -97,7 +97,7 @@
         disabled={!hasSelection}
         onclick={() => { if (onAddReview) handleAction(onAddReview); }}
       >
-        <span>{$t('review.addReview')}</span>
+        <span>{$t('review.add_review')}</span>
         <span class="shortcut">⌘⇧R</span>
       </button>
     {/if}
@@ -106,17 +106,17 @@
       <div class="menu-divider"></div>
       {#if onInsertCloudImage}
         <button class="menu-item" onclick={() => { if (onInsertCloudImage) handleAction(onInsertCloudImage); }}>
-          ☁ {$t('contextMenu.insertCloudImage')}
+          ☁ {$t('context_menu.insert_cloud_image')}
         </button>
       {/if}
       {#if onInsertCloudAudio}
         <button class="menu-item" onclick={() => { if (onInsertCloudAudio) handleAction(onInsertCloudAudio); }}>
-          ☁ {$t('contextMenu.insertCloudAudio')}
+          ☁ {$t('context_menu.insert_cloud_audio')}
         </button>
       {/if}
       {#if onInsertCloudVideo}
         <button class="menu-item" onclick={() => { if (onInsertCloudVideo) handleAction(onInsertCloudVideo); }}>
-          ☁ {$t('contextMenu.insertCloudVideo')}
+          ☁ {$t('context_menu.insert_cloud_video')}
         </button>
       {/if}
     {/if}
@@ -124,17 +124,17 @@
     <div class="menu-divider"></div>
 
     <button class="menu-item" disabled={!hasImages} onclick={() => { if (onUploadAllImages) handleAction(onUploadAllImages); }}>
-      {$t('contextMenu.uploadAllImages')}
+      {$t('context_menu.upload_all_images')}
     </button>
 
     <div class="menu-divider"></div>
 
     <button class="menu-item" onclick={() => handleAction(onSEO)}>
-      {$t('menu.seoOptimization')}
+      {$t('menu.seo_optimization')}
     </button>
 
     <button class="menu-item" onclick={() => handleAction(onImageGen)}>
-      {$t('menu.aiImageGeneration')}
+      {$t('menu.ai_image_generation')}
     </button>
 
     <button class="menu-item" onclick={() => handleAction(onPublish)}>

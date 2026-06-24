@@ -132,8 +132,8 @@
   const LANGUAGES = [
     { value: 'zh', label: '中文' },
     { value: 'en', label: 'English' },
-    { value: 'auto', label: $t('settings.voice.langAuto') },
-    { value: 'multi', label: $t('settings.voice.langMulti') },
+    { value: 'auto', label: $t('settings.voice.lang_auto') },
+    { value: 'multi', label: $t('settings.voice.lang_multi') },
     { value: 'ja', label: '日本語' },
     { value: 'ko', label: '한국어' },
     { value: 'fr', label: 'Français' },
@@ -322,12 +322,12 @@
     <div class="section-header">
       <div>
         <h3 class="section-title">{$t('settings.voice.providers')}</h3>
-        <p class="section-subtitle">{$t('settings.voice.providersHint')}</p>
+        <p class="section-subtitle">{$t('settings.voice.providers_hint')}</p>
       </div>
     </div>
 
     {#if configs.length === 0 && !showAddForm}
-      <p class="empty-hint">{$t('settings.voice.noProviders')}</p>
+      <p class="empty-hint">{$t('settings.voice.no_providers')}</p>
     {/if}
 
     {#each configs as cfg (cfg.id)}
@@ -343,20 +343,20 @@
             </select>
           </div>
           <div class="field">
-            <label>{$t('settings.voice.apiKey')}</label>
+            <label>{$t('settings.voice.api_key')}</label>
             <input
               type="password"
               bind:value={form.apiKey}
-              placeholder={form.provider === 'aws-transcribe' ? $t('settings.voice.apiKeyOptional') : ''}
+              placeholder={form.provider === 'aws-transcribe' ? $t('settings.voice.api_key_optional') : ''}
             />
           </div>
           {#if form.provider === 'aws-transcribe'}
             <div class="field">
-              <label>{$t('settings.voice.awsAccessKey')}</label>
+              <label>{$t('settings.voice.aws_access_key')}</label>
               <input type="password" bind:value={form.awsAccessKey} />
             </div>
             <div class="field">
-              <label>{$t('settings.voice.awsSecretKey')}</label>
+              <label>{$t('settings.voice.aws_secret_key')}</label>
               <input type="password" bind:value={form.awsSecretKey} />
             </div>
           {/if}
@@ -376,7 +376,7 @@
               list="voice-model-list-{form.provider}"
               type="text"
               bind:value={form.model}
-              placeholder={$t('settings.voice.modelPlaceholder')}
+              placeholder={$t('settings.voice.model_placeholder')}
             />
             <datalist id="voice-model-list-{form.provider}">
               {#each availableModels as m}
@@ -394,7 +394,7 @@
           </div>
           {#if form.provider === 'custom'}
             <div class="field">
-              <label>{$t('settings.voice.baseUrl')}</label>
+              <label>{$t('settings.voice.base_url')}</label>
               <input type="text" bind:value={form.baseUrl} list="speech-baseurl-edit" placeholder="wss://..." />
               {#if getBaseUrlPresets(form.provider).length > 0}
                 <datalist id="speech-baseurl-edit">
@@ -412,12 +412,12 @@
                 onclick={testConnection}
                 disabled={testStatus === 'testing' || (!form.apiKey.trim() && form.provider !== 'custom')}
               >
-                {testStatus === 'testing' ? $t('settings.voice.testing') : $t('settings.voice.testConnection')}
+                {testStatus === 'testing' ? $t('settings.voice.testing') : $t('settings.voice.test_connection')}
               </button>
               {#if testStatus === 'ok'}
-                <span class="test-ok">✓ {$t('settings.voice.testOk')}</span>
+                <span class="test-ok">✓ {$t('settings.voice.test_ok')}</span>
               {:else if testStatus === 'error'}
-                <span class="test-error">✕ {testError || $t('settings.voice.testFailed')}</span>
+                <span class="test-error">✕ {testError || $t('settings.voice.test_failed')}</span>
               {/if}
             </div>
             <div class="form-actions">
@@ -436,7 +436,7 @@
             </div>
             <div class="config-actions">
               {#if cfg.id !== activeId}
-                <button class="btn-sm" onclick={() => setActive(cfg.id)}>{$t('settings.voice.setActive')}</button>
+                <button class="btn-sm" onclick={() => setActive(cfg.id)}>{$t('settings.voice.set_active')}</button>
               {:else}
                 <span class="active-badge">{$t('settings.voice.active')}</span>
               {/if}
@@ -460,20 +460,20 @@
           </select>
         </div>
         <div class="field">
-          <label>{$t('settings.voice.apiKey')}</label>
+          <label>{$t('settings.voice.api_key')}</label>
           <input
             type="password"
             bind:value={form.apiKey}
-            placeholder={form.provider === 'aws-transcribe' ? $t('settings.voice.apiKeyOptional') : ''}
+            placeholder={form.provider === 'aws-transcribe' ? $t('settings.voice.api_key_optional') : ''}
           />
         </div>
         {#if form.provider === 'aws-transcribe'}
           <div class="field">
-            <label>{$t('settings.voice.awsAccessKey')}</label>
+            <label>{$t('settings.voice.aws_access_key')}</label>
             <input type="password" bind:value={form.awsAccessKey} />
           </div>
           <div class="field">
-            <label>{$t('settings.voice.awsSecretKey')}</label>
+            <label>{$t('settings.voice.aws_secret_key')}</label>
             <input type="password" bind:value={form.awsSecretKey} />
           </div>
         {/if}
@@ -493,7 +493,7 @@
             list="voice-model-list-add-{form.provider}"
             type="text"
             bind:value={form.model}
-            placeholder={$t('settings.voice.modelPlaceholder')}
+            placeholder={$t('settings.voice.model_placeholder')}
           />
           <datalist id="voice-model-list-add-{form.provider}">
             {#each availableModels as m}
@@ -511,7 +511,7 @@
         </div>
         {#if form.provider === 'custom'}
           <div class="field">
-            <label>{$t('settings.voice.baseUrl')}</label>
+            <label>{$t('settings.voice.base_url')}</label>
             <input type="text" bind:value={form.baseUrl} list="speech-baseurl-add" placeholder="wss://..." />
             {#if getBaseUrlPresets(form.provider).length > 0}
               <datalist id="speech-baseurl-add">
@@ -529,12 +529,12 @@
               onclick={testConnection}
               disabled={testStatus === 'testing' || (!form.apiKey.trim() && form.provider !== 'custom')}
             >
-              {testStatus === 'testing' ? $t('settings.voice.testing') : $t('settings.voice.testConnection')}
+              {testStatus === 'testing' ? $t('settings.voice.testing') : $t('settings.voice.test_connection')}
             </button>
             {#if testStatus === 'ok'}
-              <span class="test-ok">✓ {$t('settings.voice.testOk')}</span>
+              <span class="test-ok">✓ {$t('settings.voice.test_ok')}</span>
             {:else if testStatus === 'error'}
-              <span class="test-error">✕ {testError || $t('settings.voice.testFailed')}</span>
+              <span class="test-error">✕ {testError || $t('settings.voice.test_failed')}</span>
             {/if}
           </div>
           <div class="form-actions">
@@ -546,7 +546,7 @@
     {/if}
 
     {#if !showAddForm && !editingId}
-      <button class="add-model-btn" onclick={startAdd}>+ {$t('settings.voice.addProvider')}</button>
+      <button class="add-model-btn" onclick={startAdd}>+ {$t('settings.voice.add_provider')}</button>
     {/if}
   </section>
 
@@ -558,8 +558,8 @@
     <div class="field">
       <div class="toggle-row">
         <div class="toggle-text">
-          <span class="field-label">{$t('settings.voice.recordingBackupDir')}</span>
-          <p class="field-hint">{$t('settings.voice.recordingBackupHint')}</p>
+          <span class="field-label">{$t('settings.voice.recording_backup_dir')}</span>
+          <p class="field-hint">{$t('settings.voice.recording_backup_hint')}</p>
         </div>
         <label class="toggle-switch">
           <input
@@ -580,11 +580,11 @@
 
     <!-- Voice Sync Dir: always shown, Change migrates files to new location -->
     <div class="field">
-      <label>{$t('settings.voice.voiceSyncDir')}</label>
+      <label>{$t('settings.voice.voice_sync_dir')}</label>
       <div class="path-row">
-        <span class="path-text">{voiceSyncDir || defaultSyncDir || $t('settings.voice.syncDefault')}</span>
+        <span class="path-text">{voiceSyncDir || defaultSyncDir || $t('settings.voice.sync_default')}</span>
         <button class="path-btn" onclick={changeSyncDir} disabled={migrating}>
-          {migrating ? $t('settings.voice.migratingProfiles') : $t('common.browse')}
+          {migrating ? $t('settings.voice.migrating_profiles') : $t('common.browse')}
         </button>
         {#if voiceSyncDir}
           <button class="path-btn danger" onclick={() => settingsStore.update({ voiceSyncDir: null })}>
@@ -593,9 +593,9 @@
         {/if}
       </div>
       {#if migrationError}
-        <p class="field-hint error">{$t('settings.voice.migrationFailed')}: {migrationError}</p>
+        <p class="field-hint error">{$t('settings.voice.migration_failed')}: {migrationError}</p>
       {:else}
-        <p class="field-hint">{$t('settings.voice.voiceSyncHint')}</p>
+        <p class="field-hint">{$t('settings.voice.voice_sync_hint')}</p>
       {/if}
     </div>
   </section>
@@ -605,7 +605,7 @@
     <h3 class="section-title">{$t('settings.voice.profiles')}</h3>
 
     {#if voiceProfiles.length === 0}
-      <p class="empty-hint">{$t('settings.voice.noProfiles')}</p>
+      <p class="empty-hint">{$t('settings.voice.no_profiles')}</p>
     {:else}
       {#each voiceProfiles as profile (profile.id)}
         <div class="profile-card">

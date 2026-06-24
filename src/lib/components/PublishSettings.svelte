@@ -149,30 +149,30 @@
     <!-- Edit form -->
     <div class="edit-form">
       <div class="form-header">
-        <h4>{editingTarget.type === 'github' ? $t('publish.github') : $t('publish.customApi')}</h4>
+        <h4>{editingTarget.type === 'github' ? $t('publish.github') : $t('publish.custom_api')}</h4>
       </div>
 
       <div class="setting-group">
-        <label class="setting-label" for="pub-target-name">{$t('publish.targetName')}</label>
+        <label class="setting-label" for="pub-target-name">{$t('publish.target_name')}</label>
         <input
           id="pub-target-name"
           type="text"
           class="setting-input"
           bind:value={editingTarget.name}
-          placeholder={$t('publish.targetNamePlaceholder')}
+          placeholder={$t('publish.target_name_placeholder')}
         />
       </div>
 
       {#if editingTarget.type === 'github'}
         {@const gh = editingTarget as GitHubTarget}
         <div class="setting-group">
-          <label class="setting-label" for="pub-repo-url">{$t('publish.repoUrl')}</label>
+          <label class="setting-label" for="pub-repo-url">{$t('publish.repo_url')}</label>
           <input
             id="pub-repo-url"
             type="text"
             class="setting-input"
             bind:value={gh.repoUrl}
-            placeholder={$t('publish.repoUrlPlaceholder')}
+            placeholder={$t('publish.repo_url_placeholder')}
           />
         </div>
 
@@ -182,24 +182,24 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" for="pub-articles-dir">{$t('publish.articlesDir')}</label>
+          <label class="setting-label" for="pub-articles-dir">{$t('publish.articles_dir')}</label>
           <input
             id="pub-articles-dir"
             type="text"
             class="setting-input"
             bind:value={gh.articlesDir}
-            placeholder={$t('publish.articlesDirPlaceholder')}
+            placeholder={$t('publish.articles_dir_placeholder')}
           />
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" for="pub-images-dir">{$t('publish.imagesDir')}</label>
+          <label class="setting-label" for="pub-images-dir">{$t('publish.images_dir')}</label>
           <input
             id="pub-images-dir"
             type="text"
             class="setting-input"
             bind:value={gh.imagesDir}
-            placeholder={$t('publish.imagesDirPlaceholder')}
+            placeholder={$t('publish.images_dir_placeholder')}
           />
         </div>
 
@@ -210,22 +210,22 @@
             type="password"
             class="setting-input"
             bind:value={gh.token}
-            placeholder={$t('publish.tokenPlaceholder')}
+            placeholder={$t('publish.token_placeholder')}
           />
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" for="pub-template-preset">{$t('publish.templatePresets')}</label>
+          <label class="setting-label" for="pub-template-preset">{$t('publish.template_presets')}</label>
           <select id="pub-template-preset" class="setting-input" value={gh.frontMatterPreset || 'hugo'} onchange={handlePresetChange}>
-            <option value="hugo">{$t('publish.presetHugo')}</option>
-            <option value="hexo">{$t('publish.presetHexo')}</option>
-            <option value="astro">{$t('publish.presetAstro')}</option>
-            <option value="custom">{$t('publish.presetCustom')}</option>
+            <option value="hugo">{$t('publish.preset_hugo')}</option>
+            <option value="hexo">{$t('publish.preset_hexo')}</option>
+            <option value="astro">{$t('publish.preset_astro')}</option>
+            <option value="custom">{$t('publish.preset_custom')}</option>
           </select>
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" for="pub-front-matter">{$t('publish.frontMatterTemplate')}</label>
+          <label class="setting-label" for="pub-front-matter">{$t('publish.front_matter_template')}</label>
           <textarea
             id="pub-front-matter"
             class="setting-textarea"
@@ -243,7 +243,7 @@
             type="text"
             class="setting-input"
             bind:value={api.endpoint}
-            placeholder={$t('publish.endpointPlaceholder')}
+            placeholder={$t('publish.endpoint_placeholder')}
           />
         </div>
 
@@ -267,7 +267,7 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label" for="pub-body-template">{$t('publish.bodyTemplate')}</label>
+          <label class="setting-label" for="pub-body-template">{$t('publish.body_template')}</label>
           <textarea
             id="pub-body-template"
             class="setting-textarea"
@@ -280,13 +280,13 @@
 
       <!-- File naming pattern (shared for all target types) -->
       <div class="setting-group">
-        <label class="setting-label" for="pub-filename-input">{$t('publish.fileNamePattern')}</label>
+        <label class="setting-label" for="pub-filename-input">{$t('publish.file_name_pattern')}</label>
         <div class="filename-row">
           <select class="setting-input filename-preset" onchange={handleFileNamePresetChange}>
-            <option value="dateSlug" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.dateSlug}>{$t('publish.presetDateSlug')}</option>
-            <option value="simple" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.simple}>{$t('publish.presetSimple')}</option>
-            <option value="dateFilename" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.dateFilename}>{$t('publish.presetDateFilename')}</option>
-            <option value="yearMonth" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.yearMonth}>{$t('publish.presetYearMonth')}</option>
+            <option value="dateSlug" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.dateSlug}>{$t('publish.preset_date_slug')}</option>
+            <option value="simple" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.simple}>{$t('publish.preset_simple')}</option>
+            <option value="dateFilename" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.dateFilename}>{$t('publish.preset_date_filename')}</option>
+            <option value="yearMonth" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.yearMonth}>{$t('publish.preset_year_month')}</option>
           </select>
           <input
             id="pub-filename-input"
@@ -296,15 +296,15 @@
             placeholder={'{{date}}-{{slug}}'}
           />
         </div>
-        <span class="setting-hint filename-preview">{$t('publish.fileNamePreview')}：{fileNamePreview}</span>
-        <span class="setting-hint">{$t('publish.fileNameVariables')}</span>
+        <span class="setting-hint filename-preview">{$t('publish.file_name_preview')}：{fileNamePreview}</span>
+        <span class="setting-hint">{$t('publish.file_name_variables')}</span>
       </div>
 
       <!-- RSS Feed Configuration -->
       {#if editingTarget.type === 'github'}
         {@const gh = editingTarget as GitHubTarget}
         <div class="section-divider">
-          <span class="section-title">{$t('publish.rssSection')}</span>
+          <span class="section-title">{$t('publish.rss_section')}</span>
         </div>
 
         <div class="setting-group">
@@ -314,58 +314,58 @@
               checked={gh.rss?.enabled ?? false}
               onchange={() => { if (gh.rss) gh.rss.enabled = !gh.rss.enabled; }}
             />
-            <span>{$t('publish.rssEnable')}</span>
+            <span>{$t('publish.rss_enable')}</span>
           </label>
-          <span class="setting-hint">{$t('publish.rssEnableHint')}</span>
+          <span class="setting-hint">{$t('publish.rss_enable_hint')}</span>
         </div>
 
         {#if gh.rss?.enabled}
           <div class="setting-group">
-            <label class="setting-label" for="rss-site-url">{$t('publish.rssSiteUrl')}</label>
+            <label class="setting-label" for="rss-site-url">{$t('publish.rss_site_url')}</label>
             <input
               id="rss-site-url"
               type="text"
               class="setting-input"
               bind:value={gh.rss.siteUrl}
-              placeholder={$t('publish.rssSiteUrlPlaceholder')}
+              placeholder={$t('publish.rss_site_url_placeholder')}
             />
           </div>
 
           <div class="setting-group">
-            <label class="setting-label" for="rss-feed-title">{$t('publish.rssFeedTitle')}</label>
+            <label class="setting-label" for="rss-feed-title">{$t('publish.rss_feed_title')}</label>
             <input
               id="rss-feed-title"
               type="text"
               class="setting-input"
               bind:value={gh.rss.feedTitle}
-              placeholder={$t('publish.rssFeedTitlePlaceholder')}
+              placeholder={$t('publish.rss_feed_title_placeholder')}
             />
           </div>
 
           <div class="setting-group">
-            <label class="setting-label" for="rss-feed-desc">{$t('publish.rssFeedDescription')}</label>
+            <label class="setting-label" for="rss-feed-desc">{$t('publish.rss_feed_description')}</label>
             <input
               id="rss-feed-desc"
               type="text"
               class="setting-input"
               bind:value={gh.rss.feedDescription}
-              placeholder={$t('publish.rssFeedDescriptionPlaceholder')}
+              placeholder={$t('publish.rss_feed_description_placeholder')}
             />
           </div>
 
           <div class="setting-group">
-            <label class="setting-label" for="rss-author">{$t('publish.rssAuthorName')}</label>
+            <label class="setting-label" for="rss-author">{$t('publish.rss_author_name')}</label>
             <input
               id="rss-author"
               type="text"
               class="setting-input"
               bind:value={gh.rss.authorName}
-              placeholder={$t('publish.rssAuthorNamePlaceholder')}
+              placeholder={$t('publish.rss_author_name_placeholder')}
             />
           </div>
 
           <div class="setting-group">
-            <label class="setting-label" for="rss-language">{$t('publish.rssLanguage')}</label>
+            <label class="setting-label" for="rss-language">{$t('publish.rss_language')}</label>
             <input
               id="rss-language"
               type="text"
@@ -376,18 +376,18 @@
           </div>
 
           <div class="setting-group">
-            <label class="setting-label" for="rss-feed-path">{$t('publish.rssFeedPath')}</label>
+            <label class="setting-label" for="rss-feed-path">{$t('publish.rss_feed_path')}</label>
             <input
               id="rss-feed-path"
               type="text"
               class="setting-input"
               bind:value={gh.rss.feedPath}
-              placeholder={$t('publish.rssFeedPathPlaceholder')}
+              placeholder={$t('publish.rss_feed_path_placeholder')}
             />
           </div>
 
           <div class="setting-group">
-            <label class="setting-label" for="rss-max-items">{$t('publish.rssMaxItems')}: {gh.rss.maxItems}</label>
+            <label class="setting-label" for="rss-max-items">{$t('publish.rss_max_items')}: {gh.rss.maxItems}</label>
             <input
               id="rss-max-items"
               type="range"
@@ -405,14 +405,14 @@
                 checked={gh.rss.includeFullContent}
                 onchange={() => { if (gh.rss) gh.rss.includeFullContent = !gh.rss.includeFullContent; }}
               />
-              <span>{$t('publish.rssIncludeFullContent')}</span>
+              <span>{$t('publish.rss_include_full_content')}</span>
             </label>
           </div>
         {/if}
       {:else if editingTarget.type === 'custom-api'}
         {@const api = editingTarget as CustomAPITarget}
         <div class="section-divider">
-          <span class="section-title">{$t('publish.rssSection')}</span>
+          <span class="section-title">{$t('publish.rss_section')}</span>
         </div>
 
         <div class="setting-group">
@@ -422,19 +422,19 @@
               checked={api.rss?.enabled ?? false}
               onchange={() => { if (api.rss) api.rss.enabled = !api.rss.enabled; }}
             />
-            <span>{$t('publish.rssEnable')}</span>
+            <span>{$t('publish.rss_enable')}</span>
           </label>
         </div>
 
         {#if api.rss?.enabled}
           <div class="setting-group">
-            <label class="setting-label" for="rss-endpoint">{$t('publish.rssFeedEndpoint')}</label>
+            <label class="setting-label" for="rss-endpoint">{$t('publish.rss_feed_endpoint')}</label>
             <input
               id="rss-endpoint"
               type="text"
               class="setting-input"
               bind:value={api.rss.feedEndpoint}
-              placeholder={$t('publish.rssFeedEndpointPlaceholder')}
+              placeholder={$t('publish.rss_feed_endpoint_placeholder')}
             />
           </div>
         {/if}
@@ -451,8 +451,8 @@
     <!-- Target list -->
     {#if targets.length === 0}
       <div class="empty-state">
-        <p>{$t('publish.settingsEmpty')}</p>
-        <p class="hint">{$t('publish.settingsHint')}</p>
+        <p>{$t('publish.settings_empty')}</p>
+        <p class="hint">{$t('publish.settings_hint')}</p>
       </div>
     {:else}
       <div class="target-list">
@@ -465,7 +465,7 @@
               <div class="target-details">
                 <span class="target-name">{target.name || '(unnamed)'}</span>
                 <span class="target-type">
-                  {target.type === 'github' ? $t('publish.github') : $t('publish.customApi')}
+                  {target.type === 'github' ? $t('publish.github') : $t('publish.custom_api')}
                 </span>
               </div>
             </div>
@@ -504,12 +504,12 @@
             🔵 {$t('publish.github')}
           </button>
           <button class="add-option" onclick={addCustomAPITarget}>
-            🟣 {$t('publish.customApi')}
+            🟣 {$t('publish.custom_api')}
           </button>
         </div>
       {/if}
       <button class="btn btn-add" onclick={() => showAddMenu = !showAddMenu}>
-        + {$t('publish.addTarget')}
+        + {$t('publish.add_target')}
       </button>
     </div>
   {/if}

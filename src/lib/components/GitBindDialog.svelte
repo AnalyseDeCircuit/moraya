@@ -62,32 +62,32 @@
 
   function modeLabel(): string {
     switch (dirState) {
-      case 'empty': return $t('git.modeClone');
-      case 'has-content': return $t('git.modePush');
-      case 'has-git': return $t('git.modeConnect');
+      case 'empty': return $t('git.mode_clone');
+      case 'has-content': return $t('git.mode_push');
+      case 'has-git': return $t('git.mode_connect');
       default: return $t('git.detecting');
     }
   }
 
   async function handleBind() {
     if (!remoteUrl.trim()) {
-      error = $t('git.errorUrlRequired');
+      error = $t('git.error_url_required');
       return;
     }
     if (authMethod === 'token' && !token.trim()) {
-      error = $t('git.errorTokenRequired');
+      error = $t('git.error_token_required');
       return;
     }
     if (authMethod === 'password' && !username.trim()) {
-      error = $t('git.errorUsernameRequired');
+      error = $t('git.error_username_required');
       return;
     }
     if (authMethod === 'password' && !password.trim()) {
-      error = $t('git.errorPasswordRequired');
+      error = $t('git.error_password_required');
       return;
     }
     if (authMethod === 'ssh' && !sshKeyPath.trim()) {
-      error = $t('git.errorSshKeyRequired');
+      error = $t('git.error_ssh_key_required');
       return;
     }
 
@@ -152,7 +152,7 @@
         <svg class="git-icon" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
           <path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25V5.372a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878zm3.75 7.378a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm3-8.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"/>
         </svg>
-        <h3>{$t('git.bindTitle')}</h3>
+        <h3>{$t('git.bind_title')}</h3>
       </div>
       <button class="git-dialog-close" onclick={onClose}>&times;</button>
     </div>
@@ -161,7 +161,7 @@
       <div class="git-mode-badge">{modeLabel()}</div>
 
       <label class="git-field">
-        <span>{$t('git.repoUrl')}</span>
+        <span>{$t('git.repo_url')}</span>
         <input
           type="text"
           bind:value={remoteUrl}
@@ -182,7 +182,7 @@
 
       <!-- Auth method selector -->
       <div class="git-field">
-        <span>{$t('git.authMethod')}</span>
+        <span>{$t('git.auth_method')}</span>
         <div class="git-auth-tabs">
           <button
             class="git-auth-tab"
@@ -191,7 +191,7 @@
             disabled={loading}
             type="button"
           >
-            {$t('git.authToken')}
+            {$t('git.auth_token')}
           </button>
           <button
             class="git-auth-tab"
@@ -200,7 +200,7 @@
             disabled={loading}
             type="button"
           >
-            {$t('git.authPassword')}
+            {$t('git.auth_password')}
           </button>
           <button
             class="git-auth-tab"
@@ -209,7 +209,7 @@
             disabled={loading}
             type="button"
           >
-            {$t('git.authSsh')}
+            {$t('git.auth_ssh')}
           </button>
         </div>
       </div>
@@ -224,7 +224,7 @@
             placeholder="ghp_xxx  /  glpat-xxx  /  ..."
             disabled={loading}
           />
-          <span class="git-field-hint">{$t('git.tokenHint')}</span>
+          <span class="git-field-hint">{$t('git.token_hint')}</span>
         </label>
       {/if}
 
@@ -249,24 +249,24 @@
             disabled={loading}
             autocomplete="current-password"
           />
-          <span class="git-field-hint">{$t('git.tokenHint')}</span>
+          <span class="git-field-hint">{$t('git.token_hint')}</span>
         </label>
       {/if}
 
       <!-- SSH Key auth fields -->
       {#if authMethod === 'ssh'}
         <label class="git-field">
-          <span>{$t('git.sshKeyPath')}</span>
+          <span>{$t('git.ssh_key_path')}</span>
           <input
             type="text"
             bind:value={sshKeyPath}
             placeholder="/Users/you/.ssh/id_ed25519"
             disabled={loading}
           />
-          <span class="git-field-hint">{$t('git.sshKeyPathHint')}</span>
+          <span class="git-field-hint">{$t('git.ssh_key_path_hint')}</span>
         </label>
         <label class="git-field">
-          <span>{$t('git.sshPassphrase')}</span>
+          <span>{$t('git.ssh_passphrase')}</span>
           <input
             type="password"
             bind:value={sshPassphrase}
@@ -274,22 +274,22 @@
             disabled={loading}
             autocomplete="current-password"
           />
-          <span class="git-field-hint">{$t('git.sshPassphraseHint')}</span>
+          <span class="git-field-hint">{$t('git.ssh_passphrase_hint')}</span>
         </label>
       {/if}
 
       <div class="git-options">
         <label class="git-checkbox">
           <input type="checkbox" bind:checked={autoCommit} disabled={loading} />
-          <span>{$t('git.autoCommit')}</span>
+          <span>{$t('git.auto_commit')}</span>
         </label>
         <label class="git-checkbox">
           <input type="checkbox" bind:checked={autoSync} disabled={loading} />
-          <span>{$t('git.autoSync')}</span>
+          <span>{$t('git.auto_sync')}</span>
         </label>
         {#if autoSync}
           <label class="git-field git-field-inline">
-            <span>{$t('git.syncInterval')}</span>
+            <span>{$t('git.sync_interval')}</span>
             <input
               type="number"
               bind:value={syncIntervalMin}
@@ -320,7 +320,7 @@
         {#if loading}
           <span class="git-spinner"></span>
         {/if}
-        {$t('git.confirmBind')}
+        {$t('git.confirm_bind')}
       </button>
     </div>
   </div>

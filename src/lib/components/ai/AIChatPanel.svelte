@@ -198,11 +198,11 @@
 
   let modelTriggerLabel = $derived.by((): string => {
     const parts: string[] = [];
-    if (providerConfigs.length > 0) parts.push($t('ai.modelShort.chat'));
-    if (realtimeVoiceConfigs.length > 0) parts.push($t('ai.modelShort.realtime'));
-    if (imageConfigs.length > 0) parts.push($t('ai.modelShort.image'));
-    if (speechConfigs.length > 0) parts.push($t('ai.modelShort.speech'));
-    return parts.length > 0 ? parts.join(' · ') : $t('ai.modelShort.none');
+    if (providerConfigs.length > 0) parts.push($t('ai.model_short.chat'));
+    if (realtimeVoiceConfigs.length > 0) parts.push($t('ai.model_short.realtime'));
+    if (imageConfigs.length > 0) parts.push($t('ai.model_short.image'));
+    if (speechConfigs.length > 0) parts.push($t('ai.model_short.speech'));
+    return parts.length > 0 ? parts.join(' · ') : $t('ai.model_short.none');
   });
 
   // Top-level store subscriptions — do NOT wrap in $effect().
@@ -830,11 +830,11 @@
     if (isRealtimeVoiceActive || isRealtimeVoiceConnecting) return;
     const cfg = getPreferredRealtimeConfig();
     if (!cfg) {
-      aiStore.setError($t('ai.realtime.missingConfig'));
+      aiStore.setError($t('ai.realtime.missing_config'));
       return;
     }
     if (!hasRealtimeCredential(cfg)) {
-      aiStore.setError($t('ai.realtime.config.missingCredential'));
+      aiStore.setError($t('ai.realtime.config.missing_credential'));
       return;
     }
     showActionDrawer = false;
@@ -981,7 +981,7 @@
   async function startInlineRecording() {
     if (inlineRecordingState === 'recording') return;
     if (!speechConfig) {
-      aiStore.setError($t('transcription.noSpeechConfig'));
+      aiStore.setError($t('transcription.no_speech_config'));
       onOpenVoiceSettings?.();
       return;
     }
@@ -1269,7 +1269,7 @@
 
   async function requestVoiceInterviewAnswer(questionFocus: string, supportContext: string): Promise<string> {
     const active = aiStore.getActiveConfig();
-    if (!active || !active.apiKey) throw new Error($t('transcription.interviewNoAIConfig'));
+    if (!active || !active.apiKey) throw new Error($t('transcription.interview_no_aiconfig'));
     const maxTokens = Math.min($settingsStore.aiMaxTokens || active.maxTokens || 1024, 768);
     const config = { ...active, maxTokens, temperature: Math.min(active.temperature ?? 0.2, 0.3) };
     const now = Date.now();
@@ -1288,7 +1288,7 @@
       ],
     });
     const text = response.content?.trim();
-    if (!text) throw new Error($t('transcription.interviewEmptyAnswer'));
+    if (!text) throw new Error($t('transcription.interview_empty_answer'));
     return text;
   }
 
@@ -1322,7 +1322,7 @@
     voiceInterviewPendingContext = '';
     voiceInterviewRows = [
       ...voiceInterviewRows,
-      { id: rowId, side: 'right', text: $t('transcription.interviewAnswerPending'), timestamp: Date.now(), status: 'pending' },
+      { id: rowId, side: 'right', text: $t('transcription.interview_answer_pending'), timestamp: Date.now(), status: 'pending' },
     ];
     voiceInterviewBusy = true;
     try {
@@ -1331,7 +1331,7 @@
         row.id === rowId && row.side === 'right' ? { ...row, text: answer, status: 'done' as const } : row,
       );
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : $t('transcription.interviewAnswerFailed');
+      const msg = e instanceof Error ? e.message : $t('transcription.interview_answer_failed');
       voiceInterviewPendingContext = pendingSnapshot.length > INTERVIEW_MAX_BUFFER_CHARS
         ? pendingSnapshot.slice(-INTERVIEW_MAX_BUFFER_CHARS) : pendingSnapshot;
       voiceInterviewRows = voiceInterviewRows.map(row =>
@@ -1346,7 +1346,7 @@
 
   async function startVoiceRecording() {
     if (!speechConfig) {
-      aiStore.setError($t('transcription.noSpeechConfig'));
+      aiStore.setError($t('transcription.no_speech_config'));
       return;
     }
     voiceRecordingState = 'connecting';
@@ -1608,7 +1608,7 @@
           {#if showModelDropdown}
             <div class="model-dropdown-panel" bind:this={modelDropdownEl}>
               {#if providerConfigs.length > 0}
-                <div class="model-group-label">{$t('ai.realtime.chatModelGroup')}</div>
+                <div class="model-group-label">{$t('ai.realtime.chat_model_group')}</div>
                 {#each providerConfigs as cfg}
                   <button
                     class="model-dropdown-item"
@@ -1621,7 +1621,7 @@
               {/if}
               {#if realtimeVoiceConfigs.length > 0}
                 <div class="model-group-divider"></div>
-                <div class="model-group-label">{$t('ai.realtime.realtimeModelGroup')}</div>
+                <div class="model-group-label">{$t('ai.realtime.realtime_model_group')}</div>
                 {#each realtimeVoiceConfigs as cfg}
                   <button
                     class="model-dropdown-item"
@@ -1634,7 +1634,7 @@
               {/if}
               {#if imageConfigs.length > 0}
                 <div class="model-group-divider"></div>
-                <div class="model-group-label">{$t('ai.realtime.imageModelGroup')}</div>
+                <div class="model-group-label">{$t('ai.realtime.image_model_group')}</div>
                 {#each imageConfigs as cfg}
                   <button
                     class="model-dropdown-item"
@@ -1647,7 +1647,7 @@
               {/if}
               {#if speechConfigs.length > 0}
                 <div class="model-group-divider"></div>
-                <div class="model-group-label">{$t('ai.realtime.speechModelGroup')}</div>
+                <div class="model-group-label">{$t('ai.realtime.speech_model_group')}</div>
                 {#each speechConfigs as cfg}
                   <button
                     class="model-dropdown-item"
@@ -1665,7 +1665,7 @@
         <span class="mcp-badge" title="{mcpToolCount} MCP tools available">{mcpToolCount} tools</span>
       {/if}
       {#if morayaMdActive}
-        <span class="moraya-md-badge" title={$t('ai.rulesActive')}>
+        <span class="moraya-md-badge" title={$t('ai.rules_active')}>
           {rulesSectionCount > 0 ? `${rulesSectionCount} rules` : 'MORAYA.md'}
         </span>
       {/if}
@@ -1703,7 +1703,7 @@
       </div>
     {/if}
     {#if chatMessages.length > 0}
-      <button class="ai-btn" onclick={clearChat} title={$t('ai.clearChat')}>
+      <button class="ai-btn" onclick={clearChat} title={$t('ai.clear_chat')}>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
           <path d="M4 1V0h6v1h4v2H0V1h4zm1 3h1v8H5V4zm3 0h1v8H8V4zM1 3h12l-1 11H2L1 3z"/>
         </svg>
@@ -1715,28 +1715,28 @@
     <div class="voice-mode-bar">
       <div class="voice-mode-bar-controls">
         <label class="voice-top-field">
-          <span class="voice-top-label">{$t('transcription.sourceLabel')}</span>
+          <span class="voice-top-label">{$t('transcription.source_label')}</span>
           <select
             class="voice-top-select"
             value={voiceSourceMode}
             onchange={handleVoiceSourceChange}
             disabled={voiceRecordingState === 'connecting'}
           >
-            <option value="mic">{$t('transcription.sourceMic')}</option>
-            <option value="system">{$t('transcription.sourceSystem')}</option>
-            <option value="mixed">{$t('transcription.sourceMixed')}</option>
+            <option value="mic">{$t('transcription.source_mic')}</option>
+            <option value="system">{$t('transcription.source_system')}</option>
+            <option value="mixed">{$t('transcription.source_mixed')}</option>
           </select>
         </label>
         <label class="voice-top-field">
-          <span class="voice-top-label">{$t('transcription.modeLabel')}</span>
+          <span class="voice-top-label">{$t('transcription.mode_label')}</span>
           <select
             class="voice-top-select"
             value={voiceSessionMode}
             onchange={handleVoiceSessionModeChange}
             disabled={voiceRecordingState === 'connecting'}
           >
-            <option value="transcription">{$t('transcription.modeTranscription')}</option>
-            <option value="interview">{$t('transcription.modeInterview')}</option>
+            <option value="transcription">{$t('transcription.mode_transcription')}</option>
+            <option value="interview">{$t('transcription.mode_interview')}</option>
           </select>
         </label>
       </div>
@@ -1759,9 +1759,9 @@
   {#if !isConfigured}
     <div class="ai-unconfigured">
       <p>{$t('ai.unconfigured')}</p>
-      <p class="hint">{$t('ai.unconfiguredHint', { shortcut: navigator.platform.includes('Mac') ? 'Cmd+,' : 'Ctrl+,' })}</p>
+      <p class="hint">{$t('ai.unconfigured_hint', { shortcut: navigator.platform.includes('Mac') ? 'Cmd+,' : 'Ctrl+,' })}</p>
       {#if onOpenSettings}
-        <button class="open-settings-btn" onclick={onOpenSettings}>{$t('ai.openSettings')}</button>
+        <button class="open-settings-btn" onclick={onOpenSettings}>{$t('ai.open_settings')}</button>
       {/if}
     </div>
   {:else}
@@ -1831,11 +1831,11 @@
             <span class="message-time">{formatTime(msg.timestamp)}</span>
             <div class="message-actions">
               {#if msg.role === 'assistant'}
-                <button class="action-btn" onclick={() => handleInsert(msg.content)} title={$t('ai.insertToEditor')}>
+                <button class="action-btn" onclick={() => handleInsert(msg.content)} title={$t('ai.insert_to_editor')}>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0v5H1v2h5v5h2V7h5V5H8V0H6z"/></svg>
                 </button>
                 {#if selectedText}
-                  <button class="action-btn" onclick={() => handleReplace(msg.content)} title={$t('ai.replaceSelection')}>
+                  <button class="action-btn" onclick={() => handleReplace(msg.content)} title={$t('ai.replace_selection')}>
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M0 0h5v2H2v3H0V0zm12 12H7v-2h3V7h2v5zM8.5 3.5L5 7 3.5 5.5 2 7l3 3 5-5-1.5-1.5z"/></svg>
                   </button>
                 {/if}
@@ -1858,7 +1858,7 @@
         {#if voiceSessionMode === 'transcription'}
           <!-- Transcription mode: speaker-labeled segments in chat area -->
           {#if voiceSegments.length === 0 && voiceRecordingState !== 'idle'}
-            <div class="voice-area-empty">{$t('transcription.emptyWaiting')}</div>
+            <div class="voice-area-empty">{$t('transcription.empty_waiting')}</div>
           {/if}
           {#each voiceSegments as seg, i (i)}
             <div class="voice-segment" class:voice-interim={!seg.isFinal}>
@@ -1873,7 +1873,7 @@
         {:else}
           <!-- Interview mode: Q&A layout -->
           {#if voiceInterviewRows.length === 0 && voiceRecordingState !== 'idle'}
-            <div class="voice-area-empty">{$t('transcription.emptyWaiting')}</div>
+            <div class="voice-area-empty">{$t('transcription.empty_waiting')}</div>
           {/if}
           {#each voiceInterviewRows as row (row.id)}
             {#if row.side === 'left'}
@@ -1967,7 +1967,7 @@
               <path d="M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               <path d="M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            {$t('ai.voiceTranscription')}
+            {$t('ai.voice_transcription')}
           </button>
         </div>
       {/if}
@@ -2008,7 +2008,7 @@
                 <span class="image-preview-name" title={getAttachmentDisplayName(img)}>
                   {getAttachmentDisplayName(img)}
                 </span>
-                <button class="image-remove-btn" onclick={() => removeImage(img.id)} title={$t('ai.removeImage')}>
+                <button class="image-remove-btn" onclick={() => removeImage(img.id)} title={$t('ai.remove_image')}>
                   <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                     <path d="M9 3L3 9m0-6l6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
                   </svg>
@@ -2028,7 +2028,7 @@
             onpaste={handleInputPaste}
             ondrop={handleInputDrop}
             ondragover={handleInputDragOver}
-            placeholder={inputPlaceholderOverride ?? (selectedText ? $t('ai.placeholderSelection') : $t('ai.placeholder'))}
+            placeholder={inputPlaceholderOverride ?? (selectedText ? $t('ai.placeholder_selection') : $t('ai.placeholder'))}
             rows={1}
           ></textarea>
         </div>
@@ -2040,7 +2040,7 @@
                 class="icon-btn plus-btn"
                 bind:this={actionTriggerEl}
                 onclick={() => showActionDrawer = !showActionDrawer}
-                title={$t('ai.moreActions')}
+                title={$t('ai.more_actions')}
               >
                 <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                   <path d="M6 0v12M0 6h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -2050,7 +2050,7 @@
             <button
               class="icon-btn attach-btn"
               onclick={handleAttachImage}
-              title={$t('ai.attachImage')}
+              title={$t('ai.attach_image')}
               disabled={isLoading}
             >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -2124,7 +2124,7 @@
                   </svg>
                 </button>
               {/if}
-              <button class="icon-btn primary-btn stop-btn" onclick={stopRealtimeVoiceSession} title={$t('ai.realtime.stopVoice')}>
+              <button class="icon-btn primary-btn stop-btn" onclick={stopRealtimeVoiceSession} title={$t('ai.realtime.stop_voice')}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
                 </svg>
@@ -2165,7 +2165,7 @@
                 class="icon-btn primary-btn"
                 onclick={handlePrimaryAction}
                 disabled={!shouldShowWaveAction() && !hasDraftContent() && !isRealtimeVoiceConnecting}
-                title={shouldShowWaveAction() ? $t('ai.realtime.startVoice') : $t('ai.send')}
+                title={shouldShowWaveAction() ? $t('ai.realtime.start_voice') : $t('ai.send')}
               >
                 {#if shouldShowWaveAction()}
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2189,7 +2189,7 @@
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="lightbox-overlay" onclick={closeLightbox}>
       <img src={lightboxSrc} alt="" class="lightbox-image" />
-      <button class="lightbox-close" onclick={closeLightbox} title={$t('ai.closePreview')}>
+      <button class="lightbox-close" onclick={closeLightbox} title={$t('ai.close_preview')}>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
           <path d="M12 4L4 12m0-8l8 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>

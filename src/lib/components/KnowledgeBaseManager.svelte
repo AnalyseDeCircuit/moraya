@@ -34,7 +34,7 @@
     const selected = await open({
       directory: true,
       multiple: false,
-      title: $t('knowledgeBase.add'),
+      title: $t('knowledge_base.add'),
     });
 
     if (selected && typeof selected === 'string') {
@@ -54,8 +54,8 @@
 
   async function removeKnowledgeBase(kb: KnowledgeBase) {
     const confirmed = await ask(
-      $t('knowledgeBase.deleteConfirm').replace('{name}', kb.name),
-      { title: $t('knowledgeBase.remove'), kind: 'warning' }
+      $t('knowledge_base.delete_confirm').replace('{name}', kb.name),
+      { title: $t('knowledge_base.remove'), kind: 'warning' }
     );
     if (confirmed) {
       filesStore.removeKnowledgeBase(kb.id);
@@ -96,8 +96,8 @@
   async function unbindGit(kb: KnowledgeBase) {
     if (!kb.git) return;
     const confirmed = await ask(
-      $t('git.unbindConfirm').replace('{name}', kb.name),
-      { title: $t('git.unbindTitle'), kind: 'warning' }
+      $t('git.unbind_confirm').replace('{name}', kb.name),
+      { title: $t('git.unbind_title'), kind: 'warning' }
     );
     if (confirmed) {
       await deleteGitToken(kb.git.configId).catch(() => {});
@@ -126,15 +126,15 @@
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div class="kb-dialog" onclick={(e) => e.stopPropagation()}>
     <div class="kb-dialog-header">
-      <h3>{$t('knowledgeBase.title')}</h3>
+      <h3>{$t('knowledge_base.title')}</h3>
       <button class="kb-dialog-close" onclick={onClose}>&times;</button>
     </div>
 
     <div class="kb-dialog-body">
       {#if knowledgeBases.length === 0}
         <div class="kb-empty">
-          <p>{$t('knowledgeBase.empty')}</p>
-          <p class="kb-empty-hint">{$t('knowledgeBase.emptyHint')}</p>
+          <p>{$t('knowledge_base.empty')}</p>
+          <p class="kb-empty-hint">{$t('knowledge_base.empty_hint')}</p>
         </div>
       {:else}
         <div class="kb-list">
@@ -170,7 +170,7 @@
                 <button
                   class="kb-action-btn kb-picora-btn {picoraButtonClass(kb)}"
                   onclick={() => { picoraBindingKb = kb; }}
-                  title={kb.picoraBinding ? $t('kbSync.card.settings') : $t('kbSync.card.bind')}
+                  title={kb.picoraBinding ? $t('kb_sync.card.settings') : $t('kb_sync.card.bind')}
                 >
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path fill-rule="evenodd" d="M8 8m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0zM8 8m-4.5 0a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0zM8 8m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0z"/></svg>{#if kb.picoraBinding}{@const _s = syncStates.get(kb.id)}{#if _s?.status === 'conflict'} ⚠{_s.conflictCount}{:else if _s?.status === 'error'} ✗{:else if _s?.status === 'syncing'} ⟳{:else} {kb.picoraBinding.picoraKbName.slice(0, 12)}{/if}{/if}
                 </button>
@@ -183,10 +183,10 @@
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25V5.372a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878zm3.75 7.378a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm3-8.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"/></svg>
                   </button>
                 {/if}
-                <button class="kb-action-btn" onclick={() => startRename(kb)} title={$t('knowledgeBase.rename')}>
+                <button class="kb-action-btn" onclick={() => startRename(kb)} title={$t('knowledge_base.rename')}>
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61zM11.189 3.5L3 11.689v.001l-.59 2.058 2.058-.59L12.657 4.97 11.19 3.5z"/></svg>
                 </button>
-                <button class="kb-action-btn kb-action-danger" onclick={() => removeKnowledgeBase(kb)} title={$t('knowledgeBase.remove')}>
+                <button class="kb-action-btn kb-action-danger" onclick={() => removeKnowledgeBase(kb)} title={$t('knowledge_base.remove')}>
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19a1.75 1.75 0 001.741-1.575l.66-6.6a.75.75 0 00-1.492-.15l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"/></svg>
                 </button>
               </div>
@@ -198,7 +198,7 @@
 
     <div class="kb-dialog-footer">
       <button class="kb-add-btn" onclick={addKnowledgeBase}>
-        + {$t('knowledgeBase.add')}
+        + {$t('knowledge_base.add')}
       </button>
     </div>
   </div>

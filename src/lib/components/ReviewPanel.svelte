@@ -120,7 +120,7 @@
 		if (aiBusy) return;
 		const config = aiStore.getActiveConfig();
 		if (!config) {
-			aiError = $t('ai.notConfigured') || 'AI provider not configured';
+			aiError = $t('ai.not_configured') || 'AI provider not configured';
 			return;
 		}
 		const isLocal =
@@ -190,18 +190,18 @@
 	{#if kb?.git}
 		<div class="ai-bar">
 			<button class="ai-btn" disabled={aiBusy} onclick={aiCommandReview}>
-				{#if aiBusy}⟳{:else}✨{/if} {$t('review.aiReview')}
+				{#if aiBusy}⟳{:else}✨{/if} {$t('review.ai_review')}
 			</button>
 			<button class="ai-btn" disabled={aiBusy || openCount === 0} onclick={aiCommandImprove}>
-				📝 {$t('review.aiImprove')}
+				📝 {$t('review.ai_improve')}
 			</button>
 			<button class="ai-btn" disabled={aiBusy || reviews.length === 0} onclick={aiCommandSummary}>
-				📊 {$t('review.aiSummary')}
+				📊 {$t('review.ai_summary')}
 			</button>
 		</div>
 		{#if aiBusy}
 			<div class="ai-progress" role="status" aria-live="polite">
-				⏳ {$t('review.aiInProgress')}
+				⏳ {$t('review.ai_in_progress')}
 			</div>
 		{/if}
 		{#if aiError}
@@ -212,17 +212,17 @@
 	<!-- Source mode notice -->
 	{#if editorMode !== 'visual'}
 		<div class="notice source-mode-notice">
-			{$t('review.sourceModeLimitHint')}
+			{$t('review.source_mode_limit_hint')}
 		</div>
 	{/if}
 
 	<!-- Not git-bound -->
 	{#if !kb?.git}
 		<div class="empty-state">
-			<p>{$t('review.notGitBound')}</p>
-			<p class="hint">{$t('review.notGitBoundHint')}</p>
+			<p>{$t('review.not_git_bound')}</p>
+			<p class="hint">{$t('review.not_git_bound_hint')}</p>
 			{#if onOpenGitBind}
-				<button class="bind-btn" onclick={onOpenGitBind}>{$t('review.bindGitBtn')}</button>
+				<button class="bind-btn" onclick={onOpenGitBind}>{$t('review.bind_git_btn')}</button>
 			{/if}
 		</div>
 
@@ -233,8 +233,8 @@
 	<!-- No reviews -->
 	{:else if reviews.length === 0}
 		<div class="empty-state">
-			<p>{$t('review.noReviews')}</p>
-			<p class="hint">{$t('review.noReviewsHint')}</p>
+			<p>{$t('review.no_reviews')}</p>
+			<p class="hint">{$t('review.no_reviews_hint')}</p>
 		</div>
 
 	<!-- Review list -->
@@ -288,7 +288,7 @@
 					onclick={() => { showClosed = !showClosed; }}
 				>
 					{showClosed ? '▼' : '▶'}
-					{$t('review.resolvedCount')} ({closedReviews.length})
+					{$t('review.resolved_count')} ({closedReviews.length})
 				</button>
 				{#if showClosed}
 					{#each closedReviews as review (review.id)}
@@ -319,25 +319,25 @@
 			class="disclaimer-card"
 			role="dialog"
 			aria-modal="true"
-			aria-label={$t('review.aiDisclaimerTitle')}
+			aria-label={$t('review.ai_disclaimer_title')}
 			onclick={(e) => e.stopPropagation()}
 			onkeydown={(e) => e.stopPropagation()}
 		>
-			<h3>⚠ {$t('review.aiDisclaimerTitle')}</h3>
-			<p>{$t('review.aiDisclaimerBody')}</p>
+			<h3>⚠ {$t('review.ai_disclaimer_title')}</h3>
+			<p>{$t('review.ai_disclaimer_body')}</p>
 			<p class="provider-line">{activeProviderLabel}</p>
-			<p class="muted">{$t('review.aiDisclaimerBodyDetails')}</p>
-			<p class="muted small">{$t('review.aiDisclaimerLocalHint')}</p>
+			<p class="muted">{$t('review.ai_disclaimer_body_details')}</p>
+			<p class="muted small">{$t('review.ai_disclaimer_local_hint')}</p>
 			<label class="dont-ask">
 				<input type="checkbox" bind:checked={dontAskAgain} />
-				<span>{$t('review.aiDisclaimerDontAsk')}</span>
+				<span>{$t('review.ai_disclaimer_dont_ask')}</span>
 			</label>
 			<div class="disclaimer-actions">
 				<button class="ghost-btn" onclick={dismissDisclaimer}>
 					{$t('common.cancel')}
 				</button>
 				<button class="primary-btn" onclick={confirmDisclaimer}>
-					{$t('review.aiDisclaimerConfirm')}
+					{$t('review.ai_disclaimer_confirm')}
 				</button>
 			</div>
 		</div>

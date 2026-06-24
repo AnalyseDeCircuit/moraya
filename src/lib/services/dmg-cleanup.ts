@@ -70,12 +70,12 @@ export async function maybePromptStaleDmgCleanup(): Promise<void> {
     .join('\n');
 
   const proceed = await ask(
-    `${t('staleDmg.body')}\n\n${list}`,
+    `${t('stale_dmg.body')}\n\n${list}`,
     {
-      title: t('staleDmg.title'),
+      title: t('stale_dmg.title'),
       kind: 'info',
-      okLabel: t('staleDmg.ejectAll'),
-      cancelLabel: t('staleDmg.skip'),
+      okLabel: t('stale_dmg.eject_all'),
+      cancelLabel: t('stale_dmg.skip'),
     },
   );
 
@@ -99,8 +99,8 @@ export async function maybePromptStaleDmgCleanup(): Promise<void> {
 
   if (failures.length > 0) {
     const lines = failures.map(f => `  • ${f.path}\n    ${f.reason}`).join('\n');
-    await message(`${t('staleDmg.partialFailure')}\n\n${lines}`, {
-      title: t('staleDmg.title'),
+    await message(`${t('stale_dmg.partial_failure')}\n\n${lines}`, {
+      title: t('stale_dmg.title'),
       kind: 'warning',
     });
     // Don't store dismissal — we want to retry next launch.

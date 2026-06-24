@@ -865,7 +865,7 @@ ${tr('welcome.tip')}
     mcpMenuMapping = serversWithTools;
 
     const menuServers = serversWithTools.map(s => ({ name: s.serverName, tools: s.tools }));
-    invoke('update_mcp_menu', { servers: menuServers, noToolsLabel: $t('menu.noMCPTools') }).catch(() => {});
+    invoke('update_mcp_menu', { servers: menuServers, noToolsLabel: $t('menu.no_mcptools') }).catch(() => {});
   });
 
   onDestroy(() => {
@@ -1069,7 +1069,7 @@ ${tr('welcome.tip')}
     } else if (result.kind === 'disconnected') {
       showToast($t('shortcuts.mcp.toggled.off', { name: result.server.name }), 'success');
     } else if (result.kind === 'not-found') {
-      showToast($t('shortcuts.mcp.serverGone'), 'error');
+      showToast($t('shortcuts.mcp.server_gone'), 'error');
     } else {
       showToast(result.reason, 'error');
     }
@@ -1381,14 +1381,14 @@ ${tr('welcome.tip')}
     if (mod && event.shiftKey && (event.key === 'R' || event.key === 'r')) {
       event.preventDefault();
       if (editorMode !== 'visual' && editorMode !== 'split') {
-        showToast($t('review.sourceModeLimitHint'), 'error');
+        showToast($t('review.source_mode_limit_hint'), 'error');
         return;
       }
       const view = morayaEditor?.view;
       if (!view) return;
       const { from, to } = view.state.selection;
       if (from === to) {
-        showToast($t('review.selectTextFirst'), 'error');
+        showToast($t('review.select_text_first'), 'error');
         return;
       }
       const selText = view.state.doc.textBetween(from, to, ' ');
@@ -1526,12 +1526,12 @@ ${tr('welcome.tip')}
 
     // New unsaved document with content — ask user via native dialog
     const shouldSave = await ask(
-      $t('editor.unsavedNewDocMsg'),
+      $t('editor.unsaved_new_doc_msg'),
       {
-        title: $t('editor.unsavedTitle'),
+        title: $t('editor.unsaved_title'),
         kind: 'warning',
-        okLabel: $t('editor.saveFirst'),
-        cancelLabel: $t('editor.discardChanges'),
+        okLabel: $t('editor.save_first'),
+        cancelLabel: $t('editor.discard_changes'),
       }
     );
 
@@ -1790,9 +1790,9 @@ ${tr('welcome.tip')}
   async function handleCloseTab(tab: import('$lib/stores/tabs-store').TabItem) {
     if (tab.isDirty) {
       const shouldSave = await ask(
-        $t('tabs.unsavedMsg', { fileName: tab.fileName }),
+        $t('tabs.unsaved_msg', { fileName: tab.fileName }),
         {
-          title: $t('tabs.unsavedTitle'),
+          title: $t('tabs.unsaved_title'),
           kind: 'warning',
           okLabel: $t('tabs.save'),
           cancelLabel: $t('tabs.discard'),
@@ -1984,12 +1984,12 @@ ${tr('welcome.tip')}
       } else {
         // Dirty tab: conflict dialog
         const keepLocal = await ask(
-          $t('tabs.externalChangeMsg', { fileName: tab.fileName }),
+          $t('tabs.external_change_msg', { fileName: tab.fileName }),
           {
-            title: $t('tabs.externalChangeTitle'),
+            title: $t('tabs.external_change_title'),
             kind: 'warning',
-            okLabel: $t('tabs.keepLocal'),
-            cancelLabel: $t('tabs.loadFromDisk'),
+            okLabel: $t('tabs.keep_local'),
+            cancelLabel: $t('tabs.load_from_disk'),
           }
         );
         if (keepLocal) {
@@ -2123,7 +2123,7 @@ ${tr('welcome.tip')}
 
   async function handleAddReview(selectedText: string, contextBefore: string, contextAfter: string) {
     if (!selectedText) {
-      showToast($t('review.selectTextFirst'), 'error');
+      showToast($t('review.select_text_first'), 'error');
       return;
     }
     const editorState = editorStore.getState();
@@ -2132,7 +2132,7 @@ ${tr('welcome.tip')}
 
     const kb = filesStore.getActiveKnowledgeBase?.();
     if (!kb?.git) {
-      showToast($t('review.notGitBound'), 'error');
+      showToast($t('review.not_git_bound'), 'error');
       return;
     }
 
@@ -2343,7 +2343,7 @@ ${tr('welcome.tip')}
       // Picora's listing endpoint may omit `playbackUrl`; fetch detail if so.
       const r = await resolveMediaUrl(items[0]);
       if (!r.url) {
-        const msg = r.error ? `${$t('cloudPicker.urlMissing')} (${r.error})` : $t('cloudPicker.urlMissing');
+        const msg = r.error ? `${$t('cloud_picker.url_missing')} (${r.error})` : $t('cloud_picker.url_missing');
         showToast(msg, 'error');
         return;
       }
@@ -2351,7 +2351,7 @@ ${tr('welcome.tip')}
     } else if (items[0].type === 'video') {
       const r = await resolveMediaUrl(items[0]);
       if (!r.url) {
-        const msg = r.error ? `${$t('cloudPicker.urlMissing')} (${r.error})` : $t('cloudPicker.urlMissing');
+        const msg = r.error ? `${$t('cloud_picker.url_missing')} (${r.error})` : $t('cloud_picker.url_missing');
         showToast(msg, 'error');
         return;
       }
@@ -3054,7 +3054,7 @@ ${tr('welcome.tip')}
             );
             settingsStore.update({ imageHostTargets: JSON.parse(JSON.stringify(updated)) });
             showToast(
-              $t('imageHost.picoraKeyMigratedToast', { count: String(report.migrated) }),
+              $t('image_host.picora_key_migrated_toast', { count: String(report.migrated) }),
               'success',
             );
           }
@@ -3315,7 +3315,7 @@ ${tr('welcome.tip')}
         if (!tool) return;
 
         showAIPanel = true;
-        const message = $t('ai.prompts.mcpToolPrompt', { toolName: tool.name, serverName: server.serverName });
+        const message = $t('ai.prompts.mcp_tool_prompt', { toolName: tool.name, serverName: server.serverName });
         try {
           await sendChatMessage(message, getCurrentContent());
         } catch (e) {
@@ -3616,7 +3616,7 @@ ${tr('welcome.tip')}
       {#await import('$lib/components/ReviewPanel.svelte') then { default: ReviewPanelComp }}
         <div class="review-panel-outer">
           <div class="review-panel-header">
-            <span class="review-panel-title">{$t('review.panelTitle')}</span>
+            <span class="review-panel-title">{$t('review.panel_title')}</span>
             <button class="review-panel-close" onclick={() => { showReviewPanel = false; }} aria-label="Close">✕</button>
           </div>
           <ReviewPanelComp
@@ -3636,7 +3636,7 @@ ${tr('welcome.tip')}
       {#await import('$lib/components/HistoryPanel.svelte') then { default: HistoryPanelComp }}
         <div class="review-panel-outer">
           <div class="review-panel-header">
-            <span class="review-panel-title">{$t('history.tabLabel')}</span>
+            <span class="review-panel-title">{$t('history.tab_label')}</span>
             <button class="review-panel-close" onclick={() => { showHistoryPanel = false; }} aria-label="Close">✕</button>
           </div>
           <HistoryPanelComp
@@ -3647,7 +3647,7 @@ ${tr('welcome.tip')}
             onOpenDiff={(leftHash, rightHash) => {
               // v0.32.1 §F2: dirty confirmation before entering DiffView
               if (editorStore.getState().isDirty) {
-                const proceed = confirm($t('history.dirtyConfirm'));
+                const proceed = confirm($t('history.dirty_confirm'));
                 if (!proceed) return;
               }
               // v0.32.1 §F2: Visual → Source switch (DiffView is line-based)
@@ -3840,7 +3840,7 @@ ${tr('welcome.tip')}
 
 {#if publishProgress.length > 0}
   <div class="publish-progress">
-    <div class="progress-title">{$t('publish.progressTitle')}</div>
+    <div class="progress-title">{$t('publish.progress_title')}</div>
     {#each publishProgress as item}
       <div class="progress-item" class:done={item.status === 'done'} class:error={item.status === 'error'}>
         <span class="progress-icon">
@@ -3855,13 +3855,13 @@ ${tr('welcome.tip')}
         <span class="progress-name">{item.targetName}</span>
         <span class="progress-status">
           {#if item.status === 'publishing'}
-            {$t('publish.progressPublishing')}
+            {$t('publish.progress_publishing')}
           {:else if item.status === 'rss'}
-            {$t('publish.progressRss')}
+            {$t('publish.progress_rss')}
           {:else if item.status === 'done'}
-            {$t('publish.progressDone')}
+            {$t('publish.progress_done')}
           {:else}
-            {item.message || $t('publish.progressFailed')}
+            {item.message || $t('publish.progress_failed')}
           {/if}
         </span>
       </div>

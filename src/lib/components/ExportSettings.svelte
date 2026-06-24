@@ -68,7 +68,7 @@
        title above the card. -->
   <div class="row">
     <label class="field">
-      <span class="label">{$t('settings.export.paperSize')}</span>
+      <span class="label">{$t('settings.export.paper_size')}</span>
       <select
         value={settings.pageSize}
         onchange={(e) => persist({ pageSize: (e.currentTarget as HTMLSelectElement).value as ExportPaperSize })}
@@ -89,7 +89,7 @@
             checked={settings.orientation === 'portrait'}
             onchange={() => persist({ orientation: 'portrait' as ExportOrientation })}
           />
-          {$t('settings.export.orientationPortrait')}
+          {$t('settings.export.orientation_portrait')}
         </label>
         <label>
           <input
@@ -98,7 +98,7 @@
             checked={settings.orientation === 'landscape'}
             onchange={() => persist({ orientation: 'landscape' as ExportOrientation })}
           />
-          {$t('settings.export.orientationLandscape')}
+          {$t('settings.export.orientation_landscape')}
         </label>
       </div>
     </div>
@@ -108,7 +108,7 @@
     <legend>{$t('settings.export.margins')}</legend>
     <div class="margins-row">
       <label class="field-inline">
-        <span>{$t('settings.export.marginsTop')}</span>
+        <span>{$t('settings.export.margins_top')}</span>
         <input
           type="number"
           min="0"
@@ -120,7 +120,7 @@
         <span class="unit">mm</span>
       </label>
       <label class="field-inline">
-        <span>{$t('settings.export.marginsRight')}</span>
+        <span>{$t('settings.export.margins_right')}</span>
         <input
           type="number" min="0" max="50" step="1"
           value={settings.margins.right}
@@ -129,7 +129,7 @@
         <span class="unit">mm</span>
       </label>
       <label class="field-inline">
-        <span>{$t('settings.export.marginsBottom')}</span>
+        <span>{$t('settings.export.margins_bottom')}</span>
         <input
           type="number" min="0" max="50" step="1"
           value={settings.margins.bottom}
@@ -138,7 +138,7 @@
         <span class="unit">mm</span>
       </label>
       <label class="field-inline">
-        <span>{$t('settings.export.marginsLeft')}</span>
+        <span>{$t('settings.export.margins_left')}</span>
         <input
           type="number" min="0" max="50" step="1"
           value={settings.margins.left}
@@ -150,14 +150,14 @@
   </fieldset>
 
   <fieldset class="group">
-    <legend>{$t('settings.export.headerFooter')}</legend>
+    <legend>{$t('settings.export.header_footer')}</legend>
     <label class="check">
       <input
         type="checkbox"
         checked={settings.headerEnabled}
         onchange={(e) => persist({ headerEnabled: (e.currentTarget as HTMLInputElement).checked })}
       />
-      <span>{$t('settings.export.headerEnabled')}</span>
+      <span>{$t('settings.export.header_enabled')}</span>
     </label>
     <input
       type="text"
@@ -173,7 +173,7 @@
         checked={settings.footerEnabled}
         onchange={(e) => persist({ footerEnabled: (e.currentTarget as HTMLInputElement).checked })}
       />
-      <span>{$t('settings.export.footerEnabled')}</span>
+      <span>{$t('settings.export.footer_enabled')}</span>
     </label>
     <input
       type="text"
@@ -183,22 +183,22 @@
       onchange={(e) => persist({ footerTemplate: (e.currentTarget as HTMLInputElement).value })}
     />
 
-    <p class="hint">{$t('settings.export.templateHint')}</p>
+    <p class="hint">{$t('settings.export.template_hint')}</p>
   </fieldset>
 
   <fieldset class="group">
     <legend>{$t('settings.export.typography')}</legend>
     <label class="field">
-      <span class="label">{$t('settings.export.fontFamily')}</span>
+      <span class="label">{$t('settings.export.font_family')}</span>
       <input
         type="text"
-        placeholder={$t('settings.export.fontFamilyPlaceholder')}
+        placeholder={$t('settings.export.font_family_placeholder')}
         value={settings.fontFamily}
         onchange={(e) => persist({ fontFamily: (e.currentTarget as HTMLInputElement).value })}
       />
     </label>
     <label class="field">
-      <span class="label">{$t('settings.export.fontSize')}</span>
+      <span class="label">{$t('settings.export.font_size')}</span>
       <select
         value={settings.fontSize}
         onchange={(e) => persist({ fontSize: Number((e.currentTarget as HTMLSelectElement).value) })}
@@ -218,7 +218,7 @@
         checked={settings.enableHighlight}
         onchange={(e) => persist({ enableHighlight: (e.currentTarget as HTMLInputElement).checked })}
       />
-      <span>{$t('settings.export.enableHighlight')}</span>
+      <span>{$t('settings.export.enable_highlight')}</span>
     </label>
     <label class="check">
       <input
@@ -226,7 +226,7 @@
         checked={settings.enableMath}
         onchange={(e) => persist({ enableMath: (e.currentTarget as HTMLInputElement).checked })}
       />
-      <span>{$t('settings.export.enableMath')}</span>
+      <span>{$t('settings.export.enable_math')}</span>
     </label>
     <label class="check">
       <input
@@ -234,7 +234,7 @@
         checked={settings.enableMermaid}
         onchange={(e) => persist({ enableMermaid: (e.currentTarget as HTMLInputElement).checked })}
       />
-      <span>{$t('settings.export.enableMermaid')}</span>
+      <span>{$t('settings.export.enable_mermaid')}</span>
     </label>
   </fieldset>
 
@@ -246,9 +246,9 @@
         checked={settings.autoFallbackOnFailure}
         onchange={(e) => persist({ autoFallbackOnFailure: (e.currentTarget as HTMLInputElement).checked })}
       />
-      <span>{$t('settings.export.autoFallback')}</span>
+      <span>{$t('settings.export.auto_fallback')}</span>
     </label>
-    <p class="hint">{$t('settings.export.autoFallbackHint')}</p>
+    <p class="hint">{$t('settings.export.auto_fallback_hint')}</p>
   </fieldset>
 </div>
 

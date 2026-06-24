@@ -305,20 +305,26 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 
 ## Development Roadmap
 
+Moraya ships as a coordinated multi-product suite — each lives in its own repo and follows its own version trajectory. The tables below are organized by **product line** so you can find the version status that applies to you. Legend: ✅ shipped · 🚧 in progress · 📋 planned. Cross-product features (e.g. Picora integration, unified i18n) appear in every relevant table tagged `[cross-product]`.
+
+> **Currently in this repo (Desktop / pc)**: v0.41.8
+
+### Desktop — `moraya` (this repo)
+
 | Version | Feature | Status |
 | --- | --- | --- |
-| v0.1.0-v0.3.0 | Core Editor, AI Integration, MCP Ecosystem | ✅ |
+| v0.1.0 – v0.3.0 | Core Editor, AI Integration, MCP Ecosystem | ✅ |
 | v0.4.0 | MCP Container & Dynamic Services | ✅ |
 | v0.5.0 | Publish Workflow (SEO, AIGC, GitHub/RSS) | ✅ |
 | v0.6.0 | Security Hardening (Keychain, CSP, Path validation) | ✅ |
-| v0.7.0-v0.8.0 | Image Scaling, Image Hosting (5 providers) | ✅ |
-| v0.9.0-v0.10.0 | AI Prompt Templates, Editor UX Enhancement | ✅ |
+| v0.7.0 – v0.8.0 | Image Scaling, Image Hosting (5 providers) | ✅ |
+| v0.9.0 – v0.10.0 | AI Prompt Templates, Editor UX Enhancement | ✅ |
 | v0.11.0 | Multi-Tab Editing | ✅ |
 | v0.12.0 | Plugin System | ✅ |
 | v0.13.0 | Mermaid Diagram Support | ✅ |
 | v0.14.0 | AI Model & Image Hosting Enhancement | ✅ |
 | v0.15.0 | AI Voice Transcription | ✅ |
-| v0.16.0-v0.17.0 | Search & Replace, ProseMirror Performance | ✅ |
+| v0.16.0 – v0.17.0 | Search & Replace, ProseMirror Performance | ✅ |
 | v0.18.0 | Document Outline, Table Keys, Freeze Fix | ✅ |
 | v0.19.0 | Rendering Pipeline v2 (Doc Cache, hljs Cache, Async Parse) | ✅ |
 | v0.20.0 | Multi-Language Support (12 locales, RTL) | ✅ |
@@ -339,14 +345,26 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 | v0.36.0 | Cloud Resource Insert — pick Picora image/audio/video from menu & right-click | ✅ |
 | v0.37.0 | Picora Settings Tab — unified account/sync/browse panel; image-host entry de-emphasized | ✅ |
 | v0.39.0 | Apple code signing & notarization — signed/notarized macOS DMG, no xattr workaround | ✅ |
-| v0.40.0 | Shared markdown core extraction (@moraya/core public on npmjs.com, npm-only boundary) | ✅ |
-| v0.41.0 | Moraya Web foundation — editor base + Connect tier (Picora storage adapter) | ✅ |
+| v0.41.0 – v0.41.8 | **Desktop point-release series** — PDF export per-page fix (v0.41.0); AI chat Enter-key behavior toggle + Export merged into General settings (v0.41.4); settings UI redesign (`.gx-*` design system, segmented control for sub-tabs), native menu accelerator end-to-end sync (Tauri `set_accelerator`), MCP dynamic-shortcut catalog (server toggle + tool prompt), KB sync trash UX, Picora OAuth Device Flow Rust client (Phase A), Picora credentials Phase 2 resolver (v0.41.5); editor-mode dual-axis shortcuts + multi-file cold-start fix (v0.41.8) | ✅ |
+| v0.60.0 | Native PDF export — macOS WKWebView createPDF (vector, selectable text, CSS `@page` pagination, full Export settings tab); Win/Linux scaffold falls back to canvas | ✅ |
+| v0.60.1 | Win/Linux native PDF — platform-agnostic groundwork (viewport/mm helpers, child-mode skeleton, Channel-piped subprocess stderr); WebView2 `PrintToPdfStreamAsync` + WebKitGTK `print_to_stream` bindings pending real-hardware validation | 🚧 |
+| v0.66.0 | **Picora Sync** — Phase A ✓ (OAuth Device Flow Rust client + 5 Tauri commands + frontend service + 20 tests); Phase B-E (UI, scheduler, sidecar) blocked on Picora backend availability `[cross-product]` | 🚧 |
+| v0.68.0 | KB sync trash UX — toast on remote deletions, recycle bin panel with restore, 7-day auto purge, 3 new Rust commands | ✅ |
+| v0.69.0 | Picora credentials — Phase 1 ✓ (Keychain migration, `picora-api-key:{id}` namespace, 9 call sites refactored) + Phase 2 lite ✓ (`PicoraAuthRef` field + OAuth-branch resolver in `credentials.ts`); Rust 11-command AuthRef refactor still deferred | ✅ |
+| v0.96.0 | Unified i18n consumer — pc side of the shared `@moraya/core/i18n` rollout (1,716 callsites renamed to canonical snake_case via AST-aware codemod, 12 unified locale bundles) `[cross-product]` | ✅ |
+| v1.0.0 | Desktop GA — final polish round, release-engineering checklists, full long-form user manual | 📋 |
+
+### Web — [`moraya-web`](https://github.com/zouwei/moraya-web)
+
+| Version | Feature | Status |
+| --- | --- | --- |
+| v0.41.0 | **Moraya Web foundation** — editor base + Connect tier (Picora storage adapter) | ✅ |
 | v0.42.0 | BYOC infrastructure + 5 storage adapters (Aliyun OSS, AWS S3, Cloudflare R2, Tencent COS, Backblaze B2) | ✅ |
 | v0.43.0 | E2E client-side encryption + Cloud KMS dual mode (AWS / Aliyun / Tencent KMS) | ✅ |
 | v0.44.0 | Subscription & billing — Stripe + Alipay, 4-tier plans, usage metering | ✅ |
 | v0.45.0 | Cross-KB RAG (P0 AI 1) — client-side embedding, IndexedDB vector store, server-side optional | ✅ |
 | v0.46.0 | AI Workflow Orchestration (cron/note/manual/webhook triggers, 7 node types, client+server engines, 5 built-in templates, visual editor) | ✅ |
-| v0.47.0 | Long-term memory (P0 AI 3) — Memory KB, 3-type schema, decay, /memorize & /forget, auto-extract, injection, conflict detection, privacy, sync, health check, workflow memory nodes, settings UI | ✅ |
+| v0.47.0 | Long-term memory (P0 AI 3) — Memory KB, 3-type schema, decay, `/memorize` & `/forget`, auto-extract, injection, conflict detection, privacy, sync, health check, workflow memory nodes, settings UI | ✅ |
 | v0.48.0 | Web multi-tab workspace — TabBar, drag reorder, per-tab state, URL routing, Cmd+1-9/W/T, cross-tab mutex lock, sessionStorage persistence, mobile dropdown, Connect 1-tab gate | ✅ |
 | v0.49.0 | Web outline + find/replace + file tree | ✅ |
 | v0.50.0 | Web theming + media paste / drag-drop | ✅ |
@@ -359,19 +377,34 @@ All API keys are stored exclusively in your OS Keychain — never in plaintext. 
 | v0.57.0 | Agent over Docs (P1 AI 3) — ReAct/Plan-Execute, 5 tool types, multi-step task execution | ✅ |
 | v0.58.0 | Enterprise — SCIM, HSM, private deployment, multi-org, compliance archive | ✅ |
 | v0.59.0 | Performance + PWA polish — bundle optimization, virtual scroll, offline shell | ✅ |
-| v0.60.0 | Native PDF export — macOS WKWebView createPDF (vector, selectable text, CSS @page pagination, statusbar progress, full Export settings tab); Windows/Linux subprocess scaffold auto-falls back to canvas, native printToPdf deferred to v0.60.1 | ✅ |
-| v0.60.1 | Windows/Linux native PDF — platform-agnostic groundwork landed (shared viewport/mm conversion helpers, platform-dispatch child-mode skeleton, subprocess stderr surfaced via Channel); WebView2 PrintToPdfStreamAsync + WebKitGTK print_to_stream bindings still need Win/Linux real-hardware validation | 🚧 |
-| v0.61.0 | Moraya Mobile — Capacitor foundation (iOS 15+/Android 7+ shell, 13 plugins, sync pipeline from moraya-web build) | ✅ |
+| v0.67.0 | Push notification device registration — wire NotificationCenter to Picora `/api/v1/devices*`, settings/notifications route, device list with revoke `[cross-product]` | 📋 |
+| v0.96.0 | Unified i18n consumer — web side of the shared `@moraya/core/i18n` rollout (136 callsites renamed, web's 2 locales merged into the 12-locale unified bundles) `[cross-product]` | ✅ |
+| v1.0.0 | **Moraya Web GA** — bug bash, full docs, case studies, launch day coordination | 📋 |
+
+### Mobile — [`moraya-mobile`](https://github.com/zouwei/moraya-mobile)
+
+| Version | Feature | Status |
+| --- | --- | --- |
+| v0.7.0 | iPadOS adaptation (early mobile shell, pre-Capacitor) | ✅ |
+| v0.61.0 | **Capacitor foundation** — iOS 15+/Android 7+ shell, 13 plugins, sync pipeline from `moraya-web` build | ✅ |
 | v0.62.0 | Mobile responsive UX — drawer nav, bottom sheet, settings full-screen sheet, split disable, 44pt touch targets, virtual keyboard handling | ✅ |
 | v0.63.0 | Mobile native integrations — Push notifications (APNs/FCM), Camera/OCR (Vision/ML Kit), Face ID/Touch ID, Voice recording | ✅ |
-| v0.64.0 | Mobile iOS App Store launch — TestFlight, privacy manifest, Apple review, China region compliance | ✅ |
-| v0.65.0 | Mobile Android Play Store + GA release — internal/beta/production tracks, Sentry monitoring | ✅ |
-| v0.66.0 | Picora Sync — Phase A ✓ (OAuth Device Flow Rust client + 5 Tauri commands + frontend service + 20 tests); Phase B-E (UI, scheduler, sidecar) blocked on Picora backend availability | 🚧 |
-| v0.67.0 | Push notification device registration — wire NotificationCenter to Picora /api/v1/devices*, settings/notifications route, device list with revoke | 📋 |
-| v0.68.0 | KB sync trash UX — toast on remote deletions, recycle bin panel with restore, 7-day auto purge, 3 new Rust commands | ✅ |
-| v0.69.0 | Picora credentials — Phase 1 ✓ (Keychain migration, `picora-api-key:{id}` namespace, 9 call sites refactored) + Phase 2 lite ✓ (PicoraAuthRef field + OAuth-branch resolver in credentials.ts, 7 new tests, 0 breaking changes); Rust 11-command AuthRef refactor still deferred | ✅ |
-| v0.93.0 | Mobile Picora Photos Sync — Phase A ✓ (Capacitor plugin TS surface + web fallback + 11 tests at `moraya-mobile/native-plugins/moraya-photos-scanner`); Phase B (iOS Swift) / C (Android Kotlin) pending | 🚧 |
-| v1.0.0 | Moraya Web GA — bug bash, full docs, case studies, launch day coordination | 📋 |
+| v0.64.0 | iOS App Store launch — TestFlight, privacy manifest, Apple review, China region compliance | ✅ |
+| v0.65.0 | Android Play Store + GA release — internal/beta/production tracks, Sentry monitoring | ✅ |
+| v0.93.0 | **Picora Photos Sync** — Phase A ✓ (Capacitor plugin TS surface + web fallback + 11 tests at `native-plugins/moraya-photos-scanner`); Phase B (iOS Swift) / Phase C (Android Kotlin) pending `[cross-product]` | 🚧 |
+
+### Shared Markdown Core — [`@moraya/core`](https://www.npmjs.com/package/@moraya/core)
+
+| Version | Feature | Status |
+| --- | --- | --- |
+| v0.40.0 | **Shared markdown core extraction** — `@moraya/core` public on npmjs.com (schema / markdown serializer / ProseMirror plugins / doc-cache / commands); npm-only consumption boundary enforced by CI grep gate | ✅ |
+| v0.96.0 | **Unified i18n at `@moraya/core/i18n`** — engine extracted (framework-agnostic, dynamic locale loading); 12 PC locales + Web's 2 merged into 12 unified bundles (3,210 keys each); CI gates for key-coverage + boundary isolation `[cross-product]` | ✅ |
+
+### Homebrew Distribution
+
+| Version | Feature | Status |
+| --- | --- | --- |
+| v0.17.0 | Homebrew Cask formula — `brew install --cask moraya`, auto-update via livecheck, signed/notarized DMG channel | ✅ |
 
 ## ⭐ Star Growth trend (updated in real time)
 

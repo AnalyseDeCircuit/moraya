@@ -312,7 +312,7 @@
         class="palette-input"
         type="text"
         bind:value={query}
-        placeholder={$t('commandPalette.placeholder')}
+        placeholder={$t('command_palette.placeholder')}
         onkeydown={handleKeydown}
       />
     </div>
@@ -323,7 +323,7 @@
           {#if semanticLoading}
             {$t('kb.indexing')}
           {:else}
-            {$t('commandPalette.noResults')}
+            {$t('command_palette.no_results')}
           {/if}
         </div>
       {:else}
@@ -368,9 +368,9 @@
     </div>
 
     <div class="palette-footer">
-      <span class="hint">{$t('commandPalette.files')}</span>
-      <span class="hint"><kbd>{'>'}</kbd> {$t('commandPalette.commands')}</span>
-      <span class="hint"><kbd>#</kbd> {$t('commandPalette.semanticSearch')}</span>
+      <span class="hint">{$t('command_palette.files')}</span>
+      <span class="hint"><kbd>{'>'}</kbd> {$t('command_palette.commands')}</span>
+      <span class="hint"><kbd>#</kbd> {$t('command_palette.semantic_search')}</span>
     </div>
   </div>
 </div>

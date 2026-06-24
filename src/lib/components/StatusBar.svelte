@@ -51,7 +51,7 @@
   const aiShortcutHint = isMacOS || isIPadOS ? '⇧⌘I' : 'Ctrl+Shift+I';
 
   function getAITooltip(): string {
-    const label = $t('statusbar.aiTooltip');
+    const label = $t('statusbar.ai_tooltip');
     return `${label} (${aiShortcutHint})`;
   }
 
@@ -132,18 +132,18 @@
     {#if searchActive}
       <span class="status-item search-status" class:search-error={!!searchRegexError}>
         {#if searchRegexError}
-          {$t('search.regexError')}
+          {$t('search.regex_error')}
         {:else if searchMatchCount > 0}
-          {$t('search.matchStatus', { current: String(searchCurrentMatch), total: String(searchMatchCount) })}
+          {$t('search.match_status', { current: String(searchCurrentMatch), total: String(searchMatchCount) })}
         {:else}
-          {$t('search.noResults')}
+          {$t('search.no_results')}
         {/if}
       </span>
     {/if}
     {#if indexingPhase === 'error'}
       <span class="status-item indexing-error">Embedding error</span>
     {:else if indexingPhase === 'done'}
-      <span class="status-item indexing-done">✓ {$t('kb.indexComplete')}</span>
+      <span class="status-item indexing-done">✓ {$t('kb.index_complete')}</span>
     {:else if indexingPhase}
       <span class="status-item indexing-status">
         <span class="indexing-spinner"></span>
@@ -245,7 +245,7 @@
         onclick={() => { showSyncPopover = !showSyncPopover; }}
         title={activeKbSyncState.status === 'error' && activeKbSyncState.lastError
           ? activeKbSyncState.lastError
-          : $t('kbSync.statusbar.tooltip')}
+          : $t('kb_sync.statusbar.tooltip')}
       >
         <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path fill-rule="evenodd" d="M8 8m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0zM8 8m-4.5 0a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0zM8 8m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0z"/></svg>{#if activeKbSyncState.status === 'conflict'} ⚠{activeKbSyncState.conflictCount}{:else if activeKbSyncState.status === 'error'} ✗{#if activeKbSyncState.lastError} {activeKbSyncState.lastError.length > 35 ? activeKbSyncState.lastError.slice(0, 35) + '…' : activeKbSyncState.lastError}{/if}{:else if activeKbSyncState.status === 'idle'} ✓{/if}
       </span>
@@ -254,7 +254,7 @@
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div class="kb-sync-popover" onclick={() => { showSyncPopover = false; }}>
           <div class="kb-sync-popover-inner" onclick={(e) => e.stopPropagation()}>
-            <span class="kb-sync-popover-label">{$t('kbSync.statusbar.errorLabel')}</span>
+            <span class="kb-sync-popover-label">{$t('kb_sync.statusbar.error_label')}</span>
             <span class="kb-sync-popover-msg">{activeKbSyncState.lastError}</span>
             <button class="kb-sync-popover-close" onclick={() => { showSyncPopover = false; }}>&times;</button>
           </div>
@@ -287,7 +287,7 @@
     {#if updateAvailable && onShowUpdateDialog}
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
-      <span class="update-indicator" onclick={onShowUpdateDialog} title={$t('update.newVersionAvailable')}>
+      <span class="update-indicator" onclick={onShowUpdateDialog} title={$t('update.new_version_available')}>
         &#x2B06;&#xFE0F;
       </span>
     {/if}

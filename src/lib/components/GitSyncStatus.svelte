@@ -33,13 +33,13 @@
     {:else if syncPhase === 'committing'}
       <span class="git-spinner-sm"></span> {$t('git.committing')}
     {:else if syncPhase === 'error'}
-      <span class="git-icon">&#9888;</span> {$t('git.syncError')}
+      <span class="git-icon">&#9888;</span> {$t('git.sync_error')}
     {:else if syncPhase === 'no-git'}
-      ({$t('git.notInstalled')})
+      ({$t('git.not_installed')})
     {/if}
 
     {#if syncPhase !== 'syncing' && syncPhase !== 'committing' && syncPhase !== 'no-git'}
-      <button class="git-sync-btn" onclick={onSync} title={$t('git.syncNow')}>
+      <button class="git-sync-btn" onclick={onSync} title={$t('git.sync_now')}>
         &#x21BB;
       </button>
     {/if}

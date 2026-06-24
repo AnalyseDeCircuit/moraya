@@ -199,28 +199,28 @@
 		anonymize: boolean;
 	}): string {
 		const lines: string[] = [];
-		lines.push(`# ${$t('audit.reportTitle', { filename: fileName })}`);
+		lines.push(`# ${$t('audit.report_title', { filename: fileName })}`);
 		lines.push('');
 		const now = new Date().toISOString();
-		lines.push(`${$t('audit.generatedAt')}: ${now}`);
-		lines.push(`${$t('audit.knowledgeBase')}: ${kb?.path ?? ''}`);
+		lines.push(`${$t('audit.generated_at')}: ${now}`);
+		lines.push(`${$t('audit.knowledge_base')}: ${kb?.path ?? ''}`);
 		if (kb?.git) {
 			lines.push(
-				`${$t('audit.gitRepo')}: ${kb.git.remoteUrl} (${$t('audit.branch')} ${kb.git.branch})`,
+				`${$t('audit.git_repo')}: ${kb.git.remoteUrl} (${$t('audit.branch')} ${kb.git.branch})`,
 			);
 		} else {
-			lines.push(`${$t('audit.notGitBound')}`);
+			lines.push(`${$t('audit.not_git_bound')}`);
 		}
 		lines.push('');
 
 		// Commit history
-		lines.push(`## ${$t('audit.commitHistory')}`);
+		lines.push(`## ${$t('audit.commit_history')}`);
 		lines.push('');
 		if (commits.length === 0) {
-			lines.push($t('audit.notGitBound'));
+			lines.push($t('audit.not_git_bound'));
 		} else {
 			lines.push(
-				`| ${$t('audit.colTime')} | ${$t('audit.colAuthor')} | ${$t('audit.colSummary')} |`,
+				`| ${$t('audit.col_time')} | ${$t('audit.col_author')} | ${$t('audit.col_summary')} |`,
 			);
 			lines.push('|---|---|---|');
 			// Optional anonymization: build an alias map per author name
@@ -242,16 +242,16 @@
 			}
 			if (commits.length >= 50) {
 				lines.push('');
-				lines.push(`_${$t('audit.showingLastCommits', { count: '50' })}_`);
+				lines.push(`_${$t('audit.showing_last_commits', { count: '50' })}_`);
 			}
 		}
 		lines.push('');
 
 		// Review summary
-		lines.push(`## ${$t('audit.reviewSummary')}`);
+		lines.push(`## ${$t('audit.review_summary')}`);
 		lines.push('');
 		if (reviews.length === 0) {
-			lines.push($t('audit.noReviews'));
+			lines.push($t('audit.no_reviews'));
 		} else {
 			const resolved = reviews.filter((r) => r.status === 'resolved');
 			const wontfix = reviews.filter((r) => r.status === 'wontfix');
@@ -259,7 +259,7 @@
 				(r) => r.status === 'open' || r.status === 'unanchored',
 			);
 			lines.push(
-				$t('audit.summaryStats', {
+				$t('audit.summary_stats', {
 					total: String(reviews.length),
 					resolved: String(resolved.length),
 					wontfix: String(wontfix.length),
@@ -293,8 +293,8 @@
 					const text = (r.comments?.[0]?.text ?? '').replace(/\n/g, ' ');
 					const lineLabel =
 						lineNum > 0
-							? $t('audit.lineN', { n: String(lineNum) })
-							: $t('audit.unanchoredLabel');
+							? $t('audit.line_n', { n: String(lineNum) })
+							: $t('audit.unanchored_label');
 					if (resolvedSection && r.resolvedAt && r.resolvedBy) {
 						const note = $t(resolvedNoteKey, {
 							date: formatDate(r.resolvedAt),
@@ -309,19 +309,19 @@
 			};
 
 			sectionFor(
-				$t('audit.resolvedSection', { count: String(resolved.length) }),
+				$t('audit.resolved_section', { count: String(resolved.length) }),
 				resolved,
 				true,
 				'audit.resolvedNote',
 			);
 			sectionFor(
-				$t('audit.wontfixSection', { count: String(wontfix.length) }),
+				$t('audit.wontfix_section', { count: String(wontfix.length) }),
 				wontfix,
 				true,
 				'audit.wontfixNote',
 			);
 			sectionFor(
-				$t('audit.openSection', { count: String(open.length) }),
+				$t('audit.open_section', { count: String(open.length) }),
 				open,
 				false,
 				'',
@@ -405,7 +405,7 @@
 	<div class="toolbar">
 		{#if mode === 'snapshot'}
 			<button class="btn" onclick={backToList}>
-				{$t('history.backToList')}
+				{$t('history.back_to_list')}
 			</button>
 			<span class="title">
 				{$t('history.snapshot.label', { hash: snapshotCommit?.short_hash ?? '' })}
@@ -418,7 +418,7 @@
 			</span>
 			<button class="btn" disabled={!isGitBound || commits.length === 0 || exporting}
 				onclick={exportReport}>
-				📤 {$t('history.exportBtn')}
+				📤 {$t('history.export_btn')}
 			</button>
 		{/if}
 	</div>
@@ -442,11 +442,11 @@
 	{:else if !isGitBound}
 		<div class="empty-state">
 			<div class="empty-icon">📁</div>
-			<div class="empty-title">{$t('history.empty.noGit')}</div>
-			<div class="empty-hint">{$t('history.empty.noGitHint')}</div>
+			<div class="empty-title">{$t('history.empty.no_git')}</div>
+			<div class="empty-hint">{$t('history.empty.no_git_hint')}</div>
 			{#if onOpenGitBind}
 				<button class="btn primary" onclick={onOpenGitBind}>
-					{$t('history.empty.noGitAction')}
+					{$t('history.empty.no_git_action')}
 				</button>
 			{/if}
 		</div>
@@ -458,21 +458,21 @@
 			<div class="empty-title">{$t('history.empty.error')}</div>
 			<div class="empty-hint">{errorMessage}</div>
 			<button class="btn" onclick={loadCommits}>
-				{$t('history.empty.errorRetry')}
+				{$t('history.empty.error_retry')}
 			</button>
 		</div>
 	{:else if commits.length === 0}
 		<div class="empty-state">
 			<div class="empty-icon">📝</div>
-			<div class="empty-title">{$t('history.empty.noCommits')}</div>
-			<div class="empty-hint">{$t('history.empty.noCommitsHint')}</div>
+			<div class="empty-title">{$t('history.empty.no_commits')}</div>
+			<div class="empty-hint">{$t('history.empty.no_commits_hint')}</div>
 		</div>
 	{:else}
 		<!-- Timeline -->
 		<ul
 			class="timeline"
 			role="listbox"
-			aria-label={$t('history.tabLabel')}
+			aria-label={$t('history.tab_label')}
 			tabindex="0"
 			bind:this={listEl}
 			onkeydown={handleListKeydown}
@@ -496,21 +496,21 @@
 					<div class="msg">{commit.message}</div>
 					{#if commit.renamed_from}
 						<div class="renamed-from">
-							{$t('history.renamedFrom', { oldPath: commit.renamed_from })}
+							{$t('history.renamed_from', { oldPath: commit.renamed_from })}
 						</div>
 					{/if}
 					<div class="commit-actions">
 						<button class="link-btn" onclick={() => loadSnapshot(commit)}>
-							👁 {$t('history.viewSnapshot')}
+							👁 {$t('history.view_snapshot')}
 						</button>
 						{#if idx === 0}
 							<!-- top: always offer compare with current (working tree) -->
 							<button class="link-btn" onclick={() => compareWithCurrent(commit)}>
-								⚖ {$t('history.compareWithCurrent')}
+								⚖ {$t('history.compare_with_current')}
 							</button>
 						{:else if idx < commits.length - 1}
 							<button class="link-btn" onclick={() => compareWithPrev(commit, idx)}>
-								⚖ {$t('history.compareWithPrev')}
+								⚖ {$t('history.compare_with_prev')}
 							</button>
 						{/if}
 					</div>
@@ -519,7 +519,7 @@
 		</ul>
 
 		{#if commits.length >= 50}
-			<div class="footer-note">{$t('history.showingLast', { count: '50' })}</div>
+			<div class="footer-note">{$t('history.showing_last', { count: '50' })}</div>
 		{/if}
 
 		<!-- Blame toggle -->
@@ -532,10 +532,10 @@
 						disabled={editorMode !== 'source'}
 						onchange={() => onToggleBlame?.()}
 					/>
-					<span>{$t('history.blameToggle')}</span>
+					<span>{$t('history.blame_toggle')}</span>
 				</label>
 				{#if editorMode !== 'source'}
-					<span class="blame-hint">{$t('history.blameNotSupportedVisual')}</span>
+					<span class="blame-hint">{$t('history.blame_not_supported_visual')}</span>
 				{/if}
 			</div>
 		{/if}
@@ -544,7 +544,7 @@
 		<div class="anon-row">
 			<label>
 				<input type="checkbox" bind:checked={anonymize} />
-				<span>{$t('audit.anonymizeAuthors', { name: 'zouwei' })}</span>
+				<span>{$t('audit.anonymize_authors', { name: 'zouwei' })}</span>
 			</label>
 		</div>
 	{/if}
