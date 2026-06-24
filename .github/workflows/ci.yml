@@ -30,6 +30,11 @@ jobs:
       - name: Type check
         run: pnpm check
 
+      # v0.96.0 §6 — i18n key coverage. Fail PRs that introduce `t('foo.bar')`
+      # callsites without a corresponding key in @moraya/core's en.json.
+      - name: i18n key coverage
+        run: node scripts/i18n-coverage.mjs src
+
       # v0.60.0-pre §1.3.3: enforce npm-only consumption boundary for
       # @moraya/core. The sibling repo at ../moraya-core (or
       # ./moraya-core symlink) is for cross-repo editing convenience
