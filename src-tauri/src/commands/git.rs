@@ -1065,8 +1065,13 @@ mod tests {
 
     #[test]
     fn test_git_check_installed() {
-        // This test passes as long as git is available in the test environment
-        let result = git_check_installed();
+        // git_check_installed became async (spawn_blocking) — drive it on a
+        // current-thread runtime. Passes as long as the call resolves to Ok
+        // (git present or cleanly reported absent).
+        let rt = tokio::runtime::Builder::new_current_thread()
+            .build()
+            .unwrap();
+        let result = rt.block_on(git_check_installed());
         assert!(result.is_ok());
     }
 

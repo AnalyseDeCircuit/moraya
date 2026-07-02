@@ -622,10 +622,34 @@
 
   .kb-sync-icon:hover { background: var(--bg-hover); }
   .kb-sync-icon.sync-idle { color: var(--color-success, #38a169); }
-  .kb-sync-icon.sync-syncing { color: var(--accent-color); }
+  .kb-sync-icon.sync-syncing {
+    color: var(--accent-color);
+    display: inline-block;
+    transform-origin: center;
+    animation: kb-sync-breathe 1.6s ease-in-out infinite;
+  }
 
   .kb-sync-icon.sync-conflict { color: var(--warning-color, #e8a838); }
   .kb-sync-icon.sync-error { color: var(--color-error, #e53e3e); }
+
+  /* Breathing-light effect shown while syncing — matches the sidebar sync
+     button. Opacity + subtle scale pulse with a soft accent halo. */
+  @keyframes kb-sync-breathe {
+    0%, 100% {
+      opacity: 0.45;
+      transform: scale(0.9);
+      filter: drop-shadow(0 0 0 transparent);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 3px color-mix(in srgb, var(--accent-color) 55%, transparent));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kb-sync-icon.sync-syncing { animation: none; opacity: 0.75; }
+  }
 
   .kb-sync-popover {
     position: fixed;
