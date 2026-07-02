@@ -1030,7 +1030,7 @@
         <!-- Wrap icon in inner span so rotation only spins the glyph,
              not the button border (which would tilt the rounded rectangle). -->
         <span class="kb-sync-btn-icon" class:spin={status === 'syncing'}>
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 8m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0zM8 8m-4.5 0a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0zM8 8m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0z"/></svg>
+          <svg width="13" height="13" viewBox="8 6 16 20" fill="none" aria-hidden="true"><path d="M9.5 7.5v17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="14" r="6.5" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="14" r="2.4" fill="currentColor"/></svg>
         </span>
       </button>
     {/if}
@@ -1056,7 +1056,7 @@
                 class:error={status === 'error'}
                 class:conflict={status === 'conflict'}
                 title={$t('kb_sync.statusbar.tooltip')}
-              ><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path fill-rule="evenodd" d="M8 8m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0zM8 8m-4.5 0a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0zM8 8m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0z"/></svg>{status === 'error' ? ' ✗' : status === 'conflict' ? ' ⚠' : ''}</span>
+              ><svg width="10" height="10" viewBox="8 6 16 20" fill="none" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path d="M9.5 7.5v17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="14" r="6.5" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="14" r="2.4" fill="currentColor"/></svg>{status === 'error' ? ' ✗' : status === 'conflict' ? ' ⚠' : ''}</span>
             {/if}
           </button>
         {/each}

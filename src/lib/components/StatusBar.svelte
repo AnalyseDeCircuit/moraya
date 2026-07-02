@@ -294,7 +294,7 @@
           ? activeKbSyncState.lastError
           : $t('kb_sync.statusbar.tooltip')}
       >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path fill-rule="evenodd" d="M8 8m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0zM8 8m-4.5 0a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0zM8 8m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0z"/></svg>{#if activeKbSyncState.status === 'conflict'} ⚠{activeKbSyncState.conflictCount}{:else if activeKbSyncState.status === 'error'} ✗{#if activeKbSyncState.lastError} {activeKbSyncState.lastError.length > 35 ? activeKbSyncState.lastError.slice(0, 35) + '…' : activeKbSyncState.lastError}{/if}{:else if activeKbSyncState.status === 'idle'} ✓{/if}
+        <svg width="12" height="12" viewBox="8 6 16 20" fill="none" style="vertical-align:-1px;display:inline-block" aria-hidden="true"><path d="M9.5 7.5v17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="14" r="6.5" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="14" r="2.4" fill="currentColor"/></svg>{#if activeKbSyncState.status === 'conflict'} ⚠{activeKbSyncState.conflictCount}{:else if activeKbSyncState.status === 'error'} ✗{#if activeKbSyncState.lastError} {activeKbSyncState.lastError.length > 35 ? activeKbSyncState.lastError.slice(0, 35) + '…' : activeKbSyncState.lastError}{/if}{:else if activeKbSyncState.status === 'idle'} ✓{/if}
       </span>
       {#if showSyncPopover && activeKbSyncState.status === 'error' && activeKbSyncState.lastError}
         <!-- svelte-ignore a11y_no_static_element_interactions -->
