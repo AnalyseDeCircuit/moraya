@@ -2,6 +2,19 @@
 
 > Discover Moraya, the epitome of elegant simplicity in an open-source Markdown AI agent that bridges cutting-edge AI power with unwavering user sovereignty—empowering you to create, collaborate, and innovate in total privacy.
 
+## 🎉 Announcing Moraya Web — Now Live
+
+**Moraya is now in your browser: [web.moraya.app](https://web.moraya.app/)** — no install, open a tab and start writing.
+
+Moraya Web carries the same elegant WYSIWYG Markdown editing experience to the web, and extends it into an AI-native knowledge workspace:
+
+- **Same editor core** — instant WYSIWYG, three editing modes, outline, find & replace, powered by the shared `@moraya/core` engine for pixel-perfect rendering parity with the desktop app.
+- **Your creation, your keys, your AI** — Bring Your Own Cloud (BYOC) storage (Aliyun OSS, AWS S3, Cloudflare R2, Tencent COS, Backblaze B2) and end-to-end encryption with client-side keys; your content stays yours.
+- **AI everywhere** — multi-provider AI chat, AI agents over your documents, and voice-first capture with real-time transcription and AI structuring.
+- **Works offline** — installable as a PWA with autosave and an offline buffer, so your writing never waits for the network.
+
+Prefer a fully local, ~10MB native app? The desktop version below remains free and open-source — same Moraya, your choice of where it runs.
+
 **Moraya** is a free, open-source, ultra-lightweight (\~10MB) WYSIWYG Markdown editor crafted with Rust and Tauri v2, drawing inspiration from minimalist, seamless editing to deliver an unparalleled writing experience. Seamlessly integrating the most advanced local AI ecosystems and MCP (Model Context Protocol) capabilities, it transforms your editor into a robust, privacy-first AI agent platform. In a world where AI is everywhere, **Moraya serves as your secure, open "Personal Assistant", putting intelligent tools at your fingertips without compromising control**. Derived from "mora" (Latin for "a moment") and "ya" (Chinese for "elegance"), Moraya embodies privacy-first design, fully local operation, and infinitely extensible AI features.
 
 ![](https://raw.githubusercontent.com/zouwei/resource/master/images/moraya/20260302-184554.-image.png)
