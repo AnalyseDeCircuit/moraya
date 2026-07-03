@@ -355,8 +355,19 @@
     // so long lines (URLs etc.) that wrap to multiple rows render the caret on the
     // correct wrapped row instead of always at the top of the logical line.
     caretX = marker.offsetLeft;
-    caretY = marker.offsetTop;
-    caretH = 25; // fixed = line-height, consistent on all lines
+    // Keep the caret box in lock-step with the current-line highlight. A fixed
+    // 25px drifts from the real line box on CJK / fallback-font rows, so the
+    // caret ends up taller/shorter than the highlight. For a single-row line,
+    // overlay the caret exactly on the highlight (same top + height). For a
+    // soft-wrapped line, keep it one row tall at the marker's actual row.
+    const singleRow = parseFloat(getComputedStyle(lineDiv).lineHeight) || 25;
+    if (currentLineHeight > singleRow * 1.5) {
+      caretY = marker.offsetTop;
+      caretH = singleRow;
+    } else {
+      caretY = currentLineTop;
+      caretH = currentLineHeight;
+    }
 
     // Restore original line content
     lineDiv.textContent = lineText || '\u00A0';
