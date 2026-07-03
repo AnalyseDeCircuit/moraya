@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Pre-push guard for the @moraya/core dependency (release-safety 方案 B).
+# Shares scripts/check-core-dep.mjs with the CI/release gates (方案 A) — one
+# implementation, two call sites.
+#
+# Behavior:
+#   • Pushing a release tag (refs/tags/v*)  → STRICT release check: the dep
+#     must be a PUBLISHED npm range, not a vendored tarball / sibling path.
+#   • Any other push                        → fast offline dev check: rejects
+#     sibling file:../, link:, workspace:; allows an npm range or the frozen
+#     ./vendor/*.tgz bridge.
+#
+# Auto-activated via the `prepare` npm script (`git config core.hooksPath
+# .githooks`), which runs on `pnpm install`. Emergency override: git push --no-verify
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+mode="dev"
+
+# stdin gives one line per ref being pushed:
+#   <local ref> <local sha> <remote ref> <remote sha>
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/tags/v*) mode="release" ;;
+  esac
+done
+
+if ! node "$repo_root/scripts/check-core-dep.mjs" "$mode"; then
+  echo ""
+  echo "pre-push blocked by check-core-dep ($mode mode)."
+  echo "Override only if you know what you're doing: git push --no-verify"
+  exit 1
+fi

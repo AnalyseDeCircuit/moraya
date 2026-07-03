@@ -15,6 +15,14 @@ jobs:
       release-id: ${{ steps.create.outputs.id }}
     steps:
       - uses: actions/checkout@v4
+      # Release-safety gate (方案 A). Runs ONCE, before the GitHub Release is
+      # created and before the 5-way build matrix fans out — so if @moraya/core
+      # is still on the vendored-tarball bridge (or points at an unpublished
+      # version), the whole release aborts here instead of shipping binaries
+      # built against an unpublished core. Shares scripts/check-core-dep.mjs
+      # with the pre-push hook (方案 B). ubuntu-latest ships Node + npm.
+      - name: Guard @moraya/core is published (release mode)
+        run: node scripts/check-core-dep.mjs release
       - name: Create GitHub Release
         id: create
         uses: softprops/action-gh-release@v2
