@@ -216,7 +216,7 @@
           <div class="setting-row">
             <select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel}>
               {#each SIZE_LEVEL_OPTIONS as s}
-                <option value={s}>{$t(`ai.imageConfig.size_${s}`)}</option>
+                <option value={s}>{$t(`ai.image_config.size_${s}`)}</option>
               {/each}
             </select>
             <span class="setting-value">{imgFormResolvedSize}</span>
@@ -309,7 +309,7 @@
         <div class="setting-row">
           <select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel}>
             {#each SIZE_LEVEL_OPTIONS as s}
-              <option value={s}>{$t(`ai.imageConfig.size_${s}`)}</option>
+              <option value={s}>{$t(`ai.image_config.size_${s}`)}</option>
             {/each}
           </select>
           <span class="setting-value">{imgFormResolvedSize}</span>

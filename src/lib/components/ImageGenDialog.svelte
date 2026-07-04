@@ -359,14 +359,14 @@
                 class:active={imageMode === m}
                 onclick={() => { imageMode = m; imageStyle = 'auto'; if (!preDefinedPrompts || !hasGenerated) { prompts = []; } }}
               >
-                {tr(`imageGen.mode_${m}`)}
+                {tr(`image_gen.mode_${m}`)}
               </button>
             {/each}
             <div class="mode-row-spacer"></div>
             <label class="mini-label" for="imggen-style">{tr('image_gen.style_label')}</label>
             <select id="imggen-style" class="mini-select style-select" bind:value={imageStyle} onchange={() => { if (!preDefinedPrompts || !hasGenerated) { prompts = []; } }}>
               {#each availableStyles as s}
-                <option value={s}>{tr(`imageGen.style_${s}`)}</option>
+                <option value={s}>{tr(`image_gen.style_${s}`)}</option>
               {/each}
             </select>
           </div>
@@ -383,7 +383,7 @@
               <label class="mini-label" for="imggen-size-level">{tr('ai.image_config.size_level')}</label>
               <select id="imggen-size-level" class="mini-select" bind:value={imgSizeLevel}>
                 {#each SIZE_LEVEL_OPTIONS as s}
-                  <option value={s}>{tr(`ai.imageConfig.size_${s}`)}</option>
+                  <option value={s}>{tr(`ai.image_config.size_${s}`)}</option>
                 {/each}
               </select>
               <span class="mini-hint">{imgResolvedSize}</span>
