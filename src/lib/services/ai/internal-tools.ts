@@ -187,6 +187,21 @@ export const INTERNAL_TOOLS: ToolDefinition[] = [
     },
   },
   {
+    name: 'read_editor_content',
+    description:
+      'Read the FULL Markdown of the document currently open in the Moraya editor, ' +
+      'including any unsaved changes. Use this WHENEVER you need the current document\'s text — ' +
+      'to summarize it, transform it, or hand it to another tool (e.g. an MCP publish/convert tool via its ' +
+      'content/markdown parameter). ALWAYS prefer this over guessing or constructing a file path: MCP servers ' +
+      'run in a temporary working directory, so a relative or guessed filename will fail with ENOENT. ' +
+      'Takes no arguments; returns the whole document.',
+    input_schema: {
+      type: 'object',
+      properties: {},
+      required: [],
+    },
+  },
+  {
     name: 'fetch_image_to_local',
     description:
       'Fetch an image URL and save it to a local file. ' +
@@ -326,6 +341,8 @@ export async function executeInternalTool(
       return handleRemoveDynamicService(tc.arguments);
     case 'update_editor_content':
       return handleUpdateEditorContent(tc.arguments);
+    case 'read_editor_content':
+      return handleReadEditorContent();
     case 'fetch_image_to_local':
       return handleFetchImageToLocal(tc.arguments);
     case 'save_image_to_kb':
@@ -714,6 +731,17 @@ async function handleSaveImageToKb(
     content: `Image ${status}.\nLocal absolute path: ${absolutePath}\nMarkdown reference: ![](${relativePath})\nSize: ${buffer.byteLength} bytes.`,
     isError: false,
   };
+}
+
+function handleReadEditorContent(): { content: string; isError: boolean } {
+  // The full current document, including unsaved edits. Works for both saved
+  // and brand-new (unsaved) documents — no file path required, so the AI never
+  // has to guess a path for an MCP server whose CWD is a temp dir.
+  const content = editorStore.getState().content ?? '';
+  if (!content.trim()) {
+    return { content: '(The document currently open in the editor is empty.)', isError: false };
+  }
+  return { content, isError: false };
 }
 
 async function handleUpdateEditorContent(

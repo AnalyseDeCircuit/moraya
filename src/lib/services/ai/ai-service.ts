@@ -883,6 +883,14 @@ function buildSystemPrompt(
         ? `\n\n**Using update_editor_content on the open file**: Only allowed when user explicitly asks to modify the currently open document (${currentFilePath}). When that is the case, read current content from document context, apply changes, then pass full updated content.`
         : '');
 
+    prompt +=
+      '\n\n**Handing the CURRENT document to another tool (e.g. an MCP publish / convert tool)**:' +
+      '\n  → FIRST call `read_editor_content` to get the FULL open document (includes unsaved changes). Then pass that text to the other tool\'s content / markdown parameter.' +
+      '\n  → NEVER guess or construct a file path for an MCP tool. MCP servers run with a TEMPORARY working directory, so a relative or guessed filename fails with ENOENT (file not found).' +
+      (currentFilePath
+        ? `\n  → If a tool STRICTLY requires a file PATH argument, pass this EXACT absolute path verbatim (do not retype, rename, or add spaces): ${currentFilePath}`
+        : '\n  → The current document is UNSAVED (no file path exists), so you MUST pass its content inline via `read_editor_content`; a file path is not available.');
+
     // Remind about MORAYA.md rules if they exist
     if (rulesResult?.active) {
       prompt += '\n\nREMINDER: Before using any tools, ensure you follow the Knowledge Base Rules (MORAYA.md). Read relevant rule sections with read_file if you haven\'t already.';
