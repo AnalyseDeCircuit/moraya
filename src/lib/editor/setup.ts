@@ -36,6 +36,7 @@ import { editorStore } from '../stores/editor-store'
 import { isMacOS } from '../utils/platform'
 import { schema } from './schema'
 import { createReviewDecorationPlugin } from './plugins/review-decoration'
+import { createMarkdownSourcePastePlugin } from './plugins/markdown-source-paste'
 
 // ── Public types (legacy moraya shape, kept for zero-modification call sites) ──
 
@@ -90,7 +91,11 @@ export async function createEditor(options: EditorOptions): Promise<MorayaEditor
   // Build core's plugin array, then append moraya-only review-decoration.
   // (Cannot use coreCreateEditor directly because it doesn't accept extra plugins.)
   const corePlugins = await createEditorPlugins(baseOpts, schema as Schema)
-  const plugins = [...corePlugins, createReviewDecorationPlugin()]
+  // Prepend the markdown-source paste plugin so its handlePaste runs BEFORE
+  // core's editor-props plugin — it renders pasted markdown source even when a
+  // text/html flavor is present (which would otherwise bypass core's
+  // clipboardTextParser). See markdown-source-paste.ts.
+  const plugins = [createMarkdownSourcePastePlugin(), ...corePlugins, createReviewDecorationPlugin()]
 
   // Tier 1 nodeViews — code_block NodeView (toolbar / picker / mermaid / renderer).
   // Re-call preloadEnhancementPlugins; cache hit returns instantly.
