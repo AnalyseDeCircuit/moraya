@@ -22,6 +22,10 @@ function headersOrUndefined(headers: Record<string, string>): Record<string, str
 
 /** Rust has no SSE path for gemini/ollama — one-shot them (matches legacy PC). */
 const TOOL_EVENT_PREFIX = '\x02'
+/** Liveness-only heartbeat from the Rust proxy: the stream is alive but this
+ *  chunk carried no content event (reasoning/thinking deltas, ping, etc.).
+ *  Resets the stall-watchdog without rendering anything. */
+const STREAM_HEARTBEAT = '\x01'
 const CHUNK_TIMEOUT_MS = 120_000
 
 export class TauriAITransport implements AITransport {
@@ -63,7 +67,9 @@ export class TauriAITransport implements AITransport {
 
     const channel = new Channel<string>()
     channel.onmessage = (text: string) => {
+      // Any message — including a heartbeat — proves the stream is alive.
       lastChunkAt = Date.now()
+      if (text === STREAM_HEARTBEAT) return // liveness only; nothing to render
       if (text.startsWith(TOOL_EVENT_PREFIX)) cb.onEnvelope(text.slice(1))
       else cb.onText(text)
     }

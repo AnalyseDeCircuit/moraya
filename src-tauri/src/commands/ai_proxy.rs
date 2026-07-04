@@ -477,9 +477,13 @@ async fn do_stream(
         };
 
         let bytes = chunk.map_err(|_| "Stream read error".to_string())?;
+        if bytes.is_empty() {
+            continue;
+        }
         buffer.push_str(&String::from_utf8_lossy(&bytes));
 
         // Process complete lines
+        let events_before = events_sent;
         while let Some(pos) = buffer.find('\n') {
             let line = buffer[..pos].to_string();
             buffer = buffer[pos + 1..].to_string();
@@ -492,6 +496,17 @@ async fn do_stream(
             } else if line.contains("data") {
                 eprintln!("[ai_proxy] SSE line not parsed: {}", safe_truncate(&line, 200));
             }
+        }
+
+        // Liveness heartbeat: this chunk carried real bytes but produced no
+        // forwarded content event (e.g. reasoning/thinking deltas, `ping`,
+        // message_start, keepalive comments, or a partial line). Send a
+        // heartbeat so the frontend's stall-watchdog knows the stream is alive
+        // — otherwise a model that streams non-text output (extended thinking)
+        // for >120s would be wrongly aborted with "Stream stalled". The
+        // frontend treats HEARTBEAT (\x01) as liveness-only and renders nothing.
+        if events_sent == events_before {
+            let _ = on_event.send("\u{1}".to_string());
         }
     }
 
