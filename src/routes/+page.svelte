@@ -69,6 +69,11 @@
   // copy button, and inner <pre>/<code>. Previously duplicated inline in
   // editor.css lines 80-300 — that block was removed in the same commit.
   import '@moraya/core/plugins/code-block.css';
+  // Typora-style in-place math source editing (math_block / math_inline
+  // NodeViews) now lives in @moraya/core (v0.6.0). This stylesheet carries the
+  // overlay geometry + LaTeX token colors; the --math-src-* theme tokens in
+  // variables.css override its fallbacks for light/dark.
+  import '@moraya/core/plugins/math-source.css';
   import '$lib/styles/settings.css';
   // KaTeX renders math via katex.render() in @moraya/core's schema with default
   // output='htmlAndMathml'. Without katex.css, the MathML accessibility layer

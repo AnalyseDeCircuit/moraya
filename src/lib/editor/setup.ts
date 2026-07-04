@@ -37,7 +37,6 @@ import { isMacOS } from '../utils/platform'
 import { schema } from './schema'
 import { createReviewDecorationPlugin } from './plugins/review-decoration'
 import { createMarkdownSourcePastePlugin } from './plugins/markdown-source-paste'
-import { mathBlockNodeView, mathInlineNodeView } from './math-node-views'
 
 // ── Public types (legacy moraya shape, kept for zero-modification call sites) ──
 
@@ -106,11 +105,16 @@ export async function createEditor(options: EditorOptions): Promise<MorayaEditor
   if (tier1.codeBlockView) {
     nodeViews.code_block = tier1.codeBlockView
   }
-  // Typora-style in-place math editing: click a formula → LaTeX source opens
-  // in the document flow (block: source line above live preview; inline:
-  // source replaces the rendered formula); blur commits, Escape reverts.
-  nodeViews.math_block = mathBlockNodeView
-  nodeViews.math_inline = mathInlineNodeView
+  // Typora-style in-place math editing (core v0.6.0): click a formula → LaTeX
+  // source opens in the document flow (block: source line above live preview;
+  // inline: source replaces the rendered formula); blur commits, Escape
+  // reverts. Factories come from core's preloadEnhancementPlugins (tier1).
+  if (tier1.mathBlockView) {
+    nodeViews.math_block = tier1.mathBlockView
+  }
+  if (tier1.mathInlineView) {
+    nodeViews.math_inline = tier1.mathInlineView
+  }
 
   const initialDoc = options.defaultValue
     ? parseMarkdown(options.defaultValue, schema as Schema)
