@@ -7,7 +7,29 @@ import {
   looksLikeMarkdownSource,
   markdownPasteSlice,
   createMarkdownSourcePastePlugin,
+  unescapeMathMarkdown,
 } from './markdown-source-paste';
+
+// ── Safe math un-escape ───────────────────────────────────────────────
+describe('unescapeMathMarkdown', () => {
+  it('un-escapes markdown emphasis chars \\_ and \\*', () => {
+    expect(unescapeMathMarkdown('R\\_m')).toBe('R_m');
+    expect(unescapeMathMarkdown('a\\*b')).toBe('a*b');
+    expect(unescapeMathMarkdown('R\\_{m\\theta\\_0}')).toBe('R_{m\\theta_0}');
+  });
+  it('NEVER touches \\\\ (row break) or \\space (control space)', () => {
+    // '\\\\' in a JS string = two real backslashes = a LaTeX row break
+    expect(unescapeMathMarkdown('a \\\\ b')).toBe('a \\\\ b');
+    expect(unescapeMathMarkdown('a \\ b')).toBe('a \\ b');
+  });
+  it('NEVER touches meaningful LaTeX escapes (\\{ \\} \\& \\! \\begin)', () => {
+    expect(unescapeMathMarkdown('\\{x\\}')).toBe('\\{x\\}');
+    expect(unescapeMathMarkdown('a \\& b')).toBe('a \\& b');
+    expect(unescapeMathMarkdown('a \\! b')).toBe('a \\! b');
+    expect(unescapeMathMarkdown('\\begin{pmatrix}')).toBe('\\begin{pmatrix}');
+    expect(unescapeMathMarkdown('\\ddots')).toBe('\\ddots');
+  });
+});
 
 // ── Wiring tripwire ───────────────────────────────────────────────────
 // The editor loads its base plugins from @moraya/core (see setup.ts). This
@@ -114,6 +136,20 @@ describe('plugin handlePaste (e2e)', () => {
     let found = false;
     st.doc.descendants(n => { if (n.type.name === 'math_block') found = true; });
     expect(found).toBe(true);
+  });
+
+  it('heals over-escaped subscripts (\\_ → _) but preserves \\ and \\begin', () => {
+    // The user's exact over-escaped formula: \_ subscripts + \ (control space,
+    // corrupted row breaks). We fix the subscripts; \ and \begin stay verbatim.
+    const src = '$$\nR\\_m = \\begin{pmatrix} R\\_{m\\theta\\_0} & & \\ & R\\_{m\\theta\\_1} \\end{pmatrix}\n$$';
+    const st = pasteInto(src);
+    let value = '';
+    st.doc.descendants(n => { if (n.type.name === 'math_block') value = n.attrs.value; });
+    expect(value).toContain('R_m');            // subscript healed (\_ → _)
+    expect(value).toContain('R_{m\\theta_0}'); // nested subscripts healed
+    expect(value).not.toContain('R\\_m');      // no escaped underscore left
+    expect(value).toContain('\\begin{pmatrix}'); // \begin untouched
+    expect(value).toContain('\\ &');           // control space \ left as-is (not our job)
   });
 
   it('does NOT hijack plain prose (leaves doc empty for default handling)', () => {

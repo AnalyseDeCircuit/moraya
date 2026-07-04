@@ -12,6 +12,7 @@
     "tauri": "tauri",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "version:bump": "node scripts/bump-version.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
     "check:core-dep": "node scripts/check-core-dep.mjs"
@@ -62,6 +63,9 @@
     "@tauri-apps/cli": "^2",
     "@types/qrcode": "^1.5.6",
     "@vitest/ui": "^4.1.4",
+    "@playwright/test": "^1.61.1",
+    "happy-dom": "^20.10.6",
+    "playwright": "^1.61.1",
     "png-to-ico": "^3.0.1",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",

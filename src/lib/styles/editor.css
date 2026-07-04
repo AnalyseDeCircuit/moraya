@@ -773,3 +773,102 @@
 .ProseMirror.link-hover a[href] {
   cursor: pointer;
 }
+
+/* ── Typora-style in-place math editing (math-node-views.ts) ─────────── */
+
+.moraya-editor .math-block-nodeview {
+  margin: 1em 0;
+}
+
+.moraya-editor .math-nodeview .math-preview {
+  text-align: center;
+  overflow-x: auto;
+  cursor: pointer;
+}
+
+.moraya-editor .math-nodeview.editing .math-preview {
+  /* Live preview under the source line — slightly dimmed to signal "output" */
+  opacity: 0.85;
+}
+
+/* Source line: $$ [textarea] $$ — dedicated "math zone" palette (indigo/violet),
+   distinct from the gray code blocks. Left accent stripe signals edit mode. */
+.moraya-editor .math-src-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45em;
+  padding: 0.35em 0.6em 0.35em 0.55em;
+  margin-bottom: 0.5em;
+  background: var(--math-src-bg);
+  border-radius: 6px;
+  border-left: 3px solid var(--math-src-border);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.88em;
+  line-height: 1.55;
+}
+
+.moraya-editor .math-src-delim {
+  color: var(--math-src-delim);
+  font-weight: 700;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.moraya-editor .math-src-row .math-src-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: var(--math-src-text);
+  font: inherit;
+  line-height: inherit;
+  caret-color: var(--math-src-caret);
+}
+
+.moraya-editor .math-src-row .math-src-input::placeholder {
+  color: var(--math-src-delim);
+  opacity: 0.5;
+}
+
+/* Inline variant: $ [input] $ replaces the rendered formula in place */
+.moraya-editor .math-inline-nodeview {
+  display: inline;
+}
+
+.moraya-editor .math-preview-inline {
+  cursor: pointer;
+}
+
+.moraya-editor .math-src-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.15em;
+  padding: 0.05em 0.35em;
+  background: var(--math-src-bg);
+  border-radius: 4px;
+  box-shadow: inset 2px 0 0 var(--math-src-border);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.9em;
+}
+
+.moraya-editor .math-src-inline .math-src-input {
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: var(--math-src-text);
+  font: inherit;
+  caret-color: var(--math-src-caret);
+}
+
+/* KaTeX failed to parse — show raw source in the math error color */
+.moraya-editor .math-nodeview .math-error {
+  color: var(--math-src-error);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  white-space: pre-wrap;
+}

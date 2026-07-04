@@ -120,3 +120,7 @@ watermarks.local.json.ots
 # Local sandbox — anything dropped here stays uncommitted.
 # (Historically held pre-publication @moraya/core tarballs; now empty.)
 /vendor/
+# Playwright e2e artifacts
+/test-results/
+/playwright-report/
+/playwright/.cache/

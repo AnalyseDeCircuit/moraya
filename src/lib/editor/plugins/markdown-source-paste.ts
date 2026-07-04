@@ -23,9 +23,58 @@
  *    capture-phase paste handler, so they never reach here.
  */
 
-import { Slice } from 'prosemirror-model';
+import { Fragment, Node as PMNode, Slice } from 'prosemirror-model';
 import { Plugin } from 'prosemirror-state';
 import { parseMarkdown } from '../markdown';
+
+/**
+ * Un-escape ONLY the safe markdown backslash-escapes inside pasted math, so
+ * LaTeX that was over-escaped in a markdown context renders correctly.
+ *
+ * When LaTeX is pasted from a markdown source (LLM output, escaped docs), the
+ * markdown emphasis chars often arrive escaped — `R\_m` instead of `R_m` — so
+ * subscripts break. We reverse `\_ → _` and `\* → *` (both are markdown
+ * emphasis chars whose escaped form is meaningless in LaTeX math).
+ *
+ * DELIBERATELY LEFT UNTOUCHED (they are meaningful LaTeX and cannot be safely
+ * guessed):
+ *   - `\\`  (row break)          — consumed as a unit so it's never altered
+ *   - `\ `  (control space)      — space isn't in the unescape set
+ *   - `\{ \} \[ \] \( \)`        — literal braces / math delimiters
+ *   - `\& \! \# \% \, \;` etc.   — alignment, spacing, params, comments
+ *
+ * NOTE: a corrupted row break that arrived as `\ ` (single backslash + space,
+ * instead of `\\`) is NOT recoverable here without breaking real control
+ * spaces — that must be fixed in the source.
+ */
+export function unescapeMathMarkdown(latex: string): string {
+  // Alternation order matters: match `\\` first so a real row break is consumed
+  // as a pair and preserved; otherwise unescape `\_` / `\*`.
+  return latex.replace(/\\\\|\\([_*])/g, (m, p1: string | undefined) => (p1 !== undefined ? p1 : m));
+}
+
+/** Rebuild a fragment, un-escaping markdown emphasis inside math nodes. */
+function fixMathEscapes(frag: Fragment): Fragment {
+  const out: PMNode[] = [];
+  frag.forEach((node) => {
+    const name = node.type.name;
+    if (name === 'math_block') {
+      const cur = typeof node.attrs.value === 'string' ? node.attrs.value : '';
+      const fixed = unescapeMathMarkdown(cur);
+      out.push(fixed === cur ? node : node.type.create({ ...node.attrs, value: fixed }, node.content, node.marks));
+    } else if (name === 'math_inline') {
+      const cur = node.textContent;
+      const fixed = unescapeMathMarkdown(cur);
+      const content = fixed ? Fragment.from(node.type.schema.text(fixed)) : Fragment.empty;
+      out.push(fixed === cur ? node : node.type.create(node.attrs, content, node.marks));
+    } else if (node.content.size > 0) {
+      out.push(node.copy(fixMathEscapes(node.content)));
+    } else {
+      out.push(node);
+    }
+  });
+  return Fragment.fromArray(out);
+}
 
 /**
  * Heuristic: does this text look like Markdown *source* (literal syntax the
@@ -74,7 +123,8 @@ export function markdownPasteSlice(plain: string): Slice | null {
     && doc.firstChild!.type.name === 'paragraph'
     && doc.firstChild!.content.size === 0;
   if (onlyEmptyPara) return null;
-  const content = doc.content;
+  // Heal markdown-over-escaped math (\_ → _, \* → *); leaves \\ / \ / \{ etc.
+  const content = fixMathEscapes(doc.content);
   const inner = (content.childCount === 1 && content.firstChild!.type.name === 'paragraph')
     ? content.firstChild!.content
     : content;
