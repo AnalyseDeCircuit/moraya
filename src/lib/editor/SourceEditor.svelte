@@ -430,10 +430,32 @@
       // preventScroll avoids the browser auto-scrolling to the caret position,
       // which uses the imprecise cursor offset and causes a jarring jump.
       textareaEl.focus({ preventScroll: true });
-      // Initialize current line highlight and line heights from ghost DOM
+      // Initialize current line highlight + line heights, then scroll the view
+      // so the restored caret LINE is centred — anchors the source view to the
+      // cursor position carried over from the visual editor (rather than the
+      // decoupled scroll fraction, which drifts because line heights differ
+      // between modes).
       requestAnimationFrame(() => {
         readLineHeightsFromGhost();
         updateCurrentLine();
+        const outer = textareaEl?.closest('.source-editor-outer') as HTMLElement | null;
+        if (outer) {
+          if (clamped === 0) {
+            outer.scrollTop = 0;
+          } else {
+            const maxScroll = outer.scrollHeight - outer.clientHeight;
+            if (maxScroll > 0) {
+              const caretCenter = currentLineTop + currentLineHeight / 2;
+              const target = caretCenter - outer.clientHeight / 2;
+              // If the caret line geometry is unavailable (currentLineTop 0 but
+              // caret is not at the top), fall back to the saved scroll fraction.
+              const useFraction = currentLineTop === 0 && clamped > 0;
+              outer.scrollTop = useFraction
+                ? Math.round(scrollFraction * maxScroll)
+                : Math.max(0, Math.min(target, maxScroll));
+            }
+          }
+        }
       });
 
       // Listen for selectionchange to track ALL cursor movement
@@ -447,21 +469,7 @@
       };
       document.addEventListener('selectionchange', handleSelectionChange);
       selectionChangeCleanup = () => document.removeEventListener('selectionchange', handleSelectionChange);
-
-      const outer = textareaEl.closest('.source-editor-outer') as HTMLElement | null;
-      if (offset === 0 && scrollFraction === 0) {
-        // Scroll to top for new files
-        if (outer) outer.scrollTop = 0;
-      } else if (outer) {
-        // Restore scroll position using saved fraction (more reliable than cursor offset).
-        // Use rAF to ensure the ghost div has been laid out so scrollHeight is accurate.
-        requestAnimationFrame(() => {
-          const maxScroll = outer.scrollHeight - outer.clientHeight;
-          if (maxScroll > 0) {
-            outer.scrollTop = Math.round(scrollFraction * maxScroll);
-          }
-        });
-      }
+      // Scroll restore now happens in the caret-centred rAF above.
     }
   });
 

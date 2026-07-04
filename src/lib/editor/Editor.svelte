@@ -2103,14 +2103,28 @@
         if (proseMirrorEl) proseMirrorEl.focus();
       }
 
-      // 2. Restore scroll position (overrides any scroll caused by focus)
+      // 2. Scroll so the restored caret is centred in the viewport — anchor the
+      // visual view to the cursor carried over from source mode (rather than the
+      // decoupled scroll fraction, which drifts because visual/source render at
+      // different heights). Falls back to the fraction if caret coords are
+      // unavailable (e.g. atom NodeSelection with no measurable box).
       const wrapper = editorEl?.closest('.editor-wrapper') as HTMLElement | null;
-      if (savedOffset === 0 && savedScrollFraction === 0) {
-        if (wrapper) wrapper.scrollTop = 0;
-      } else if (wrapper) {
-        const maxScroll = wrapper.scrollHeight - wrapper.clientHeight;
-        if (maxScroll > 0) {
-          wrapper.scrollTop = Math.round(savedScrollFraction * maxScroll);
+      if (wrapper) {
+        if (savedOffset === 0) {
+          wrapper.scrollTop = 0;
+        } else {
+          const maxScroll = wrapper.scrollHeight - wrapper.clientHeight;
+          let scrolled = false;
+          try {
+            const coords = editor.view.coordsAtPos(editor.view.state.selection.from);
+            const wrapRect = wrapper.getBoundingClientRect();
+            const caretY = coords.top - wrapRect.top + wrapper.scrollTop;
+            wrapper.scrollTop = Math.max(0, Math.min(caretY - wrapper.clientHeight / 2, maxScroll));
+            scrolled = true;
+          } catch { /* fall back below */ }
+          if (!scrolled && maxScroll > 0) {
+            wrapper.scrollTop = Math.round(savedScrollFraction * maxScroll);
+          }
         }
       }
 
