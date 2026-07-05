@@ -398,6 +398,7 @@ Moraya ships as a coordinated multi-product suite — each lives in its own repo
 | v0.96.0 | Unified i18n consumer — web side of the shared `@moraya/core/i18n` rollout (136 callsites renamed, web's 2 locales merged into the 12-locale unified bundles) `[cross-product]` | ✅ |
 | v1.0.0 | **Moraya Web GA** — bug bash, full docs, case studies, launch day coordination | 📋 |
 | v1.4.0 | Long-term memory activation — remove legacy plan gate (memory free for all users, local-only), wire memory injection into AI chat, implement agent/workflow memory tools, settings page on real MemoryStore data; Picora-hosted memory cloud spec'd for a separate Picora-side iteration | ✅ |
+| v1.5.0 | Memory Picora cloud sync — mirror local memories to Picora dot-directory hosting (`.moraya/memories/*.md`) via `@moraya/core/memory`; startup pull/push merge, per-write push, cloud clear; settings cloud-sync section; local-free + cloud-follows-Picora-plan; mobile inherits via rebuild `[cross-product]` | ✅ |
 
 ### Mobile — [`moraya-mobile`](https://github.com/zouwei/moraya-mobile)
 
@@ -419,6 +420,7 @@ Moraya ships as a coordinated multi-product suite — each lives in its own repo
 | --- | --- | --- |
 | v0.40.0 | **Shared markdown core extraction** — `@moraya/core` public on npmjs.com (schema / markdown serializer / ProseMirror plugins / doc-cache / commands); npm-only consumption boundary enforced by CI grep gate | ✅ |
 | v0.96.0 | **Unified i18n at `@moraya/core/i18n`** — engine extracted (framework-agnostic, dynamic locale loading); 12 PC locales + Web's 2 merged into 12 unified bundles (3,210 keys each); CI gates for key-coverage + boundary isolation `[cross-product]` | ✅ |
+| v0.7.0 | **Shared memory serialization contract at `@moraya/core/memory`** — platform-agnostic MemoryDoc type + zero-dependency Markdown serialization aligned with Picora dot-directory hosting; single source of truth for web/mobile/PC memory sync; 21 memory i18n keys added across all 12 locales `[cross-product]` | ✅ |
 
 ### Homebrew Distribution
 
