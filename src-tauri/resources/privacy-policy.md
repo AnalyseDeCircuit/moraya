@@ -164,11 +164,4 @@ Moraya is not intended for users under 13 (16 in the EU). We do not knowingly co
 
 We will post updates on moraya.app and, for material changes affecting account holders, notify in-app and by email at least 30 days before they take effect. The English version of this policy is authoritative; translations are provided for convenience.
 
-## 20. Contact
-
-- Privacy questions: privacy@moraya.app
-- Security disclosures: security@moraya.app
-- Legal: legal@moraya.app
-- Open-source issues: github.com/zouwei/moraya/issues
-
 Thank you for using Moraya.

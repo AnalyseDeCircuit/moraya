@@ -164,11 +164,4 @@ Moraya 不面向 13 岁以下(欧盟为 16 岁以下)用户。我们不会有意
 
 更新将发布在 moraya.app;对影响账户持有者的重大变更,我们将至少提前 30 天在应用内及通过邮件通知。本政策以英文版本为准;译本仅为方便阅读而提供。
 
-## 20. 联系我们
-
-- 隐私问题:privacy@moraya.app
-- 安全披露:security@moraya.app
-- 法务:legal@moraya.app
-- 开源问题反馈:github.com/zouwei/moraya/issues
-
 感谢使用 Moraya。
