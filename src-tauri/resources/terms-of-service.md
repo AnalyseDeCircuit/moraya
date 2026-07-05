@@ -104,8 +104,3 @@ We may revise these Terms. For material changes we will notify account holders i
 ## 14. Language
 
 These Terms are drafted in English. Translations (including Simplified Chinese) are provided for convenience only; **the English version prevails** in case of any conflict.
-
-## 15. Contact
-
-- Legal inquiries: legal@moraya.app
-- Support: support@moraya.app
