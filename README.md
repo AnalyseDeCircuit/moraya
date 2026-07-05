@@ -397,6 +397,7 @@ Moraya ships as a coordinated multi-product suite — each lives in its own repo
 | v0.67.0 | Push notification device registration — wire NotificationCenter to Picora `/api/v1/devices*`, settings/notifications route, device list with revoke `[cross-product]` | 📋 |
 | v0.96.0 | Unified i18n consumer — web side of the shared `@moraya/core/i18n` rollout (136 callsites renamed, web's 2 locales merged into the 12-locale unified bundles) `[cross-product]` | ✅ |
 | v1.0.0 | **Moraya Web GA** — bug bash, full docs, case studies, launch day coordination | 📋 |
+| v1.4.0 | Long-term memory activation — remove legacy plan gate (memory free for all users, local-only), wire memory injection into AI chat, implement agent/workflow memory tools, settings page on real MemoryStore data; Picora-hosted memory cloud spec'd for a separate Picora-side iteration | ✅ |
 
 ### Mobile — [`moraya-mobile`](https://github.com/zouwei/moraya-mobile)
 
