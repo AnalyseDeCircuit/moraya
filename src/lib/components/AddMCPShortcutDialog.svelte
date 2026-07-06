@@ -6,6 +6,7 @@
    * the entry is added (see `ShortcutsPanel.handleAddMCPTool`).
    */
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import type { MCPServerConfig, MCPTool } from '$lib/services/mcp/types';
   import type { MCPToolShortcutRef } from '$lib/shortcuts/catalog';
 
@@ -29,6 +30,12 @@
   // Tools available for the selected server only — keeps the picker simple
   // and avoids surfacing tool name collisions across servers.
   let serverTools = $derived(tools.filter(t => t.serverId === serverId));
+
+  let serverOptions = $derived(servers.map(s => ({ value: s.id, label: s.name })));
+  let toolOptions = $derived([
+    { value: '', label: $t('shortcuts.mcp.dialog.tool_placeholder'), disabled: true },
+    ...serverTools.map(tool => ({ value: tool.name, label: tool.name })),
+  ]);
 
   let duplicate = $derived(
     !!serverId && !!toolName &&
@@ -63,11 +70,7 @@
     <div class="dialog-body">
       <div class="field">
         <label class="field-label" for="mcp-shortcut-server">{$t('shortcuts.mcp.dialog.server_label')}</label>
-        <select id="mcp-shortcut-server" class="gx-select" bind:value={serverId}>
-          {#each servers as s (s.id)}
-            <option value={s.id}>{s.name}</option>
-          {/each}
-        </select>
+        <Select id="mcp-shortcut-server" class="gx-select" block bind:value={serverId} options={serverOptions} />
       </div>
 
       <div class="field">
@@ -75,12 +78,7 @@
         {#if serverTools.length === 0}
           <p class="hint">{$t('shortcuts.mcp.dialog.no_tools_for_server')}</p>
         {:else}
-          <select id="mcp-shortcut-tool" class="gx-select" bind:value={toolName}>
-            <option value="" disabled>{$t('shortcuts.mcp.dialog.tool_placeholder')}</option>
-            {#each serverTools as tool (tool.name)}
-              <option value={tool.name}>{tool.name}</option>
-            {/each}
-          </select>
+          <Select id="mcp-shortcut-tool" class="gx-select" block bind:value={toolName} options={toolOptions} />
           {#if toolName}
             {@const sel = serverTools.find(tt => tt.name === toolName)}
             {#if sel?.description}

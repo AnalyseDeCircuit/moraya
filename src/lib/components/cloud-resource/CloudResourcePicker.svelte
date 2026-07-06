@@ -16,6 +16,7 @@
     toggleFavorite,
     updateVisibility,
   } from '$lib/services/cloud-resource';
+  import { Select } from '$lib/components/ui';
 
   let {
     type,
@@ -92,6 +93,13 @@
   // refresh updates them.
   let kbScope = $state<KbScope>('all');
   let hasKbBinding = $derived(!!boundKbId && selectedTargetId === boundPicoraTargetId);
+
+  let targetOptions = $derived(picoraTargets.map(tgt => ({ value: tgt.id, label: tgt.name || tgt.picoraApiUrl })));
+  let scopeOptions = $derived([
+    { value: 'this-kb', label: $t('cloud_picker.scope_this_kb') },
+    { value: 'all', label: $t('cloud_picker.scope_all') },
+    { value: 'no-kb', label: $t('cloud_picker.scope_no_kb') },
+  ]);
 
   // ── Search / pagination ──────────────────────────────────────────────
 
@@ -403,20 +411,12 @@
       {#if picoraTargets.length === 0}
         <span class="no-targets">{$t('cloud_picker.no_targets')}</span>
       {:else}
-        <select class="target-select" bind:value={selectedTargetId}>
-          {#each picoraTargets as tgt}
-            <option value={tgt.id}>{tgt.name || tgt.picoraApiUrl}</option>
-          {/each}
-        </select>
+        <Select class="target-select" size="sm" bind:value={selectedTargetId} options={targetOptions} />
       {/if}
 
       <!-- KB scope (only shown when hasKbBinding) -->
       {#if hasKbBinding}
-        <select class="scope-select" bind:value={kbScope}>
-          <option value="this-kb">{$t('cloud_picker.scope_this_kb')}</option>
-          <option value="all">{$t('cloud_picker.scope_all')}</option>
-          <option value="no-kb">{$t('cloud_picker.scope_no_kb')}</option>
-        </select>
+        <Select class="scope-select" size="sm" bind:value={kbScope} options={scopeOptions} />
       {/if}
 
       <button class="refresh-btn" onclick={() => { fetchKey++; }} title={$t('common.refresh')}>↺</button>
@@ -726,15 +726,6 @@
     padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--border-light);
     flex-wrap: wrap;
-  }
-
-  .target-select, .scope-select {
-    font-size: var(--font-size-sm);
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
   }
 
   .refresh-btn {

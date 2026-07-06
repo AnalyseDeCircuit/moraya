@@ -6,6 +6,7 @@
   import { createDefaultImageHostTarget, targetToConfig, uploadImage, isObjectStorageProvider } from '$lib/services/image-hosting';
   import { invoke } from '@tauri-apps/api/core';
   import { PICORA_DEFAULT_API_BASE } from '$lib/services/image-hosting';
+  import { Select } from '$lib/components/ui';
 
   let { onImportPicora, onJumpToPicora }: { onImportPicora?: () => void; onJumpToPicora?: () => void } = $props();
 
@@ -223,6 +224,11 @@
     return REGION_OPTIONS[provider] ?? [];
   }
 
+  let githubCdnOptions = $derived([
+    { value: 'raw', label: tr('image_host.github_cdn_raw') },
+    { value: 'jsdelivr', label: tr('image_host.github_cdn_jsdelivr') },
+  ]);
+
   function importFromPublishTarget(target: { repoUrl?: string; branch?: string; token?: string }) {
     if (!editingTarget) return;
     if (target.repoUrl) editingTarget.githubRepoUrl = target.repoUrl;
@@ -335,10 +341,7 @@
         </div>
         <div class="setting-group">
           <label class="setting-label" for="imghost-github-cdn">{tr('image_host.github_cdn')}</label>
-          <select id="imghost-github-cdn" class="setting-input" bind:value={editingTarget.githubCdn}>
-            <option value="raw">{tr('image_host.github_cdn_raw')}</option>
-            <option value="jsdelivr">{tr('image_host.github_cdn_jsdelivr')}</option>
-          </select>
+          <Select id="imghost-github-cdn" class="setting-input" block bind:value={editingTarget.githubCdn} options={githubCdnOptions} />
         </div>
       {/if}
 

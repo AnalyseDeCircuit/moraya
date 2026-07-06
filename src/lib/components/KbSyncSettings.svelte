@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { filesStore, type KnowledgeBase } from '$lib/stores/files-store';
   import { settingsStore } from '$lib/stores/settings-store';
   import type { KbBinding, SyncStrategy } from '$lib/services/kb-sync/types';
@@ -112,6 +113,32 @@
     if (!kb.picoraBinding) return '';
     return state.status;
   }
+
+  let modeOptions = $derived([
+    { value: 'manual', label: $t('kb_sync.strategy.mode_manual') },
+    { value: 'on-save', label: $t('kb_sync.strategy.mode_on_save') },
+    { value: 'interval', label: $t('kb_sync.strategy.mode_interval') },
+    { value: 'on-startup-and-close', label: $t('kb_sync.strategy.mode_startup') },
+  ]);
+
+  let intervalOptions = $derived([
+    { value: 60, label: $t('kb_sync.strategy.interval60') },
+    { value: 300, label: $t('kb_sync.strategy.interval300') },
+    { value: 900, label: $t('kb_sync.strategy.interval900') },
+    { value: 1800, label: $t('kb_sync.strategy.interval1800') },
+  ]);
+
+  let scopeOptions = $derived([
+    { value: 'markdown-only', label: $t('kb_sync.strategy.scope_md_only') },
+    { value: 'markdown-plus-rules', label: $t('kb_sync.strategy.scope_md_rules') },
+    { value: 'all-including-hidden', label: $t('kb_sync.strategy.scope_all') },
+  ]);
+
+  let conflictOptions = $derived([
+    { value: 'prompt', label: $t('kb_sync.strategy.conflict_prompt') },
+    { value: 'prefer-local', label: $t('kb_sync.strategy.conflict_local') },
+    { value: 'prefer-remote', label: $t('kb_sync.strategy.conflict_remote') },
+  ]);
 </script>
 
 <div class="kb-sync-settings gx-tab">
@@ -195,52 +222,38 @@
           <div class="strategy-editor">
             <div class="strategy-row">
               <label class="strategy-label">{$t('kb_sync.strategy.mode')}</label>
-              <select
+              <Select
                 class="select-input"
                 value={binding.strategy.mode}
-                onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, mode: (e.target as HTMLSelectElement).value as SyncStrategy['mode'] })}
-              >
-                <option value="manual">{$t('kb_sync.strategy.mode_manual')}</option>
-                <option value="on-save">{$t('kb_sync.strategy.mode_on_save')}</option>
-                <option value="interval">{$t('kb_sync.strategy.mode_interval')}</option>
-                <option value="on-startup-and-close">{$t('kb_sync.strategy.mode_startup')}</option>
-              </select>
+                options={modeOptions}
+                onchange={(v) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, mode: v as SyncStrategy['mode'] })}
+              />
               {#if binding.strategy.mode === 'interval'}
-                <select
+                <Select
                   class="select-input"
                   value={binding.strategy.intervalSecs}
-                  onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, intervalSecs: Number((e.target as HTMLSelectElement).value) as SyncStrategy['intervalSecs'] })}
-                >
-                  <option value={60}>{$t('kb_sync.strategy.interval60')}</option>
-                  <option value={300}>{$t('kb_sync.strategy.interval300')}</option>
-                  <option value={900}>{$t('kb_sync.strategy.interval900')}</option>
-                  <option value={1800}>{$t('kb_sync.strategy.interval1800')}</option>
-                </select>
+                  options={intervalOptions}
+                  onchange={(v) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, intervalSecs: v as SyncStrategy['intervalSecs'] })}
+                />
               {/if}
             </div>
             <div class="strategy-row">
               <label class="strategy-label">{$t('kb_sync.strategy.scope')}</label>
-              <select
+              <Select
                 class="select-input"
                 value={binding.strategy.scope}
-                onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, scope: (e.target as HTMLSelectElement).value as SyncStrategy['scope'] })}
-              >
-                <option value="markdown-only">{$t('kb_sync.strategy.scope_md_only')}</option>
-                <option value="markdown-plus-rules">{$t('kb_sync.strategy.scope_md_rules')}</option>
-                <option value="all-including-hidden">{$t('kb_sync.strategy.scope_all')}</option>
-              </select>
+                options={scopeOptions}
+                onchange={(v) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, scope: v as SyncStrategy['scope'] })}
+              />
             </div>
             <div class="strategy-row">
               <label class="strategy-label">{$t('kb_sync.strategy.conflict')}</label>
-              <select
+              <Select
                 class="select-input"
                 value={binding.strategy.conflictPolicy}
-                onchange={(e) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, conflictPolicy: (e.target as HTMLSelectElement).value as SyncStrategy['conflictPolicy'] })}
-              >
-                <option value="prompt">{$t('kb_sync.strategy.conflict_prompt')}</option>
-                <option value="prefer-local">{$t('kb_sync.strategy.conflict_local')}</option>
-                <option value="prefer-remote">{$t('kb_sync.strategy.conflict_remote')}</option>
-              </select>
+                options={conflictOptions}
+                onchange={(v) => filesStore.updateKbStrategy(kb.id, { ...binding.strategy, conflictPolicy: v as SyncStrategy['conflictPolicy'] })}
+              />
             </div>
           </div>
         {/if}

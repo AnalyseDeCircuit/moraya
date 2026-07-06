@@ -9,6 +9,7 @@
   import { onDestroy } from 'svelte';
   import { settingsStore, type ExportSettings, type ExportPaperSize, type ExportOrientation } from '$lib/stores/settings-store';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
 
   let settings: ExportSettings = $state({
     pageSize: 'a4',
@@ -60,6 +61,11 @@
   ];
 
   const FONT_SIZE_OPTIONS = [9, 10, 11, 12, 14];
+
+  let paperOptions = $derived(
+    PAPER_OPTIONS.map((opt) => ({ value: opt.value, label: $t(opt.labelKey) })),
+  );
+  const fontSizeOptions = FONT_SIZE_OPTIONS.map((size) => ({ value: size, label: `${size}pt` }));
 </script>
 
 <div class="export-settings">
@@ -69,14 +75,12 @@
   <div class="row">
     <label class="field">
       <span class="label">{$t('settings.export.paper_size')}</span>
-      <select
+      <Select
+        block
         value={settings.pageSize}
-        onchange={(e) => persist({ pageSize: (e.currentTarget as HTMLSelectElement).value as ExportPaperSize })}
-      >
-        {#each PAPER_OPTIONS as opt}
-          <option value={opt.value}>{$t(opt.labelKey)}</option>
-        {/each}
-      </select>
+        options={paperOptions}
+        onchange={(v) => persist({ pageSize: v as ExportPaperSize })}
+      />
     </label>
 
     <div class="field">
@@ -199,14 +203,12 @@
     </label>
     <label class="field">
       <span class="label">{$t('settings.export.font_size')}</span>
-      <select
+      <Select
+        block
         value={settings.fontSize}
-        onchange={(e) => persist({ fontSize: Number((e.currentTarget as HTMLSelectElement).value) })}
-      >
-        {#each FONT_SIZE_OPTIONS as size}
-          <option value={size}>{size}pt</option>
-        {/each}
-      </select>
+        options={fontSizeOptions}
+        onchange={(v) => persist({ fontSize: v as number })}
+      />
     </label>
   </fieldset>
 
@@ -356,7 +358,7 @@
     margin: 0;
     line-height: 1.45;
   }
-  select, input[type='text'], input[type='number'] {
+  input[type='text'], input[type='number'] {
     padding: 4px 8px;
     background: var(--bg-primary);
     border: 1px solid var(--border-color);

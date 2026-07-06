@@ -13,6 +13,7 @@
   import { invoke } from '@tauri-apps/api/core';
   import { onDestroy } from 'svelte';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
 
   let imageConfigs = $state<ImageProviderConfig[]>([]);
   let activeImageConfigId = $state<string | null>(null);
@@ -34,6 +35,11 @@
   const SIZE_LEVEL_OPTIONS: ImageSizeLevel[] = ['large', 'medium', 'small'];
 
   let imgFormResolvedSize = $derived(resolveImageSize(imgFormRatio, imgFormSizeLevel));
+
+  const IMAGE_PROVIDER_OPTION_KEYS: ImageProvider[] = ['openai', 'grok', 'gemini', 'qwen', 'doubao', 'custom'];
+  let imgProviderOptions = $derived(IMAGE_PROVIDER_OPTION_KEYS.map(p => ({ value: p, label: $t(`ai.image_config.provider_${p}`) })));
+  let ratioOptions = $derived(RATIO_OPTIONS.map(r => ({ value: r, label: r })));
+  let sizeLevelOptions = $derived(SIZE_LEVEL_OPTIONS.map(s => ({ value: s, label: $t(`ai.image_config.size_${s}`) })));
 
   // Top-level store subscriptions — do NOT wrap in $effect().
   const unsub = settingsStore.subscribe(state => {
@@ -78,8 +84,8 @@
     addingImage = false;
   }
 
-  function handleImgProviderChange(event: Event) {
-    imgFormProvider = (event.target as HTMLSelectElement).value as ImageProvider;
+  function handleImgProviderChange(value: unknown) {
+    imgFormProvider = value as ImageProvider;
     const preset = IMAGE_PROVIDER_PRESETS[imgFormProvider];
     imgFormBaseUrl = preset.baseURL;
     imgFormModel = preset.model;
@@ -163,14 +169,7 @@
       <div class="config-form">
         <div class="setting-group">
           <label class="setting-label">{$t('ai.image_config.provider')}</label>
-          <select class="setting-input" value={imgFormProvider} onchange={handleImgProviderChange}>
-            <option value="openai">{$t('ai.image_config.provider_openai')}</option>
-            <option value="grok">{$t('ai.image_config.provider_grok')}</option>
-            <option value="gemini">{$t('ai.image_config.provider_gemini')}</option>
-            <option value="qwen">{$t('ai.image_config.provider_qwen')}</option>
-            <option value="doubao">{$t('ai.image_config.provider_doubao')}</option>
-            <option value="custom">{$t('ai.image_config.provider_custom')}</option>
-          </select>
+          <Select class="setting-input" block bind:value={imgFormProvider} options={imgProviderOptions} onchange={handleImgProviderChange} />
         </div>
 
         <div class="setting-group">
@@ -204,21 +203,13 @@
 
         <div class="setting-group">
           <label class="setting-label">{$t('ai.image_config.ratio')}</label>
-          <select class="setting-input" bind:value={imgFormRatio}>
-            {#each RATIO_OPTIONS as r}
-              <option value={r}>{r}</option>
-            {/each}
-          </select>
+          <Select class="setting-input" block bind:value={imgFormRatio} options={ratioOptions} />
         </div>
 
         <div class="setting-group">
           <label class="setting-label">{$t('ai.image_config.size_level')}</label>
           <div class="setting-row">
-            <select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel}>
-              {#each SIZE_LEVEL_OPTIONS as s}
-                <option value={s}>{$t(`ai.image_config.size_${s}`)}</option>
-              {/each}
-            </select>
+            <Select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel} options={sizeLevelOptions} />
             <span class="setting-value">{imgFormResolvedSize}</span>
           </div>
         </div>
@@ -270,14 +261,7 @@
     <div class="config-form">
       <div class="setting-group">
         <label class="setting-label">{$t('ai.image_config.provider')}</label>
-        <select class="setting-input" value={imgFormProvider} onchange={handleImgProviderChange}>
-          <option value="openai">{$t('ai.image_config.provider_openai')}</option>
-          <option value="grok">{$t('ai.image_config.provider_grok')}</option>
-          <option value="gemini">{$t('ai.image_config.provider_gemini')}</option>
-          <option value="qwen">{$t('ai.image_config.provider_qwen')}</option>
-          <option value="doubao">{$t('ai.image_config.provider_doubao')}</option>
-          <option value="custom">{$t('ai.image_config.provider_custom')}</option>
-        </select>
+        <Select class="setting-input" block bind:value={imgFormProvider} options={imgProviderOptions} onchange={handleImgProviderChange} />
       </div>
 
       <div class="setting-group">
@@ -297,21 +281,13 @@
 
       <div class="setting-group">
         <label class="setting-label">{$t('ai.image_config.ratio')}</label>
-        <select class="setting-input" bind:value={imgFormRatio}>
-          {#each RATIO_OPTIONS as r}
-            <option value={r}>{r}</option>
-          {/each}
-        </select>
+        <Select class="setting-input" block bind:value={imgFormRatio} options={ratioOptions} />
       </div>
 
       <div class="setting-group">
         <label class="setting-label">{$t('ai.image_config.size_level')}</label>
         <div class="setting-row">
-          <select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel}>
-            {#each SIZE_LEVEL_OPTIONS as s}
-              <option value={s}>{$t(`ai.image_config.size_${s}`)}</option>
-            {/each}
-          </select>
+          <Select class="setting-input" style="flex:1" bind:value={imgFormSizeLevel} options={sizeLevelOptions} />
           <span class="setting-value">{imgFormResolvedSize}</span>
         </div>
       </div>

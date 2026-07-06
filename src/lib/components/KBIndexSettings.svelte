@@ -16,6 +16,7 @@
   import type { IndexStatus } from '$lib/services/kb/types';
 
   import type { KnowledgeBase } from '$lib/stores/files-store';
+  import { Select } from '$lib/components/ui';
 
   let {
     onOpenKBManager,
@@ -29,6 +30,16 @@
     { value: 'online', labelKey: 'kb.online_model' },
     { value: 'local', labelKey: 'kb.local_models' },
   ];
+
+  let sourceOptions = $derived(
+    SOURCE_OPTIONS.map((opt) => ({ value: opt.value, label: $t(opt.labelKey) })),
+  );
+
+  function handleSourceChange(val: unknown) {
+    const v = val as 'online' | 'local';
+    embeddingSource = v;
+    settingsStore.update({ embeddingProvider: v === 'local' ? 'local' : (embeddingProvider || null) });
+  }
 
   // Online provider list for the model dropdown
   const ONLINE_PROVIDERS = ['openai', 'gemini', 'ollama', 'glm', 'doubao', 'deepseek'];
@@ -276,15 +287,7 @@
 
   <div class="setting-group">
     <label class="setting-label">{$t('kb.provider')}</label>
-    <select class="setting-input" value={embeddingSource} onchange={(e) => {
-      const val = (e.target as HTMLSelectElement).value as 'online' | 'local';
-      embeddingSource = val;
-      settingsStore.update({ embeddingProvider: val === 'local' ? 'local' : (embeddingProvider || null) });
-    }}>
-      {#each SOURCE_OPTIONS as opt}
-        <option value={opt.value}>{$t(opt.labelKey)}</option>
-      {/each}
-    </select>
+    <Select class="setting-input" block value={embeddingSource} options={sourceOptions} onchange={handleSourceChange} />
   </div>
 
   <div class="setting-group">

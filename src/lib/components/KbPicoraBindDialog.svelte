@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { settingsStore } from '$lib/stores/settings-store';
   import { filesStore, type KnowledgeBase } from '$lib/stores/files-store';
   import { onDestroy } from 'svelte';
@@ -175,6 +176,37 @@
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
   }
+
+  let remoteKbOptions = $derived([
+    { value: '', label: $t('kb_sync.bind_dialog.select_kb') },
+    ...remoteKbs.map(rKb => ({ value: rKb.id, label: `${rKb.name} · ${rKb.docCount} docs` })),
+  ]);
+
+  let modeOptions = $derived([
+    { value: 'manual', label: $t('kb_sync.strategy.mode_manual') },
+    { value: 'on-save', label: $t('kb_sync.strategy.mode_on_save') },
+    { value: 'interval', label: $t('kb_sync.strategy.mode_interval') },
+    { value: 'on-startup-and-close', label: $t('kb_sync.strategy.mode_startup') },
+  ]);
+
+  let intervalOptions = $derived([
+    { value: 60, label: $t('kb_sync.strategy.interval60') },
+    { value: 300, label: $t('kb_sync.strategy.interval300') },
+    { value: 900, label: $t('kb_sync.strategy.interval900') },
+    { value: 1800, label: $t('kb_sync.strategy.interval1800') },
+  ]);
+
+  let scopeOptions = $derived([
+    { value: 'markdown-only', label: $t('kb_sync.strategy.scope_md_only') },
+    { value: 'markdown-plus-rules', label: $t('kb_sync.strategy.scope_md_rules') },
+    { value: 'all-including-hidden', label: $t('kb_sync.strategy.scope_all') },
+  ]);
+
+  let conflictOptions = $derived([
+    { value: 'prompt', label: $t('kb_sync.strategy.conflict_prompt') },
+    { value: 'prefer-local', label: $t('kb_sync.strategy.conflict_local') },
+    { value: 'prefer-remote', label: $t('kb_sync.strategy.conflict_remote') },
+  ]);
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -252,12 +284,7 @@
             </label>
             {#if !createMode}
               <div class="radio-sub">
-                <select class="select-input" bind:value={selectedRemoteKbId}>
-                  <option value="">{$t('kb_sync.bind_dialog.select_kb')}</option>
-                  {#each remoteKbs as rKb}
-                    <option value={rKb.id}>{rKb.name} · {rKb.docCount} docs</option>
-                  {/each}
-                </select>
+                <Select class="select-input" block bind:value={selectedRemoteKbId} options={remoteKbOptions} />
               </div>
             {/if}
           </div>
@@ -267,36 +294,18 @@
         <h4>{$t('kb_sync.bind_dialog.step3_title')}</h4>
         <div class="form-section">
           <label class="form-label">{$t('kb_sync.strategy.mode')}</label>
-          <select class="select-input" bind:value={strategy.mode}>
-            <option value="manual">{$t('kb_sync.strategy.mode_manual')}</option>
-            <option value="on-save">{$t('kb_sync.strategy.mode_on_save')}</option>
-            <option value="interval">{$t('kb_sync.strategy.mode_interval')}</option>
-            <option value="on-startup-and-close">{$t('kb_sync.strategy.mode_startup')}</option>
-          </select>
+          <Select class="select-input" block bind:value={strategy.mode} options={modeOptions} />
           {#if strategy.mode === 'interval'}
-            <select class="select-input" bind:value={strategy.intervalSecs}>
-              <option value={60}>{$t('kb_sync.strategy.interval60')}</option>
-              <option value={300}>{$t('kb_sync.strategy.interval300')}</option>
-              <option value={900}>{$t('kb_sync.strategy.interval900')}</option>
-              <option value={1800}>{$t('kb_sync.strategy.interval1800')}</option>
-            </select>
+            <Select class="select-input" block bind:value={strategy.intervalSecs} options={intervalOptions} />
           {/if}
         </div>
         <div class="form-section">
           <label class="form-label">{$t('kb_sync.strategy.scope')}</label>
-          <select class="select-input" bind:value={strategy.scope}>
-            <option value="markdown-only">{$t('kb_sync.strategy.scope_md_only')}</option>
-            <option value="markdown-plus-rules">{$t('kb_sync.strategy.scope_md_rules')}</option>
-            <option value="all-including-hidden">{$t('kb_sync.strategy.scope_all')}</option>
-          </select>
+          <Select class="select-input" block bind:value={strategy.scope} options={scopeOptions} />
         </div>
         <div class="form-section">
           <label class="form-label">{$t('kb_sync.strategy.conflict')}</label>
-          <select class="select-input" bind:value={strategy.conflictPolicy}>
-            <option value="prompt">{$t('kb_sync.strategy.conflict_prompt')}</option>
-            <option value="prefer-local">{$t('kb_sync.strategy.conflict_local')}</option>
-            <option value="prefer-remote">{$t('kb_sync.strategy.conflict_remote')}</option>
-          </select>
+          <Select class="select-input" block bind:value={strategy.conflictPolicy} options={conflictOptions} />
         </div>
 
       {:else if step === 4}
@@ -535,7 +544,7 @@
     color: var(--text-muted);
   }
 
-  .text-input, .select-input {
+  .text-input {
     padding: 0.35rem 0.5rem;
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -545,7 +554,7 @@
     width: 100%;
   }
 
-  .text-input:focus, .select-input:focus {
+  .text-input:focus {
     outline: none;
     border-color: var(--accent-color);
   }

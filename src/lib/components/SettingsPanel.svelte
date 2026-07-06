@@ -17,6 +17,7 @@
   import PicoraSettingsTab from './picora-tab/PicoraSettingsTab.svelte';
   import ExportSettings from './ExportSettings.svelte';
   import ShortcutsPanel from './ShortcutsPanel.svelte';
+  import { Select } from '$lib/components/ui';
 
   type Tab = 'general' | 'ai' | 'image-ai' | 'mcp' | 'image' | 'publish' | 'shortcuts' | 'voice' | 'plugins' | 'knowledge-base' | 'kb-sync' | 'picora';
 
@@ -64,6 +65,25 @@
   const lightThemes = getLightThemes();
   const darkThemes = getDarkThemes();
 
+  let localeOptions = $derived(
+    SUPPORTED_LOCALES.map(loc => ({
+      value: loc.code,
+      label: loc.code === 'system' ? $t('settings.language.system') : loc.label,
+    }))
+  );
+  const tabSizeOptions = [
+    { value: 2, label: '2' },
+    { value: 4, label: '4' },
+    { value: 8, label: '8' },
+  ];
+  const colorThemeOptions = builtinThemes.map(ct => ({ value: ct.id, label: ct.name }));
+  const darkThemeOptions = darkThemes.map(ct => ({ value: ct.id, label: ct.name }));
+  let darkModeOptions = $derived([
+    { value: 'system', label: $t('settings.theme.system') },
+    { value: 'light', label: $t('settings.theme.light') },
+    { value: 'dark', label: $t('settings.theme.dark') },
+  ]);
+
   // Top-level store subscriptions — do NOT wrap in $effect().
   // Svelte 5 $effect tracks reads in subscribe callbacks, causing infinite loops.
   const unsub1 = filesStore.subscribe(state => {
@@ -86,23 +106,19 @@
   });
   onDestroy(() => { unsub1(); unsub2(); });
 
-  function handleLocaleChange(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as LocaleSelection;
+  function handleLocaleChange(value: LocaleSelection) {
     settingsStore.setLocaleSelection(value);
   }
 
-  function handleThemeChange(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as Theme;
+  function handleThemeChange(value: Theme) {
     settingsStore.setTheme(value);
   }
 
-  function handleColorThemeChange(event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
+  function handleColorThemeChange(value: string) {
     settingsStore.setColorTheme(value);
   }
 
-  function handleDarkColorThemeChange(event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
+  function handleDarkColorThemeChange(value: string) {
     settingsStore.setDarkColorTheme(value);
   }
 
@@ -132,8 +148,7 @@
     settingsStore.update({ editorLineWidth: value });
   }
 
-  function handleTabSizeChange(event: Event) {
-    const value = parseInt((event.target as HTMLSelectElement).value);
+  function handleTabSizeChange(value: number) {
     settingsStore.update({ editorTabSize: value });
   }
 
@@ -286,11 +301,7 @@
                 <div class="gx-row">
                   <label class="gx-label" for="settings-locale">{$t('settings.language.label')}</label>
                   <div class="gx-control">
-                    <select id="settings-locale" class="gx-select" value={currentLocale} onchange={handleLocaleChange}>
-                      {#each SUPPORTED_LOCALES as loc}
-                        <option value={loc.code}>{loc.code === 'system' ? $t('settings.language.system') : loc.label}</option>
-                      {/each}
-                    </select>
+                    <Select id="settings-locale" class="gx-select" block bind:value={currentLocale} options={localeOptions} onchange={(v) => handleLocaleChange(v as LocaleSelection)} />
                   </div>
                 </div>
 
@@ -387,11 +398,7 @@
                 <div class="gx-row">
                   <label class="gx-label" for="settings-tab-size">{$t('settings.editor.tab_size')}</label>
                   <div class="gx-control">
-                    <select id="settings-tab-size" class="gx-select" value={editorTabSize} onchange={handleTabSizeChange}>
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
-                      <option value={8}>8</option>
-                    </select>
+                    <Select id="settings-tab-size" class="gx-select" block bind:value={editorTabSize} options={tabSizeOptions} onchange={(v) => handleTabSizeChange(v as number)} />
                   </div>
                 </div>
 
@@ -413,11 +420,7 @@
                 <div class="gx-row">
                   <label class="gx-label" for="settings-color-theme">{$t('settings.theme.label')}</label>
                   <div class="gx-control">
-                    <select id="settings-color-theme" class="gx-select" value={colorTheme} onchange={handleColorThemeChange}>
-                      {#each builtinThemes as ct}
-                        <option value={ct.id}>{ct.name}</option>
-                      {/each}
-                    </select>
+                    <Select id="settings-color-theme" class="gx-select" block bind:value={colorTheme} options={colorThemeOptions} onchange={(v) => handleColorThemeChange(v as string)} />
                   </div>
                 </div>
                 <div class="gx-row gx-row-check">
@@ -430,11 +433,7 @@
                   <div class="gx-row gx-row-indent">
                     <label class="gx-label" for="settings-dark-theme">{$t('settings.appearance.dark_theme')}</label>
                     <div class="gx-control">
-                      <select id="settings-dark-theme" class="gx-select" value={darkColorTheme} onchange={handleDarkColorThemeChange}>
-                        {#each darkThemes as ct}
-                          <option value={ct.id}>{ct.name}</option>
-                        {/each}
-                      </select>
+                      <Select id="settings-dark-theme" class="gx-select" block bind:value={darkColorTheme} options={darkThemeOptions} onchange={(v) => handleDarkColorThemeChange(v as string)} />
                     </div>
                   </div>
                 {/if}
@@ -445,11 +444,7 @@
                 <div class="gx-row">
                   <label class="gx-label" for="settings-dark-mode">{$t('settings.appearance.dark_mode_label')}</label>
                   <div class="gx-control">
-                    <select id="settings-dark-mode" class="gx-select" value={theme} onchange={handleThemeChange}>
-                      <option value="system">{$t('settings.theme.system')}</option>
-                      <option value="light">{$t('settings.theme.light')}</option>
-                      <option value="dark">{$t('settings.theme.dark')}</option>
-                    </select>
+                    <Select id="settings-dark-mode" class="gx-select" block bind:value={theme} options={darkModeOptions} onchange={(v) => handleThemeChange(v as Theme)} />
                   </div>
                 </div>
               </div>

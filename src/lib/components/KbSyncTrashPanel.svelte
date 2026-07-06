@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { filesStore, type KnowledgeBase } from '$lib/stores/files-store';
   import {
     listTrash,
@@ -83,6 +84,16 @@
     [...new Set(entries.map(e => e.kbId))]
   );
 
+  let kbFilterOptions = $derived([
+    { value: '__all__', label: $t('kb_sync.trash.filter_kb_all') },
+    ...availableKbIds.map(kbId => ({ value: kbId, label: kbNameOf(kbId) })),
+  ]);
+  let timeFilterOptions = $derived([
+    { value: '7d', label: $t('kb_sync.trash.filter_time7d') },
+    { value: '30d', label: $t('kb_sync.trash.filter_time30d') },
+    { value: 'all', label: $t('kb_sync.trash.filter_time_all') },
+  ]);
+
   async function handleRestore(entry: TrashEntry, overwrite = false) {
     const kbRoot = kbRootOf(entry.kbId);
     if (!kbRoot) {
@@ -158,19 +169,10 @@
 
     <div class="filters">
       <label>
-        <select bind:value={kbFilter}>
-          <option value="__all__">{$t('kb_sync.trash.filter_kb_all')}</option>
-          {#each availableKbIds as kbId (kbId)}
-            <option value={kbId}>{kbNameOf(kbId)}</option>
-          {/each}
-        </select>
+        <Select bind:value={kbFilter} options={kbFilterOptions} />
       </label>
       <label>
-        <select bind:value={timeFilter}>
-          <option value="7d">{$t('kb_sync.trash.filter_time7d')}</option>
-          <option value="30d">{$t('kb_sync.trash.filter_time30d')}</option>
-          <option value="all">{$t('kb_sync.trash.filter_time_all')}</option>
-        </select>
+        <Select bind:value={timeFilter} options={timeFilterOptions} />
       </label>
       <button class="purge-btn" onclick={handlePurgeAll} type="button">
         {$t('kb_sync.trash.purge_all')}
@@ -266,11 +268,6 @@
   .close-btn:hover { color: var(--text-primary); }
   .filters {
     display: flex; gap: 0.5rem; align-items: center; margin: 0.5rem 0;
-  }
-  .filters select {
-    padding: 4px 8px; font-size: var(--font-size-sm);
-    background: var(--bg-secondary); color: var(--text-primary);
-    border: 1px solid var(--border-color); border-radius: 4px;
   }
   .purge-btn {
     margin-left: auto;

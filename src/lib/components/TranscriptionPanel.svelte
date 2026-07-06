@@ -4,6 +4,7 @@
   import { aiStore, sendAIRequest } from '$lib/services/ai';
   import { t, resolveAllLocales } from '$lib/i18n';
   import { isMacOS, isTauri } from '$lib/utils/platform';
+  import { Select } from '$lib/components/ui';
   import type {
     TranscriptSegment,
     NewProfileProposal,
@@ -85,6 +86,17 @@
   });
 
   let voiceProfiles = $derived($settingsStore.voiceProfiles ?? []);
+
+  let sourceModeOptions = $derived([
+    { value: 'mic', label: $t('transcription.source_mic') },
+    { value: 'system', label: $t('transcription.source_system'), disabled: systemSourceUnsupported },
+    { value: 'mixed', label: $t('transcription.source_mixed'), disabled: systemSourceUnsupported },
+  ]);
+
+  let sessionModeOptions = $derived([
+    { value: 'transcription', label: $t('transcription.mode_transcription') },
+    { value: 'interview', label: $t('transcription.mode_interview') },
+  ]);
 
   // Default voice-profiles directory (appDataDir/voice-profiles) — computed once
   let defaultSyncDir = $state('');
@@ -491,8 +503,8 @@
       .catch(() => { /* ignore */ });
   }
 
-  async function handleModeChange(event: Event) {
-    const next = (event.target as HTMLSelectElement).value as VoiceSessionMode;
+  async function handleModeChange(value: unknown) {
+    const next = value as VoiceSessionMode;
     if (next === sessionMode) return;
 
     const wasActive = recordingState === 'recording' || recordingState === 'paused';
@@ -515,8 +527,8 @@
     }
   }
 
-  async function handleSourceModeChange(event: Event) {
-    const next = (event.target as HTMLSelectElement).value as VoiceInputSourceMode;
+  async function handleSourceModeChange(value: unknown) {
+    const next = value as VoiceInputSourceMode;
     if (next === sourceMode) return;
     if (systemSourceUnsupported && requiresUserGestureSource(next)) {
       // Keep this as non-fatal warning state only.
@@ -851,28 +863,25 @@
     <div class="top-controls">
       <label class="top-field">
         <span class="top-label">{$t('transcription.source_label')}</span>
-        <select
+        <Select
           class="top-select"
+          size="sm"
           value={sourceMode}
+          options={sourceModeOptions}
           onchange={handleSourceModeChange}
           disabled={recordingState === 'connecting'}
-        >
-          <option value="mic">{$t('transcription.source_mic')}</option>
-          <option value="system" disabled={systemSourceUnsupported}>{$t('transcription.source_system')}</option>
-          <option value="mixed" disabled={systemSourceUnsupported}>{$t('transcription.source_mixed')}</option>
-        </select>
+        />
       </label>
       <label class="top-field">
         <span class="top-label">{$t('transcription.mode_label')}</span>
-        <select
+        <Select
           class="top-select"
+          size="sm"
           value={sessionMode}
+          options={sessionModeOptions}
           onchange={handleModeChange}
           disabled={recordingState === 'connecting'}
-        >
-          <option value="transcription">{$t('transcription.mode_transcription')}</option>
-          <option value="interview">{$t('transcription.mode_interview')}</option>
-        </select>
+        />
       </label>
       <button class="ctrl-btn icon" onclick={onBack} title={$t('transcription.back')}>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
@@ -1096,20 +1105,6 @@
     white-space: nowrap;
   }
 
-  .top-select {
-    font-size: var(--font-size-xs);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-primary);
-    padding: 0.15rem 0.35rem;
-    min-width: 88px;
-  }
-
-  .top-select:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-  }
 
   .recording-main-action {
     display: flex;

@@ -15,6 +15,7 @@
   } from '$lib/services/publish/types';
   import { testGitHubConnection } from '$lib/services/publish/github-publisher';
   import { testCustomAPIConnection } from '$lib/services/publish/api-publisher';
+  import { Select } from '$lib/components/ui';
 
   let targets = $state<PublishTarget[]>([]);
   let editingTarget = $state<PublishTarget | null>(null);
@@ -113,24 +114,48 @@
     }, 3000);
   }
 
-  function handlePresetChange(event: Event) {
+  function handlePresetChange(preset: string) {
     if (!editingTarget || editingTarget.type !== 'github') return;
     const gh = editingTarget as GitHubTarget;
-    const preset = (event.target as HTMLSelectElement).value;
     gh.frontMatterPreset = preset;
     if (FRONT_MATTER_PRESETS[preset]) {
       gh.frontMatterTemplate = FRONT_MATTER_PRESETS[preset];
     }
   }
 
-
-  function handleFileNamePresetChange(event: Event) {
+  function handleFileNamePresetChange(preset: string) {
     if (!editingTarget) return;
-    const preset = (event.target as HTMLSelectElement).value;
     if (FILE_NAME_PRESETS[preset]) {
       editingTarget.fileNamePattern = FILE_NAME_PRESETS[preset];
     }
   }
+
+  let templatePresetOptions = $derived([
+    { value: 'hugo', label: $t('publish.preset_hugo') },
+    { value: 'hexo', label: $t('publish.preset_hexo') },
+    { value: 'astro', label: $t('publish.preset_astro') },
+    { value: 'custom', label: $t('publish.preset_custom') },
+  ]);
+
+  let methodOptions = $derived([
+    { value: 'POST', label: 'POST' },
+    { value: 'PUT', label: 'PUT' },
+  ]);
+
+  let fileNamePresetOptions = $derived([
+    { value: 'dateSlug', label: $t('publish.preset_date_slug') },
+    { value: 'simple', label: $t('publish.preset_simple') },
+    { value: 'dateFilename', label: $t('publish.preset_date_filename') },
+    { value: 'yearMonth', label: $t('publish.preset_year_month') },
+  ]);
+
+  // Which preset key matches the current file-name pattern (for the Select value).
+  let fileNamePresetValue = $derived.by(() => {
+    const pattern = editingTarget?.fileNamePattern;
+    const match = (Object.keys(FILE_NAME_PRESETS) as (keyof typeof FILE_NAME_PRESETS)[])
+      .find((k) => FILE_NAME_PRESETS[k] === pattern);
+    return match ?? undefined;
+  });
 
   let fileNamePreview = $derived.by(() => {
     if (!editingTarget) return '';
@@ -216,12 +241,14 @@
 
         <div class="setting-group">
           <label class="setting-label" for="pub-template-preset">{$t('publish.template_presets')}</label>
-          <select id="pub-template-preset" class="setting-input" value={gh.frontMatterPreset || 'hugo'} onchange={handlePresetChange}>
-            <option value="hugo">{$t('publish.preset_hugo')}</option>
-            <option value="hexo">{$t('publish.preset_hexo')}</option>
-            <option value="astro">{$t('publish.preset_astro')}</option>
-            <option value="custom">{$t('publish.preset_custom')}</option>
-          </select>
+          <Select
+            id="pub-template-preset"
+            class="setting-input"
+            block
+            value={gh.frontMatterPreset || 'hugo'}
+            options={templatePresetOptions}
+            onchange={(v) => handlePresetChange(v as string)}
+          />
         </div>
 
         <div class="setting-group">
@@ -249,10 +276,7 @@
 
         <div class="setting-group">
           <label class="setting-label" for="pub-method">{$t('publish.method')}</label>
-          <select id="pub-method" class="setting-input" bind:value={api.method}>
-            <option value="POST">POST</option>
-            <option value="PUT">PUT</option>
-          </select>
+          <Select id="pub-method" class="setting-input" block bind:value={api.method} options={methodOptions} />
         </div>
 
         <div class="setting-group">
@@ -282,12 +306,12 @@
       <div class="setting-group">
         <label class="setting-label" for="pub-filename-input">{$t('publish.file_name_pattern')}</label>
         <div class="filename-row">
-          <select class="setting-input filename-preset" onchange={handleFileNamePresetChange}>
-            <option value="dateSlug" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.dateSlug}>{$t('publish.preset_date_slug')}</option>
-            <option value="simple" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.simple}>{$t('publish.preset_simple')}</option>
-            <option value="dateFilename" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.dateFilename}>{$t('publish.preset_date_filename')}</option>
-            <option value="yearMonth" selected={editingTarget.fileNamePattern === FILE_NAME_PRESETS.yearMonth}>{$t('publish.preset_year_month')}</option>
-          </select>
+          <Select
+            class="setting-input filename-preset"
+            value={fileNamePresetValue}
+            options={fileNamePresetOptions}
+            onchange={(v) => handleFileNamePresetChange(v as string)}
+          />
           <input
             id="pub-filename-input"
             type="text"
@@ -767,11 +791,6 @@
   .filename-row {
     display: flex;
     gap: 0.5rem;
-  }
-
-  .filename-preset {
-    flex: 0 0 auto;
-    width: 10rem;
   }
 
   .filename-input {

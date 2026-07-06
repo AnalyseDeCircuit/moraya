@@ -22,6 +22,7 @@
     type MarketplaceSource,
   } from '$lib/services/mcp';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { isIPadOS, isWindows, isMacOS, isLinux } from '$lib/utils/platform';
   import { ask } from '@tauri-apps/plugin-dialog';
   import { openUrl } from '@tauri-apps/plugin-opener';
@@ -533,6 +534,22 @@
   let newSyncLocalPath = $state('');
   let newSyncDirection = $state<'push' | 'pull' | 'bidirectional'>('push');
 
+  let transportOptions = $derived([
+    ...(isIPadOS ? [] : [{ value: 'stdio', label: $t('mcp.servers.stdio') }]),
+    { value: 'http', label: $t('mcp.servers.http') },
+    { value: 'sse', label: $t('mcp.servers.sse') },
+  ]);
+  let syncServerOptions = $derived([
+    { value: '', label: $t('mcp.sync.server'), disabled: true },
+    ...servers.filter(s => connectedServers.has(s.id)).map(s => ({ value: s.id, label: s.name })),
+  ]);
+  let syncDirectionOptions = $derived([
+    { value: 'push', label: $t('mcp.sync.push') },
+    { value: 'pull', label: $t('mcp.sync.pull') },
+    { value: 'bidirectional', label: $t('mcp.sync.bidirectional') },
+  ]);
+  let mpSourceOptions = $derived(MARKETPLACE_SOURCES.map(src => ({ value: src.value, label: $t(src.labelKey) })));
+
   function handleAddSync() {
     if (!newSyncName.trim() || !newSyncServerId) return;
     addSyncConfig({
@@ -812,11 +829,7 @@
                 bind:value={editName}
                 placeholder={$t('mcp.servers.server_name')}
               />
-              <select class="form-input" bind:value={editTransport}>
-                {#if !isIPadOS}<option value="stdio">{$t('mcp.servers.stdio')}</option>{/if}
-                <option value="http">{$t('mcp.servers.http')}</option>
-                <option value="sse">{$t('mcp.servers.sse')}</option>
-              </select>
+              <Select class="form-input" block bind:value={editTransport} options={transportOptions} />
               {#if editTransport === 'stdio'}
                 <input
                   type="text"
@@ -962,11 +975,7 @@
               bind:value={newServerName}
               placeholder={$t('mcp.servers.server_name')}
             />
-            <select class="form-input" bind:value={newServerTransport}>
-              {#if !isIPadOS}<option value="stdio">{$t('mcp.servers.stdio')}</option>{/if}
-              <option value="http">{$t('mcp.servers.http')}</option>
-              <option value="sse">{$t('mcp.servers.sse')}</option>
-            </select>
+            <Select class="form-input" block bind:value={newServerTransport} options={transportOptions} />
             {#if newServerTransport === 'stdio'}
               <input
                 type="text"
@@ -1160,19 +1169,10 @@
       {#if showAddSync}
         <div class="add-form">
           <input type="text" class="form-input" bind:value={newSyncName} placeholder={$t('mcp.sync.name')} />
-          <select class="form-input" bind:value={newSyncServerId}>
-            <option value="" disabled>{$t('mcp.sync.server')}</option>
-            {#each servers.filter(s => connectedServers.has(s.id)) as server}
-              <option value={server.id}>{server.name}</option>
-            {/each}
-          </select>
+          <Select class="form-input" block bind:value={newSyncServerId} options={syncServerOptions} />
           <input type="text" class="form-input" bind:value={newSyncRemotePath} placeholder={$t('mcp.sync.remote_path')} />
           <input type="text" class="form-input" bind:value={newSyncLocalPath} placeholder={$t('mcp.sync.local_path')} />
-          <select class="form-input" bind:value={newSyncDirection}>
-            <option value="push">{$t('mcp.sync.push')}</option>
-            <option value="pull">{$t('mcp.sync.pull')}</option>
-            <option value="bidirectional">{$t('mcp.sync.bidirectional')}</option>
-          </select>
+          <Select class="form-input" block bind:value={newSyncDirection} options={syncDirectionOptions} />
           <div class="form-actions">
             <button class="btn-sm" onclick={() => showAddSync = false}>{$t('common.cancel')}</button>
             <button class="btn-sm primary" onclick={handleAddSync}>{$t('common.add')}</button>
@@ -1185,11 +1185,7 @@
     <div class="tab-content">
       <!-- Source selector + search -->
       <div class="mp-toolbar">
-        <select class="form-input mp-source-select" value={mpSource} onchange={(e) => mpChangeSource((e.target as HTMLSelectElement).value as MarketplaceSource)}>
-          {#each MARKETPLACE_SOURCES as src}
-            <option value={src.value}>{$t(src.labelKey)}</option>
-          {/each}
-        </select>
+        <Select class="form-input mp-source-select" bind:value={mpSource} options={mpSourceOptions} onchange={(v) => mpChangeSource(v as MarketplaceSource)} />
         <input
           type="text"
           class="form-input mp-search-input"
@@ -1802,12 +1798,6 @@
   .mp-toolbar {
     display: flex;
     gap: 0.35rem;
-  }
-
-  .mp-source-select {
-    width: 90px;
-    flex-shrink: 0;
-    font-size: 11px;
   }
 
   .mp-search-input {

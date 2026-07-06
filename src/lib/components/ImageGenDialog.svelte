@@ -24,6 +24,7 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { aiStore } from '$lib/services/ai';
   import { settingsStore } from '$lib/stores/settings-store';
   import { editorStore } from '$lib/stores/editor-store';
@@ -91,6 +92,12 @@
   );
   let imgCssAspectRatio = $derived(imgRatio.replace(':', '/'));
   let availableStyles = $derived(MODE_STYLES[imageMode] || MODE_STYLES.article);
+
+  // Select options
+  let styleOptions = $derived(availableStyles.map(s => ({ value: s, label: tr(`image_gen.style_${s}`) })));
+  let ratioOptions = $derived(RATIO_OPTIONS.map(r => ({ value: r, label: r })));
+  let sizeLevelOptions = $derived(SIZE_LEVEL_OPTIONS.map(s => ({ value: s, label: tr(`ai.image_config.size_${s}`) })));
+  let countOptions = $derived(Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: String(i + 1) })));
 
   // Step 2 state
   let generatedImages = $state<(ImageGenerationResult & { promptIdx: number; selected: boolean; loading: boolean; error?: string })[]>([]);
@@ -364,37 +371,21 @@
             {/each}
             <div class="mode-row-spacer"></div>
             <label class="mini-label" for="imggen-style">{tr('image_gen.style_label')}</label>
-            <select id="imggen-style" class="mini-select style-select" bind:value={imageStyle} onchange={() => { if (!preDefinedPrompts || !hasGenerated) { prompts = []; } }}>
-              {#each availableStyles as s}
-                <option value={s}>{tr(`image_gen.style_${s}`)}</option>
-              {/each}
-            </select>
+            <Select id="imggen-style" class="mini-select style-select" size="sm" bind:value={imageStyle} options={styleOptions} onchange={() => { if (!preDefinedPrompts || !hasGenerated) { prompts = []; } }} />
           </div>
 
           <!-- Row 3: Ratio + Resolution + Count -->
           <div class="step-header">
             <div class="step-controls">
               <label class="mini-label" for="imggen-ratio">{tr('ai.image_config.ratio')}</label>
-              <select id="imggen-ratio" class="mini-select" bind:value={imgRatio}>
-                {#each RATIO_OPTIONS as r}
-                  <option value={r}>{r}</option>
-                {/each}
-              </select>
+              <Select id="imggen-ratio" class="mini-select" size="sm" bind:value={imgRatio} options={ratioOptions} />
               <label class="mini-label" for="imggen-size-level">{tr('ai.image_config.size_level')}</label>
-              <select id="imggen-size-level" class="mini-select" bind:value={imgSizeLevel}>
-                {#each SIZE_LEVEL_OPTIONS as s}
-                  <option value={s}>{tr(`ai.image_config.size_${s}`)}</option>
-                {/each}
-              </select>
+              <Select id="imggen-size-level" class="mini-select" size="sm" bind:value={imgSizeLevel} options={sizeLevelOptions} />
               <span class="mini-hint">{imgResolvedSize}</span>
             </div>
             <div class="step-controls">
               <label class="mini-label" for="imggen-count">{tr('image_gen.count_label')}</label>
-              <select id="imggen-count" class="mini-select style-select" bind:value={imageCount} onchange={() => { if (!preDefinedPrompts || !hasGenerated) { prompts = []; } }}>
-                {#each Array.from({length: 10}, (_, i) => i + 1) as n}
-                  <option value={n}>{n}</option>
-                {/each}
-              </select>
+              <Select id="imggen-count" class="mini-select style-select" size="sm" bind:value={imageCount} options={countOptions} onchange={() => { if (!preDefinedPrompts || !hasGenerated) { prompts = []; } }} />
             </div>
           </div>
 
@@ -670,10 +661,6 @@
     flex: 1;
   }
 
-  .style-select {
-    min-width: 5.5rem;
-  }
-
   .mode-btn {
     padding: 0.25rem 0.6rem;
     border: 1px solid var(--border-color);
@@ -733,14 +720,6 @@
     white-space: nowrap;
   }
 
-  .mini-select {
-    padding: 0.2rem 0.4rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: var(--font-size-xs);
-  }
 
   .loading-state,
   .error-state {

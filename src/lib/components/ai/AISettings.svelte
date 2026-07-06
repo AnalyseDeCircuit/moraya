@@ -15,6 +15,7 @@
   } from '$lib/services/ai';
   import { onDestroy } from 'svelte';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
 
   // ── Session chat model state ──
   let chatConfigs = $state<AIProviderConfig[]>([]);
@@ -92,6 +93,9 @@
     ],
   };
 
+  let chatProviderOptions = $derived(CHAT_PROVIDERS.map(p => ({ value: p, label: $t(`ai.providers.${p}`) })));
+  let realtimeProviderOptions = $derived(REALTIME_PROVIDERS.map(p => ({ value: p, label: getRealtimeProviderLabel(p) })));
+
   function getChatBaseUrlPresets(provider: AIProvider): { value: string; label: string }[] {
     return CHAT_BASE_URL_PRESETS[provider] ?? [];
   }
@@ -158,8 +162,8 @@
     formTestError = '';
   }
 
-  function handleChatProviderChange(event: Event) {
-    formProvider = (event.target as HTMLSelectElement).value as AIProvider;
+  function handleChatProviderChange(value: unknown) {
+    formProvider = value as AIProvider;
     formModel = getChatModels()[0] || '';
     formBaseUrl = PROVIDER_BASE_URLS[formProvider] || '';
     formTestStatus = 'idle';
@@ -289,8 +293,8 @@
     realtimeTestError = '';
   }
 
-  function handleRealtimeProviderChange(event: Event) {
-    realtimeProvider = (event.target as HTMLSelectElement).value as RealtimeVoiceProvider;
+  function handleRealtimeProviderChange(value: unknown) {
+    realtimeProvider = value as RealtimeVoiceProvider;
     realtimeModel = REALTIME_VOICE_DEFAULT_MODELS[realtimeProvider]?.[0] || '';
     realtimeBaseUrl = REALTIME_VOICE_BASE_URLS[realtimeProvider] || '';
     realtimeVoice = '';
@@ -422,11 +426,7 @@
         <div class="config-form">
           <div class="setting-group">
             <label class="setting-label">{$t('ai.config.provider')}</label>
-            <select class="setting-input" value={formProvider} onchange={handleChatProviderChange}>
-              {#each CHAT_PROVIDERS as p}
-                <option value={p}>{$t(`ai.providers.${p}`)}</option>
-              {/each}
-            </select>
+            <Select class="setting-input" block bind:value={formProvider} options={chatProviderOptions} onchange={handleChatProviderChange} />
           </div>
 
           <div class="setting-group">
@@ -546,11 +546,7 @@
       <div class="config-form">
         <div class="setting-group">
           <label class="setting-label">{$t('ai.config.provider')}</label>
-          <select class="setting-input" value={formProvider} onchange={handleChatProviderChange}>
-            {#each CHAT_PROVIDERS as p}
-              <option value={p}>{$t(`ai.providers.${p}`)}</option>
-            {/each}
-          </select>
+          <Select class="setting-input" block bind:value={formProvider} options={chatProviderOptions} onchange={handleChatProviderChange} />
         </div>
 
         <div class="setting-group">
@@ -670,11 +666,7 @@
         <div class="config-form">
           <div class="setting-group">
             <label class="setting-label">{$t('ai.config.provider')}</label>
-            <select class="setting-input" value={realtimeProvider} onchange={handleRealtimeProviderChange}>
-              {#each REALTIME_PROVIDERS as p}
-                <option value={p}>{getRealtimeProviderLabel(p)}</option>
-              {/each}
-            </select>
+            <Select class="setting-input" block bind:value={realtimeProvider} options={realtimeProviderOptions} onchange={handleRealtimeProviderChange} />
           </div>
 
           {#if providerNeedsAwsCredential(realtimeProvider)}
@@ -810,11 +802,7 @@
       <div class="config-form">
         <div class="setting-group">
           <label class="setting-label">{$t('ai.config.provider')}</label>
-          <select class="setting-input" value={realtimeProvider} onchange={handleRealtimeProviderChange}>
-            {#each REALTIME_PROVIDERS as p}
-              <option value={p}>{getRealtimeProviderLabel(p)}</option>
-            {/each}
-          </select>
+          <Select class="setting-input" block bind:value={realtimeProvider} options={realtimeProviderOptions} onchange={handleRealtimeProviderChange} />
         </div>
 
         {#if providerNeedsAwsCredential(realtimeProvider)}

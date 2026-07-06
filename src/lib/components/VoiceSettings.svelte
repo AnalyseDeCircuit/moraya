@@ -1,6 +1,7 @@
 <script lang="ts">
   import { settingsStore } from '$lib/stores/settings-store';
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { invoke } from '@tauri-apps/api/core';
   import { testSpeechConnection } from '$lib/services/voice/speech-service';
   import {
@@ -140,6 +141,9 @@
     { value: 'de', label: 'Deutsch' },
     { value: 'es', label: 'Español' },
   ];
+
+  let providerOptions = $derived(PROVIDERS.map(p => ({ value: p.value, label: p.label })));
+  let languageOptions = $derived(LANGUAGES.map(l => ({ value: l.value, label: l.label })));
 
   let availableModels = $derived(SPEECH_PROVIDER_MODELS[form.provider] ?? []);
 
@@ -336,11 +340,7 @@
         <div class="config-form">
           <div class="field">
             <label>{$t('settings.voice.provider')}</label>
-            <select bind:value={form.provider} onchange={onProviderChange}>
-              {#each PROVIDERS as p}
-                <option value={p.value}>{p.label}</option>
-              {/each}
-            </select>
+            <Select block bind:value={form.provider} options={providerOptions} onchange={onProviderChange} />
           </div>
           <div class="field">
             <label>{$t('settings.voice.api_key')}</label>
@@ -386,11 +386,7 @@
           </div>
           <div class="field">
             <label>{$t('settings.voice.language')}</label>
-            <select bind:value={form.language}>
-              {#each LANGUAGES as lang}
-                <option value={lang.value}>{lang.label}</option>
-              {/each}
-            </select>
+            <Select block bind:value={form.language} options={languageOptions} />
           </div>
           {#if form.provider === 'custom'}
             <div class="field">
@@ -453,11 +449,7 @@
       <div class="config-form">
         <div class="field">
           <label>{$t('settings.voice.provider')}</label>
-          <select bind:value={form.provider} onchange={onProviderChange}>
-            {#each PROVIDERS as p}
-              <option value={p.value}>{p.label}</option>
-            {/each}
-          </select>
+          <Select block bind:value={form.provider} options={providerOptions} onchange={onProviderChange} />
         </div>
         <div class="field">
           <label>{$t('settings.voice.api_key')}</label>
@@ -503,11 +495,7 @@
         </div>
         <div class="field">
           <label>{$t('settings.voice.language')}</label>
-          <select bind:value={form.language}>
-            {#each LANGUAGES as lang}
-              <option value={lang.value}>{lang.label}</option>
-            {/each}
-          </select>
+          <Select block bind:value={form.language} options={languageOptions} />
         </div>
         {#if form.provider === 'custom'}
           <div class="field">
@@ -749,8 +737,7 @@
     font-weight: 500;
   }
 
-  .field input,
-  .field select {
+  .field input {
     padding: 0.3rem 0.5rem;
     font-size: var(--font-size-sm);
     border: 1px solid var(--border-color);
@@ -760,8 +747,7 @@
     outline: none;
   }
 
-  .field input:focus,
-  .field select:focus {
+  .field input:focus {
     border-color: var(--accent-color);
   }
 

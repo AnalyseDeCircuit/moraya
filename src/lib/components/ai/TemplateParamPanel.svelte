@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '$lib/i18n';
+  import { Select } from '$lib/components/ui';
   import { getTemplateName, getParamLabel, getOptionLabel } from '$lib/services/ai';
   import type { AITemplate } from '$lib/services/ai';
 
@@ -58,15 +59,14 @@
         <div class="param-group">
           <div class="param-label">{getParamLabel(param, $t)}</div>
           {#if param.type === 'select'}
-            <select
+            {@const selectOptions = param.options.map(opt => ({ value: opt.value, label: getOptionLabel(opt, $t) }))}
+            <Select
               class="param-select"
+              block
               value={paramValues[param.key]}
-              onchange={(e) => { paramValues[param.key] = (e.target as HTMLSelectElement).value; }}
-            >
-              {#each param.options as opt}
-                <option value={opt.value}>{getOptionLabel(opt, $t)}</option>
-              {/each}
-            </select>
+              options={selectOptions}
+              onchange={(v) => { paramValues[param.key] = v as string; }}
+            />
           {:else}
             <div class="radio-group">
               {#each param.options as opt}
@@ -167,20 +167,6 @@
     color: var(--text-secondary);
   }
 
-  .param-select {
-    padding: 0.35rem 0.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: var(--font-size-xs);
-    cursor: pointer;
-    outline: none;
-  }
-
-  .param-select:focus {
-    border-color: var(--accent-color);
-  }
 
   .radio-group {
     display: flex;

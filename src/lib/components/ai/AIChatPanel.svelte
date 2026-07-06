@@ -39,6 +39,7 @@
   import TemplateGallery from './TemplateGallery.svelte';
   import TemplateParamPanel from './TemplateParamPanel.svelte';
   import TemplateManagePanel from './TemplateManagePanel.svelte';
+  import { Select } from '$lib/components/ui';
 
   let {
     documentContent = '',
@@ -139,6 +140,15 @@
   let voiceSessionId = $state<string | null>(null);
   let voiceSourceMode = $state<VoiceSourceMode>('mic');
   let voiceSessionMode = $state<VoiceSessionMode>('transcription');
+  let voiceSourceOptions = $derived([
+    { value: 'mic', label: $t('transcription.source_mic') },
+    { value: 'system', label: $t('transcription.source_system') },
+    { value: 'mixed', label: $t('transcription.source_mixed') },
+  ]);
+  let voiceSessionModeOptions = $derived([
+    { value: 'transcription', label: $t('transcription.mode_transcription') },
+    { value: 'interview', label: $t('transcription.mode_interview') },
+  ]);
   let voiceElapsedMs = $state(0);
   let voiceStartTime = 0;
   let voiceTimerRef: ReturnType<typeof setInterval> | null = null;
@@ -1441,8 +1451,7 @@
     }
   }
 
-  async function handleVoiceSourceChange(e: Event) {
-    const val = (e.target as HTMLSelectElement).value as VoiceSourceMode;
+  async function handleVoiceSourceChange(val: VoiceSourceMode) {
     voiceSourceMode = val;
     if (voiceRecordingState === 'recording') {
       await stopVoiceRecording();
@@ -1465,8 +1474,7 @@
     voiceSpeakerColorMap.clear();
   }
 
-  async function handleVoiceSessionModeChange(e: Event) {
-    const next = (e.target as HTMLSelectElement).value as VoiceSessionMode;
+  async function handleVoiceSessionModeChange(next: VoiceSessionMode) {
     if (next === voiceSessionMode) return;
     voiceSessionMode = next;
     if (next === 'interview') {
@@ -1720,28 +1728,25 @@
       <div class="voice-mode-bar-controls">
         <label class="voice-top-field">
           <span class="voice-top-label">{$t('transcription.source_label')}</span>
-          <select
+          <Select
             class="voice-top-select"
-            value={voiceSourceMode}
-            onchange={handleVoiceSourceChange}
+            size="sm"
+            bind:value={voiceSourceMode}
+            options={voiceSourceOptions}
+            onchange={(v) => handleVoiceSourceChange(v as VoiceSourceMode)}
             disabled={voiceRecordingState === 'connecting'}
-          >
-            <option value="mic">{$t('transcription.source_mic')}</option>
-            <option value="system">{$t('transcription.source_system')}</option>
-            <option value="mixed">{$t('transcription.source_mixed')}</option>
-          </select>
+          />
         </label>
         <label class="voice-top-field">
           <span class="voice-top-label">{$t('transcription.mode_label')}</span>
-          <select
+          <Select
             class="voice-top-select"
-            value={voiceSessionMode}
-            onchange={handleVoiceSessionModeChange}
+            size="sm"
+            bind:value={voiceSessionMode}
+            options={voiceSessionModeOptions}
+            onchange={(v) => handleVoiceSessionModeChange(v as VoiceSessionMode)}
             disabled={voiceRecordingState === 'connecting'}
-          >
-            <option value="transcription">{$t('transcription.mode_transcription')}</option>
-            <option value="interview">{$t('transcription.mode_interview')}</option>
-          </select>
+          />
         </label>
       </div>
       <div class="voice-mode-bar-right">
